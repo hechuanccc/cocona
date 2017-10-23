@@ -38,7 +38,7 @@ export default {
           password: this.password
         }
       }).then(result => {
-        this.$router.push('Game')
+        this.$router.push('game')
       }, errorRes => {
         const errors = errorRes.response.data.error
         let messages = []

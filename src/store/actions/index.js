@@ -1,8 +1,12 @@
 import axios from 'axios'
 import Vue from 'vue'
 
+import * as types from '../mutations/mutation-types'
+
 import {
-  login
+  login,
+  fetchUser,
+  fetchGames
 } from '../../api'
 
 export default {
@@ -15,12 +19,25 @@ export default {
         Vue.cookie.set('refresh_token', data.refresh_token, expires.toGMTString())
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token
       }
-      commit('SET_USER', {
+      commit(types.SET_USER, {
         user: {
           logined: true
         }
       })
       return Promise.resolve(res.data)
     }, error => Promise.reject(error))
+  },
+  fetchUser: ({ commit, state }) => {
+    return fetchUser().then(res => {
+      // console.log(res)
+      // commit(types.SET_GAMES, res)
+    })
+  },
+  fetchGames: ({ commit, state }) => {
+    return fetchGames().then(res => {
+      commit(types.SET_GAMES, {
+        games: res.data
+      })
+    })
   }
 }

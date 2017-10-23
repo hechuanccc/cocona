@@ -11,7 +11,8 @@ export function createStore () {
     state: {
       user: {
         logined: !!Vue.cookie.get('access_token')
-      }
+      },
+      games: []
     },
     actions,
     mutations,

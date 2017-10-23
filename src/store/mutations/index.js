@@ -6,5 +6,8 @@ export default {
       ...state.user,
       ...user
     }
+  },
+  [types.SET_GAMES]: (state, { games }) => {
+    state.games = games
   }
 }
