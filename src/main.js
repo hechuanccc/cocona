@@ -6,7 +6,7 @@ import router from './router'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 import VueCookie from 'vue-cookie'
-
+import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -24,5 +24,12 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  created () {
+    const token = Vue.cookie.get('access_token')
+    if (token) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+      this.$store.dispatch('fetchUser')
+    }
+  }
 })
