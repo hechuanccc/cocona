@@ -37,10 +37,10 @@ export default {
   },
   created () {
   },
-  name: 'GameTab',
+  name: 'gamemenu',
   methods: {
     handleSelect (key, keyPath) {
-      this.$router.push('' + this.allGames[key].id)
+      this.$router.push('/game/' + this.allGames[key].id)
     }
   }
 }

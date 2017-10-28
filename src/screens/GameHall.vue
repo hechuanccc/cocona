@@ -1,19 +1,19 @@
 <template>
   <el-container>
     <el-header>
-      <GameTab />
+      <GameMenu />
     </el-header>
     <!-- user key props to force Vue to re-render router-view whenever route change -->
-    <router-view :key="$route.name + ($route.params.id || '')"/>
+    <router-view :key="$route.name + ($route.params.gameId || '')"/>
   </el-container>
 </template>
 
 <script>
-import GameTab from '../components/GameTab'
+import GameMenu from '../components/GameMenu'
 export default {
-  name: 'game',
+  name: 'gamehall',
   components: {
-    GameTab
+    GameMenu
   },
   created () {
     if (!this.$store.state.games.length) {
