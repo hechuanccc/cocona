@@ -9,13 +9,21 @@ export function login (user) {
 }
 
 export function fetchGames () {
-  return axios.get(urls.games)
+  return axios.get(urls.games).then(res => res.data)
 }
 
 export function fetchUser () {
-  return axios.get(urls.user)
+  return axios.get(urls.user).then(res => res.data)
 }
 
-export function fetchGamePlays (gameId) {
-  return axios.get(`${urls.plays}?&game=${gameId}`)
+export function fetchCategories (gameId) {
+  return axios.get(`${urls.category}?&game=${gameId}`).then(res => res.data)
+}
+
+export function fetchPlaygroup (categoryId) {
+  return axios.get(`${urls.playgroup}?&category=${categoryId}`).then(res => res.data)
+}
+
+export function fetchSchedule (gameId) {
+  return axios.get(`${urls.schedule}?&game=${gameId}`).then(res => res.data)
 }

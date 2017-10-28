@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/screens/Home'
-import Game from '@/screens/Game'
-import GamePlay from '@/screens/games/GamePlay'
+import GameHall from '@/screens/GameHall'
+import Game from '@/screens/games/Game'
+import GameCategory from '@/screens/games/GameCategory'
 
 Vue.use(Router)
 
@@ -16,11 +17,17 @@ export default new Router({
     {
       path: '/game',
       name: 'Game',
-      component: Game,
+      component: GameHall,
       children: [
         {
-          path: ':id',
-          component: GamePlay
+          path: ':gameId',
+          component: Game,
+          children: [
+            {
+              path: ':categoryId',
+              component: GameCategory
+            }
+          ]
         }
       ]
     }

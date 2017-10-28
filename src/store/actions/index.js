@@ -29,14 +29,18 @@ export default {
   },
   fetchUser: ({ commit, state }) => {
     return fetchUser().then(res => {
-      // console.log(res)
-      // commit(types.SET_GAMES, res)
+      if (res.length > 0) {
+        commit(types.SET_USER, {
+          user: res[0]
+        })
+      }
     })
   },
   fetchGames: ({ commit, state }) => {
     return fetchGames().then(res => {
+      console.log(res)
       commit(types.SET_GAMES, {
-        games: res.data
+        games: res
       })
     })
   }
