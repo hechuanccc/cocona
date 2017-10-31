@@ -24,9 +24,10 @@ export default {
   },
   computed: {
     activeIndex () {
-      return '' + this.allGames.findIndex(item => {
-        return item.id === parseInt(this.$route.params.id)
+      let index = this.allGames.findIndex(item => {
+        return item.id === parseInt(this.$route.params.gameId)
       })
+      return (index === -1 ? 0 : index) + ''
     },
     ...mapGetters([
       'allGames'
@@ -35,7 +36,13 @@ export default {
       return this.$store.state.user
     }
   },
-  created () {
+  watch: {
+    'allGames': function () {
+      if (!this.$route.params.gameId) {
+        console.log(this.allGames[0])
+        this.$router.push('/game/' + this.allGames[0].id)
+      }
+    }
   },
   name: 'gamemenu',
   methods: {

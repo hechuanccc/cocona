@@ -1,3 +1,4 @@
+import _ from 'lodash'
 import axios from 'axios'
 import Vue from 'vue'
 
@@ -6,7 +7,8 @@ import * as types from '../mutations/mutation-types'
 import {
   login,
   fetchUser,
-  fetchGames
+  fetchGames,
+  fetchCategories
 } from '../../api'
 
 export default {
@@ -38,9 +40,18 @@ export default {
   },
   fetchGames: ({ commit, state }) => {
     return fetchGames().then(res => {
-      console.log(res)
       commit(types.SET_GAMES, {
         games: res
+      })
+    })
+  },
+  fetchCategories: ({commit, state}, gameId) => {
+    return fetchCategories(gameId).then(res => {
+      commit(types.SET_CATEGORIES, {
+        categories: _.map(res, item => {
+          item['game_id'] = gameId
+          return item
+        })
       })
     })
   }
