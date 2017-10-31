@@ -14,22 +14,48 @@ import _ from 'lodash'
  * @return     {<type>}  Regrouped lists
  */
 
-export function unionChunked (list, keyBy, keyUnion, size) {
+export function unionChunked (raw, keyBy, keyUnion, size) {
+  const list = _.cloneDeep(raw)
   list.forEach(item => {
-    item.plays = _.chunk(item[keyUnion], 4)
+    console.log(Array.isArray(item.plays[0][0]))
+    item[keyUnion] = _.chunk(item[keyUnion], size)
+    console.log(Array.isArray(item.plays[0][0]))
   })
   if (list.length < 2) {
     return list
   }
-
+  console.log(list)
   let obj = {}
 
   list.forEach(item => {
     if (!obj[item[keyBy]]) {
       obj[item[keyBy]] = item
     } else {
+      console.log(obj[item[keyBy]][keyUnion])
       obj[item[keyBy]][keyUnion] = obj[item[keyBy]][keyUnion].concat(item[keyUnion])
     }
   })
+  console.log(obj)
   return _.map(obj, n => n)
+}
+
+export function formatPlayGroup (raw, formatting) {
+  console.log(raw, formatting)
+  let sections = []
+  formatting.forEach(format => {
+    let chunkedRaw = unionChunked(raw, 'display_name', 'plays', format.play_col)
+    let playgroups = []
+    format.grp_code.forEach(code => {
+      let targetGroup = _.find(chunkedRaw, x => x.code === code)
+      if (targetGroup) {
+        playgroups.push(targetGroup)
+      }
+    })
+    sections.push({
+      groupCol: format.grp_col,
+      playCol: format.play_col,
+      playgroups: playgroups
+    })
+  })
+  return sections
 }
