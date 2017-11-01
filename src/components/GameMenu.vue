@@ -39,7 +39,6 @@ export default {
   watch: {
     'allGames': function () {
       if (!this.$route.params.gameId) {
-        console.log(this.allGames[0])
         this.$router.push('/game/' + this.allGames[0].id)
       }
     }

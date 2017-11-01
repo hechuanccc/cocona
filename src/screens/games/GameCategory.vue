@@ -12,13 +12,13 @@
     </el-row>
 
     <div v-for="(playSection, index) in playSections" class="clearfix" v-if="playSections.length" >
-      <div :style="{width: (1 / playSection.groupCol) * 100 + '%'}" v-for="(playgroup, playgroupIndex) in playSection.playgroups" class="group-table"> 
-        <table :class="['play-table', playgroupIndex === playgroup.length - 1 ? 'last' : '']" align="center"  key="playgroup.code + index + '' + playgroupIndex">
+      <div :style="{width: getWidthForGroup(playSection)}" v-for="(playgroup, playgroupIndex) in playSection.playgroups" :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']">
+        <table class="play-table" align="center"  key="playgroup.code + index + '' + playgroupIndex">
           <tr>
             <th class="group-name" :colspan="playSection.playCol">{{playgroup.length}}{{playgroup.display_name}}</th>
           </tr>
-          <tr v-for="playInChunk in playgroup.plays">
-            <td v-for="play in playInChunk" align="center" :class="['clickable', 
+          <tr v-for="(playChunk, playChunkIndex) in playgroup.plays">
+            <td v-for="play in playChunk" align="center" :class="['clickable', 
               {
                 hover: play.hover,
                 active: play.active
@@ -31,7 +31,7 @@
                 <el-input size="mini" class="extramini" v-model="plays[play.id].amount" type="number" min="1" step="10"/>
               </el-col>
             </td>
-            <td colspan="4 - playChunk.length" v-if="index === playgroup.plays.length - 1"></td>
+            <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
       </div>
@@ -108,6 +108,10 @@ export default {
     })
   },
   methods: {
+    getWidthForGroup (playSection) {
+      // 0.01 is margin-right for each group
+      return ((1 - (playSection.groupCol - 1) * 0.01) / playSection.groupCol) * 100 + '%'
+    },
     updateAmount (amount) {
       this.amount = amount
     },
@@ -143,7 +147,6 @@ export default {
 <style scoped lang='scss'>
 @import '../../style/vars.scss';
 
-
 .name {
   font-weight: bold;
   line-height: $cell-height;
@@ -165,16 +168,13 @@ export default {
 }
 .group-table {
   float: left;
-  .play-table {
-    margin-right: 5%;
-    &.last {
-      margin-right: 0;
-      width: 100%;
-    }
+  margin-right: 1%;
+  &.last {
+    margin-right: 0;
   }
 }
 .play-table {
-  width: 95%;
+  width: 100%;
   background: #ecf5ff;
   margin-bottom: 10px;
   border: $cell-border;

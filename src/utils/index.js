@@ -6,41 +6,35 @@ import _ from 'lodash'
  *
  *    For example: unionChunked(playgroups, 'display_name', 'plays', 4)
  *
- * @param      {<Array>}  list      The list
+ * @param      {<Array>}  raw      The playgroups
  * @param      {<String>}  keyBy     Which field do we use to decide the
- *           item should be in the same group.
+ *             item should be in the same group.
  * @param      {<String>}  keyUnion  Which field do we want to union.
  * @param      {<Int>}  size      The chunk size
  * @return     {<type>}  Regrouped lists
  */
 
 export function unionChunked (raw, keyBy, keyUnion, size) {
-  const list = _.cloneDeep(raw)
-  list.forEach(item => {
-    console.log(Array.isArray(item.plays[0][0]))
-    item[keyUnion] = _.chunk(item[keyUnion], size)
-    console.log(Array.isArray(item.plays[0][0]))
+  const playgroups = _.cloneDeep(raw)
+  playgroups.forEach(playgroup => {
+    playgroup[keyUnion] = _.chunk(playgroup[keyUnion], size)
   })
-  if (list.length < 2) {
-    return list
+  if (playgroups.length < 2) {
+    return playgroups
   }
-  console.log(list)
   let obj = {}
 
-  list.forEach(item => {
+  playgroups.forEach(item => {
     if (!obj[item[keyBy]]) {
       obj[item[keyBy]] = item
     } else {
-      console.log(obj[item[keyBy]][keyUnion])
       obj[item[keyBy]][keyUnion] = obj[item[keyBy]][keyUnion].concat(item[keyUnion])
     }
   })
-  console.log(obj)
   return _.map(obj, n => n)
 }
 
 export function formatPlayGroup (raw, formatting) {
-  console.log(raw, formatting)
   let sections = []
   formatting.forEach(format => {
     let chunkedRaw = unionChunked(raw, 'display_name', 'plays', format.play_col)
