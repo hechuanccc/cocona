@@ -18,6 +18,7 @@ export default new Router({
       path: '/game',
       name: 'Game',
       component: GameHall,
+      meta: { requiresAuth: true },
       children: [
         {
           path: ':gameId',

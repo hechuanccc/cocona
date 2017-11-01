@@ -10,10 +10,23 @@ import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+Vue.use(require('vue-moment'))
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
 
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+  // fisrMacthed might be the top-level parent route of others
+  const firstMatched = to.matched.length ? to.matched[0] : null
+  if (to.meta.requiresAuth || firstMatched.meta.requiresAuth) {
+    const token = Vue.cookie.get('access_token')
+    if (!token) {
+      return next('/')
+    }
+  }
+  next()
+})
 
 const store = createStore()
 sync(store, router)

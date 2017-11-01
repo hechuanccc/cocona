@@ -17,8 +17,12 @@ export default {
       let data = res.data
       let expires = new Date(data.expires_in)
       if (data.access_token && data.refresh_token) {
-        Vue.cookie.set('access_token', data.access_token, expires.toGMTString())
-        Vue.cookie.set('refresh_token', data.refresh_token, expires.toGMTString())
+        Vue.cookie.set('access_token', data.access_token, {
+          expires: expires
+        })
+        Vue.cookie.set('refresh_token', data.refresh_token, {
+          expires: expires
+        })
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token
       }
       commit(types.SET_USER, {
@@ -36,6 +40,7 @@ export default {
           user: res[0]
         })
       }
+      return Promise.resolve(res)
     })
   },
   fetchGames: ({ commit, state }) => {
@@ -47,12 +52,14 @@ export default {
   },
   fetchCategories: ({commit, state}, gameId) => {
     return fetchCategories(gameId).then(res => {
-      commit(types.SET_CATEGORIES, {
-        categories: _.map(res, item => {
-          item['game_id'] = gameId
-          return item
-        })
+      const categories = _.map(res, item => {
+        item['game_id'] = gameId
+        return item
       })
+      commit(types.SET_CATEGORIES, {
+        categories
+      })
+      return categories
     })
   }
 }
