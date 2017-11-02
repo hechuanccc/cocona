@@ -8,6 +8,14 @@ export function login (user) {
   return axios.post(urls.login, qs.stringify(user))
 }
 
+export function register (userInfo) {
+  return axios.post(urls.agent_register, qs.stringify(userInfo))
+}
+
+export function getCaptcha () {
+  return axios.get(urls.agent_captcha)
+}
+
 export function fetchGames () {
   return axios.get(urls.games).then(res => res.data)
 }
