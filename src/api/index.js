@@ -8,6 +8,14 @@ export function login (user) {
   return axios.post(urls.login, qs.stringify(user))
 }
 
+export function register (user) {
+  return axios.post(urls.register, qs.stringify(user))
+}
+
+export function checkUserName (username) {
+  return axios.get(urls.check_username, {params: {username: username}}).then(res => res.data)
+}
+
 export function fetchGames () {
   return axios.get(urls.games).then(res => res.data)
 }
@@ -26,4 +34,8 @@ export function fetchPlaygroup (categoryId) {
 
 export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`).then(res => res.data)
+}
+
+export function fetchVerification () {
+  return axios.get(urls.verification).then(res => res.data)
 }

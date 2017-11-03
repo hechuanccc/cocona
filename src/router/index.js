@@ -4,6 +4,7 @@ import Home from '@/screens/Home'
 import GameHall from '@/screens/GameHall'
 import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
+import Register from '@/screens/member/Register'
 
 Vue.use(Router)
 
@@ -12,7 +13,14 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: 'register',
+          name: 'Register',
+          component: Register
+        }
+      ]
     },
     {
       path: '/game',
