@@ -13,14 +13,12 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home,
-      children: [
-        {
-          path: 'register',
-          name: 'Register',
-          component: Register
-        }
-      ]
+      component: Home
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/game',
