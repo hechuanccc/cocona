@@ -7,12 +7,15 @@ import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
+import VueI18n from 'vue-i18n'
+import locales from './i18n/locales'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueI18n from 'vue-i18n'
 import locales from './i18n/locales'
 
 Vue.use(require('vue-moment'))
+Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
 Vue.use(VueI18n)

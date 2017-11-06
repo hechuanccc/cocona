@@ -9,9 +9,10 @@ const apiManage = host + '/v1/manage'
 export default {
   domain: host,
   login: prefix + '/login/',
+  register: apiv1 + '/register/',
   user: apiv1 + '/profile/',
   refresh_token: prefix + '/login/refresh/',
-  verification: prefix + '/verification_code/',
+  verification: apiv1 + '/verification_code/',
   logout: host + '/logout/',
   games: apiv1 + '/game/',
   category: apiv1 + '/game/category/',
@@ -21,5 +22,6 @@ export default {
   agent_captcha: apiv1 + '/verification_code/',
   banner: apiv1 + '/banners/',
   homePage: apiv1 + '/website/home-page/',
-  announcements: apiv1 + '/announcements/'
+  announcements: apiv1 + '/announcements/',
+  check_username: host + '/v1/checkmember/'
 }

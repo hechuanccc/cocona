@@ -4,7 +4,11 @@ import Home from '@/screens/Home'
 import GameHall from '@/screens/GameHall'
 import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
+<<<<<<< HEAD
 import agentRegister from '@/screens/agent/agentRegister'
+=======
+import Register from '@/screens/member/Register'
+>>>>>>> 0b20661bbc2f3c6575952ce88b093c7204260728
 
 Vue.use(Router)
 
@@ -21,6 +25,11 @@ export default new Router({
           component: agentRegister
         }
       ]
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
     },
     {
       path: '/game',
