@@ -16,6 +16,18 @@ export function getCaptcha () {
   return axios.get(urls.agent_captcha)
 }
 
+export function getBanner () {
+  return axios.get(urls.banner)
+}
+
+export function getAnnouncements () {
+  return axios.get(urls.announcements)
+}
+
+export function gethomePage () {
+  return axios.get(urls.homePage)
+}
+
 export function fetchGames () {
   return axios.get(urls.games).then(res => res.data)
 }

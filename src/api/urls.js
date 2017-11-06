@@ -18,5 +18,8 @@ export default {
   playgroup: apiv1 + '/game/playgroup/',
   schedule: apiv1 + '/game/schedule/',
   agent_register: apiManage + '/agentapplication/',
-  agent_captcha: apiv1 + '/verification_code/'
+  agent_captcha: apiv1 + '/verification_code/',
+  banner: apiv1 + '/banners/',
+  homePage: apiv1 + '/website/home-page/',
+  announcements: apiv1 + '/announcements/'
 }
