@@ -8,12 +8,14 @@ const apiv1 = host + '/v1/member'
 export default {
   domain: host,
   login: prefix + '/login/',
+  register: apiv1 + '/register/',
   user: apiv1 + '/profile/',
   refresh_token: prefix + '/login/refresh/',
-  verification: prefix + '/verification_code/',
+  verification: apiv1 + '/verification_code/',
   logout: host + '/logout/',
   games: apiv1 + '/game/',
   category: apiv1 + '/game/category/',
   playgroup: apiv1 + '/game/playgroup/',
-  schedule: apiv1 + '/game/schedule/'
+  schedule: apiv1 + '/game/schedule/',
+  check_username: host + '/v1/checkmember/'
 }

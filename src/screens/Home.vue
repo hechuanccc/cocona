@@ -5,6 +5,7 @@
         <TopBar />
       </el-header>
       <el-main>
+        <router-view/>
       </el-main>
     </el-container>
   </div>

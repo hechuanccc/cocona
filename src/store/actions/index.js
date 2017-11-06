@@ -6,6 +6,7 @@ import * as types from '../mutations/mutation-types'
 
 import {
   login,
+  register,
   fetchUser,
   fetchGames,
   fetchCategories
@@ -30,6 +31,11 @@ export default {
           logined: true
         }
       })
+      return Promise.resolve(res.data)
+    }, error => Promise.reject(error))
+  },
+  register: ({ commit, state }, { user }) => {
+    return register(user).then(res => {
       return Promise.resolve(res.data)
     }, error => Promise.reject(error))
   },

@@ -7,14 +7,30 @@ import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
+import VueI18n from 'vue-i18n'
+import locales from './i18n/locales'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.use(require('vue-moment'))
+Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
 
 Vue.config.productionTip = false
+
+let navLang = navigator.language || navigator.userLanguage
+if (navLang === 'zh-CN' || navLang === 'zh-cn') {
+  Vue.config.lang = 'cn'
+} else if (navLang === 'en-US' || navLang === 'en-us') {
+  Vue.config.lang = 'en'
+} else {
+  Vue.config.lang = 'cn'
+}
+
+Object.keys(locales).forEach(lang => {
+  Vue.locale(lang, locales[lang])
+})
 
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
