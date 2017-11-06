@@ -43,18 +43,6 @@
                           @keyup.enter.native="submitForm('ruleForm')"></el-input>
               </el-form-item>
             </el-tooltip>
-
-            <el-tooltip placement="right" effect="light" :value="captcha.show" :manual="true">
-              <div slot="content">
-                <img :src="captcha1.img" @click="grabCaptcha()">
-                <br/>{{$t('agent.captcha_reset')}}</div>
-              <el-form-item :label="$t('agent.captcha')" prop="captcha_1">
-                <el-input v-model="ruleForm.captcha_1" 
-                          @focus="captcha1.show = true" 
-                          @blur="captcha1.show = false" 
-                          @keyup.enter.native="submitForm('ruleForm')"></el-input>
-              </el-form-item>
-            </el-tooltip>
             <el-form-item>
               <el-button type="primary" @click="submitForm('ruleForm')" size="medium">{{$t('action.submit')}}</el-button>
             </el-form-item>
@@ -66,7 +54,7 @@
 
 <script>
   import TopBar from '../../components/TopBar'
-  import {register, getCaptcha} from '../../api'
+  import {agentRegister, getCaptcha} from '../../api'
   import api from '../../api/urls'
 
   export default {
@@ -148,7 +136,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let inputData = this.ruleForm
-            register(inputData).then(
+            agentRegister(inputData).then(
               response => {
                 this.$router.push({name: 'Home'})
               }, errorRes => {
@@ -196,30 +184,6 @@
           })
         }
       )
-
-        getCaptcha().then(
-      response => {
-        this.captcha1.show = true
-        this.ruleForm.captcha_0 = response.data.captcha_val
-        this.captcha1.img = api.domain + response.data.captcha_src
-      },
-      errorRes => {
-        const errors = errorRes.response.data.error
-        let messages = []
-
-        errors.forEach(error => {
-          Object.keys(error).forEach(key => {
-            messages.push(error[key])
-          })
-        })
-
-        this.$message({
-          showClose: true,
-          message: messages.join(', '),
-          type: 'error'
-        })
-      }
-    )
       }
     },
     created () {

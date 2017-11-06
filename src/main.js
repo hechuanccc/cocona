@@ -11,8 +11,6 @@ import VueI18n from 'vue-i18n'
 import locales from './i18n/locales'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import VueI18n from 'vue-i18n'
-import locales from './i18n/locales'
 
 Vue.use(require('vue-moment'))
 Vue.use(VueI18n)
