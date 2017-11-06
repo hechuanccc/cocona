@@ -3,48 +3,60 @@
     <el-row type="flex" class="row-bg" justify="center">
       <el-col :span="8">
         <el-form :label-position="labelPosition" 
-                 :model="ruleForm" 
+                 :model="ruleForm"
                  status-icon
                  :rules="formRules"
                  ref="ruleForm"
                  label-width="100px">
-          <el-tooltip content="6~10个字符的代理帐号" placement="right">
-            <el-form-item label="代理帐号" prop="username">
+          <el-tooltip :content="$t('validate.username_validate')" placement="right">
+            <el-form-item :label="$t('agent.username')" prop="username">
               <el-input v-model.number="ruleForm.username"></el-input>
             </el-form-item>
           </el-tooltip>
-            <el-tooltip content="密码请至少含有两个字母且4-13个字符" placement="right">
-              <el-form-item label="設定密码" prop="password">
+            <el-tooltip :content="$t('validate.password_validate')" placement="right">
+              <el-form-item :label="$t('agent.password')" prop="password">
                 <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
               </el-form-item>
             </el-tooltip>
-            <el-form-item label="确认密码" prop="confirm_password">
+            <el-form-item :label="$t('agent.confirm_password')" prop="confirm_password">
               <el-input type="password" v-model="ruleForm.confirm_password" auto-complete="off"></el-input>
             </el-form-item>
-            <el-tooltip content="提醒：真实姓名必须与您用于提款银行账户名称一致唷" placement="right">
-              <el-form-item label="真实姓名" prop="real_name">
+            <el-tooltip :content="$t('agent.realname_tip')" placement="right">
+              <el-form-item :label="$t('agent.real_name')" prop="real_name">
                 <el-input v-model="ruleForm.real_name"> </el-input>
               </el-form-item>
             </el-tooltip>
-            <el-form-item label="手机号码" prop="phone">
+            <el-form-item :label="$t('agent.phone')" prop="phone">
               <el-input v-model="ruleForm.phone" number></el-input>
             </el-form-item>
-            <el-form-item label="邮箱" prop="email">
+            <el-form-item :label="$t('agent.email')" prop="email">
               <el-input v-model="ruleForm.email"></el-input>
             </el-form-item>
             <el-tooltip placement="right" effect="light" :value="captcha.show" :manual="true">
               <div slot="content">
                 <img :src="captcha.img" @click="grabCaptcha()">
-                <br/>点击图片换一张</div>
-              <el-form-item label="验证码" prop="captcha_1">
+                <br/>{{$t('agent.captcha_reset')}}</div>
+              <el-form-item :label="$t('agent.captcha')" prop="captcha_1">
                 <el-input v-model="ruleForm.captcha_1" 
                           @focus="captcha.show = true" 
                           @blur="captcha.show = false" 
                           @keyup.enter.native="submitForm('ruleForm')"></el-input>
               </el-form-item>
             </el-tooltip>
+
+            <el-tooltip placement="right" effect="light" :value="captcha.show" :manual="true">
+              <div slot="content">
+                <img :src="captcha1.img" @click="grabCaptcha()">
+                <br/>{{$t('agent.captcha_reset')}}</div>
+              <el-form-item :label="$t('agent.captcha')" prop="captcha_1">
+                <el-input v-model="ruleForm.captcha_1" 
+                          @focus="captcha1.show = true" 
+                          @blur="captcha1.show = false" 
+                          @keyup.enter.native="submitForm('ruleForm')"></el-input>
+              </el-form-item>
+            </el-tooltip>
             <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')" size="medium">提交</el-button>
+              <el-button type="primary" @click="submitForm('ruleForm')" size="medium">{{$t('action.submit')}}</el-button>
             </el-form-item>
         </el-form>
       </el-col>
@@ -56,14 +68,14 @@
   import TopBar from '../../components/TopBar'
   import {register, getCaptcha} from '../../api'
   import api from '../../api/urls'
-  
+
   export default {
     data () {
       var validatePass = (rule, value, callback) => {
         if (value === '') {
-          callback(new Error('请再次输入密码'))
+          callback(new Error(this.$t('validate.password_again')))
         } else if (value !== this.ruleForm.password) {
-          callback(new Error('两次输入密码不一致!'))
+          callback(new Error(this.$t('validate.password_diff')))
         } else {
           callback()
         }
@@ -83,17 +95,21 @@
           img: '',
           show: false
         },
+        captcha1: {
+          img: '',
+          show: false
+        },
         formRules: {
           username: [{
             required: true,
             pattern: /^[a-zA-Z0-9]{4,10}$/,
-            message: '6~10个字符的代理帐号',
+            message: this.$t('validate.username_validate'),
             trigger: 'blur'
           }],
           password: [{
             required: true,
             pattern: /^[a-zA-Z]{2}[a-zA-Z0-9]{4,13}$/,
-            message: '密码请至少含有两个字母且4-13个字符',
+            message: this.$t('validate.password_validate'),
             trigger: 'blur'
           }],
           confirm_password: [{
@@ -104,24 +120,23 @@
           real_name: [{
             required: true,
             pattern: /^\D*$/,
-            message: '请输入真实姓名',
+            message: this.$t('validate.username_required'),
             trigger: 'blur'
           }],
           phone: [{
             required: true,
-            pattern: /^\d{11}$/,
-            message: '请输入 11 位手机号',
+            message: this.$t('validate_phone_required'),
             trigger: 'blur'
           }],
           email: [{
             required: true,
             pattern: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
-            message: '请输入正确格式的邮箱',
+            message: this.$t('validate.email_validate'),
             trigger: 'blur'
           }],
           captcha_1: [{
             required: true,
-            message: '请输入验证码',
+            message: this.$t('validate.captcha_required'),
             trigger: 'blur'
           }]
         },
@@ -181,6 +196,30 @@
           })
         }
       )
+
+        getCaptcha().then(
+      response => {
+        this.captcha1.show = true
+        this.ruleForm.captcha_0 = response.data.captcha_val
+        this.captcha1.img = api.domain + response.data.captcha_src
+      },
+      errorRes => {
+        const errors = errorRes.response.data.error
+        let messages = []
+
+        errors.forEach(error => {
+          Object.keys(error).forEach(key => {
+            messages.push(error[key])
+          })
+        })
+
+        this.$message({
+          showClose: true,
+          message: messages.join(', '),
+          type: 'error'
+        })
+      }
+    )
       }
     },
     created () {

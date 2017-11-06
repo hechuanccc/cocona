@@ -9,15 +9,31 @@ import VueCookie from 'vue-cookie'
 import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import VueI18n from 'vue-i18n'
+import locales from './i18n/locales'
 
 Vue.use(require('vue-moment'))
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
+Vue.use(VueI18n)
 
 Vue.config.productionTip = false
 
+let navLang = navigator.language || navigator.userLanguage
+if (navLang === 'zh-CN' || navLang === 'zh-cn') {
+  Vue.config.lang = 'cn'
+} else if (navLang === 'en-US' || navLang === 'en-us') {
+  Vue.config.lang = 'en'
+} else {
+  Vue.config.lang = 'cn'
+}
+
+Object.keys(locales).forEach(lang => {
+  Vue.locale(lang, locales[lang])
+})
+
 router.beforeEach((to, from, next) => {
-  // fisrMacthed might be the top-level parent route of others
+    // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
   if (to.meta.requiresAuth || firstMatched.meta.requiresAuth) {
     const token = Vue.cookie.get('access_token')
