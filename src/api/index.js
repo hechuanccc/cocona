@@ -69,25 +69,6 @@ export function fetchCaptcha () {
     return data
   })
 }
-export function agentRegister (userInfo) {
-  return axios.post(urls.agent_register, qs.stringify(userInfo))
-}
-
-export function getCaptcha () {
-  return axios.get(urls.agent_captcha)
-}
-
-export function getBanner () {
-  return axios.get(urls.banner)
-}
-
-export function getAnnouncements () {
-  return axios.get(urls.announcements)
-}
-
-export function gethomePage () {
-  return axios.get(urls.homePage)
-}
 
 export function fetchPaymentType () {
   return axios.get(urls.paymentType).then(res => res.data)
