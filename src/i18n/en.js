@@ -1,7 +1,7 @@
 'use strict'
 
 export default {
-  register: {
+  user: {
     username: 'User Name',
     password: 'Password',
     confirm_password: 'Confirm Password',
@@ -9,15 +9,28 @@ export default {
     phone: 'Phone Number',
     email: 'Email',
     withdraw_password: 'Withdraw Password',
-    captcha: 'Captcha'
+    captcha: 'Captcha',
+    level: 'Level',
+    money: 'Money',
+    unsettled: 'Unsettled',
+    payment: 'Payment',
+    withdraw: 'Withdraw',
+    betrecord: 'Bet Record',
+    primary_info: 'Primary Info',
+    password_setting: 'Password Setting',
+    amount: 'Amount',
+    gender: 'Gender',
+    male: 'male',
+    female: 'female'
   },
   action: {
     submit: 'Submit',
-    reset: 'Reset'
+    reset: 'Reset',
+    modify: 'Modify'
   },
   validate: {
-    username_validate: 'User name length should be 4-10 digit or character',
-    password_validate: 'Password length should be 6-15 digit or character,  the first two letters must be charater',
+    username_validate: 'User name should be 4-10 digit or character',
+    password_validate: 'Password should be 6-15 digit or character, the first two letters must be charater',
     password_again: 'Please enter password again',
     password_diff: 'twice password are different',
     username_exist: 'This usernam has existed',

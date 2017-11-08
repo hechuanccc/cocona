@@ -1,7 +1,7 @@
 'use strict'
 
 export default {
-  register: {
+  user: {
     username: '帐号',
     password: '密码',
     confirm_password: '确认密码',
@@ -9,11 +9,24 @@ export default {
     phone: '手机号码',
     email: '邮件信箱',
     withdraw_password: '提款密码',
-    captcha: '验证码'
+    captcha: '验证码',
+    level: '会员等级',
+    money: '钱包',
+    unsettled: '未结金额',
+    payment: '充值',
+    withdraw: '提款',
+    betrecord: '下注纪录',
+    primary_info: '基本信息',
+    password_setting: '密码设定',
+    amount: '金额',
+    gender: '性别',
+    male: '男',
+    female: '女'
   },
   action: {
     submit: '提交',
-    reset: '重置'
+    reset: '重置',
+    modify: '修改'
   },
   validate: {
     username_validate: '请输入4~10位英数字',

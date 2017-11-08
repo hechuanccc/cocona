@@ -1,34 +1,34 @@
 
 <template>
 <el-row class="row-bg">
-  <el-col :span="16" :offset="4">
+  <el-col :span="10" :offset="7">
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
-      <el-form-item :label="$t('register.username')" prop="username">
+      <el-form-item :label="$t('user.username')" prop="username">
         <el-input :maxlength="10" v-model="user.username" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.password')" prop="password">
-        <el-input type="text" v-model="user.password" auto-complete="off"></el-input>
+      <el-form-item :label="$t('user.password')" prop="password">
+        <el-input type="password" v-model="user.password" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.confirm_password')" prop="confirmation_password">
+      <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
         <el-input type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.realname')" prop="real_name">
+      <el-form-item :label="$t('user.realname')" prop="real_name">
         <el-input v-model="user.real_name"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.phone')" prop="phone">
+      <el-form-item :label="$t('user.phone')" prop="phone">
         <el-input v-model="user.phone"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.email')" prop="email">
+      <el-form-item :label="$t('user.email')" prop="email">
         <el-input v-model="user.email"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.withdraw_password')" prop="withdraw_password">
+      <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
         <el-input v-model="user.withdraw_password"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.captcha')" required>
+      <el-form-item :label="$t('user.captcha')" required>
         <el-col :span="12">
           <el-form-item  prop="verification_code_1">
             <el-input :maxlength="4" v-model="user.verification_code_1">
-              <el-button slot="append" icon="el-icon-refresh" @click="fetchVerification"></el-button>
+              <el-button slot="append" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
             </el-input>
 
           </el-form-item>
@@ -47,15 +47,15 @@
 </template>
 
 <script>
-  import {fetchVerification, checkUserName} from '../../api'
-  import urls from '../../api/urls'
-
-  const userNamePattern = /^[a-zA-Z0-9]{4,10}$/
-  const passwordPattern = /^[a-zA-Z]{2}[a-zA-Z0-9]{4,13}$/
+  import {fetchCaptcha, checkUserName} from '../../api'
+  import {validateUserName, validatePassword} from '../../validate'
+  import errorHandler from '../../mixins/errorHandler'
   export default {
+    name: 'register',
+    mixins: [errorHandler],
     data () {
-      const validateUserName = (rule, value, callback) => {
-        if (!userNamePattern.test(value)) {
+      const userNameValidator = (rule, value, callback) => {
+        if (!validateUserName(value)) {
           callback(new Error(this.$t('validate.username_validate')))
         } else {
           checkUserName(value).then(data => {
@@ -67,7 +67,7 @@
           })
         }
       }
-      const validatePass = (rule, value, callback) => {
+      const passwordValidator = (rule, value, callback) => {
         if (value === '') {
           callback(new Error(this.$t('validate.password_required')))
         } else {
@@ -78,15 +78,15 @@
         }
       }
 
-      const validatePassFormat = (rule, value, callback) => {
-        if (!passwordPattern.test(value)) {
+      const passwordFormatValidator = (rule, value, callback) => {
+        if (!validatePassword(value)) {
           callback(new Error(this.$t('validate.password_validate')))
         } else {
           callback()
         }
       }
 
-      const validateConfirmPass = (rule, value, callback) => {
+      const confirmPasswordValidator = (rule, value, callback) => {
         if (value === '') {
           callback(new Error(this.$t('validate.password_again')))
         } else if (value !== this.user.password) {
@@ -95,7 +95,7 @@
           callback()
         }
       }
-      const validateCode = (rule, value, callback) => {
+      const captchaValidator = (rule, value, callback) => {
         if (value === '') {
           callback(new Error(this.$t('validate.captcha_required')))
         } else {
@@ -118,14 +118,14 @@
         rules: {
           username: [
             { required: true, message: this.$t('validate.username_required'), trigger: 'blur' },
-            { validator: validateUserName, trigger: 'blur,change' }
+            { validator: userNameValidator, trigger: 'blur,change' }
           ],
           password: [
-            { required: true, validator: validatePass, trigger: 'blur' },
-            { validator: validatePassFormat, trigger: 'blur,change' }
+            { required: true, validator: passwordValidator, trigger: 'blur' },
+            { validator: passwordFormatValidator, trigger: 'blur,change' }
           ],
           confirmation_password: [
-            { required: true, validator: validateConfirmPass, trigger: 'blur' }
+            { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
           ],
           real_name: [
             { required: true, message: this.$t('validate.realname_required'), trigger: 'blur' }
@@ -141,13 +141,13 @@
             { required: true, message: this.$t('validate.withdraw_password_required'), trigger: 'blur' }
           ],
           verification_code_1: [
-            { required: true, validator: validateCode, trigger: 'blur' }
+            { required: true, validator: captchaValidator, trigger: 'blur' }
           ]
         }
       }
     },
     created () {
-      this.fetchVerification()
+      this.fetchCaptcha()
     },
     methods: {
       submitForm () {
@@ -165,27 +165,7 @@
             }).then(result => {
               this.$router.push({name: 'Game'})
             }, errorRes => {
-              const errors = errorRes.response.data.error
-
-              let message
-              if (Array.isArray(errors)) {
-                let messages = []
-
-                errors.forEach(error => {
-                  Object.keys(error).forEach(key => {
-                    messages.push(error[key])
-                  })
-                })
-                message = messages.join(', ')
-              } else {
-                message = errors
-              }
-
-              this.$message({
-                showClose: true,
-                message: message,
-                type: 'error'
-              })
+              this.errorHandler(errorRes.response.data.error)
             })
           } else {
             return false
@@ -194,11 +174,11 @@
       },
       resetForm () {
         this.$refs['user'].resetFields()
-        this.fetchVerification()
+        this.fetchCaptcha()
       },
-      fetchVerification () {
-        fetchVerification().then(data => {
-          this.captcha_src = urls.domain + data.captcha_src
+      fetchCaptcha () {
+        fetchCaptcha().then(data => {
+          this.captcha_src = data.captcha_src
           this.user.verification_code_0 = data.captcha_val
         })
       }

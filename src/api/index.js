@@ -13,7 +13,7 @@ export function register (user) {
 }
 
 export function checkUserName (username) {
-  return axios.get(urls.check_username, {params: {username: username}}).then(res => res.data)
+  return axios.get(urls.check_username, { params: { username: username } }).then(res => res.data)
 }
 
 export function fetchGames () {
@@ -22,6 +22,9 @@ export function fetchGames () {
 
 export function fetchUser () {
   return axios.get(urls.user).then(res => res.data)
+}
+export function updateUser (user) {
+  return axios.put(`${urls.user}${user.id}/`, user).then(res => res.data)
 }
 
 export function fetchCategories (gameId) {
@@ -36,6 +39,37 @@ export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`).then(res => res.data)
 }
 
-export function fetchVerification () {
-  return axios.get(urls.verification).then(res => res.data)
+export function fetchCaptcha () {
+  return axios.get(urls.verification).then(res => {
+    let data = res.data
+    data.captcha_src = urls.domain + data.captcha_src
+    return data
+  })
+}
+export function agentRegister (userInfo) {
+  return axios.post(urls.agent_register, qs.stringify(userInfo))
+}
+
+export function getCaptcha () {
+  return axios.get(urls.agent_captcha)
+}
+
+export function getBanner () {
+  return axios.get(urls.banner)
+}
+
+export function getAnnouncements () {
+  return axios.get(urls.announcements)
+}
+
+export function gethomePage () {
+  return axios.get(urls.homePage)
+}
+
+export function fetchPaymentType () {
+  return axios.get(urls.paymentType).then(res => res.data)
+}
+
+export function fetchPaymentTypeDetail (id) {
+  return axios.get(`${urls.paymentType}?opt_expand=1`).then(res => res.data)
 }

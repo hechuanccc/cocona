@@ -8,6 +8,7 @@ import {
   login,
   register,
   fetchUser,
+  updateUser,
   fetchGames,
   fetchCategories
 } from '../../api'
@@ -47,6 +48,13 @@ export default {
         })
       }
       return Promise.resolve(res)
+    })
+  },
+  updateUser: ({ commit, state }, updateData) => {
+    return updateUser(updateData).then(data => {
+      commit(types.SET_USER, {
+        user: data
+      })
     })
   },
   fetchGames: ({ commit, state }) => {

@@ -4,6 +4,7 @@ const env = process.env.NODE_ENV === 'development' ? config.dev.env : config.bui
 const host = env.HOST.replace(/"/g, '')
 const prefix = host + '/member'
 const apiv1 = host + '/v1/member'
+const apiManage = host + '/v1/manage'
 
 export default {
   domain: host,
@@ -17,5 +18,12 @@ export default {
   category: apiv1 + '/game/category/',
   playgroup: apiv1 + '/game/playgroup/',
   schedule: apiv1 + '/game/schedule/',
-  check_username: host + '/v1/checkmember/'
+  agent_register: apiManage + '/agentapplication/',
+  agent_captcha: apiv1 + '/verification_code/',
+  banner: apiv1 + '/banners/',
+  homePage: apiv1 + '/website/home-page/',
+  announcements: apiv1 + '/announcements/',
+  check_username: host + '/v1/checkmember/',
+  payment: apiv1 + '/payment/',
+  paymentType: apiv1 + '/paymenttype/?opt_expand=1/'
 }
