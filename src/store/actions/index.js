@@ -48,7 +48,7 @@ export default {
         })
       }
       return Promise.resolve(res)
-    })
+    }, error => Promise.reject(error))
   },
   updateUser: ({ commit, state }, updateData) => {
     return updateUser(updateData).then(data => {

@@ -7,28 +7,35 @@ import _ from 'lodash'
  *    For example: unionChunked(playgroups, 'display_name', 'plays', 4)
  *
  * @param      {<Array>}  raw      The playgroups
- * @param      {<String>}  keyBy     Which field do we use to decide the
- *             item should be in the same group.
- * @param      {<String>}  keyUnion  Which field do we want to union.
  * @param      {<Int>}  size      The chunk size
- * @return     {<type>}  Regrouped lists
+ * @return     {<Array>}  Regrouped lists
  */
 
-export function unionChunked (raw, keyBy, keyUnion, size) {
-  const playgroups = _.cloneDeep(raw)
+export function unionChunked (raw, size, groupCodes) {
+  const playgroups = []
+  // sort groups in raw by the orders in groupCodes
+  groupCodes.forEach(code => {
+    const matchedGroup = _.find(raw, group => group.code === code)
+    if (matchedGroup) {
+      playgroups.push(matchedGroup)
+    }
+  })
+
+  // turn plays in playgroups into chunks
   playgroups.forEach(playgroup => {
-    playgroup[keyUnion] = _.chunk(playgroup[keyUnion], size)
+    playgroup['plays'] = _.chunk(playgroup['plays'], size)
   })
   if (playgroups.length < 2) {
     return playgroups
   }
+
   let obj = {}
 
   playgroups.forEach(item => {
-    if (!obj[item[keyBy]]) {
-      obj[item[keyBy]] = item
+    if (!obj[item['display_name']]) {
+      obj[item['display_name']] = item
     } else {
-      obj[item[keyBy]][keyUnion] = obj[item[keyBy]][keyUnion].concat(item[keyUnion])
+      obj[item['display_name']]['plays'] = obj[item['display_name']]['plays'].concat(item['plays'])
     }
   })
   return _.map(obj, n => n)
@@ -37,7 +44,7 @@ export function unionChunked (raw, keyBy, keyUnion, size) {
 export function formatPlayGroup (raw, formatting) {
   let sections = []
   formatting.forEach(format => {
-    let chunkedRaw = unionChunked(raw, 'display_name', 'plays', format.play_col)
+    let chunkedRaw = unionChunked(raw, format.play_col, format.grp_code)
     let playgroups = []
     format.grp_code.forEach(code => {
       let targetGroup = _.find(chunkedRaw, x => x.code === code)

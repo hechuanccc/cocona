@@ -1,6 +1,27 @@
 'use strict'
 
 export default {
+  navMenu: {
+    home_page: 'Home',
+    game_center: 'Games Center',
+    user_register: 'Register',
+    qa: 'Problem',
+    affliate: 'Join Us',
+    promotion: 'Preferential',
+    draw_history: 'Draw History',
+    game_intro: 'Game Intro'
+  },
+  agent: {
+    username: 'Username',
+    password: 'Password',
+    confirm_password: 'Confirm',
+    real_name: 'Real Name',
+    realname_tip: 'Tips: Must be the same as the name you used for your withdrawal bank account',
+    phone: 'Phone',
+    email: 'Email',
+    captcha: 'Captcha',
+    captcha_reset: 'Reset Captcha'
+  },
   user: {
     username: 'User Name',
     password: 'Password',

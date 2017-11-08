@@ -19,11 +19,13 @@ export default {
   playgroup: apiv1 + '/game/playgroup/',
   schedule: apiv1 + '/game/schedule/',
   agent_register: apiManage + '/agentapplication/',
+  promotions: apiv1 + '/promotion/',
   agent_captcha: apiv1 + '/verification_code/',
   banner: apiv1 + '/banners/',
   homePage: apiv1 + '/website/home-page/',
   announcements: apiv1 + '/announcements/',
   check_username: host + '/v1/checkmember/',
   payment: apiv1 + '/payment/',
-  paymentType: apiv1 + '/paymenttype/?opt_expand=1/'
+  paymentType: apiv1 + '/paymenttype/?opt_expand=1/',
+  betrecord: apiv1 + '/betrecord/'
 }

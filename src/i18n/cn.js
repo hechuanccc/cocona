@@ -1,6 +1,27 @@
 'use strict'
 
 export default {
+  navMenu: {
+    home_page: '网站首页',
+    game_center: '游戏大厅',
+    user_register: '会员注册',
+    qa: '常见问题',
+    affliate: '加盟合作',
+    promotion: '优惠活动',
+    draw_history: '历史开奖',
+    game_intro: '游戏介绍'
+  },
+  agent: {
+    username: '代理帐号',
+    password: '設定密码',
+    confirm_password: '确认密码',
+    real_name: '真实姓名',
+    realname_tip: '提醒：真实姓名必须与您用于提款银行账户名称一致',
+    phone: '手机号码',
+    email: '邮箱',
+    captcha: '验证码',
+    captcha_reset: '点击图片换一张'
+  },
   user: {
     username: '帐号',
     password: '密码',

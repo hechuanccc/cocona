@@ -17,6 +17,12 @@ import { mapGetters } from 'vuex'
 import style from '../style'
 
 export default {
+  props: {
+    path: {
+      type: String,
+      default: 'game'
+    }
+  },
   data () {
     return {
       style
@@ -39,18 +45,22 @@ export default {
   watch: {
     'allGames': function () {
       if (!this.$route.params.gameId) {
-        this.$router.push('/game/' + this.allGames[0].id)
+        this.$router.push('/' + this.path + '/' + this.allGames[0].id)
       }
     }
   },
   name: 'gamemenu',
   methods: {
     handleSelect (key, keyPath) {
-      this.$router.push('/game/' + this.allGames[key].id)
+      this.$router.push('/' + this.path + '/' + this.allGames[key].id)
     }
   }
 }
 </script>
 
 <style scoped lang='scss'>
+.el-menu--horizontal .el-menu-item {
+  height: 40px;
+  line-height: 40px;
+}
 </style>

@@ -16,6 +16,7 @@ Vue.use(require('vue-moment'))
 Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
+Vue.use(VueI18n)
 
 Vue.config.productionTip = false
 
@@ -33,7 +34,7 @@ Object.keys(locales).forEach(lang => {
 })
 
 router.beforeEach((to, from, next) => {
-  // fisrMacthed might be the top-level parent route of others
+    // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
   if (to.meta.requiresAuth || firstMatched.meta.requiresAuth) {
     const token = Vue.cookie.get('access_token')
@@ -58,7 +59,6 @@ new Vue({
     const token = Vue.cookie.get('access_token')
     if (token) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-      this.$store.dispatch('fetchUser')
     }
   }
 })

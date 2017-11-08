@@ -4,6 +4,7 @@ import Home from '@/screens/Home'
 import GameHall from '@/screens/GameHall'
 import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
+import agentRegister from '@/screens/agent/agentRegister'
 import Register from '@/screens/member/Register'
 import Account from '@/screens/member/Account'
 import Withdraw from '@/screens/member/Withdraw'
@@ -19,11 +20,19 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
+      meta: {Page: 'Home'},
       component: Home
+    },
+    {
+      path: '/agent/register',
+      name: 'agentRegister',
+      meta: {Page: 'agentRegister'},
+      component: agentRegister
     },
     {
       path: '/register',
       name: 'Register',
+      meta: {Page: 'Register'},
       component: Register
     },
     {
@@ -63,15 +72,17 @@ export default new Router({
       path: '/game',
       name: 'Game',
       component: GameHall,
-      meta: { requiresAuth: true },
+      meta: {requiresAuth: true, Page: 'Game'},
       children: [
         {
           path: ':gameId',
           component: Game,
+          meta: {Page: 'Game'},
           children: [
             {
               path: ':categoryId',
-              component: GameCategory
+              component: GameCategory,
+              meta: {Page: 'Game'}
             }
           ]
         }
