@@ -59,4 +59,8 @@ export default {
 </script>
 
 <style scoped lang='scss'>
+.el-menu--horizontal .el-menu-item {
+  height: 40px;
+  line-height: 40px;
+}
 </style>

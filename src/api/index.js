@@ -62,3 +62,9 @@ export function fetchSchedule (gameId) {
 export function fetchVerification () {
   return axios.get(urls.verification).then(res => res.data)
 }
+
+export function placeBet (data) {
+  return axios.post(urls.betrecord, data, {
+    'Content-Type': 'application/json'
+  }).then(res => res.data)
+}
