@@ -22,6 +22,12 @@ export default {
     captcha: '验证码',
     captcha_reset: '点击图片换一张'
   },
+  promotions: {
+    campaign: '活动',
+    deposit_withdraw: '存提款',
+    lottery: '彩票类',
+    others: '其他'
+  },
   register: {
     username: '帐号',
     password: '密码',

@@ -22,6 +22,12 @@ export default {
     captcha: 'Captcha',
     captcha_reset: 'Reset Captcha'
   },
+  promotions: {
+    campaign: 'Campaign',
+    deposit_withdraw: 'Deposits&withdrawals',
+    lottery: 'Lottery',
+    others: 'Others'
+  },
   register: {
     username: 'User Name',
     password: 'Password',

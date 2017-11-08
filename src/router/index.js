@@ -6,6 +6,7 @@ import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
 import agentRegister from '@/screens/agent/agentRegister'
 import Register from '@/screens/member/Register'
+import Promotions from '@/screens/Promotions'
 
 Vue.use(Router)
 
@@ -28,6 +29,12 @@ export default new Router({
       name: 'Register',
       meta: {Page: 'Register'},
       component: Register
+    },
+    {
+      path: '/promotions',
+      name: 'Promotions',
+      meta: {Page: 'Promotions'},
+      component: Promotions
     },
     {
       path: '/game',
