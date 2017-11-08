@@ -110,10 +110,6 @@ export default {
 </script>
 
 <style scoped>
-  /* #app {
-    width: 1000px;
-    margin: 0 auto;
-  } */
 /* banner */
   .el-carousel__item img {
     width: 100%;

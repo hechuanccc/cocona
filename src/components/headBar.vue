@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .top-header
   margin-bottom: 20px
 .header-bar
