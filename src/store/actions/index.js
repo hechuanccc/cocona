@@ -47,7 +47,7 @@ export default {
         })
       }
       return Promise.resolve(res)
-    })
+    }, error => Promise.reject(error))
   },
   fetchGames: ({ commit, state }) => {
     return fetchGames().then(res => {

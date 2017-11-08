@@ -50,7 +50,8 @@ export default {
           password: this.password
         }
       }).then(result => {
-        this.$router.push('game')
+        const next = this.$route.query.next
+        this.$router.push(next || 'game')
       }, errorRes => {
         const errors = errorRes.response.data.error
         let messages = []
