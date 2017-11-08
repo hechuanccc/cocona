@@ -1,6 +1,16 @@
 'use strict'
 
 export default {
+  navMenu: {
+    home_page: '网站首页',
+    game_center: '游戏大厅',
+    user_register: '会员注册',
+    qa: '常见问题',
+    affliate: '加盟合作',
+    promotion: '优惠活动',
+    draw_history: '历史开奖',
+    game_intro: '游戏介绍'
+  },
   agent: {
     username: '代理帐号',
     password: '設定密码',

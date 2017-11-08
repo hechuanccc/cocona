@@ -1,6 +1,16 @@
 'use strict'
 
 export default {
+  navMenu: {
+    home_page: 'Home',
+    game_center: 'Games Center',
+    user_register: 'Register',
+    qa: 'Problem',
+    affliate: 'Join Us',
+    promotion: 'Preferential',
+    draw_history: 'Draw History',
+    game_intro: 'Game Intro'
+  },
   agent: {
     username: 'Username',
     password: 'Password',

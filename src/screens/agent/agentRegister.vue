@@ -2,7 +2,7 @@
   <div>
     <el-row type="flex" class="row-bg" justify="center">
       <el-col :span="8">
-        <el-form :label-position="labelPosition" 
+        <el-form :label-position="labelPosition"
                  :model="ruleForm"
                  status-icon
                  :rules="formRules"
@@ -37,9 +37,9 @@
                 <img :src="captcha.img" @click="grabCaptcha()">
                 <br/>{{$t('agent.captcha_reset')}}</div>
               <el-form-item :label="$t('agent.captcha')" prop="captcha_1">
-                <el-input v-model="ruleForm.captcha_1" 
-                          @focus="captcha.show = true" 
-                          @blur="captcha.show = false" 
+                <el-input v-model="ruleForm.captcha_1"
+                          @focus="captcha.show = true"
+                          @blur="captcha.show = false"
                           @keyup.enter.native="submitForm('ruleForm')"></el-input>
               </el-form-item>
             </el-tooltip>
@@ -113,7 +113,7 @@
           }],
           phone: [{
             required: true,
-            message: this.$t('validate_phone_required'),
+            message: this.$t('validate.phone_required'),
             trigger: 'blur'
           }],
           email: [{

@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <GameMenu />
+      <GameMenu path="game"/>
     </el-header>
     <!-- user key props to force Vue to re-render router-view whenever route change -->
     <router-view :key="$route.name + ($route.params.gameId || '')"/>
