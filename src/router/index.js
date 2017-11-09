@@ -6,7 +6,7 @@ import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
 import agentRegister from '@/screens/agent/agentRegister'
 import Register from '@/screens/member/Register'
-import Promotions from '@/screens/Promotions'
+import Promotions from '@/screens/promotion/Promotions'
 
 Vue.use(Router)
 

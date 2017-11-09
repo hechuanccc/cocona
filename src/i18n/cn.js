@@ -4,6 +4,7 @@ export default {
   navMenu: {
     home_page: '网站首页',
     game_center: '游戏大厅',
+    personal_account: '个人帐户',
     user_register: '会员注册',
     qa: '常见问题',
     affliate: '加盟合作',

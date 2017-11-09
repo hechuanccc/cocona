@@ -5,6 +5,7 @@ export default {
     home_page: 'Home',
     game_center: 'Games Center',
     user_register: 'Register',
+    personal_account: '个人帐户',
     qa: 'Problem',
     affliate: 'Join Us',
     promotion: 'Preferential',
