@@ -26,8 +26,11 @@ export default {
 
 <style lang="sass" scoped>
 .logo
-  float: left
+  position: relative
+  display: inline-block
+  left: 0
   height: 60px
+  width: 240px
   img
     width: auto
     height: 100%

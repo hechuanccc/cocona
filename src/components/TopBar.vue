@@ -1,22 +1,22 @@
 <template>
-
   <el-row :gutter="4" class="top-bar">
-    <!--static data--><el-col :span="4" class="bar-descript">內時聞海提出主面必調的為化。育麼活研件怎斷和熱到大好</el-col>
-    <el-col :span="4">
+    <el-col :span="4" class="bar-descript">
+      {{now_time}} 营业时间: 白天07:30 - 凌晨04:00/ 全年无休
+    </el-col>
+    <el-col :span="3" :push="5">
       <el-input v-model="username" placeholder="会员登录"></el-input>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="3" :push="5">
       <el-input v-model="password" type="password" placeholder="密码">
         <el-button slot="suffix" size="mini" type="info" class="ipt-slot">忘记?</el-button>
       </el-input>
     </el-col>
-    <el-col :span="8">
+    <el-col :span="8" :push="4">
       <el-button type="primary" @click="login">会员登录</el-button>
       <el-button type="info">会员注册</el-button>
       <el-button type="warning">免费试玩</el-button>
     </el-col>
   </el-row>
-
 </template>
 
 <script>
@@ -32,15 +32,9 @@ export default {
     return {
       username: '',
       password: '',
-      homepage: ''
+      homepage: '',
+      now_time: ''
     }
-  },
-  created () {
-    gethomePage().then(
-      response => {
-        this.homepage = response.data
-      }
-    )
   },
   methods: {
     login () {
@@ -69,6 +63,21 @@ export default {
         })
       })
     }
+  },
+  created () {
+    gethomePage().then(
+      response => {
+        this.homepage = response.data
+      }
+    )
+
+    this.timing = setInterval(() => {
+      let now = new Date()
+      this.now_time = now.toLocaleString()
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timing)
   }
 }
 </script>
@@ -78,7 +87,7 @@ export default {
   padding: 7px
 .top-bar
   padding-top: 7px
-  width: 1000px
+  width: 1280px
   display: inline-block
 .bar-descript
   width: auto
