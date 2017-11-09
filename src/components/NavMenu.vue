@@ -5,12 +5,12 @@
   mode="horizontal"
   @select="handleSelect"
   :active-text-color="style.primaryColor">
-    <el-menu-item index="" v-show="!showHistory">{{$t('navMenu.home_page')}}</el-menu-item>
-    <el-menu-item :index="islogin">{{$t('navMenu.game_center')}}</el-menu-item>
-    <el-menu-item index="register" v-show="!showHistory">{{$t('navMenu.user_register')}}</el-menu-item>
-    <el-menu-item index="promotions" v-show="!showHistory">{{$t('navMenu.promotion')}}</el-menu-item>
-    <el-menu-item index="qa" v-show="!showHistory">{{$t('navMenu.qa')}}</el-menu-item>
-    <el-menu-item index="agent/register" v-show="!showHistory">{{$t('navMenu.affliate')}}</el-menu-item>
+    <el-menu-item index="" v-show="!islogin">{{$t('navMenu.home_page')}}</el-menu-item>
+    <el-menu-item index="game">{{$t('navMenu.game_center')}}</el-menu-item>
+    <el-menu-item index="register" v-show="!islogin">{{$t('navMenu.user_register')}}</el-menu-item>
+    <el-menu-item index="promotions" v-show="!islogin">{{$t('navMenu.promotion')}}</el-menu-item>
+    <el-menu-item index="qa" v-show="!islogin">{{$t('navMenu.qa')}}</el-menu-item>
+    <el-menu-item index="agent/register" v-show="!islogin">{{$t('navMenu.affliate')}}</el-menu-item>
 
     <el-menu-item index="personal" v-show="showHistory">{{$t('navMenu.personal_account')}}</el-menu-item>
     <el-menu-item index="history" v-show="showHistory">{{$t('navMenu.draw_history')}}</el-menu-item>
@@ -42,11 +42,8 @@ export default {
     }
   },
   computed: {
-    showHistory () {
-      return ['Game', 'Personal'].includes(this.$route.meta.Page)
-    },
     islogin () {
-      return this.$store.state.user.logined ? 'game' : 'register'
+      return this.$store.state.user.logined
     }
   }
 }
