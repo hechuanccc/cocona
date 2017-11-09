@@ -12,9 +12,9 @@
     <el-menu-item index="qa" v-show="!islogin">{{$t('navMenu.qa')}}</el-menu-item>
     <el-menu-item index="agent/register" v-show="!islogin">{{$t('navMenu.affliate')}}</el-menu-item>
 
-    <el-menu-item index="personal" v-show="showHistory">{{$t('navMenu.personal_account')}}</el-menu-item>
-    <el-menu-item index="history" v-show="showHistory">{{$t('navMenu.draw_history')}}</el-menu-item>
-    <el-menu-item index="game-intro" v-show="showHistory">{{$t('navMenu.game_intro')}}</el-menu-item>
+    <el-menu-item index="personal" v-show="islogin">{{$t('navMenu.personal_account')}}</el-menu-item>
+    <el-menu-item index="history" v-show="islogin">{{$t('navMenu.draw_history')}}</el-menu-item>
+    <el-menu-item index="game-intro" v-show="islogin">{{$t('navMenu.game_intro')}}</el-menu-item>
   </el-menu>
 </template>
 
