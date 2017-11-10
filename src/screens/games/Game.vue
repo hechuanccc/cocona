@@ -1,24 +1,29 @@
 <template>
-  <div class="game-container">
+  <div>
     <el-tabs v-model="activeName" @tab-click="switchTab" v-if="categories.length > 0">
       <el-tab-pane v-for="(category, index) in categories" :key="'category' + index" :name="''+category.id" :label="category.display_name" ></el-tab-pane>
     </el-tabs>
     <div class="schedule-tips">
+      <div class="current-game" v-if="currentGame && currentCategory">
+        {{currentGame.display_name}} > {{currentCategory.display_name}}
+      </div>
       <span v-if="schedule && schedule.issue_number">
         <span class="issue-number">{{schedule.issue_number}} 期</span>
         封盘
         <span v-if="!gameClosed" class="red countdown">
+          <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
           <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
         </span>
         <span v-else class="red countdown">已封盘</span>
         开奖
         <span v-if="!ended" class="green countdown">
+          <span v-if="resultCountDown.days > 0">{{resultCountDown.days}}天 </span>
           <span v-if="resultCountDown.hours > 0">{{resultCountDown.hours | complete}}:</span>{{resultCountDown.minutes | complete}}:{{resultCountDown.seconds | complete}}
         </span>
         <span v-else class="green countdown">已结束</span>
       </span>
     </div>
-    <router-view :key="$route.name + ($route.params.categoryId || '')" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
+    <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
   </div>
 </template>
 
@@ -34,6 +39,7 @@ export default {
       categories: [],
       gameId: this.$route.params.gameId,
       schedule: '',
+      timer: '',
       closeCountDown: {
         days: 0,
         hours: 0,
@@ -93,20 +99,23 @@ export default {
   },
   methods: {
     updateSchedule () {
+      clearInterval(this.timer)
       fetchSchedule(this.gameId)
-      .then(res => {
-        this.schedule = _.find(res, schedule => schedule.status === 'open' || schedule.status === 'created')
-        if (!this.timer && this.schedule) {
-          this.startTimer()
-        }
-      }, error => {
-        if (error.response.status > 400) {
-          this.$route.push({
-            path: '/',
-            next: this.$route.path
+        .then(res => {
+          this.schedule = _.find(res, schedule => {
+            return schedule.id !== this.schedule.id &&
+            this.$moment().isBefore(schedule.schedule_result) &&
+            (schedule.status === 'open' || schedule.status === 'created')
           })
-        }
-      })
+          this.startTimer()
+        }, error => {
+          if (error.response.status > 400) {
+            this.$router.push({
+              path: '/',
+              next: this.$route.path
+            })
+          }
+        })
     },
     startTimer () {
       if (!this.schedule) {
@@ -115,13 +124,17 @@ export default {
       this.timer = setInterval(() => {
         const closeTime = this.$moment(this.schedule.schedule_close)
         const resultTime = this.$moment(this.schedule.schedule_result)
+        if (this.$moment().isAfter(resultTime)) {
+          clearInterval(this.timer)
+          return
+        }
         this.closeCountDown = this.diffTime(closeTime)
         this.resultCountDown = this.diffTime(resultTime, true)
       }, 1000)
     },
     diffTime (target, flag) {
       const duration = this.$moment.duration(target.diff())
-      const days = duration.minutes()
+      const days = duration.days()
       const hours = duration.hours()
       const minutes = duration.minutes()
       let seconds = duration.seconds()
@@ -156,18 +169,18 @@ export default {
 
 <style scoped lang="scss">
 @import '../../style/vars.scss';
-.game-container {
-  padding: 0 20px;
+.current-game {
+  position: absolute;
 }
 .el-tabs__header {
   margin-bottom: 5px;
 }
 .schedule-tips {
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   color: #878d99;
-  font-weight: 500;
-  padding: 8px;
-  border-radius: 4px;
+  padding: 0 8px;
   background: #f3f4f5;
   margin-top: -5px;
   margin-bottom: 10px;
