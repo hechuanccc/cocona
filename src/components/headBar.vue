@@ -1,29 +1,24 @@
 <template>
   <div class="top-header">
     <div class="header-bar">
-        <TopBar v-if="showTopbar"/>
+        <TopBar v-if="showTopbar" />
     </div>
-    <el-row class="header-nav">
-      <el-col :span="4">
+    <div class="header-nav container">
         <Logo/>
-      </el-col>
-      <el-col :span="14" :offset="4">
         <NavMenu />
-      </el-col>
-    </el-row>
+    </div>
   </div>
 </template>
 
 <style lang="sass" scoped>
 .top-header
-  margin-bottom: 20px
-.header-bar
-  width: 100%
-  background: #433e81
-  text-align: center
-.header-nav
-  width: 1000px
-  margin: 0 auto
+  margin-bottom: 10px
+  .header-bar
+    width: 100%
+    background: #433e81
+    text-align: center
+  .header-nav
+    margin-top: 10px
 </style>
 <script>
 import TopBar from '../components/TopBar'
@@ -38,7 +33,7 @@ export default {
   },
   computed: {
     showTopbar () {
-      return !(['Game'].includes(this.$route.meta.Page))
+      return !this.$store.state.user.logined
     }
   }
 }

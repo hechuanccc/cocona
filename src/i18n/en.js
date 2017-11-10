@@ -5,6 +5,7 @@ export default {
     home_page: 'Home',
     game_center: 'Games Center',
     user_register: 'Register',
+    personal_account: '个人帐户',
     qa: 'Problem',
     affliate: 'Join Us',
     promotion: 'Preferential',
@@ -21,6 +22,12 @@ export default {
     email: 'Email',
     captcha: 'Captcha',
     captcha_reset: 'Reset Captcha'
+  },
+  promotions: {
+    campaign: 'Campaign',
+    deposit_withdraw: 'Deposits&withdrawals',
+    lottery: 'Lottery',
+    others: 'Others'
   },
   register: {
     username: 'User Name',

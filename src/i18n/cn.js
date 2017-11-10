@@ -4,6 +4,7 @@ export default {
   navMenu: {
     home_page: '网站首页',
     game_center: '游戏大厅',
+    personal_account: '个人帐户',
     user_register: '会员注册',
     qa: '常见问题',
     affliate: '加盟合作',
@@ -21,6 +22,12 @@ export default {
     email: '邮箱',
     captcha: '验证码',
     captcha_reset: '点击图片换一张'
+  },
+  promotions: {
+    campaign: '活动',
+    deposit_withdraw: '存提款',
+    lottery: '彩票类',
+    others: '其他'
   },
   register: {
     username: '帐号',

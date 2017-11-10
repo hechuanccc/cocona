@@ -4,6 +4,7 @@
     <router-view/>
   </div>
 </template>
+
 <script>
 import './style/reset.css'
 import './style/base.scss'
