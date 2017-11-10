@@ -6,6 +6,12 @@ import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
 import agentRegister from '@/screens/agent/agentRegister'
 import Register from '@/screens/member/Register'
+import Account from '@/screens/member/Account'
+import Withdraw from '@/screens/member/Withdraw'
+import Payment from '@/screens/member/Payment'
+import PrimaryInfo from '@/screens/member/PrimaryInfo'
+import PasswordSetting from '@/screens/member/PasswordSetting'
+import BetRecord from '@/screens/member/BetRecord'
 import Promotions from '@/screens/promotion/Promotions'
 
 Vue.use(Router)
@@ -15,42 +21,75 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      meta: {Page: 'Home'},
+      meta: { Page: 'Home' },
       component: Home
     },
     {
       path: '/agent/register',
       name: 'agentRegister',
-      meta: {Page: 'agentRegister'},
+      meta: { Page: 'agentRegister' },
       component: agentRegister
     },
     {
       path: '/register',
       name: 'Register',
-      meta: {Page: 'Register'},
+      meta: { Page: 'Register' },
       component: Register
     },
     {
+      path: '/account',
+      name: 'Account',
+      meta: { requiresAuth: true },
+      component: Account,
+      children: [
+        {
+          path: 'withdraw',
+          name: 'Withdraw',
+          component: Withdraw
+        },
+        {
+          path: 'payment',
+          name: 'Payment',
+          component: Payment
+        },
+        {
+          path: 'primary_info',
+          name: 'PrimaryInfo',
+          component: PrimaryInfo
+        },
+        {
+          path: 'password_setting',
+          name: 'PasswordSetting',
+          component: PasswordSetting
+        },
+        {
+          path: 'betrecord',
+          name: 'BetRecord',
+          component: BetRecord
+        }
+      ]
+    }, {
       path: '/promotions',
       name: 'Promotions',
-      meta: {Page: 'Promotions'},
+      meta: { Page: 'Promotions' },
       component: Promotions
+
     },
     {
       path: '/game',
       name: 'Game',
       component: GameHall,
-      meta: {requiresAuth: true, Page: 'Game'},
+      meta: { requiresAuth: true, Page: 'Game' },
       children: [
         {
           path: ':gameId',
           component: Game,
-          meta: {Page: 'Game'},
+          meta: { Page: 'Game' },
           children: [
             {
               path: ':categoryId',
               component: GameCategory,
-              meta: {Page: 'Game'}
+              meta: { Page: 'Game' }
             }
           ]
         }

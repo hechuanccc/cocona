@@ -60,3 +60,20 @@ export function formatPlayGroup (raw, formatting) {
   })
   return sections
 }
+
+export function msgFormatter (msgs) {
+  let formatMsg
+  if (Array.isArray(msgs)) {
+    let arr = []
+
+    msgs.forEach(msg => {
+      Object.keys(msg).forEach(key => {
+        arr.push(msg[key])
+      })
+    })
+    formatMsg = arr.join(', ')
+  } else {
+    formatMsg = msgs
+  }
+  return formatMsg
+}
