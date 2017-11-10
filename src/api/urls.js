@@ -11,6 +11,8 @@ export default {
   login: prefix + '/login/',
   register: apiv1 + '/register/',
   user: apiv1 + '/profile/',
+  password: prefix + '/password/',
+  withdraw_password: prefix + '/withdraw_password/',
   refresh_token: prefix + '/login/refresh/',
   verification: apiv1 + '/verification_code/',
   logout: host + '/logout/',
@@ -25,6 +27,8 @@ export default {
   homePage: apiv1 + '/website/home-page/',
   announcements: apiv1 + '/announcements/',
   check_username: host + '/v1/checkmember/',
+  payment: apiv1 + '/payment/',
+  paymentType: apiv1 + '/paymenttype/?opt_expand=1/',
   betrecord: apiv1 + '/betrecord/',
   result: '/result/'
 }

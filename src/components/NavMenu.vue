@@ -8,12 +8,10 @@
     center>
       <loginPopup />
     </el-dialog>
-
     <el-menu-item index="register" v-show="!isBack">{{$t('navMenu.user_register')}}</el-menu-item>
     <el-menu-item index="promotions" v-show="!isBack">{{$t('navMenu.promotion')}}</el-menu-item>
     <el-menu-item index="qa" v-show="!isBack">{{$t('navMenu.qa')}}</el-menu-item>
     <el-menu-item index="agent/register" v-show="!isBack">{{$t('navMenu.affliate')}}</el-menu-item>
-
     <el-menu-item index="account" v-show="isBack">{{$t('navMenu.personal_account')}}</el-menu-item>
     <el-menu-item index="history" v-show="isBack">{{$t('navMenu.draw_history')}}</el-menu-item>
     <el-menu-item index="game-intro" v-show="isBack">{{$t('navMenu.game_intro')}}</el-menu-item>

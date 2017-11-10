@@ -38,33 +38,46 @@ export default {
     lottery: 'Lottery',
     others: 'Others'
   },
-  register: {
+  user: {
     username: 'User Name',
     password: 'Password',
+    new_password: 'New Password',
+    prev_password: 'Old Password',
     confirm_password: 'Confirm Password',
+    new_withdraw_password: 'New Withdraw Password',
+    prev_withdraw_password: 'New Withdraw ',
+    confirm_withdraw_password: 'Confirm Withdraw Password',
     realname: 'Real Name',
     phone: 'Phone Number',
     email: 'Email',
     withdraw_password: 'Withdraw Password',
-    captcha: 'Captcha'
+    captcha: 'Captcha',
+    level: 'Level',
+    money: 'Money',
+    unsettled: 'Unsettled',
+    payment: 'Payment',
+    withdraw: 'Withdraw',
+    betrecord: 'Bet Record',
+    primary_info: 'Primary Info',
+    password_setting: 'Password Setting',
+    amount: 'Amount',
+    gender: 'Gender',
+    male: 'male',
+    female: 'female'
   },
   action: {
     submit: 'Submit',
-    reset: 'Reset'
+    reset: 'Reset',
+    modify: 'Modify'
   },
   validate: {
-    username_validate: 'User name length should be 4-10 digit or character',
-    password_validate: 'Password length should be 6-15 digit or character,  the first two letters must be charater',
+    username_validate: 'User name should be 4-10 digit or character',
+    password_validate: 'Password must be 8-15 characters and must contain at least one capital letter and a digit',
     password_again: 'Please enter password again',
     password_diff: 'twice password are different',
     username_exist: 'This usernam has existed',
-    username_required: 'User name is required',
-    password_required: 'Password is required',
-    realname_required: 'Real name is required',
-    phone_required: 'Phone Number is required',
-    email_required: 'Email address is required',
-    email_validate: 'This email is invalid',
-    withdraw_password_required: 'Withdraw password is required',
-    captcha_required: 'Captch is required'
+    required: 'This field is required',
+    required_num: 'Number is required',
+    email_validate: 'This email is invalid'
   }
 }
