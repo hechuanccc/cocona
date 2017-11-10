@@ -3,7 +3,7 @@
     <div class="header-bar">
         <TopBar v-if="showTopbar" />
     </div>
-    <div class="header-nav inner">
+    <div class="header-nav container">
         <Logo/>
         <NavMenu />
     </div>

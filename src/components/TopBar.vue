@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="4" class="top-bar inner">
+  <el-row :gutter="4" class="top-bar container">
     <el-col :span="4" class="bar-descript">
       {{nowTime}} 营业时间: 白天07:30 - 凌晨04:00/ 全年无休
     </el-col>

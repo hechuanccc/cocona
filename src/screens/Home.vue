@@ -8,7 +8,7 @@
           </el-carousel-item>
         </el-carousel>
         <div class="home-speaker">
-          <div class="inner">
+          <div class="container">
             <div class="wrap">
               <marquee behavior="" direction="">
                 <span v-for="announcement in announcements" :key="announcement.id">
