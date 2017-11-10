@@ -1,4 +1,4 @@
-<template>
+<template> <!--登入前後都要一組-->
   <el-row :gutter="4" class="top-bar container">
     <el-col :span="4" class="bar-descript">
       {{nowTime}} {{$t('navMenu.bussiness_hours')}}
