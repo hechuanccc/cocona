@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import UserInfoPanel from '../../components/UserInfoPanel'
 import urls from '../../api/urls'
 // import axios from 'axios'
 // import qs from 'qs'
@@ -36,9 +35,6 @@ import Vue from 'vue'
 
 export default {
   name: 'Account',
-  components: {
-    UserInfoPanel: UserInfoPanel
-  },
   data () {
     return {
       formSrc: urls.payment,

@@ -28,7 +28,7 @@ export function gethomePage () {
   return axios.get(urls.homePage)
 }
 export function getPromotions () {
-  return axios.get(urls.promotions)
+  return axios.get(urls.promotions).then(res => res.data)
 }
 
 export function register (user) {
