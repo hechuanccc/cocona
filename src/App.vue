@@ -1,6 +1,6 @@
 <template>
   <div>
-    <headBar />
+    <HeadBar />
     <router-view/>
   </div>
 </template>
@@ -8,12 +8,12 @@
 <script>
 import './style/reset.css'
 import './style/base.scss'
-import headBar from './components/headBar.vue'
+import HeadBar from './components/HeadBar.vue'
 
 export default {
   name: 'app',
   components: {
-    headBar
+    HeadBar
   }
 }
 </script>

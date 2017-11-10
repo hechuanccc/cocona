@@ -1,7 +1,7 @@
 <template>
   <div class="top-header">
     <div class="header-bar">
-        <TopBar v-if="showTopbar" />
+        <TopBar/>
     </div>
     <div class="header-nav container">
         <Logo/>
@@ -30,11 +30,6 @@ export default {
     TopBar,
     NavMenu,
     Logo
-  },
-  computed: {
-    showTopbar () {
-      return !this.$store.state.user.logined
-    }
   }
 }
 </script>
