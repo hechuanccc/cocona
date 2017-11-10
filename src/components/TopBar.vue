@@ -12,8 +12,8 @@
       </el-input>
     </el-col>
     <el-col :span="8" :push="4">
-      <el-button type="primary" @click="login">会员登录</el-button>
-      <el-button type="info">会员注册</el-button>
+      <el-button type="primary" @click="login()">会员登录</el-button>
+      <el-button type="info"><router-link tag="span" to="/register">会员注册</router-link></el-button>
       <el-button type="warning">免费试玩</el-button>
     </el-col>
   </el-row>

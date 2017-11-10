@@ -25,7 +25,6 @@
 
 </style>
 <script>
-
 export default {
   props: {
     promo: {
