@@ -7,3 +7,76 @@
 .el-table--small td, .el-table--small th {
   padding: 4px 0;
 }
+
+.el-menu-item i {
+  color: #fff;
+}
+
+.gd11x5_pg_sn_1f1,
+.gd11x5_pg_sn_b1,
+.gd11x5_pg_sn_b2,
+.gd11x5_pg_sn_b3,
+.gd11x5_pg_sn_b4,
+.gd11x5_pg_sn_b5 {
+  display: inline-block;
+  background: #3389D5;
+  color: #fff;
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
+  border-radius: 13px;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+@mixin bcr-num {
+  @for $i from 1 through 10 {
+    .bcr_pl_champion_#{$i},
+    .bcr_pl_2nd_#{$i},
+    .bcr_pl_3rd_#{$i},
+    .bcr_pl_4th_#{$i},
+    .bcr_pl_5th_#{$i},
+    .bcr_pl_6th_#{$i},
+    .bcr_pl_7th_#{$i},
+    .bcr_pl_8th_#{$i},
+    .bcr_pl_9th_#{$i},
+    .bcr_pl_10th_#{$i},
+    .jspk10_pl_gr_1p_#{$i},
+    .jspk10_pl_gr_2p_#{$i},
+    .jspk10_pl_gr_3p_#{$i},
+    .jspk10_pl_gr_4p_#{$i},
+    .jspk10_pl_gr_5p_#{$i},
+    .jspk10_pl_gr_6p_#{$i},
+    .jspk10_pl_gr_7p_#{$i},
+    .jspk10_pl_gr_8p_#{$i},
+    .jspk10_pl_gr_9p_#{$i},
+    .jspk10_pl_gr_10p_#{$i} {
+      display: inline-block;
+      background: url(../assets/#{$i}.png) no-repeat center center;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
+      text-indent: -1000px;
+    }
+  }
+}
+@include bcr-num;
+
+@mixin cqssc-num {
+  @for $j from 1 through 5 {
+    @for $i from 1 through 9 {
+      .cqssc_pl_inte#{$j}b_#{$j}b_num_#{$i} {
+        display: inline-block;
+        background: #3389D5;
+        color: #fff;
+        width: 26px;
+        height: 26px;
+        line-height: 26px;
+        border-radius: 13px;
+        font-weight: normal;
+        font-size: 13px;
+      }
+    }
+  }
+}
+@include cqssc-num;

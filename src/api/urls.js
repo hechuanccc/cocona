@@ -29,5 +29,6 @@ export default {
   check_username: host + '/v1/checkmember/',
   payment: apiv1 + '/payment/',
   paymentType: apiv1 + '/paymenttype/?opt_expand=1/',
-  betrecord: apiv1 + '/betrecord/'
+  betrecord: apiv1 + '/betrecord/',
+  result: '/result/'
 }

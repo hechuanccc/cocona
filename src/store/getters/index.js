@@ -1,6 +1,9 @@
 import _ from 'lodash'
 
 export default {
+  user: (state, getters) => {
+    return state.user
+  },
   allGames: (state, getters) => {
     return state.games
   },
