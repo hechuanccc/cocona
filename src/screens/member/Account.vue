@@ -29,8 +29,6 @@
 
 <script>
 import urls from '../../api/urls'
-// import axios from 'axios'
-// import qs from 'qs'
 import Vue from 'vue'
 
 export default {
@@ -67,6 +65,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import '../../style/vars.scss';
 .avatar {
   margin: 10px auto;
   height: 50px;
@@ -77,7 +76,7 @@ export default {
     background: darkblue;
   }
   &.female {
-    background: red;
+    background: $red;
   }
 }
 .welcome {
