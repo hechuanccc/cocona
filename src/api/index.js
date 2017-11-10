@@ -91,3 +91,7 @@ export function placeBet (data) {
     'Content-Type': 'application/json'
   }).then(res => res.data)
 }
+
+export function fetchPaymentRecord () {
+  return axios.get(urls.payment_record).then(res => res.data)
+}

@@ -25,11 +25,20 @@
       </el-form>
     </el-col>
   </el-row>
+  <el-row class="title">
+    {{$t('user.payment_record')}}
+  </el-row>
+  <el-row>
+    <el-table>
+
+    </el-table>
+  </el-row>
+
 </div>
 </template>
 
 <script>
-import { fetchPaymentType } from '../../api'
+import { fetchPaymentType, fetchPaymentRecord } from '../../api'
 import urls from '../../api/urls'
 import Vue from 'vue'
 export default {
@@ -74,7 +83,8 @@ export default {
       },
       token: Vue.cookie.get('access_token'),
       paymentUrl: urls.payment,
-      notify_page: 'xxx'
+      notify_page: 'xxx',
+      paymentRecords: []
     }
   },
   created () {
@@ -83,6 +93,10 @@ export default {
       datas.forEach(data => {
         this.gatewaysPerPayment[data.id] = data.detail
       })
+    })
+
+    fetchPaymentRecord().then(datas => {
+      this.paymentRecords = datas
     })
   },
   computed: {
@@ -119,5 +133,8 @@ export default {
 <style lang="scss" scoped>
 .form {
   margin-top: 20px;
+}
+.title {
+  font-size: 20px;
 }
 </style>

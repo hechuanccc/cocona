@@ -54,7 +54,12 @@ export default {
     amount: 'Amount',
     gender: 'Gender',
     male: 'male',
-    female: 'female'
+    female: 'female',
+    payment_time: 'Payment Time',
+    payment_amount: 'Payment Amount',
+    payment_way: 'Payment Way',
+    payment_record: 'Payment Record',
+    balance: 'Balance'
   },
   action: {
     submit: 'Submit',

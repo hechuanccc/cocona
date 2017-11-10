@@ -54,7 +54,12 @@ export default {
     amount: '金额',
     gender: '性别',
     male: '男',
-    female: '女'
+    female: '女',
+    payment_time: '充值时间',
+    payment_amount: '充值金额',
+    payment_way: '充值方式',
+    payment_record: '充值纪录',
+    balance: '帐户余额'
   },
   action: {
     submit: '提交',
