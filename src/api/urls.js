@@ -25,5 +25,6 @@ export default {
   homePage: apiv1 + '/website/home-page/',
   announcements: apiv1 + '/announcements/',
   check_username: host + '/v1/checkmember/',
-  betrecord: apiv1 + '/betrecord/'
+  betrecord: apiv1 + '/betrecord/',
+  result: '/result/'
 }

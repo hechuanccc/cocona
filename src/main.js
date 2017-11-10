@@ -34,9 +34,9 @@ Object.keys(locales).forEach(lang => {
 })
 
 router.beforeEach((to, from, next) => {
-    // fisrMacthed might be the top-level parent route of others
+  // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
-  if (to.meta.requiresAuth || firstMatched.meta.requiresAuth) {
+  if ((to || firstMatched).meta.requiresAuth) {
     const token = Vue.cookie.get('access_token')
     if (!token) {
       return next('/')

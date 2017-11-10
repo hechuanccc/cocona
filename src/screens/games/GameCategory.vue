@@ -7,7 +7,7 @@
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
-        <el-button type="info" size="small" @click="reset">重置</el-button>
+        <el-button size="small" @click="reset" >重置</el-button>
       </el-col>
     </el-row>
 
@@ -30,12 +30,16 @@
               @mouseover="toggleHover(play, true)" 
               @mouseleave="toggleHover(play, false)" 
               @click="toggleActive(plays[play.id], $event)">
-              <el-col :span="7" class="name">{{play.display_name}}</el-col>
+              <el-col :span="7" class="name">
+                <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
+              </el-col>
               <el-col :span="7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
               </el-col>
               <el-col :span="10" class="input" >
-                <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" type="number" min="1" step="10"/>
+                <el-input 
+                  v-if="!gameClosed" size="mini" class="extramini" 
+                  v-model="plays[play.id].amount" type="number" min="1" step="10"/>
                 <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
               </el-col>
             </td>
@@ -51,10 +55,12 @@
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
-        <el-button type="info" size="small" @click="reset">重置</el-button>
+        <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
-    <el-dialog title="确认注单" 
+    <el-dialog 
+      title="确认注单"
+      width="40%"
       :before-close="beforeClose"
       :visible.sync="dialogVisible" 
       :close-on-click-modal="false" 
@@ -123,6 +129,9 @@ export default {
     },
     scheduleId: {
       type: Number
+    },
+    game: {
+      type: Object
     }
   },
   name: 'gameplay',
@@ -182,12 +191,21 @@ export default {
       if (this.raw.length && this.formatting.length) {
         this.playSections = formatPlayGroup(this.raw, this.formatting)
       }
+    },
+    'game': function (game) {
+      this.updateBetrecords()
     }
   },
   created () {
     this.initPlaygroups()
+    if (this.game) {
+      this.updateBetrecords()
+    }
   },
   methods: {
+    updateBetrecords () {
+      this.$root.bus.$emit('new-betrecords', this.game.id)
+    },
     beforeClose (done) {
       if (this.submitting) {
         return
@@ -208,6 +226,7 @@ export default {
             setTimeout(() => {
               this.submitted = false
               this.dialogVisible = false
+              this.updateBetrecords()
             }, 1000)
           } else {
             let messages = []
@@ -367,8 +386,5 @@ export default {
 .popup-actions {
   margin-top: 20px;
   text-align: center;
-}
-.el-dialog__wrapper >>> td, .el-dialog__wrapper th {
-  padding: 2px 0;
 }
 </style>
