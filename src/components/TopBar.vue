@@ -1,7 +1,7 @@
 <template>
-  <el-row :gutter="4" class="top-bar">
+  <el-row :gutter="4" class="top-bar inner">
     <el-col :span="4" class="bar-descript">
-      {{now_time}} 营业时间: 白天07:30 - 凌晨04:00/ 全年无休
+      {{nowTime}} 营业时间: 白天07:30 - 凌晨04:00/ 全年无休
     </el-col>
     <el-col :span="3" :push="5">
       <el-input v-model="username" placeholder="会员登录"></el-input>
@@ -33,7 +33,7 @@ export default {
       username: '',
       password: '',
       homepage: '',
-      now_time: ''
+      nowTime: ''
     }
   },
   methods: {
@@ -73,7 +73,7 @@ export default {
 
     this.timing = setInterval(() => {
       let now = new Date()
-      this.now_time = now.toLocaleString()
+      this.nowTime = now.toLocaleString()
     }, 1000)
   },
   beforeDestroy () {
@@ -87,7 +87,6 @@ export default {
   padding: 7px
 .top-bar
   padding-top: 7px
-  width: 1280px
   display: inline-block
 .bar-descript
   width: auto

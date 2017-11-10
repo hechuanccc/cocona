@@ -3,7 +3,7 @@
     <div class="header-bar">
         <TopBar v-if="showTopbar" />
     </div>
-    <div class="header-nav">
+    <div class="header-nav inner">
         <Logo/>
         <NavMenu />
     </div>
@@ -18,8 +18,7 @@
     background: #433e81
     text-align: center
   .header-nav
-    width: 1280px
-    margin: 10px auto
+    margin-top: 10px
 </style>
 <script>
 import TopBar from '../components/TopBar'

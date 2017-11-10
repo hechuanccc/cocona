@@ -4,23 +4,16 @@
         <h1 class="title">{{$t('navMenu.promotion')}}</h1>
         <span>PREFERENTIAL</span>
       </div>
-  <el-tabs tab-position="left">
-    <el-tab-pane v-for="(label,index) in promo_labels"
-    :key="index"
-    :label="label">
       <promoBanner v-for="promo in promotions"
       :key="promo.id"
       :promo="promo"
       />
-    </el-tab-pane>
-  </el-tabs>
   </div>
 </template>
 
 <style lang="sass" scoped>
 $banner_width: 1000px
 $primary-color: #409EFF
-
 
 .promo
   width: $banner_width

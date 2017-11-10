@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <router-link to="/">
-      <img :src="icon">
+      <img :src="icon" alt="icon"/>
     </router-link>
   </div>
 </template>
@@ -26,9 +26,7 @@ export default {
 
 <style lang="sass" scoped>
 .logo
-  position: relative
   display: inline-block
-  left: 0
   height: 60px
   width: 240px
   img

@@ -13,13 +13,13 @@
 </template>
 <style lang="sass" scoped>
 .promo-banners
-  width: 800px
+  width: 1000px
   img
     width: 100%
     height: 144px
 
 .banner-content
-  width: 800px
+  width: 1000px
   margin-bottom: 10px
   background: #DDD
 
