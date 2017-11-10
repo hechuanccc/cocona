@@ -3,7 +3,7 @@
     <el-aside width="250px">
       <div :class="['avatar', gender]"></div>
       <div class="welcome">{{username}} 你好</div>
-      <el-menu default-active="/account/primary_info" :router="true">
+      <el-menu :default-active="$route.path" :router="true">
         <el-menu-item index="/account/primary_info">
           <span slot="title" class="menu-text">{{$t('user.primary_info')}}</span>
         </el-menu-item>
@@ -22,7 +22,7 @@
       </el-menu>
     </el-aside>
     <el-main>
-      <router-view :key="($route.name || '')"/>
+      <router-view/>
     </el-main>
   </el-container>
 </template>
@@ -51,13 +51,21 @@ export default {
     },
     gender () {
       return this.$store.state.user.gender === 'M' ? 'male' : 'female'
-    }
+    },
+    routeName () { }
   },
   beforeRouteEnter (to, from, next) {
     if (to.name === 'Account') {
       next({ name: 'PrimaryInfo' })
     } else {
       next()
+    }
+  },
+  watch: {
+    '$route': function (to, from) {
+      if (to.name === 'Account') {
+        this.$router.push({ name: 'PrimaryInfo' })
+      }
     }
   }
 }

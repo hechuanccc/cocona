@@ -1,6 +1,6 @@
 const pattern = {
   username: /^[a-zA-Z0-9]{4,10}$/,
-  password: /^[a-zA-Z]{2}[a-zA-Z0-9]{4,13}$/
+  password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/
 }
 
 export function validateUserName (value) {

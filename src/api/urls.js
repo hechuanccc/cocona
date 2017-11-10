@@ -11,6 +11,8 @@ export default {
   login: prefix + '/login/',
   register: apiv1 + '/register/',
   user: apiv1 + '/profile/',
+  password: prefix + '/password/',
+  withdraw_password: prefix + '/withdraw_password/',
   refresh_token: prefix + '/login/refresh/',
   verification: apiv1 + '/verification_code/',
   logout: host + '/logout/',

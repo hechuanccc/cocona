@@ -50,6 +50,14 @@ export function updateUser (user) {
   return axios.put(`${urls.user}${user.id}/`, user).then(res => res.data)
 }
 
+export function updatePassword (password) {
+  return axios.post(urls.password, qs.stringify(password)).then(res => res.data)
+}
+
+export function updateWithdrawPassword (withdrawPassword) {
+  return axios.post(urls.withdraw_password, qs.stringify(withdrawPassword)).then(res => res.data)
+}
+
 export function fetchCategories (gameId) {
   return axios.get(`${urls.category}?&game=${gameId}`).then(res => res.data)
 }

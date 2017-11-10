@@ -5,20 +5,12 @@
       <el-form-item :label="$t('user.level')">
         {{level}}
       </el-form-item>
-      <el-form-item :label="$t('user.realname')">
-        <span v-if="displayMode">{{userInfo.real_name}}</span>
-        <el-input v-else v-model="user.real_name"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.phone')">
-        <span v-if="displayMode">{{userInfo.phone}}</span>
-        <el-input v-else v-model="user.phone"></el-input>
-      </el-form-item>
       <el-form-item :label="$t('user.email')" prop="email">
         <span v-if="displayMode">{{userInfo.email}}</span>
         <el-input v-else v-model="user.email"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.gender')">
-        <span v-if="displayMode">{{userInfo.gender}}</span>
+        <span v-if="displayMode">{{userInfo.gender | genderFilter}}</span>
         <el-radio-group v-else v-model="user.gender">
           <el-radio :label="'M'">{{$t('user.male')}}</el-radio>
           <el-radio :label="'F'">{{$t('user.female')}}</el-radio>
@@ -34,18 +26,21 @@
 </el-row>
 </template>
 <script>
-import errorHandler from '../../mixins/errorHandler'
+import { msgFormatter } from '../../utils'
+import Vue from 'vue'
 export default {
   name: 'PrimaryInfo',
-  mixins: [errorHandler],
+  filters: {
+    genderFilter (value) {
+      return value === 'M' ? Vue.t('user.male') : Vue.t('user.female')
+    }
+  },
   data () {
     return {
       displayMode: true,
       user: {
         id: '',
-        real_name: '',
         gender: '',
-        phone: '',
         email: ''
       },
       captcha_src: '',
@@ -77,9 +72,13 @@ export default {
       this.$refs['user'].validate((valid) => {
         if (valid) {
           this.$store.dispatch('updateUser', this.user).then(
-            () => { this.displayMode = true },
+            (data) => { this.displayMode = true },
             errorRes => {
-              this.errorHandler(errorRes.response.data.error)
+              this.$message({
+                showClose: true,
+                message: msgFormatter(errorRes.response.data.error),
+                type: 'error'
+              })
             }
           )
         }

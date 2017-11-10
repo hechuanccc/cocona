@@ -1,92 +1,176 @@
 <template>
 <el-row class="row-bg">
-  <el-col :span="10" :offset="7">
-    <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
-      <el-form-item :label="$t('user.level')">
-        {{level}}
-      </el-form-item>
-      <el-form-item :label="$t('user.realname')">
-        <span v-if="displayMode">{{userInfo.real_name}}</span>
-        <el-input v-else v-model="user.real_name"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.phone')">
-        <span v-if="displayMode">{{userInfo.phone}}</span>
-        <el-input v-else v-model="user.phone"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.email')" prop="email">
-        <span v-if="displayMode">{{userInfo.email}}</span>
-        <el-input v-else v-model="user.email"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.gender')">
-        <span v-if="displayMode">{{userInfo.gender}}</span>
-        <el-radio-group v-else v-model="user.gender">
-          <el-radio :label="'M'">{{$t('user.male')}}</el-radio>
-          <el-radio :label="'F'">{{$t('user.female')}}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item>
-        <el-button v-if="displayMode" type="primary" @click="modifyForm">{{$t('action.modify')}}</el-button>
-        <el-button v-if="!displayMode" type="primary" @click="submitForm">{{$t('action.submit')}}</el-button>
-        <el-button v-if="!displayMode" @click="resetForm">{{$t('action.reset')}}</el-button>
-      </el-form-item>
-    </el-form>
+  <el-col :span="12" :offset="6">
+    <el-row class="title">
+      <h2>{{$t('user.password')}}</h2>
+    </el-row>
+    <el-row>
+      <el-form :model="password" status-icon :rules="passwordRule" ref="password" label-width="120px">
+        <el-form-item :label="$t('user.prev_password')" prop="prev_password">
+          <el-input type="password" v-model="password.prev_password" :maxlength="15" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.new_password')" prop="new_password">
+          <el-input type="password" v-model="password.new_password" :maxlength="15" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.confirm_password')" prop="repeat_password">
+          <el-input type="password" v-model="password.repeat_password" :maxlength="15" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitPasswordForm">{{$t('action.submit')}}</el-button>
+          <el-button @click="resetForm('password')">{{$t('action.reset')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-row>
+    <el-row class="title">
+      <h2>{{$t('user.withdraw_password')}}</h2>
+    </el-row>
+    <el-row>
+      <el-form :model="withdraw_password" status-icon :rules="withdrawRule" ref="withdraw_password" label-width="120px">
+        <el-form-item :label="$t('user.prev_withdraw_password')" prop="current_password">
+          <el-input type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.new_withdraw_password')" prop="new_password">
+          <el-input type="password" v-model="withdraw_password.new_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.confirm_withdraw_password')" prop="repeat_password">
+          <el-input type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
+          <el-button @click="resetForm('withdraw_password')">{{$t('action.reset')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-row>
   </el-col>
 </el-row>
 </template>
 <script>
-import { updateUser } from '../../api'
+import { updatePassword, updateWithdrawPassword } from '../../api'
+import { validatePassword } from '../../validate'
+import { msgFormatter } from '../../utils'
 export default {
   name: 'AccountEdit',
   data () {
+    const passwordValidator = (form) => {
+      return (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('validate.required')))
+        } else {
+          if (this[form].repeat_password !== '') {
+            this.$refs[form].validateField('repeat_password')
+          }
+          callback()
+        }
+      }
+    }
+
+    const passwordFormatValidator = (rule, value, callback) => {
+      if (!validatePassword(value)) {
+        callback(new Error(this.$t('validate.password_validate')))
+      } else {
+        callback()
+      }
+    }
+
+    const repeatPasswordValidator = (form) => {
+      return (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('validate.password_again')))
+        } else if (value !== this[form].new_password) {
+          callback(new Error(this.$t('validate.password_diff')))
+        } else {
+          callback()
+        }
+      }
+    }
+
     return {
       displayMode: true,
-      user: {
-        id: '',
-        real_name: '',
-        gender: '',
-        phone: '',
-        email: ''
+      password: {
+        new_password: '',
+        prev_password: '',
+        repeat_password: ''
       },
-      captcha_src: '',
-      rules: {
-        email: [
-          { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
+      withdraw_password: {
+        new_password: '',
+        current_password: '',
+        repeat_password: ''
+      },
+      passwordRule: {
+        prev_password: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        new_password: [
+          { required: true, validator: passwordValidator('password'), trigger: 'blur' },
+          { validator: passwordFormatValidator, trigger: 'blur,change' }
+        ],
+        repeat_password: [
+          { required: true, validator: repeatPasswordValidator('password'), trigger: 'blur' }
+        ]
+      },
+      withdrawRule: {
+        current_password: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        new_password: [
+          { required: true, validator: passwordValidator('withdraw_password'), trigger: 'blur' }
+        ],
+        repeat_password: [
+          { required: true, validator: repeatPasswordValidator('withdraw_password'), trigger: 'blur' }
         ]
       }
     }
   },
-  computed: {
-    level () {
-      if (this.$store.state.user.level) {
-        return this.$store.state.user.level.name
-      } else {
-        return ''
-      }
-    },
-    userInfo () {
-      return this.$store.state.user
-    }
-  },
   methods: {
-    modifyForm () {
-      this.displayMode = false
-      Object.keys(this.user).forEach(key => {
-        this.user[key] = this.userInfo[key]
-      })
-    },
-    submitForm () {
-      this.$refs['user'].validate((valid) => {
+    submitPasswordForm () {
+      this.$refs['password'].validate((valid) => {
         if (valid) {
-          updateUser(this.user).then(data => {
-            console.log(data)
+          updatePassword(this.password).then(data => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(data.message),
+              type: 'success'
+            })
+          }, errorRes => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(errorRes.response.data.error),
+              type: 'error'
+            })
           })
         }
       })
     },
-    resetForm () {
-      this.$refs['user'].resetFields()
+    submitWithdrawForm () {
+      this.$refs['withdraw_password'].validate((valid) => {
+        if (valid) {
+          updateWithdrawPassword(this.withdraw_password).then(data => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(data.message),
+              type: 'success'
+            })
+          }, errorRes => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(errorRes.response.data.error),
+              type: 'error'
+            })
+          })
+        }
+      })
+    },
+    resetForm (form) {
+      this.$refs[form].resetFields()
     }
   }
 }
 </script>
 
+<style lang="scss" scoped>
+.title {
+  text-align: center;
+  font-size: 20px;
+  padding: 20px 0;
+}
+</style>

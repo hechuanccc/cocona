@@ -47,141 +47,144 @@
 </template>
 
 <script>
-  import {fetchCaptcha, checkUserName} from '../../api'
-  import {validateUserName, validatePassword} from '../../validate'
-  import errorHandler from '../../mixins/errorHandler'
-  export default {
-    name: 'register',
-    mixins: [errorHandler],
-    data () {
-      const userNameValidator = (rule, value, callback) => {
-        if (!validateUserName(value)) {
-          callback(new Error(this.$t('validate.username_validate')))
-        } else {
-          checkUserName(value).then(data => {
-            if (data.length > 0) {
-              callback()
-            } else {
-              callback(new Error(this.$t('validate.username_exist')))
-            }
-          })
-        }
-      }
-      const passwordValidator = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error(this.$t('validate.password_required')))
-        } else {
-          if (this.user.confirmation_password !== '') {
-            this.$refs.user.validateField('confirmation_password')
-          }
-          callback()
-        }
-      }
-
-      const passwordFormatValidator = (rule, value, callback) => {
-        if (!validatePassword(value)) {
-          callback(new Error(this.$t('validate.password_validate')))
-        } else {
-          callback()
-        }
-      }
-
-      const confirmPasswordValidator = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error(this.$t('validate.password_again')))
-        } else if (value !== this.user.password) {
-          callback(new Error(this.$t('validate.password_diff')))
-        } else {
-          callback()
-        }
-      }
-      const captchaValidator = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error(this.$t('validate.captcha_required')))
-        } else {
-          callback()
-        }
-      }
-      return {
-        user: {
-          username: '',
-          password: '',
-          confirmation_password: '',
-          real_name: '',
-          phone: '',
-          email: '',
-          withdraw_password: '',
-          verification_code_0: '',
-          verification_code_1: ''
-        },
-        captcha_src: '',
-        rules: {
-          username: [
-            { required: true, message: this.$t('validate.username_required'), trigger: 'blur' },
-            { validator: userNameValidator, trigger: 'blur,change' }
-          ],
-          password: [
-            { required: true, validator: passwordValidator, trigger: 'blur' },
-            { validator: passwordFormatValidator, trigger: 'blur,change' }
-          ],
-          confirmation_password: [
-            { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
-          ],
-          real_name: [
-            { required: true, message: this.$t('validate.realname_required'), trigger: 'blur' }
-          ],
-          phone: [
-            { required: true, message: this.$t('validate.phone_required'), trigger: 'blur' }
-          ],
-          email: [
-            { required: true, message: this.$t('validate.email_required'), trigger: 'blur' },
-            { type: 'email', message: this.$t('validate.email_validate'), trigger: 'blur,change' }
-          ],
-          withdraw_password: [
-            { required: true, message: this.$t('validate.withdraw_password_required'), trigger: 'blur' }
-          ],
-          verification_code_1: [
-            { required: true, validator: captchaValidator, trigger: 'blur' }
-          ]
-        }
-      }
-    },
-    created () {
-      this.fetchCaptcha()
-    },
-    methods: {
-      submitForm () {
-        this.$refs['user'].validate((valid) => {
-          if (valid) {
-            this.$store.dispatch('register', {
-              user: this.user
-            }).then(result => {
-              return this.$store.dispatch('login', {
-                user: {
-                  username: this.user.username,
-                  password: this.user.password
-                }
-              })
-            }).then(result => {
-              this.$router.push({name: 'Game'})
-            }, errorRes => {
-              this.errorHandler(errorRes.response.data.error)
-            })
+import { fetchCaptcha, checkUserName } from '../../api'
+import { validateUserName, validatePassword } from '../../validate'
+import { msgFormatter } from '../../utils'
+export default {
+  name: 'register',
+  data () {
+    const userNameValidator = (rule, value, callback) => {
+      if (!validateUserName(value)) {
+        callback(new Error(this.$t('validate.username_validate')))
+      } else {
+        checkUserName(value).then(data => {
+          if (data.length > 0) {
+            callback()
           } else {
-            return false
+            callback(new Error(this.$t('validate.username_exist')))
           }
-        })
-      },
-      resetForm () {
-        this.$refs['user'].resetFields()
-        this.fetchCaptcha()
-      },
-      fetchCaptcha () {
-        fetchCaptcha().then(data => {
-          this.captcha_src = data.captcha_src
-          this.user.verification_code_0 = data.captcha_val
         })
       }
     }
+    const passwordValidator = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('validate.required')))
+      } else {
+        if (this.user.confirmation_password !== '') {
+          this.$refs.user.validateField('confirmation_password')
+        }
+        callback()
+      }
+    }
+
+    const passwordFormatValidator = (rule, value, callback) => {
+      if (!validatePassword(value)) {
+        callback(new Error(this.$t('validate.password_validate')))
+      } else {
+        callback()
+      }
+    }
+
+    const confirmPasswordValidator = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('validate.password_again')))
+      } else if (value !== this.user.password) {
+        callback(new Error(this.$t('validate.password_diff')))
+      } else {
+        callback()
+      }
+    }
+    const captchaValidator = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('validate.required')))
+      } else {
+        callback()
+      }
+    }
+    return {
+      user: {
+        username: '',
+        password: '',
+        confirmation_password: '',
+        real_name: '',
+        phone: '',
+        email: '',
+        withdraw_password: '',
+        verification_code_0: '',
+        verification_code_1: ''
+      },
+      captcha_src: '',
+      rules: {
+        username: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: userNameValidator, trigger: 'blur,change' }
+        ],
+        password: [
+          { required: true, validator: passwordValidator, trigger: 'blur' },
+          { validator: passwordFormatValidator, trigger: 'blur,change' }
+        ],
+        confirmation_password: [
+          { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
+        ],
+        real_name: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { type: 'email', message: this.$t('validate.email_validate'), trigger: 'blur,change' }
+        ],
+        withdraw_password: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        verification_code_1: [
+          { required: true, validator: captchaValidator, trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  created () {
+    this.fetchCaptcha()
+  },
+  methods: {
+    submitForm () {
+      this.$refs['user'].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('register', {
+            user: this.user
+          }).then(result => {
+            return this.$store.dispatch('login', {
+              user: {
+                username: this.user.username,
+                password: this.user.password
+              }
+            })
+          }).then(result => {
+            this.$router.push({ name: 'Game' })
+          }, errorRes => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(errorRes.response.data.error),
+              type: 'error'
+            })
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    resetForm () {
+      this.$refs['user'].resetFields()
+      this.fetchCaptcha()
+    },
+    fetchCaptcha () {
+      fetchCaptcha().then(data => {
+        this.captcha_src = data.captcha_src
+        this.user.verification_code_0 = data.captcha_val
+      })
+    }
   }
+}
 </script>
