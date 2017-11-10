@@ -8,6 +8,7 @@
     center>
       <GuestPop />
     </el-dialog>
+
     <el-menu-item index="register" v-show="!isBack">{{$t('navMenu.user_register')}}</el-menu-item>
     <el-menu-item index="promotions" v-show="!isBack">{{$t('navMenu.promotion')}}</el-menu-item>
     <el-menu-item index="qa" v-show="!isBack">{{$t('navMenu.qa')}}</el-menu-item>
