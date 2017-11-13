@@ -12,6 +12,8 @@ import locales from './i18n/locales'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+// Vue.prototype.axios = axios
+
 Vue.use(require('vue-moment'))
 Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })

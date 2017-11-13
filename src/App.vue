@@ -1,7 +1,9 @@
 <template>
   <div>
     <HeadBar />
-    <router-view/>
+    <transition name="el-fade-in">
+      <router-view/>
+    </transition>
   </div>
 </template>
 
@@ -10,6 +12,7 @@ import './style/reset.css'
 import './style/base.scss'
 import HeadBar from './components/HeadBar.vue'
 import {refreshToken} from './api'
+import axios from 'axios'
 
 export default {
   name: 'app',
@@ -40,13 +43,29 @@ export default {
         }
       )
       }
+    },
+    setAuth () {
+      this.refreshTokenInterval = window.setInterval(() => {
+        this.refresh()
+      }, 30000)
+
+      axios.interceptors.response.use(
+        res => res,
+        errRes => {
+          if (errRes.status === 401 || errRes.status === 403) { // every unauthorized resquest will get back to index and logout
+            this.commit('SET_USERs', {
+              user: {
+                logined: false
+              }
+            })
+            this.$router.push('/')
+          }
+        }
+      )
     }
   },
   created () {
-    this.refresh()
-    this.refreshTokenInterval = window.setInterval(() => {
-      this.refresh()
-    }, 30000)
+
   },
   beforeDestroy () {
     clearInterval(this.refreshTokenInterval)
