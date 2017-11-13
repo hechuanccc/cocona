@@ -18,14 +18,15 @@
       </el-col>
     </span>
     <span v-else class="logined-bar">
-      <el-button type="primary" @click="logout()">登出</el-button>
+      {{$t('navMenu.user')}} : {{user.username}}
+      <el-button type="primary" @click="logout()">{{$t('navMenu.logout')}}</el-button>
     </span>
   </el-row>
 </template>
 
 
 <script>
-import {gethomePage} from '../api'
+import {gethomePage, fetchUser} from '../api'
 export default {
   computed: {
     user () {
@@ -82,6 +83,12 @@ export default {
       }
     )
 
+    fetchUser().then(
+      result => {
+        this.$store.commit('SET_USERs', result)
+      }
+    )
+
     this.timing = setInterval(() => {
       let now = new Date()
       this.nowTime = now.toLocaleString()
@@ -95,6 +102,10 @@ export default {
 <style scoped lang='sass'>
 .logined-bar
   float: right
+  color: white
+  letter-spacing: 1px
+  button
+    margin-left: 10px
 .ipt-slot
   margin-top: 2px
   padding: 7px
