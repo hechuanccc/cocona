@@ -99,6 +99,9 @@ export function fetchPaymentRecord () {
 export function fetchBet (gameId) {
   return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameId}&status=ongoing`).then(res => res.data)
 }
+export function fetchBetHistory (gameId) {
+  return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameId}`).then(res => res.data)
+}
 
 export function fetchResults (gameId) {
   return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)

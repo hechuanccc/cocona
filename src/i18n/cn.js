@@ -47,6 +47,8 @@ export default {
     money: '钱包',
     unsettled: '未结金额',
     payment: '充值',
+    online_payment: '线上支付',
+    remit: '汇款',
     withdraw: '提款',
     betrecord: '下注纪录',
     primary_info: '基本信息',
@@ -59,7 +61,15 @@ export default {
     payment_amount: '充值金额',
     payment_way: '充值方式',
     payment_record: '充值纪录',
-    balance: '帐户余额'
+    issue_number: '期数',
+    play: '玩法',
+    bet_amount: '下注金额',
+    status: '审核状态',
+    success: '成功',
+    failed: '失败',
+    ongoing: '处理中',
+    cancelled: '取消',
+    declined: '拒绝'
   },
   action: {
     submit: '提交',

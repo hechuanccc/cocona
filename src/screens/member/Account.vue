@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="container">
     <el-aside width="250px">
       <div :class="['avatar', gender]"></div>
       <div class="welcome">{{username}} 你好</div>
@@ -10,9 +10,18 @@
         <el-menu-item index="/account/password_setting">
           <span slot="title" class="menu-text">{{$t('user.password_setting')}}</span>
         </el-menu-item>
-        <el-menu-item index="/account/payment">
+        <el-submenu index="payment">
           <span slot="title" class="menu-text">{{$t('user.payment')}}</span>
-        </el-menu-item>
+          <el-menu-item index="/account/online_payment">
+            <span slot="title" class="menu-text">{{$t('user.online_payment')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/remit">
+            <span slot="title" class="menu-text">{{$t('user.remit')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/payment_record">
+            <span slot="title" class="menu-text">{{$t('user.payment_record')}}</span>
+          </el-menu-item>
+        </el-submenu>
         <el-menu-item index="/account/withdraw">
           <span slot="title" class="menu-text">{{$t('user.withdraw')}}</span>
         </el-menu-item>
@@ -41,7 +50,11 @@ export default {
   },
   computed: {
     username () {
-      return this.$store.state.user.username
+      if (this.$store.state.user.username) {
+        return this.$store.state.user.username
+      } else {
+        this.$store.dispatch('fetchUser')
+      }
     },
     gender () {
       return this.$store.state.user.gender === 'M' ? 'male' : 'female'
@@ -65,7 +78,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../style/vars.scss';
+@import "../../style/vars.scss";
 .avatar {
   margin: 10px auto;
   height: 50px;

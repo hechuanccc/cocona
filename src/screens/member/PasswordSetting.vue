@@ -1,43 +1,41 @@
 <template>
 <el-row class="row-bg">
-  <el-col :span="12" :offset="6">
+  <el-col :span="12" :offset="8">
     <el-row class="title">
-      <h2>{{$t('user.password')}}</h2>
+      <el-col :offset="6" :span="4">{{$t('user.password')}}</el-col>
     </el-row>
     <el-row>
       <el-form :model="password" status-icon :rules="passwordRule" ref="password" label-width="120px">
         <el-form-item :label="$t('user.prev_password')" prop="prev_password">
-          <el-input type="password" v-model="password.prev_password" :maxlength="15" auto-complete="off"></el-input>
+          <el-input class="input-width" type="password" v-model="password.prev_password" :maxlength="15" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.new_password')" prop="new_password">
-          <el-input type="password" v-model="password.new_password" :maxlength="15" auto-complete="off"></el-input>
+          <el-input class="input-width" type="password" v-model="password.new_password" :maxlength="15" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.confirm_password')" prop="repeat_password">
-          <el-input type="password" v-model="password.repeat_password" :maxlength="15" auto-complete="off"></el-input>
+          <el-input class="input-width" type="password" v-model="password.repeat_password" :maxlength="15" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitPasswordForm">{{$t('action.submit')}}</el-button>
-          <el-button @click="resetForm('password')">{{$t('action.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </el-row>
     <el-row class="title">
-      <h2>{{$t('user.withdraw_password')}}</h2>
+      <el-col :offset="6" :span="4">{{$t('user.withdraw_password')}}</el-col>
     </el-row>
     <el-row>
       <el-form :model="withdraw_password" status-icon :rules="withdrawRule" ref="withdraw_password" label-width="120px">
         <el-form-item :label="$t('user.prev_withdraw_password')" prop="current_password">
-          <el-input type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>
+          <el-input class="input-width" type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.new_withdraw_password')" prop="new_password">
-          <el-input type="password" v-model="withdraw_password.new_password" auto-complete="off"></el-input>
+          <el-input class="input-width" type="password" v-model="withdraw_password.new_password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.confirm_withdraw_password')" prop="repeat_password">
-          <el-input type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
+          <el-input class="input-width" type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
-          <el-button @click="resetForm('withdraw_password')">{{$t('action.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </el-row>
@@ -159,9 +157,6 @@ export default {
           })
         }
       })
-    },
-    resetForm (form) {
-      this.$refs[form].resetFields()
     }
   }
 }
@@ -169,7 +164,6 @@ export default {
 
 <style lang="scss" scoped>
 .title {
-  text-align: center;
   font-size: 20px;
   padding: 20px 0;
 }
