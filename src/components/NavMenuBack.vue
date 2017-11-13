@@ -3,7 +3,7 @@
     <el-menu-item index="game">{{$t('navMenu.game_center')}}</el-menu-item>
     <el-menu-item index="account">{{$t('navMenu.personal_account')}}</el-menu-item>
     <el-menu-item index="history">{{$t('navMenu.draw_history')}}</el-menu-item>
-    <el-menu-item index="game-intro">{{$t('navMenu.game_intro')}}</el-menu-item>
+    <el-menu-item index="gameintro">{{$t('navMenu.game_intro')}}</el-menu-item>
   </el-menu>
 </template>
 
@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     handleSelect (key, keyPath) {
-      this.$router.push('/' + key) // key to that page set by index attribute
+      this.$router.push('/' + key)
     }
   }
 }

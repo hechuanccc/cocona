@@ -17,7 +17,7 @@
         <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
       </el-col>
     </span>
-    <span v-else class="logined-bar">
+    <span class="logined-bar" v-else>
       {{$t('navMenu.user')}} : {{user.username}}
       <el-button type="primary" @click="logout()">{{$t('navMenu.logout')}}</el-button>
     </span>
@@ -83,11 +83,15 @@ export default {
       }
     )
 
-    fetchUser().then(
+    if (!this.$store.state.user.username) {
+      return
+    } else {
+      fetchUser().then(
       result => {
         this.$store.commit('SET_USERs', result)
       }
     )
+    }
 
     this.timing = setInterval(() => {
       let now = new Date()

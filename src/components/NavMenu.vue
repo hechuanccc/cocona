@@ -28,7 +28,7 @@ import loginPopup from './LoginPopup'
 export default {
   data () {
     return {
-      activeIndex: 'home',
+      activeIndex: '',
       popVisible: false,
       style
     }
@@ -41,7 +41,6 @@ export default {
       if (!this.$store.state.user.logined) {
         this.popVisible = true
       }
-      this.$router.push('/')
     }
   },
   components: {

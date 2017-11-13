@@ -38,6 +38,13 @@ export default {
     }, error => Promise.reject(error))
   },
   logout: ({commit, state}) => {
+    Vue.cookie.delete('access_token')
+    Vue.cookie.delete('refresh_token')
+    commit(types.SET_USER, {
+      user: {
+        logined: false
+      }
+    })
     return logout().then(
       res => {
         router.push('/')

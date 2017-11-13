@@ -1,11 +1,11 @@
 <template>
   <div class="top-header">
-    <div class="header-bar">
+    <div class="header-bar" v-show="isFrontPage">
       <div class="container">
       <span class="bar-descript">
         {{nowTime}} {{$t('navMenu.bussiness_hours')}}
       </span>
-      <TopBar class="right-bar"/>
+      <TopBar/>
     </div>
     </div>
     <div class="header-nav container">
@@ -52,10 +52,8 @@ export default {
   },
   computed: {
     isFrontPage () {
-      return this.$route.path.indexOf('/game/') === -1 && this.$route.path.indexOf('/account/') === -1
-    },
-    isLogin () {
-      return this.$store.state.user.logined
+      let pat = new RegExp(/\/game\/|\/account\/|\/history|\/gameintro/)
+      return !(pat.test(this.$route.path))
     }
   },
   created () {
