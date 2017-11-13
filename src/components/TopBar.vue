@@ -1,23 +1,28 @@
 <template>
-  <el-row :gutter="4" class="top-bar container">
-    <el-col :span="4" class="bar-descript">
-      {{nowTime}} {{$t('navMenu.bussiness_hours')}}
-    </el-col>
-    <el-col :span="3" :push="5">
-      <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
-    </el-col>
-    <el-col :span="3" :push="5">
-      <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')">
-        <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
-      </el-input>
-    </el-col>
-    <el-col :span="8" :push="4">
-      <el-button type="primary" @click="login()">{{$t('navMenu.user_login')}}</el-button>
-      <el-button type="info"><router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link></el-button>
-      <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
-    </el-col>
+  <el-row :gutter="4" class="top-bar">
+    <span v-if="!isLogin">
+      <el-col :span="6">
+        <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
+      </el-col>
+      <el-col :span="6">
+        <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')">
+          <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
+        </el-input>
+      </el-col>
+      <el-col :span="10">
+        <el-button type="primary" @click="login()">{{$t('navMenu.user_login')}}</el-button>
+        <el-button type="info">
+          <router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link>
+        </el-button>
+        <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
+      </el-col>
+    </span>
+    <span v-else class="logined-bar">
+      <el-button type="primary" @click="logout()">登出</el-button>
+    </span>
   </el-row>
 </template>
+
 
 <script>
 import {gethomePage} from '../api'
@@ -25,6 +30,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user
+    },
+    isLogin () {
+      return this.$store.state.user.logined
     }
   },
   name: 'TopBar',
@@ -62,6 +70,9 @@ export default {
           type: 'error'
         })
       })
+    },
+    logout () {
+      this.$store.dispatch('logout')
     }
   },
   created () {
@@ -82,17 +93,15 @@ export default {
 }
 </script>
 <style scoped lang='sass'>
+.logined-bar
+  float: right
 .ipt-slot
   margin-top: 2px
   padding: 7px
 .top-bar
   padding-top: 7px
   display: inline-block
-.bar-descript
-  width: auto
-  line-height: 36px
-  margin-right: 10px
-  color: white
+  float: right
 </style>
 
 

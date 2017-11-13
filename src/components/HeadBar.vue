@@ -1,25 +1,35 @@
 <template>
   <div class="top-header">
     <div class="header-bar">
-        <TopBar v-show="isFrontPage"/>
+      <div class="container">
+      <span class="bar-descript">
+        {{nowTime}} {{$t('navMenu.bussiness_hours')}}
+      </span>
+      <TopBar class="right-bar"/>
+    </div>
     </div>
     <div class="header-nav container">
-        <Logo/>
-        <NavMenu v-if="isFrontPage" />
-        <NavMenuBack v-else/>
+      <Logo/>
+      <NavMenu v-if="isFrontPage" />
+      <NavMenuBack v-else/>
     </div>
   </div>
 </template>
+
 
 <style lang="sass" scoped>
 .top-header
   margin-bottom: 10px
   .header-bar
     width: 100%
+    height: 45px
     background: #433e81
-    text-align: center
-  .header-nav
-    margin-top: 10px
+    margin: 0 auto
+.bar-descript
+  float: left
+  width: auto
+  line-height: 45px
+  color: white
 </style>
 <script>
 import TopBar from '../components/TopBar'
@@ -30,7 +40,8 @@ import NavMenuBack from '../components/NavMenuBack'
 export default {
   data () {
     return {
-      userInfo: ''
+      userInfo: '',
+      nowTime: new Date().toLocaleString()
     }
   },
   components: {
@@ -42,7 +53,19 @@ export default {
   computed: {
     isFrontPage () {
       return this.$route.path.indexOf('/game/') === -1 && this.$route.path.indexOf('/account/') === -1
+    },
+    isLogin () {
+      return this.$store.state.user.logined
     }
+  },
+  created () {
+    this.timing = setInterval(() => {
+      let now = new Date()
+      this.nowTime = now.toLocaleString()
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timing)
   }
 }
 </script>

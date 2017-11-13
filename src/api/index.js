@@ -7,6 +7,9 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 export function login (user) {
   return axios.post(urls.login, qs.stringify(user))
 }
+export function logout () {
+  return axios.post(urls.logout)
+}
 
 export function agentRegister (userInfo) {
   return axios.post(urls.agent_register, qs.stringify(userInfo))
@@ -98,4 +101,18 @@ export function fetchBet (gameId) {
 
 export function fetchResults (gameId) {
   return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)
+}
+
+export function refreshToken (oldToken) {
+  if (!oldToken) {
+    return
+  }
+  return axios.post(urls.refresh_token, {
+    refresh_token: oldToken
+  }).then(
+    res => {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access_token
+      return res.data
+    }
+  )
 }
