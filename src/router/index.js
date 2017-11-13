@@ -21,19 +21,16 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      meta: { Page: 'Home' },
       component: Home
     },
     {
       path: '/agent/register',
       name: 'agentRegister',
-      meta: { Page: 'agentRegister' },
       component: agentRegister
     },
     {
       path: '/register',
       name: 'Register',
-      meta: { Page: 'Register' },
       component: Register
     },
     {
@@ -71,7 +68,6 @@ export default new Router({
     }, {
       path: '/promotions',
       name: 'Promotions',
-      meta: { Page: 'Promotions' },
       component: Promotions
 
     },
@@ -79,17 +75,15 @@ export default new Router({
       path: '/game',
       name: 'Game',
       component: GameHall,
-      meta: { requiresAuth: true, Page: 'Game' },
+      meta: { requiresAuth: true },
       children: [
         {
           path: ':gameId',
           component: Game,
-          meta: { Page: 'Game' },
           children: [
             {
               path: ':categoryId',
-              component: GameCategory,
-              meta: { Page: 'Game' }
+              component: GameCategory
             }
           ]
         }

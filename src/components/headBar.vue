@@ -1,11 +1,12 @@
 <template>
   <div class="top-header">
     <div class="header-bar">
-        <TopBar v-if="!isBack"/>
+        <TopBar v-show="isFrontPage"/>
     </div>
     <div class="header-nav container">
         <Logo/>
-        <NavMenu />
+        <NavMenu v-if="isFrontPage" />
+        <NavMenuBack v-else/>
     </div>
   </div>
 </template>
@@ -24,6 +25,7 @@
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
 import Logo from '../components/Logo'
+import NavMenuBack from '../components/NavMenuBack'
 
 export default {
   data () {
@@ -34,11 +36,12 @@ export default {
   components: {
     TopBar,
     NavMenu,
-    Logo
+    Logo,
+    NavMenuBack
   },
   computed: {
-    isBack () {
-      return ['Game', 'Account'].includes(this.$route.meta.Page)
+    isFrontPage () {
+      return this.$route.path.indexOf('/game/') === -1 && this.$route.path.indexOf('/account/') === -1
     }
   }
 }
