@@ -57,10 +57,10 @@ export default {
     unsettled: '未结金额',
     payment: '充值',
     online_payment: '线上支付',
-    remit: '汇款',
-    withdraw: '提款',
+    remit: '公司入款',
+    withdraw: '申请提款',
     betrecord: '下注纪录',
-    primary_info: '基本信息',
+    my_account: '我的账号',
     password_setting: '密码设定',
     amount: '金额',
     gender: '性别',
@@ -78,7 +78,10 @@ export default {
     failed: '失败',
     ongoing: '处理中',
     cancelled: '取消',
-    declined: '拒绝'
+    declined: '拒绝',
+    finance: '财务记录',
+    message: '站内消息',
+    announcement: '系统公告'
   },
   action: {
     submit: '提交',

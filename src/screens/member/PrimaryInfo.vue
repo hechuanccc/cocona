@@ -1,5 +1,12 @@
 <template>
 <el-row class="row-bg">
+  <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
+    <el-tab-pane label="基本信息" ></el-tab-pane>
+    <el-tab-pane label="密码修改" ></el-tab-pane>
+    <el-tab-pane label="取款密码" ></el-tab-pane>
+    <el-tab-pane label="银行信息" ></el-tab-pane>
+  </el-tabs>
+  <router-view />
   <el-col :span="10" :offset="7">
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
       <el-form-item :label="$t('user.level')">

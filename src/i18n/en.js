@@ -60,7 +60,7 @@ export default {
     remit: 'Remit',
     withdraw: 'Withdraw',
     betrecord: 'Bet Record',
-    primary_info: 'Primary Info',
+    my_account: 'My Account',
     password_setting: 'Password Setting',
     amount: 'Amount',
     gender: 'Gender',
@@ -78,7 +78,10 @@ export default {
     failed: 'Failed',
     ongoing: 'Ongoing',
     cancelled: 'Cancelled',
-    declined: 'Declined'
+    declined: 'Declined',
+    finance: 'Financing',
+    message: 'Message',
+    announcement: 'Announcement'
   },
   action: {
     submit: 'Submit',
