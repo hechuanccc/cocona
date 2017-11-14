@@ -50,8 +50,9 @@ export default {
   },
   computed: {
     username () {
-      if (this.$store.state.user.username) {
-        return this.$store.state.user.username
+      let username = this.$store.state.user.username
+      if (username) {
+        return username
       } else {
         this.$store.dispatch('fetchUser')
       }

@@ -56,6 +56,8 @@ export default {
     money: 'Money',
     unsettled: 'Unsettled',
     payment: 'Payment',
+    online_payment: 'Online Payment',
+    remit: 'Remit',
     withdraw: 'Withdraw',
     betrecord: 'Bet Record',
     primary_info: 'Primary Info',
