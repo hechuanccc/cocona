@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <router-link to="/">
-      <img :src="icon" alt="icon"/>
+      <img :src="icon" alt="logo" height="60" />
     </router-link>
   </div>
 </template>
@@ -29,6 +29,9 @@ export default {
   display: inline-block
   height: 60px
   width: 240px
+  a
+    display: inline-block
+    height: 60px
   img
     width: auto
     height: 100%
