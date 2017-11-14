@@ -8,7 +8,9 @@ import agentRegister from '@/screens/agent/agentRegister'
 import Register from '@/screens/member/Register'
 import Account from '@/screens/member/Account'
 import Withdraw from '@/screens/member/Withdraw'
-import Payment from '@/screens/member/Payment'
+import OnlinePayment from '@/screens/member/OnlinePayment'
+import Remit from '@/screens/member/Remit'
+import PaymentRecord from '@/screens/member/PaymentRecord'
 import PrimaryInfo from '@/screens/member/PrimaryInfo'
 import PasswordSetting from '@/screens/member/PasswordSetting'
 import BetRecord from '@/screens/member/BetRecord'
@@ -45,9 +47,19 @@ export default new Router({
           component: Withdraw
         },
         {
-          path: 'payment',
-          name: 'Payment',
-          component: Payment
+          path: 'online_payment',
+          name: 'OnlinePayment',
+          component: OnlinePayment
+        },
+        {
+          path: 'remit',
+          name: 'Remit',
+          component: Remit
+        },
+        {
+          path: 'payment_record',
+          name: 'PaymentRecord',
+          component: PaymentRecord
         },
         {
           path: 'primary_info',

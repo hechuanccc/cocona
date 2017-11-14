@@ -63,7 +63,20 @@ export default {
     amount: 'Amount',
     gender: 'Gender',
     male: 'male',
-    female: 'female'
+    female: 'female',
+    payment_time: 'Payment Time',
+    payment_amount: 'Payment Amount',
+    payment_way: 'Payment Way',
+    payment_record: 'Payment Record',
+    issue_number: 'Issue Number',
+    play: 'Play Name',
+    bet_amount: 'Bet Amount',
+    status: 'Status',
+    success: 'Success',
+    failed: 'Failed',
+    ongoing: 'Ongoing',
+    cancelled: 'Cancelled',
+    declined: 'Declined'
   },
   action: {
     submit: 'Submit',
