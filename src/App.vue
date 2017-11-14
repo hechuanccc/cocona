@@ -52,7 +52,14 @@ export default {
           if (errRes.response.status === 401 || errRes.response.status === 403) {
             this.$cookie.delete('access_token')
             this.$cookie.delete('refresh_token')
-            window.location.reload()
+
+            this.$store.commit('SET_USERs', {
+              user: {
+                logined: false
+              }
+            })
+
+            this.$router.push('/')
           }
         }
       )
