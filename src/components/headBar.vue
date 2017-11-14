@@ -1,7 +1,7 @@
 <template>
   <div class="top-header">
-    <div class="header-bar">
-        <TopBar v-show="isFrontPage"/>
+    <div class="header-bar" v-show="isFrontPage">
+        <TopBar/>
     </div>
     <div class="header-nav container">
         <Logo/>
@@ -10,18 +10,6 @@
     </div>
   </div>
 </template>
-
-<style lang="sass" scoped>
-.top-header
-  margin-bottom: 10px
-  .header-bar
-    width: 100%
-    background: #f0f0f0
-    text-align: center
-  .header-nav
-    height: 60px
-    margin-top: 10px
-</style>
 <script>
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
@@ -48,4 +36,16 @@ export default {
 }
 </script>
 
-
+<style lang="sass" scoped>
+.top-header
+  margin-bottom: 10px
+  .header-bar
+    height: 33px
+    padding: 3px 0
+    width: 100%
+    background: #f0f0f0
+    text-align: center
+  .header-nav
+    height: 60px
+    margin-top: 10px
+</style>

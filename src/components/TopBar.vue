@@ -3,7 +3,7 @@
     <div class="clock">
       {{nowTime}} {{$t('navMenu.bussiness_hours')}}
     </div>
-    <div class="actions">
+    <div class="actions" v-if="user.logined === ''">
       <div class="input">
         <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
       </div>
@@ -17,6 +17,24 @@
         <el-button type="info"><router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link></el-button>
         <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
       </div>
+    </div>
+    <div v-else-if="user.logined" class="account-links" >
+      <el-button-group>
+        <el-button>立即存款</el-button>
+        <el-button>申请取款</el-button>
+        <el-button>我的注单</el-button>
+      </el-button-group>
+      <el-button class="account-trigger" 
+        @mouseenter.native="showDropdown=true"
+        @mouseleave.native="showDropdown=false">我的账号<i class="el-icon-caret-bottom"></i>
+        <ul v-show="showDropdown" class="dropdown">
+          <li><router-link to="/account/my/">账户余额 {{user.balance}}</router-link></li>
+          <li><router-link to="/account/my/">账号信息</router-link></li>
+          <li><router-link to="/account/my/">修改密码</router-link></li>
+          <li><router-link to="/account/my/">退出登录</router-link></li>
+        </ul>
+      </el-button>
+      
     </div>
   </div>
 </template>
@@ -35,7 +53,8 @@ export default {
       username: '',
       password: '',
       homepage: '',
-      nowTime: ''
+      nowTime: '',
+      showDropdown: false
     }
   },
   methods: {
@@ -84,11 +103,11 @@ export default {
 }
 </script>
 <style scoped lang='sass'>
+@import '../style/vars.scss';
 .ipt-slot
   margin-top: 2px
   padding: 7px
 .top-bar
-  padding-top: 5px
   display: inline-block
 .clock
   float: left
@@ -104,6 +123,36 @@ export default {
   text-align: right
 .buttons
   float: right
+.account-links
+  position: relative
+  float: right
+  color: #666
+  a
+    text-decoration: none
+    padding: 0 5px
+    color: #666
+    &:hover
+      color: $primary
+
+.dropdown
+  padding: 10px 0
+  text-align: left
+  position: absolute
+  top: 30px
+  right: 0
+  border: 1px solid #d8dce5
+  border-radius: 2px
+  background: #fff
+  width: 160px
+  z-index: 10
+  li
+    cursor: pointer
+    line-height: 32px
+    padding: 0 10px
+    a
+      display: block
+    &:hover
+      background: #f0f0f0
 </style>
 
 

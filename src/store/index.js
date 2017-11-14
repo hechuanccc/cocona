@@ -10,7 +10,7 @@ export function createStore () {
   return new Vuex.Store({
     state: {
       user: {
-        logined: !!Vue.cookie.get('access_token')
+        logined: ''
       },
       games: [],
       categories: []
