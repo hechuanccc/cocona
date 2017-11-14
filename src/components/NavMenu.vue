@@ -1,6 +1,6 @@
 <template>
-  <el-menu :default-active="activeIndex" class="el-menu" mode="horizontal" :router="true" :active-text-color="style.primaryColor">
-    <el-menu-item index="/">{{$t('navMenu.home_page')}}</el-menu-item>
+  <el-menu :default-active="activeIndex" class="el-menu" mode="horizontal" @select="handleSelect" :active-text-color="style.primaryColor">
+    <el-menu-item index="">{{$t('navMenu.home_page')}}</el-menu-item>
     <el-menu-item index="game" @click="popGuest">{{$t('navMenu.game_center')}}</el-menu-item>
     <el-dialog :title="$t('navMenu.pop_title')"
     :visible.sync="popVisible"
@@ -28,12 +28,15 @@ import loginPopup from './LoginPopup'
 export default {
   data () {
     return {
-      activeIndex: '/',
+      activeIndex: '',
       popVisible: false,
       style
     }
   },
   methods: {
+    handleSelect (key, keyPath) {
+      this.$router.push('/' + key) // key to that page set by index attribute
+    },
     popGuest () {
       if (!this.$store.state.user.logined) {
         this.popVisible = true
