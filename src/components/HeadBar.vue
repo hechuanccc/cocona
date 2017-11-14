@@ -1,13 +1,15 @@
 <template>
   <div class="top-header">
-    <div class="header-bar" v-show="isFrontPage">
-      <div class="container">
-      <span class="bar-descript">
-        {{nowTime}} {{$t('navMenu.bussiness_hours')}}
-      </span>
-      <TopBar/>
-    </div>
-    </div>
+    <transition name="el-fade-in">
+      <div class="header-bar" v-show="isFrontPage">
+        <div class="container">
+          <span class="bar-descript">
+            {{nowTime}} {{$t('navMenu.bussiness_hours')}}
+          </span>
+          <TopBar/>
+        </div>
+      </div>
+    </transition>
     <div class="header-nav container">
       <Logo/>
       <NavMenu v-if="isFrontPage" />
@@ -15,6 +17,8 @@
     </div>
   </div>
 </template>
+
+
 
 
 <style lang="sass" scoped>
@@ -25,6 +29,8 @@
     height: 45px
     background: #433e81
     margin: 0 auto
+  .header-nav
+    margin-top: 10px
 .bar-descript
   float: left
   width: auto
@@ -52,7 +58,7 @@ export default {
   },
   computed: {
     isFrontPage () {
-      let pat = new RegExp(/\/game\/|\/account\/|\/history|\/gameintro/)
+      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/history|\/gameintro/)
       return !(pat.test(this.$route.path))
     }
   },

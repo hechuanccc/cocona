@@ -26,7 +26,7 @@
 
 
 <script>
-import {gethomePage, fetchUser} from '../api'
+import {gethomePage} from '../api'
 export default {
   computed: {
     user () {
@@ -82,16 +82,6 @@ export default {
         this.homepage = response.data
       }
     )
-
-    if (!this.$store.state.user.username) {
-      return
-    } else {
-      fetchUser().then(
-      result => {
-        this.$store.commit('SET_USERs', result)
-      }
-    )
-    }
 
     this.timing = setInterval(() => {
       let now = new Date()

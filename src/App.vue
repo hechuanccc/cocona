@@ -1,9 +1,7 @@
 <template>
   <div>
     <HeadBar />
-    <transition name="el-fade-in">
-      <router-view/>
-    </transition>
+    <router-view/>
   </div>
 </template>
 
@@ -22,8 +20,10 @@ export default {
   methods: {
     refresh () {
       let old = this.$cookie.get('refresh_token')
-      if (old) {
-        refreshToken(old).then(
+      if (!old) {
+        return
+      }
+      refreshToken(old).then(
         result => {
           let data = result
           let expires = new Date(data.expires_in)
@@ -35,29 +35,23 @@ export default {
               expires: expires
             })
           }
-          this.$store.commit('SET_USERs', {
-            user: {
-              logined: true
-            }
-          })
         }
       )
-      }
     },
     setAuth () {
       this.refreshTokenInterval = window.setInterval(() => {
+        if (!this.$cookie.get('access_token')) {
+          return
+        }
         this.refresh()
-      }, 30000)
+      }, 3000)
 
       axios.interceptors.response.use(
         res => res,
         errRes => {
-          if (errRes.status === 401 || errRes.status === 403) { // every unauthorized resquest will get back to index and logout
-            this.commit('SET_USERs', {
-              user: {
-                logined: false
-              }
-            })
+          if (errRes.response.status === 401 || errRes.response.status === 403) { // every unauthorized request will get back to index and logout
+            this.$cookie.delete('access_token')
+            this.$cookie.delete('refresh_token')
             this.$router.push('/')
           }
         }
@@ -65,7 +59,10 @@ export default {
     }
   },
   created () {
-
+    this.setAuth()
+    if (this.$store.state.user.logined) {
+      this.$store.dispatch('fetchUser')
+    }
   },
   beforeDestroy () {
     clearInterval(this.refreshTokenInterval)
