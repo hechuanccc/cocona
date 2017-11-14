@@ -18,12 +18,12 @@ export default {
     HeadBar
   },
   methods: {
-    refresh () {
-      let old = this.$cookie.get('refresh_token')
-      if (!old) {
+    refreshToken () {
+      let oldtoken = this.$cookie.get('refresh_token')
+      if (!oldtoken) {
         return
       }
-      refreshToken(old).then(
+      refreshToken(oldtoken).then(
         result => {
           let data = result
           let expires = new Date(data.expires_in)
@@ -43,16 +43,16 @@ export default {
         if (!this.$cookie.get('access_token')) {
           return
         }
-        this.refresh()
-      }, 3000)
+        this.refreshToken()
+      }, 30000)
 
       axios.interceptors.response.use(
         res => res,
         errRes => {
-          if (errRes.response.status === 401 || errRes.response.status === 403) { // every unauthorized request will get back to index and logout
+          if (errRes.response.status === 401 || errRes.response.status === 403) {
             this.$cookie.delete('access_token')
             this.$cookie.delete('refresh_token')
-            this.$router.push('/')
+            window.location.reload()
           }
         }
       )
