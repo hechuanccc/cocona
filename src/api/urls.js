@@ -31,5 +31,6 @@ export default {
   paymentType: apiv1 + '/paymenttype/?opt_expand=1/',
   betrecord: apiv1 + '/betrecord/',
   payment_record: apiv1 + '/transaction/',
-  result: '/result/'
+  result: '/result/',
+  bank: apiv1 + '/bank/'
 }

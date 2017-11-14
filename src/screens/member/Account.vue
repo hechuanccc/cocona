@@ -83,13 +83,12 @@ export default {
   margin: 10px auto;
   height: 50px;
   width: 50px;
-  border-radius: 50%;
 
   &.male {
-    background: darkblue;
+    background: url(../../assets/male.png) no-repeat center center/contain;
   }
   &.female {
-    background: $red;
+    background: url(../../assets/female.png) no-repeat center center/contain;
   }
 }
 .welcome {
