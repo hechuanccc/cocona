@@ -1,22 +1,24 @@
 <template>
-  <el-row :gutter="4" class="top-bar container">
-    <el-col :span="4" class="bar-descript">
+  <div class="top-bar container" justify="space-between">
+    <div class="clock">
       {{nowTime}} {{$t('navMenu.bussiness_hours')}}
-    </el-col>
-    <el-col :span="3" :push="5">
-      <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
-    </el-col>
-    <el-col :span="3" :push="5">
-      <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')">
-        <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
-      </el-input>
-    </el-col>
-    <el-col :span="8" :push="4">
-      <el-button type="primary" @click="login()">{{$t('navMenu.user_login')}}</el-button>
-      <el-button type="info"><router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link></el-button>
-      <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
-    </el-col>
-  </el-row>
+    </div>
+    <div class="actions">
+      <div class="input">
+        <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
+      </div>
+      <div class="input">
+        <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')">
+          <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
+        </el-input>
+      </div>
+      <div class="buttons">
+        <el-button type="primary" @click="login()">{{$t('navMenu.user_login')}}</el-button>
+        <el-button type="info"><router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link></el-button>
+        <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -86,13 +88,22 @@ export default {
   margin-top: 2px
   padding: 7px
 .top-bar
-  padding-top: 7px
+  padding-top: 5px
   display: inline-block
-.bar-descript
-  width: auto
-  line-height: 36px
+.clock
+  float: left
+  line-height: 32px
   margin-right: 10px
-  color: white
+  color: #666
+.input
+  width: 140px
+  float: left
+  margin-right: 10px
+.actions
+  float: right
+  text-align: right
+.buttons
+  float: right
 </style>
 
 
