@@ -18,7 +18,7 @@ export default {
     HeadBar
   },
   methods: {
-    getToken () {
+    setToken () {
       let oldtoken = this.$cookie.get('refresh_token')
       if (!oldtoken) {
         return
@@ -39,11 +39,11 @@ export default {
       )
     },
     setAuth () {
-      this.refreshTokenInterval = window.setInterval(() => {
+      this.refreshTokenInterval = window.setInterval(() => {  // this is refresh actually
         if (!this.$cookie.get('access_token')) {
           return
         }
-        this.getToken()
+        this.setToken()
       }, 30000)
 
       axios.interceptors.response.use(
