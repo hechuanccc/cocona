@@ -62,8 +62,8 @@ export default new Router({
           component: PaymentRecord
         },
         {
-          path: 'primary_info',
-          name: 'PrimaryInfo',
+          path: 'my',
+          name: 'MyAccount',
           component: PrimaryInfo
         },
         {

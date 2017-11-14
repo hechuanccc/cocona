@@ -1,32 +1,40 @@
 <template>
   <el-container class="container">
-    <el-aside width="250px">
-      <div :class="['avatar', gender]"></div>
-      <div class="welcome">{{username}} 你好</div>
-      <el-menu :default-active="$route.path" :router="true">
-        <el-menu-item index="/account/primary_info">
-          <span slot="title" class="menu-text">{{$t('user.primary_info')}}</span>
+    <el-aside width="180px">
+      <el-menu 
+        :default-active="$route.path" 
+        text-color="#fff"
+        active-text-color="#fff"
+        :background-color="style.primaryColor"
+        :router="true">
+
+        <el-menu-item index="/account/online_payment">
+          <icon name="credit-card"></icon>
+          <span slot="title" class="menu-text">{{$t('user.online_payment')}}</span>
         </el-menu-item>
-        <el-menu-item index="/account/password_setting">
-          <span slot="title" class="menu-text">{{$t('user.password_setting')}}</span>
+        <el-menu-item index="/account/remit">
+          <icon name="credit-card-alt"></icon>
+          <span slot="title" class="menu-text">{{$t('user.remit')}}</span>
         </el-menu-item>
-        <el-submenu index="payment">
-          <span slot="title" class="menu-text">{{$t('user.payment')}}</span>
-          <el-menu-item index="/account/online_payment">
-            <span slot="title" class="menu-text">{{$t('user.online_payment')}}</span>
-          </el-menu-item>
-          <el-menu-item index="/account/remit">
-            <span slot="title" class="menu-text">{{$t('user.remit')}}</span>
-          </el-menu-item>
-          <el-menu-item index="/account/payment_record">
-            <span slot="title" class="menu-text">{{$t('user.payment_record')}}</span>
-          </el-menu-item>
-        </el-submenu>
         <el-menu-item index="/account/withdraw">
+          <icon name="file-text-o" />
           <span slot="title" class="menu-text">{{$t('user.withdraw')}}</span>
         </el-menu-item>
-        <el-menu-item index="/account/betrecord">
-          <span slot="title" class="menu-text">{{$t('user.betrecord')}}</span>
+        <el-menu-item index="/account/finance">
+          <icon name="list-ul" />
+          <span slot="title" class="menu-text">{{$t('user.finance')}}</span>
+        </el-menu-item>
+        <el-menu-item index="/account/my">
+          <icon name="user" />
+          <span slot="title" class="menu-text">{{$t('user.my_account')}}</span>
+        </el-menu-item>
+        <el-menu-item index="/account/message">
+          <icon name="envelope-o" />
+          <span slot="title" class="menu-text">{{$t('user.message')}}</span>
+        </el-menu-item>
+        <el-menu-item index="/account/announcement">
+          <icon name="bullhorn" />
+          <span slot="title" class="menu-text">{{$t('user.announcement')}}</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -37,13 +45,23 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/credit-card'
+import 'vue-awesome/icons/credit-card-alt'
+import 'vue-awesome/icons/file-text-o'
+import 'vue-awesome/icons/list-ul'
+import 'vue-awesome/icons/user'
+import 'vue-awesome/icons/envelope-o'
+import 'vue-awesome/icons/bullhorn'
+
 import urls from '../../api/urls'
+import style from '../../style'
 import Vue from 'vue'
 
 export default {
   name: 'Account',
   data () {
     return {
+      style,
       formSrc: urls.payment,
       token: Vue.cookie.get('access_token')
     }
@@ -56,9 +74,6 @@ export default {
       } else {
         this.$store.dispatch('fetchUser')
       }
-    },
-    gender () {
-      return this.$store.state.user.gender === 'M' ? 'male' : 'female'
     },
     routeName () { }
   },
@@ -80,26 +95,29 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
-.avatar {
-  margin: 10px auto;
-  height: 50px;
-  width: 50px;
-
-  &.male {
-    background: url(../../assets/male.png) no-repeat center center/contain;
-  }
-  &.female {
-    background: url(../../assets/female.png) no-repeat center center/contain;
+.el-main {
+  padding-top: 0;
+}
+.container {
+  border-top: 1px solid #ededed;
+  padding-top: 20px;
+}
+.el-menu .el-menu-item {
+  &.is-active {
+    background: url('../../assets/active_menu_bg_right.png') no-repeat center right;
+    background-size: 200px 44px;
+    border-bottom-width: 0;
   }
 }
-.welcome {
-  text-align: center;
-  height: 35px;
-  line-height: 35px;
-  width: 100%;
+.fa-icon {
+  width: 16px;
 }
 .menu-text {
-  padding-left: 20px;
+  padding-left: 10px;
+}
+.el-menu-item, .el-submenu__title {
+  height: 44px;
+  line-height: 44px;
 }
 </style>
 
