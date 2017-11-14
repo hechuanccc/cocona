@@ -103,7 +103,7 @@ export function fetchResults (gameId) {
   return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)
 }
 
-export function refreshToken (oldToken) {
+export function getToken (oldToken) {
   if (!oldToken) {
     return
   }

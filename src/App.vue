@@ -9,7 +9,7 @@
 import './style/reset.css'
 import './style/base.scss'
 import HeadBar from './components/HeadBar.vue'
-import {refreshToken} from './api'
+import {getToken} from './api'
 import axios from 'axios'
 
 export default {
@@ -18,12 +18,12 @@ export default {
     HeadBar
   },
   methods: {
-    refreshToken () {
+    getToken () {
       let oldtoken = this.$cookie.get('refresh_token')
       if (!oldtoken) {
         return
       }
-      refreshToken(oldtoken).then(
+      getToken(oldtoken).then(
         result => {
           let data = result
           let expires = new Date(data.expires_in)
@@ -43,7 +43,7 @@ export default {
         if (!this.$cookie.get('access_token')) {
           return
         }
-        this.refreshToken()
+        this.getToken()
       }, 30000)
 
       axios.interceptors.response.use(
