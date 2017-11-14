@@ -1,20 +1,20 @@
 <template>
   <el-row :gutter="4" class="top-bar container">
     <el-col :span="4" class="bar-descript">
-      {{nowTime}} 营业时间: 白天07:30 - 凌晨04:00/ 全年无休
+      {{nowTime}} {{$t('navMenu.bussiness_hours')}}
     </el-col>
     <el-col :span="3" :push="5">
-      <el-input v-model="username" placeholder="会员登录"></el-input>
+      <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
     </el-col>
     <el-col :span="3" :push="5">
-      <el-input v-model="password" type="password" placeholder="密码">
-        <el-button slot="suffix" size="mini" type="info" class="ipt-slot">忘记?</el-button>
+      <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')">
+        <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
       </el-input>
     </el-col>
     <el-col :span="8" :push="4">
-      <el-button type="primary" @click="login">会员登录</el-button>
-      <el-button type="info">会员注册</el-button>
-      <el-button type="warning">免费试玩</el-button>
+      <el-button type="primary" @click="login()">{{$t('navMenu.user_login')}}</el-button>
+      <el-button type="info"><router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link></el-button>
+      <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
     </el-col>
   </el-row>
 </template>
