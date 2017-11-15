@@ -10,13 +10,16 @@ import Account from '@/screens/member/Account'
 import Withdraw from '@/screens/member/Withdraw'
 import OnlinePayment from '@/screens/member/OnlinePayment'
 import Remit from '@/screens/member/Remit'
-import PaymentRecord from '@/screens/member/PaymentRecord'
 
 import MyAccount from '@/screens/member/MyAccount'
 import PrimaryInfo from '@/screens/member/PrimaryInfo'
 import PasswordSetting from '@/screens/member/PasswordSetting'
 import WithdrawPassword from '@/screens/member/WithdrawPassword'
+
+import Finance from '@/screens/member/Finance'
+import PaymentRecord from '@/screens/member/PaymentRecord'
 import BetRecord from '@/screens/member/BetRecord'
+
 import Promotions from '@/screens/promotion/Promotions'
 
 Vue.use(Router)
@@ -60,11 +63,6 @@ export default new Router({
           component: Remit
         },
         {
-          path: 'payment_record',
-          name: 'PaymentRecord',
-          component: PaymentRecord
-        },
-        {
           path: 'my',
           name: 'MyAccount',
           component: MyAccount,
@@ -87,9 +85,21 @@ export default new Router({
           ]
         },
         {
-          path: 'betrecord',
-          name: 'BetRecord',
-          component: BetRecord
+          path: 'finance',
+          name: 'Finance',
+          component: Finance,
+          children: [
+            {
+              path: 'payment_record',
+              name: 'PaymentRecord',
+              component: PaymentRecord
+            },
+            {
+              path: 'betrecord',
+              name: 'BetRecord',
+              component: BetRecord
+            }
+          ]
         }
       ]
     }, {
