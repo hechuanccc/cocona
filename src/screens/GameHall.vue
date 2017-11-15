@@ -1,47 +1,51 @@
 <template>
-  <div class="container">
+  <div>
+    
     <GameMenu path="game"/>
-    <!-- user key props to force Vue to re-render router-view whenever route change -->
-    <el-container>
-      <el-aside width="220px">
-        <ul class="side-menu">
-          <li>
-            <span>账号</span>
-            {{user.username}}
-          </li>
-          <li>
-            <span>余额</span>
-            <strong class="balance">￥{{user.balance}}</strong>
-          </li>
-          <li class="center">
-            <el-button type="primary" plain>我的账号</el-button>
-            <el-button type="primary" plain>立即充值</el-button>
-          </li>
-          <li class="center">
-            <el-button type="primary" plain>申请提款</el-button>
-            <el-button type="primary" plain>我的注单</el-button>
-          </li>
-        </ul>
-        <div class="betrecords">
-          <h3>最新注单</h3>
-          <ul  v-if="betrecords.length > 0">
-            <li v-for="bet in betrecords">
-              <span class="issue-number">{{bet.issue_number}} 期</span>
-              <span class="amount">
-              ￥{{bet.bet_amount}}</span>
-              <div>
-                <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span> @
-                <span class="odds">{{bet.play.odds}}</span>
-              </div>
+  
+    <div class="container">
+      <!-- user key props to force Vue to re-render router-view whenever route change -->
+      <el-container>
+        <el-aside width="220px">
+          <ul class="side-menu">
+            <li>
+              <span>账号</span>
+              {{user.username}}
+            </li>
+            <li>
+              <span>余额</span>
+              <strong class="balance">￥{{user.balance}}</strong>
+            </li>
+            <li class="center">
+              <el-button type="primary" plain>我的账号</el-button>
+              <el-button type="primary" plain>立即充值</el-button>
+            </li>
+            <li class="center">
+              <el-button type="primary" plain>申请提款</el-button>
+              <el-button type="primary" plain>我的注单</el-button>
             </li>
           </ul>
-          <div class="empty" v-else>暂无注单</div>
-        </div>
-      </el-aside>
-      <el-main>
-        <router-view :key="$route.name + ($route.params.gameId || '')"/>
-      </el-main>
-    </el-container>
+          <div class="betrecords">
+            <h3>最新注单</h3>
+            <ul  v-if="betrecords.length > 0">
+              <li v-for="bet in betrecords">
+                <span class="issue-number">{{bet.issue_number}} 期</span>
+                <span class="amount">
+                ￥{{bet.bet_amount}}</span>
+                <div>
+                  <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span> @
+                  <span class="odds">{{bet.play.odds}}</span>
+                </div>
+              </li>
+            </ul>
+            <div class="empty" v-else>暂无注单</div>
+          </div>
+        </el-aside>
+        <el-main>
+          <router-view :key="$route.name + ($route.params.gameId || '')"/>
+        </el-main>
+      </el-container>
+    </div>
   </div>
 </template>
 

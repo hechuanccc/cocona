@@ -15,8 +15,6 @@
   </div>
 </template>
 
-
-
 <style lang="sass" scoped>
 $primary-color: #409EFF
 

@@ -12,7 +12,7 @@
 </template>
 
 <style lang="sass" scoped>
-$banner_width: 1000px
+$banner_width: 1280px
 $primary-color: #409EFF
 
 .promo

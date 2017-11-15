@@ -95,8 +95,15 @@ export function placeBet (data) {
   }).then(res => res.data)
 }
 
+export function fetchPaymentRecord () {
+  return axios.get(urls.payment_record).then(res => res.data)
+}
+
 export function fetchBet (gameId) {
   return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameId}&status=ongoing`).then(res => res.data)
+}
+export function fetchBetHistory (gameId) {
+  return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameId}`).then(res => res.data)
 }
 
 export function fetchResults (gameId) {
@@ -115,4 +122,7 @@ export function getToken (oldToken) {
       return res.data
     }
   )
+}
+export function fetchBank () {
+  return axios.get(urls.bank).then(res => res.data)
 }

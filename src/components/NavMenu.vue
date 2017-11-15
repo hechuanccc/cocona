@@ -1,36 +1,51 @@
 <template>
-  <el-menu :default-active="activeIndex" class="el-menu" mode="horizontal" @select="handleSelect" :active-text-color="style.primaryColor">
-    <el-menu-item index="">{{$t('navMenu.home_page')}}</el-menu-item>
-    <el-menu-item index="game" @click="popGuest">{{$t('navMenu.game_center')}}</el-menu-item>
-    <el-dialog :title="$t('navMenu.pop_title')"
-    :visible.sync="popVisible"
-    width="480px"
-    center>
-      <loginPopup />
-    </el-dialog>
-    <el-menu-item index="register">{{$t('navMenu.user_register')}}</el-menu-item>
-    <el-menu-item index="promotions">{{$t('navMenu.promotion')}}</el-menu-item>
-    <el-menu-item index="quastions/quastion">{{$t('navMenu.qa')}}</el-menu-item>
-    <el-menu-item index="agent/register">{{$t('navMenu.affliate')}}</el-menu-item>
-  </el-menu>
+  <!-- 这里只处理了UI 部分，没有加上 router -->
+  <ul class="menu">
+    <router-link tag="li" :to="menu.path" :class="{'active': menu.active, [menu.class]: menu.class}" v-for="menu in menus" :key="menu.icon">
+      <i class="icon">
+        <icon :name="menu.icon" scale="1.4" />
+      </i>
+      <span class="txt">{{menu.name}}</span>
+    </router-link>
+  </ul>
 </template>
 
-<style lang="sass" scoped>
-.el-menu
-  display: inline-block
-  float: right
-  width: auto
-</style>
-
 <script>
+import 'vue-awesome/icons/home'
+import 'vue-awesome/icons/th-large'
+import 'vue-awesome/icons/user-plus'
+import 'vue-awesome/icons/info'
+import 'vue-awesome/icons/clone'
+import 'vue-awesome/icons/list-ul'
 import style from '../style'
 import loginPopup from './LoginPopup'
 export default {
   data () {
     return {
-      activeIndex: '',
       popVisible: false,
-      style
+      style,
+      menus: [{
+        icon: 'home',
+        active: true,
+        name: this.$t('navMenu.home_page'),
+        path: '/'
+      }, {
+        icon: 'th-large',
+        name: this.$t('navMenu.game_center'),
+        path: '/game'
+      }, {
+        icon: 'list-ul',
+        name: this.$t('navMenu.promotion'),
+        path: '/promotions'
+      }, {
+        icon: 'info',
+        name: this.$t('navMenu.qa'),
+        path: '/faq'
+      }, {
+        icon: 'clone',
+        name: this.$t('navMenu.affliate'),
+        path: '/agent/register'
+      }]
     }
   },
   methods: {
@@ -48,3 +63,39 @@ export default {
   }
 }
 </script>
+
+
+<style lang="sass" scoped>
+@import "../style/vars.scss";
+.icon
+  color: #999
+  height: 20px
+  margin-top: 10px
+  display: inline-block
+.menu
+  float: right
+  li
+    margin-left: 5px
+    height: 60px
+    cursor: pointer
+    width: 90px
+    color: #999
+    float: left
+    text-align: center
+    font-size: 13px
+    border-radius: 2px
+    a
+      text-decoration: none
+      color: #999
+    &:hover
+      background: #f5f5f5
+    &.active
+      background: #f0f0f0
+    &.yellow
+      color: $yellow
+      .icon
+        color: $yellow
+  .txt
+    display: block
+
+</style>
