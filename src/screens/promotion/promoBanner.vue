@@ -14,6 +14,7 @@
 <style lang="sass" scoped>
 .promo-banners
   width: 1000px
+  margin: 0 auto
   img
     width: 100%
     height: 144px

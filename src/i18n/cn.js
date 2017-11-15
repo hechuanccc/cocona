@@ -10,6 +10,7 @@ export default {
     user_login: '登录',
     forget_password: '忘记?',
     login: '登录',
+    logout: '登出',
     password: '密码',
     personal_account: '个人帐户',
     user_register: '注册',

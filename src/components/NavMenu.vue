@@ -1,10 +1,12 @@
 <template>
   <!-- 这里只处理了UI 部分，没有加上 router -->
   <ul class="menu">
-    <li :class="{'active': menu.active, [menu.class]: menu.class}" v-for="menu in menus">
-      <i class="icon"><icon :name="menu.icon" scale="1.4" /></i>
+    <router-link tag="li" :to="menu.path" :class="{'active': menu.active, [menu.class]: menu.class}" v-for="menu in menus" :key="menu.icon">
+      <i class="icon">
+        <icon :name="menu.icon" scale="1.4" />
+      </i>
       <span class="txt">{{menu.name}}</span>
-    </li>
+    </router-link>
   </ul>
 </template>
 
@@ -20,25 +22,29 @@ import loginPopup from './LoginPopup'
 export default {
   data () {
     return {
-      activeIndex: 'home',
       popVisible: false,
       style,
       menus: [{
         icon: 'home',
         active: true,
-        name: this.$t('navMenu.home_page')
+        name: this.$t('navMenu.home_page'),
+        path: '/'
       }, {
         icon: 'th-large',
-        name: this.$t('navMenu.game_center')
+        name: this.$t('navMenu.game_center'),
+        path: '/game'
       }, {
         icon: 'list-ul',
-        name: this.$t('navMenu.promotion')
+        name: this.$t('navMenu.promotion'),
+        path: '/promotions'
       }, {
         icon: 'info',
-        name: this.$t('navMenu.qa')
+        name: this.$t('navMenu.qa'),
+        path: '/faq'
       }, {
         icon: 'clone',
-        name: this.$t('navMenu.affliate')
+        name: this.$t('navMenu.affliate'),
+        path: '/agent/register'
       }]
     }
   },
@@ -50,7 +56,6 @@ export default {
       if (!this.$store.state.user.logined) {
         this.popVisible = true
       }
-      this.$router.push('/')
     }
   },
   components: {
@@ -79,6 +84,9 @@ export default {
     text-align: center
     font-size: 13px
     border-radius: 2px
+    a
+      text-decoration: none
+      color: #999
     &:hover
       background: #f5f5f5
     &.active

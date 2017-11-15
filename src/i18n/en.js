@@ -8,6 +8,7 @@ export default {
     user: 'User',
     try_play: 'Try it Free',
     user_login: 'Login',
+    logout: 'Logout',
     forget_password: 'Forget?',
     login: 'Login',
     password: 'Password',

@@ -3,7 +3,7 @@
     <div class="clock">
       {{nowTime}} {{$t('navMenu.bussiness_hours')}}
     </div>
-    <div class="actions">
+    <div class="actions" v-if="!isLogin">
       <div class="input">
         <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
       </div>
@@ -18,8 +18,13 @@
         <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
       </div>
     </div>
+    <div class="logined actions" v-else>
+      {{$t('navMenu.user')}} : {{user.username}}
+      <el-button type="primary" @click="logout()">{{$t('navMenu.logout')}}</el-button>
+    </div>
   </div>
 </template>
+
 
 <script>
 import {gethomePage} from '../api'
@@ -27,6 +32,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user
+    },
+    isLogin () {
+      return this.$store.state.user.logined
     }
   },
   name: 'TopBar',
@@ -35,7 +43,7 @@ export default {
       username: '',
       password: '',
       homepage: '',
-      nowTime: ''
+      nowTime: new Date().toLocaleString()
     }
   },
   methods: {
@@ -64,6 +72,9 @@ export default {
           type: 'error'
         })
       })
+    },
+    logout () {
+      this.$store.dispatch('logout')
     }
   },
   created () {
@@ -84,6 +95,11 @@ export default {
 }
 </script>
 <style scoped lang='sass'>
+.logined
+  color: white
+  letter-spacing: 1px
+  button
+    margin-left: 10px
 .ipt-slot
   margin-top: 2px
   padding: 7px
@@ -94,7 +110,7 @@ export default {
   float: left
   line-height: 32px
   margin-right: 10px
-  color: #666
+  color: #FFFFFF
 .input
   width: 140px
   float: left
