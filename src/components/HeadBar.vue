@@ -16,9 +16,10 @@
   margin-bottom: 10px
   .header-bar
     width: 100%
-    background: #433e81
+    background: #f0f0f0
     text-align: center
   .header-nav
+    height: 60px
     margin-top: 10px
 </style>
 <script>
