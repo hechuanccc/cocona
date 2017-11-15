@@ -5,7 +5,7 @@
       <span>GAME INTRO</span>
     </div>
     <el-tabs type="border-card" :tab-position="tabposition" class="mb-20 container">
-      <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name" @click="switchIntro($event)">
+      <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name">
         <div class="rules-content">
           <h1>重要声明</h1>
           <ul>
@@ -93,11 +93,6 @@ export default {
       tabposition: 'left',
       games: '',
       now_game: '132'
-    }
-  },
-  methods: {
-    switchIntro (el) {
-      console.log(el)
     }
   },
   created () {
