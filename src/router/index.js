@@ -18,6 +18,7 @@ import WithdrawPassword from '@/screens/member/WithdrawPassword'
 
 import Finance from '@/screens/member/Finance'
 import PaymentRecord from '@/screens/member/PaymentRecord'
+import RemitRecord from '@/screens/member/RemitRecord'
 import BetRecord from '@/screens/member/BetRecord'
 
 import Promotions from '@/screens/promotion/Promotions'
@@ -95,6 +96,11 @@ export default new Router({
               path: 'payment_record',
               name: 'PaymentRecord',
               component: PaymentRecord
+            },
+            {
+              path: 'remit_record',
+              name: 'RemitRecord',
+              component: RemitRecord
             },
             {
               path: 'betrecord',

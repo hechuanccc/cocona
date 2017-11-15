@@ -78,6 +78,7 @@ export default {
     payment_record: '线上存款纪录',
     remit_record: '公司入款纪录',
     issue_number: '期数',
+    game_name: '游戏名称',
     play: '玩法',
     bet_amount: '下注金额',
     status: '审核状态',
@@ -89,6 +90,9 @@ export default {
     finance: '财务记录',
     message: '站内消息',
     announcement: '系统公告'
+  },
+  common: {
+    all: '全部'
   },
   action: {
     submit: '提交',

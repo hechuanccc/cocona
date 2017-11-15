@@ -78,6 +78,7 @@ export default {
     payment_record: 'Payment Record',
     remit_record: 'Remit Record',
     issue_number: 'Issue Number',
+    game_name: 'Game Name',
     play: 'Play Name',
     bet_amount: 'Bet Amount',
     status: 'Status',
@@ -89,6 +90,9 @@ export default {
     finance: 'Financing',
     message: 'Message',
     announcement: 'Announcement'
+  },
+  common: {
+    all: 'All'
   },
   action: {
     submit: 'Submit',
