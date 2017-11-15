@@ -1,6 +1,6 @@
 <template>
   <ul class="menu">
-    <router-link tag="li" :to="menu.path" :class="{'active': menu.active, [menu.class]: menu.class}" v-for="menu in menus" :key="menu.icon">
+    <router-link tag="li" :to="'/'+menu.path" :class="currentPath(menu)" v-for="menu in menus" :key="menu.icon">
       <i class="icon">
         <icon :name="menu.icon" scale="1.4" />
       </i>
@@ -56,25 +56,31 @@ export default {
       menus: [{
         icon: 'th-large',
         name: this.$t('navMenu.game_center'),
-        path: '/game'
+        path: 'game'
       }, {
         icon: 'money',
         name: this.$t('navMenu.personal_account'),
-        path: '/account'
+        path: 'account'
       }, {
         icon: 'line-chart',
         name: this.$t('navMenu.draw_history'),
-        path: '/history'
+        path: 'history'
       }, {
         icon: 'star',
         name: this.$t('navMenu.game_intro'),
-        path: '/gameintro'
+        path: 'gameintro'
       }]
     }
   },
   methods: {
     handleSelect (key, keyPath) {
       this.$router.push('/' + key)
+    },
+    currentPath (menu) {
+      return {
+        'active': this.$route.path.split('/')[1] === menu.path,
+        [menu.class]: menu.class
+      }
     }
   }
 }

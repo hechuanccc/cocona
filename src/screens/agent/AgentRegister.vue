@@ -58,6 +58,7 @@
   import api from '../../api/urls'
 
   export default {
+    name: 'AgentRegister',
     data () {
       var validatePass = (rule, value, callback) => {
         if (value === '') {

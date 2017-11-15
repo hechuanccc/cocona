@@ -1,7 +1,7 @@
 <template>
   <!-- 这里只处理了UI 部分，没有加上 router -->
   <ul class="menu">
-    <router-link tag="li" :to="menu.path" :class="{'active': menu.active, [menu.class]: menu.class}" v-for="menu in menus" :key="menu.icon">
+    <router-link tag="li" :to="'/' + menu.path" :class="currentPath(menu)" v-for="menu in menus" :key="menu.icon">
       <i class="icon">
         <icon :name="menu.icon" scale="1.4" />
       </i>
@@ -26,31 +26,33 @@ export default {
       style,
       menus: [{
         icon: 'home',
-        active: true,
         name: this.$t('navMenu.home_page'),
-        path: '/'
+        path: ''
       }, {
         icon: 'th-large',
         name: this.$t('navMenu.game_center'),
-        path: '/game'
+        path: 'game'
       }, {
         icon: 'list-ul',
         name: this.$t('navMenu.promotion'),
-        path: '/promotions'
+        path: 'promotions'
       }, {
         icon: 'info',
         name: this.$t('navMenu.qa'),
-        path: '/faq'
+        path: 'faq'
       }, {
         icon: 'clone',
         name: this.$t('navMenu.affliate'),
-        path: '/agent/register'
+        path: 'agent'
       }]
     }
   },
   methods: {
-    handleSelect (key, keyPath) {
-      this.$router.push('/' + key) // key to that page set by index attribute
+    currentPath (menu) {
+      return {
+        'active': this.$route.path.split('/')[1] === menu.path,
+        [menu.class]: menu.class
+      }
     },
     popGuest () {
       if (!this.$store.state.user.logined) {
