@@ -50,6 +50,9 @@ export default {
     realname: 'Real Name',
     phone: 'Phone Number',
     email: 'Email',
+    birthday: 'Birthday',
+    choose_date: 'Choose Date',
+    wechat: 'WeChat',
     withdraw_password: 'Withdraw Password',
     captcha: 'Captcha',
     level: 'Level',
@@ -62,6 +65,7 @@ export default {
     betrecord: 'Bet Record',
     my_account: 'My Account',
     password_setting: 'Password Setting',
+    bank_info: 'Bank Info',
     amount: 'Amount',
     gender: 'Gender',
     male: 'male',
@@ -86,7 +90,8 @@ export default {
   action: {
     submit: 'Submit',
     reset: 'Reset',
-    modify: 'Modify'
+    modify: 'Modify',
+    save: 'save'
   },
   validate: {
     username_validate: 'User name should be 4-10 digit or character',
@@ -97,5 +102,8 @@ export default {
     required: 'This field is required',
     required_num: 'Number is required',
     email_validate: 'This email is invalid'
+  },
+  message: {
+    save_success: 'Save Success'
   }
 }

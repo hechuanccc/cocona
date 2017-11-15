@@ -15,7 +15,7 @@
           <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
           <i class="el-icon-arrow-down icon" v-else/>
           <div v-show="dropdownActive" class="dropdown">
-            <el-menu 
+            <el-menu
               class="dropdown-menu"
               text-color="#fff"
               active-text-color="#fff"
@@ -62,7 +62,7 @@ export default {
   watch: {
     'allGames': function () {
       if (!this.$route.params.gameId) {
-        const defaultGameId = localStorage.getItem('lastGame', this.allGames[0].id)
+        const defaultGameId = localStorage.getItem('lastGame') || this.allGames[0].id
         this.$router.push(`/${this.path}/${defaultGameId}`)
       }
     }
@@ -116,6 +116,6 @@ export default {
 }
 .dropdown-menu .el-menu-item {
   float: none;
-  text-align: center; 
+  text-align: center;
 }
 </style>

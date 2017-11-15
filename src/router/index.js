@@ -11,8 +11,11 @@ import Withdraw from '@/screens/member/Withdraw'
 import OnlinePayment from '@/screens/member/OnlinePayment'
 import Remit from '@/screens/member/Remit'
 import PaymentRecord from '@/screens/member/PaymentRecord'
+
+import MyAccount from '@/screens/member/MyAccount'
 import PrimaryInfo from '@/screens/member/PrimaryInfo'
 import PasswordSetting from '@/screens/member/PasswordSetting'
+import WithdrawPassword from '@/screens/member/WithdrawPassword'
 import BetRecord from '@/screens/member/BetRecord'
 import Promotions from '@/screens/promotion/Promotions'
 
@@ -64,12 +67,24 @@ export default new Router({
         {
           path: 'my',
           name: 'MyAccount',
-          component: PrimaryInfo
-        },
-        {
-          path: 'password_setting',
-          name: 'PasswordSetting',
-          component: PasswordSetting
+          component: MyAccount,
+          children: [
+            {
+              path: 'primary_info',
+              name: 'PrimaryInfo',
+              component: PrimaryInfo
+            },
+            {
+              path: 'password_setting',
+              name: 'PasswordSetting',
+              component: PasswordSetting
+            },
+            {
+              path: 'withdraw_password',
+              name: 'WithdrawPassword',
+              component: WithdrawPassword
+            }
+          ]
         },
         {
           path: 'betrecord',

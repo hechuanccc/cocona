@@ -1,8 +1,8 @@
 <template>
   <el-container class="container">
     <el-aside width="180px">
-      <el-menu 
-        :default-active="$route.path" 
+      <el-menu
+        :default-active="currentPath"
         text-color="#fff"
         active-text-color="#fff"
         :background-color="style.primaryColor"
@@ -75,11 +75,19 @@ export default {
         this.$store.dispatch('fetchUser')
       }
     },
-    routeName () { }
+    currentPath () {
+      const path = this.$route.path
+      const paths = path.split('/')
+      if (paths.length > 3) {
+        return `/${paths[1]}/${paths[2]}`
+      } else {
+        return path
+      }
+    }
   },
   beforeRouteEnter (to, from, next) {
     if (to.name === 'Account') {
-      next({ name: 'PrimaryInfo' })
+      next({ name: 'MyAccount' })
     } else {
       next()
     }
@@ -87,7 +95,7 @@ export default {
   watch: {
     '$route': function (to, from) {
       if (to.name === 'Account') {
-        this.$router.push({ name: 'PrimaryInfo' })
+        this.$router.push({ name: 'MyAccount' })
       }
     }
   }
@@ -104,7 +112,8 @@ export default {
 }
 .el-menu .el-menu-item {
   &.is-active {
-    background: url('../../assets/active_menu_bg_right.png') no-repeat center right;
+    background: url("../../assets/active_menu_bg_right.png") no-repeat center
+      right;
     background-size: 200px 44px;
     border-bottom-width: 0;
   }
@@ -115,7 +124,8 @@ export default {
 .menu-text {
   padding-left: 10px;
 }
-.el-menu-item, .el-submenu__title {
+.el-menu-item,
+.el-submenu__title {
   height: 44px;
   line-height: 44px;
 }
