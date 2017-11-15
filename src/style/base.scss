@@ -29,6 +29,62 @@ body {
   margin: 0 auto;
 }
 
+
+// faq repeated style
+
+.faq-content{
+  .el-card {
+    box-shadow: 0 2px 12px 0 $primary;
+    margin-bottom: 20px;
+  }
+  line-height: 16px + 12px;
+  h1{
+    font-size: 16px + 16px;
+    padding-bottom: 16px;
+    color: $primary;}
+  h2{
+    font-size: 16px + 8px;
+    padding: 20px 0;}
+  p, ol{
+    font-size: 16px;
+    margin-bottom: 8px;}
+}
+//gameintro repeated style
+
+.rule-details {
+  font-size: 16px;
+  p {
+    margin-top: 10px;
+    margin-bottom: 10px
+  }
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px
+  }
+  h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+  h3 {
+    margin-top: 5px;
+    margin-bottom: 7px;
+    line-height: 24px
+  }
+  .warn {
+    color: $red
+  }
+  ul {
+    margin: 10px auto
+  }
+  li {
+    line-height: 24px;
+    &:before {
+      content: ' ＊ '
+    }
+  }
+}
+
 .input-width {
   width: 200px
 }

@@ -3,7 +3,7 @@
     <div class="clock">
       {{nowTime}} {{$t('navMenu.bussiness_hours')}}
     </div>
-    <div class="actions" v-if="user.logined === ''">
+    <div class="actions" v-if="!isLogin">
       <div class="input">
         <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
       </div>
@@ -31,13 +31,13 @@
           <li><router-link to="/account/my/">账户余额 {{user.balance}}</router-link></li>
           <li><router-link to="/account/my/">账号信息</router-link></li>
           <li><router-link to="/account/my/">修改密码</router-link></li>
-          <li><router-link to="/account/my/">退出登录</router-link></li>
+          <li @click="logout()"><a>{{$t('navMenu.logout')}}</a></li>
         </ul>
       </el-button>
-      
     </div>
   </div>
 </template>
+
 
 <script>
 import {gethomePage} from '../api'
@@ -45,6 +45,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user
+    },
+    isLogin () {
+      return this.$store.state.user.logined
     }
   },
   name: 'TopBar',
@@ -53,8 +56,8 @@ export default {
       username: '',
       password: '',
       homepage: '',
-      nowTime: '',
-      showDropdown: false
+      showDropdown: false,
+      nowTime: new Date().toLocaleString()
     }
   },
   methods: {
@@ -83,6 +86,9 @@ export default {
           type: 'error'
         })
       })
+    },
+    logout () {
+      this.$store.dispatch('logout')
     }
   },
   created () {
@@ -127,7 +133,7 @@ export default {
   position: relative
   float: right
   color: #666
-  a
+  a, span
     text-decoration: none
     padding: 0 5px
     color: #666

@@ -1,11 +1,13 @@
 import _ from 'lodash'
 import axios from 'axios'
 import Vue from 'vue'
+import router from '../../router'
 
 import * as types from '../mutations/mutation-types'
 
 import {
   login,
+  logout,
   register,
   fetchUser,
   updateUser,
@@ -34,6 +36,17 @@ export default {
       })
       return Promise.resolve(res.data)
     }, error => Promise.reject(error))
+  },
+  logout: ({commit, state}) => {
+    return logout().then(
+      res => {
+        router.push('/')
+        Vue.cookie.delete('access_token')
+        Vue.cookie.delete('refresh_token')
+        commit(types.RESET_USER)
+      },
+      errRes => Promise.reject(errRes)
+    )
   },
   register: ({ commit, state }, { user }) => {
     return register(user).then(res => {

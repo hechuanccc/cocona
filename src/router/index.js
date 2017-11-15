@@ -15,6 +15,8 @@ import PrimaryInfo from '@/screens/member/PrimaryInfo'
 import PasswordSetting from '@/screens/member/PasswordSetting'
 import BetRecord from '@/screens/member/BetRecord'
 import Promotions from '@/screens/promotion/Promotions'
+import Faq from '@/screens/faq/FaqsHome'
+import Gameintro from '@/screens/gameintro/Gameintros'
 
 Vue.use(Router)
 
@@ -81,6 +83,16 @@ export default new Router({
       path: '/promotions',
       name: 'Promotions',
       component: Promotions
+
+    }, {
+      path: '/faq',
+      name: 'Faq',
+      component: Faq
+
+    }, {
+      path: '/gameintro',
+      name: 'Gameintro',
+      component: Gameintro
 
     },
     {

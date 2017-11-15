@@ -3,13 +3,15 @@
     <div class="header-bar" v-show="isFrontPage">
         <TopBar/>
     </div>
+
     <div class="header-nav container">
-        <Logo/>
-        <NavMenu v-if="isFrontPage" />
-        <NavMenuBack v-else/>
+      <Logo/>
+      <NavMenu v-if="isFrontPage" />
+      <NavMenuBack v-else/>
     </div>
   </div>
 </template>
+
 <script>
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
@@ -19,7 +21,8 @@ import NavMenuBack from '../components/NavMenuBack'
 export default {
   data () {
     return {
-      userInfo: ''
+      userInfo: '',
+      nowTime: new Date().toLocaleString()
     }
   },
   components: {
@@ -30,8 +33,18 @@ export default {
   },
   computed: {
     isFrontPage () {
-      return this.$route.path.indexOf('/game/') === -1 && this.$route.path.indexOf('/account/') === -1
+      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/history|\/gameintro/)
+      return !(pat.test(this.$route.path))
     }
+  },
+  created () {
+    this.timing = setInterval(() => {
+      let now = new Date()
+      this.nowTime = now.toLocaleString()
+    }, 1000)
+  },
+  beforeDestroy () {
+    clearInterval(this.timing)
   }
 }
 </script>
