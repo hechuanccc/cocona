@@ -8,6 +8,11 @@ export default {
       ...user
     }
   },
+  [types.RESET_USER]: (state) => {
+    state.user = {
+      logined: false
+    }
+  },
   [types.SET_GAMES]: (state, { games }) => {
     state.games = games
   },

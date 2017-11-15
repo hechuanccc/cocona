@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row type="flex" class="row-bg" justify="center">
+    <el-row type="flex" class="row-bg container" justify="center">
       <el-col :span="8">
         <el-form :label-position="labelPosition"
                  :model="ruleForm"
