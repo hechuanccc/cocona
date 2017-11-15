@@ -57,11 +57,21 @@ export default {
     return fetchUser().then(res => {
       if (res.length > 0) {
         commit(types.SET_USER, {
-          user: res[0]
+          user: {
+            ...res[0],
+            logined: true
+          }
         })
       }
       return Promise.resolve(res)
-    }, error => Promise.reject(error))
+    }, error => {
+      console.log(error)
+      commit(types.SET_USER, {
+        user: {
+          logined: false
+        }
+      })
+    })
   },
   updateUser: ({ commit, state }, updateData) => {
     return updateUser(updateData).then(data => {

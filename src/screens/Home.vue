@@ -18,10 +18,13 @@
             </div>
           </div>
         </div>
-        <el-row class="game-area">
+        <el-row class="game-area container">
           <ul>
-            <li v-for="game in games" :key="game.id">
-              <img :src="game.icon" :alt="game.id">
+            <li v-for="game in games" :key="game.id" v-if="game.icon" @click="navigate(game)">
+              <span class="icon-wp">
+                <img class="icon" :src="game.icon" :alt="game.id" width="100" height="100">
+                <el-button type="primary">进入投注</el-button>
+              </span>
             </li>
           </ul>
         </el-row>
@@ -50,6 +53,15 @@ export default {
   computed: {
     isHome () {
       return this.$store.state.route.path === '/'
+    }
+  },
+  methods: {
+    navigate (game) {
+      if (this.$store.state.user.logined) {
+        this.$router.push(`/game/${game.id}/`)
+      } else {
+        // show popup here
+      }
     }
   },
   created () {
@@ -117,26 +129,31 @@ export default {
 /* game-area */
   .game-area ul{
     position: relative;
-    left: 50%;
     overflow: hidden;
-    width: 780px;
-    float: left;
     margin-top: 19px;
-    margin-left: -390px;
     background: #fff;
-    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
   }
 
-  .game-area ul li {
+  .game-area li {
+    cursor: pointer;
     float: left;
-    width: 194px;
-    height: 125px;
-    padding-top: 18px;
+    width: 16.66%;
     position: relative;
     text-align: center;
-    border-top: 1px solid #e6e6e6;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+    overflow: hidden;
+  }
+  .icon {
+    display: block;
+    margin: 0 auto 10px;
+  }
+  .icon-wp {
+    text-align: center;
+    padding: 10px;
+    margin-right: -1px;
+    display: block;
+    border-style: bold;
+    border: 1px solid #e6e6e6;
   }
 /* lay over the default padding */
   .el-main {
