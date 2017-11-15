@@ -43,11 +43,7 @@ export default {
         router.push('/')
         Vue.cookie.delete('access_token')
         Vue.cookie.delete('refresh_token')
-        commit(types.SET_USER, {
-          user: {
-            logined: false
-          }
-        })
+        commit(types.RESET_USER)
       },
       errRes => Promise.reject(errRes)
     )

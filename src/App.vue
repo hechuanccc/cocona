@@ -53,11 +53,7 @@ export default {
             this.$cookie.delete('access_token')
             this.$cookie.delete('refresh_token')
 
-            this.$store.commit('SET_USERs', {
-              user: {
-                logined: false
-              }
-            })
+            this.$store.commit('RESET_USERs')
 
             this.$router.push('/')
           }
