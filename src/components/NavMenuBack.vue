@@ -1,6 +1,6 @@
 <template>
   <ul class="menu">
-    <router-link tag="li" :to="'/'+menu.path" :class="currentPath(menu)" v-for="menu in menus" :key="menu.icon">
+    <router-link tag="li" :to="'/'+menu.path" :class="menuMatchPath(menu)" v-for="menu in menus" :key="menu.icon">
       <i class="icon">
         <icon :name="menu.icon" scale="1.4" />
       </i>
@@ -76,7 +76,7 @@ export default {
     handleSelect (key, keyPath) {
       this.$router.push('/' + key)
     },
-    currentPath (menu) {
+    menuMatchPath (menu) {
       return {
         'active': this.$route.path.split('/')[1] === menu.path,
         [menu.class]: menu.class

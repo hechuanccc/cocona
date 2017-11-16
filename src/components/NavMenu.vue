@@ -3,7 +3,7 @@
     <router-link
       tag="li"
       :to="'/' + menu.path"
-      :class="currentPath(menu)"
+      :class="menuMatchPath(menu)"
       v-for="menu in menus"
       :key="menu.icon"
       @click.native="doMenuAction(menu)">
@@ -61,7 +61,7 @@ export default {
     }
   },
   methods: {
-    currentPath (menu) {
+    menuMatchPath (menu) {
       return {
         'active': this.$route.path.split('/')[1] === menu.path,
         [menu.class]: menu.class
