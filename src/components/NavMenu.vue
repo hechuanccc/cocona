@@ -13,7 +13,7 @@
       <span class="txt">{{menu.name}}</span>
     </router-link>
     <el-dialog
-      title="login"
+      :title="$t('navMenu.pop_title')"
       :visible.sync="popVisible"
       width="480px"
       center>
