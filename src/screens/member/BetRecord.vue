@@ -3,7 +3,12 @@
   <el-row>
     <el-col :span="8">
       <span class="title">{{$t('user.issue_number')}}</span>
-      <el-select v-model="selectedIssueNumber" placeholder="请选择">
+      <el-select v-model="selectedIssueNumber">
+        <el-option
+          key="all"
+          :label="$t('common.all')"
+          value="">
+        </el-option>
         <el-option
           v-for="num in issueNumbers"
           :key="num"
@@ -13,20 +18,24 @@
       </el-select>
     </el-col>
     <el-col :span="8">
-      <span class="title">當前遊戲</span>
-      <el-select v-model="selectedGame" placeholder="请选择">
+      <span class="title">{{$t('user.game_name')}}</span>
+      <el-select v-model="selectedGame">
         <el-option
-          v-for="game in allGames"
-          :key="game.id"
-          :label="game.display_name"
-          :value="game.id">
+          key="all"
+          :label="$t('common.all')"
+          value="">
+        </el-option>
+        <el-option
+          v-for="name in gameNames"
+          :key="name"
+          :label="name"
+          :value="name">
         </el-option>
       </el-select>
     </el-col>
-
   </el-row>
   <el-row>
-    <el-table :data="betRecords" stripe>
+    <el-table :data="showRecords" stripe>
       <el-table-column
         :label="$t('user.issue_number')"
         prop="issue_number">
@@ -36,9 +45,14 @@
           <span>{{ `${scope.row.play.playgroup} ${scope.row.play.display_name}`}}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('user.game_name')"
+        prop="game.display_name">
+      </el-table-column>
       <el-table-column
-        :label="$t('user.bet_amount')"
-        prop="bet_amount">
+        :label="$t('user.bet_amount')">
+        <template slot-scope="scope">
+          <span>{{ `$${scope.row.bet_amount}`}}</span>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -62,43 +76,63 @@ export default {
       selectedIssueNumber: '',
       currentPage: 1,
       pageSize: 10,
-      loading: true
+      loading: true,
+      issueNumbers: [],
+      gameNames: []
     }
   },
   created () {
-
+    fetchBetHistory()
+      .then(records => {
+        this.betRecords = records
+        const issueNumbersSet = new Set()
+        const gameNameSet = new Set()
+        this.betRecords.forEach(record => {
+          const issueNumber = record.issue_number
+          if (!issueNumbersSet.has(issueNumber)) {
+            issueNumbersSet.add(issueNumber)
+            this.issueNumbers.push(issueNumber)
+          }
+          const gameName = record.game.display_name
+          if (!gameNameSet.has(gameName)) {
+            gameNameSet.add(gameName)
+            this.gameNames.push(gameName)
+          }
+        })
+      })
   },
   computed: {
-    allGames () {
-      let games = this.$store.state.games
-      if (games.length > 0) {
-        this.selectedGame = games[0].id
-        return games
+    showRecords () {
+      let gameFilter
+      if (this.selectedGame) {
+        gameFilter = (value) => {
+          return value === this.selectedGame
+        }
       } else {
-        this.$store.dispatch('fetchGames')
-        return []
+        gameFilter = () => {
+          return true
+        }
       }
-    },
-    issueNumbers () {
-      const s = new Set()
-      this.betRecords.forEach(record => {
-        s.add(record.issue_number)
+      let issueNumberFilter
+      if (this.selectedIssueNumber) {
+        issueNumberFilter = (value) => {
+          return value === this.selectedIssueNumber
+        }
+      } else {
+        issueNumberFilter = () => {
+          return true
+        }
+      }
+
+      return this.betRecords.filter(rec => {
+        return gameFilter(rec.game.display_name) && issueNumberFilter(rec.issue_number)
       })
-      return Array.from(s)
-    }
-  },
-  watch: {
-    'selectedGame': function (id) {
-      fetchBetHistory(id)
-        .then(res => {
-          this.betRecords = res
-        })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.title{
+.title {
   margin-right: 20px;
 }
 </style>

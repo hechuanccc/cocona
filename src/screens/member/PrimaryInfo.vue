@@ -1,32 +1,36 @@
 <template>
 <el-row class="row-bg">
-  <el-tabs v-model="activeName2" type="card" @tab-click="handleClick">
-    <el-tab-pane label="基本信息" ></el-tab-pane>
-    <el-tab-pane label="密码修改" ></el-tab-pane>
-    <el-tab-pane label="取款密码" ></el-tab-pane>
-    <el-tab-pane label="银行信息" ></el-tab-pane>
-  </el-tabs>
-  <router-view />
   <el-col :span="10" :offset="7">
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
       <el-form-item :label="$t('user.level')">
         {{level}}
       </el-form-item>
+      <el-form-item :label="$t('user.realname')">
+        {{userInfo.real_name}}
+      </el-form-item>
+      <el-form-item :label="$t('user.phone')">
+        {{userInfo.phone}}
+      </el-form-item>
       <el-form-item :label="$t('user.email')" prop="email">
-        <span v-if="displayMode">{{userInfo.email}}</span>
-        <el-input v-else v-model="user.email"></el-input>
+        <el-input class="input-width" v-model="user.email"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('user.birthday')" prop="birthday">
+        <el-date-picker type="date" :placeholder="$t('user.choose_date')" v-model="user.birthday" value-format="yyyy-MM-dd" style="width: 200px;"></el-date-picker>
       </el-form-item>
       <el-form-item :label="$t('user.gender')">
-        <span v-if="displayMode">{{userInfo.gender | genderFilter}}</span>
-        <el-radio-group v-else v-model="user.gender">
+        <el-radio-group v-model="user.gender">
           <el-radio :label="'M'">{{$t('user.male')}}</el-radio>
           <el-radio :label="'F'">{{$t('user.female')}}</el-radio>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="QQ" prop="qq">
+        <el-input class="input-width" v-model="user.qq"></el-input>
+      </el-form-item>
+      <el-form-item :label="$t('user.wechat')" prop="wechat">
+        <el-input class="input-width" v-model="user.wechat"></el-input>
+      </el-form-item>
       <el-form-item>
-        <el-button v-if="displayMode" type="primary" @click="modifyForm">{{$t('action.modify')}}</el-button>
-        <el-button v-if="!displayMode" type="primary" @click="submitForm">{{$t('action.submit')}}</el-button>
-        <el-button v-if="!displayMode" @click="resetForm">{{$t('action.reset')}}</el-button>
+        <el-button type="primary" @click="submitForm">{{$t('action.save')}}</el-button>
       </el-form-item>
     </el-form>
   </el-col>
@@ -44,13 +48,14 @@ export default {
   },
   data () {
     return {
-      displayMode: true,
       user: {
         id: '',
         gender: '',
-        email: ''
+        email: '',
+        qq: '',
+        wechat: '',
+        birthday: ''
       },
-      captcha_src: '',
       rules: {
         email: [
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
@@ -67,19 +72,26 @@ export default {
       }
     },
     userInfo () {
-      return this.$store.state.user
+      let user = this.$store.state.user
+      Object.keys(this.user).forEach(key => {
+        this.user[key] = user[key]
+      })
+      return user
     }
   },
   methods: {
-    modifyForm () {
-      this.resetForm()
-      this.displayMode = false
-    },
     submitForm () {
       this.$refs['user'].validate((valid) => {
         if (valid) {
           this.$store.dispatch('updateUser', this.user).then(
-            (data) => { this.displayMode = true },
+            (data) => {
+              this.$refs['user'].resetFields()
+              this.$message({
+                showClose: true,
+                message: this.$t('message.save_success'),
+                type: 'success'
+              })
+            },
             errorRes => {
               this.$message({
                 showClose: true,
@@ -89,11 +101,6 @@ export default {
             }
           )
         }
-      })
-    },
-    resetForm () {
-      Object.keys(this.user).forEach(key => {
-        this.user[key] = this.userInfo[key]
       })
     }
   }

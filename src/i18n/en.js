@@ -51,6 +51,9 @@ export default {
     realname: 'Real Name',
     phone: 'Phone Number',
     email: 'Email',
+    birthday: 'Birthday',
+    choose_date: 'Choose Date',
+    wechat: 'WeChat',
     withdraw_password: 'Withdraw Password',
     captcha: 'Captcha',
     level: 'Level',
@@ -62,7 +65,9 @@ export default {
     withdraw: 'Withdraw',
     betrecord: 'Bet Record',
     my_account: 'My Account',
+    primary_info: 'Primary Info',
     password_setting: 'Password Setting',
+    bank_info: 'Bank Info',
     amount: 'Amount',
     gender: 'Gender',
     male: 'male',
@@ -71,7 +76,9 @@ export default {
     payment_amount: 'Payment Amount',
     payment_way: 'Payment Way',
     payment_record: 'Payment Record',
+    remit_record: 'Remit Record',
     issue_number: 'Issue Number',
+    game_name: 'Game Name',
     play: 'Play Name',
     bet_amount: 'Bet Amount',
     status: 'Status',
@@ -84,10 +91,14 @@ export default {
     message: 'Message',
     announcement: 'Announcement'
   },
+  common: {
+    all: 'All'
+  },
   action: {
     submit: 'Submit',
     reset: 'Reset',
-    modify: 'Modify'
+    modify: 'Modify',
+    save: 'save'
   },
   validate: {
     username_validate: 'User name should be 4-10 digit or character',
@@ -98,5 +109,8 @@ export default {
     required: 'This field is required',
     required_num: 'Number is required',
     email_validate: 'This email is invalid'
+  },
+  message: {
+    save_success: 'Save Success'
   }
 }

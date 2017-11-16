@@ -1,0 +1,93 @@
+<template>
+  <el-row>
+    <el-col :offset="8" :span="12">
+      <el-form :model="withdraw_password" status-icon :rules="withdrawRule" ref="withdraw_password" label-width="120px">
+        <el-form-item :label="$t('user.prev_withdraw_password')" prop="current_password">
+          <el-input class="input-width" type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.new_withdraw_password')" prop="new_password">
+          <el-input class="input-width" type="password" v-model="withdraw_password.new_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.confirm_withdraw_password')" prop="repeat_password">
+          <el-input class="input-width" type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
+</template>
+<script>
+import { updateWithdrawPassword } from '../../api'
+import { msgFormatter } from '../../utils'
+
+export default {
+  name: 'WithdrawPassword',
+  data () {
+    const passwordValidator = (form) => {
+      return (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('validate.required')))
+        } else {
+          if (this[form].repeat_password !== '') {
+            this.$refs[form].validateField('repeat_password')
+          }
+          callback()
+        }
+      }
+    }
+    const repeatPasswordValidator = (form) => {
+      return (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('validate.password_again')))
+        } else if (value !== this[form].new_password) {
+          callback(new Error(this.$t('validate.password_diff')))
+        } else {
+          callback()
+        }
+      }
+    }
+    return {
+      withdraw_password: {
+        new_password: '',
+        current_password: '',
+        repeat_password: ''
+      },
+      withdrawRule: {
+        current_password: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        new_password: [
+          { required: true, validator: passwordValidator('withdraw_password'), trigger: 'blur' }
+        ],
+        repeat_password: [
+          { required: true, validator: repeatPasswordValidator('withdraw_password'), trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    submitWithdrawForm () {
+      this.$refs['withdraw_password'].validate((valid) => {
+        if (valid) {
+          updateWithdrawPassword(this.withdraw_password).then(data => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(data.message),
+              type: 'success'
+            })
+          }, errorRes => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(errorRes.response.data.error),
+              type: 'error'
+            })
+          })
+        }
+      })
+    }
+  }
+
+}
+</script>
