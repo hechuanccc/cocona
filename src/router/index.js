@@ -11,10 +11,17 @@ import Account from '@/screens/member/Account'
 import Withdraw from '@/screens/member/Withdraw'
 import OnlinePayment from '@/screens/member/OnlinePayment'
 import Remit from '@/screens/member/Remit'
-import PaymentRecord from '@/screens/member/PaymentRecord'
+
+import MyAccount from '@/screens/member/MyAccount'
 import PrimaryInfo from '@/screens/member/PrimaryInfo'
 import PasswordSetting from '@/screens/member/PasswordSetting'
+import WithdrawPassword from '@/screens/member/WithdrawPassword'
+
+import Finance from '@/screens/member/Finance'
+import PaymentRecord from '@/screens/member/PaymentRecord'
+import RemitRecord from '@/screens/member/RemitRecord'
 import BetRecord from '@/screens/member/BetRecord'
+
 import Promotions from '@/screens/promotion/Promotions'
 import Faq from '@/screens/faq/FaqsHome'
 import Gameintro from '@/screens/gameintro/Gameintros'
@@ -67,24 +74,48 @@ export default new Router({
           component: Remit
         },
         {
-          path: 'payment_record',
-          name: 'PaymentRecord',
-          component: PaymentRecord
-        },
-        {
           path: 'my',
           name: 'MyAccount',
-          component: PrimaryInfo
+          component: MyAccount,
+          children: [
+            {
+              path: 'primary_info',
+              name: 'PrimaryInfo',
+              component: PrimaryInfo
+            },
+            {
+              path: 'password_setting',
+              name: 'PasswordSetting',
+              component: PasswordSetting
+            },
+            {
+              path: 'withdraw_password',
+              name: 'WithdrawPassword',
+              component: WithdrawPassword
+            }
+          ]
         },
         {
-          path: 'password_setting',
-          name: 'PasswordSetting',
-          component: PasswordSetting
-        },
-        {
-          path: 'betrecord',
-          name: 'BetRecord',
-          component: BetRecord
+          path: 'finance',
+          name: 'Finance',
+          component: Finance,
+          children: [
+            {
+              path: 'payment_record',
+              name: 'PaymentRecord',
+              component: PaymentRecord
+            },
+            {
+              path: 'remit_record',
+              name: 'RemitRecord',
+              component: RemitRecord
+            },
+            {
+              path: 'betrecord',
+              name: 'BetRecord',
+              component: BetRecord
+            }
+          ]
         }
       ]
     }, {

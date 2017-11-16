@@ -45,33 +45,40 @@ export default {
     new_password: '新密码',
     prev_password: '当前密码',
     confirm_password: '确认密码',
-    new_withdraw_password: '新提款密码',
-    prev_withdraw_password: '当前提款密码',
-    confirm_withdraw_password: '确认提款密码',
+    new_withdraw_password: '新取款密码',
+    prev_withdraw_password: '当前取款密码',
+    confirm_withdraw_password: '确认取款密码',
     realname: '真实姓名',
     phone: '手机号码',
     email: '邮件信箱',
-    withdraw_password: '提款密码',
+    birthday: '生日',
+    choose_date: '选择日期',
+    wechat: '微信',
+    withdraw_password: '取款密码',
     captcha: '验证码',
     level: '会员等级',
     money: '钱包',
     unsettled: '未结金额',
     payment: '充值',
-    online_payment: '线上支付',
+    online_payment: '线上存款',
     remit: '公司入款',
-    withdraw: '申请提款',
+    withdraw: '申请取款',
     betrecord: '下注纪录',
     my_account: '我的账号',
-    password_setting: '密码设定',
+    primary_info: '基本信息',
+    password_setting: '密码修改',
+    bank_info: '银行信息',
     amount: '金额',
     gender: '性别',
     male: '男',
     female: '女',
-    payment_time: '充值时间',
-    payment_amount: '充值金额',
-    payment_way: '充值方式',
-    payment_record: '充值纪录',
+    payment_time: '线上存款时间',
+    payment_amount: '线上存款金额',
+    payment_way: '线上存款方式',
+    payment_record: '线上存款纪录',
+    remit_record: '公司入款纪录',
     issue_number: '期数',
+    game_name: '游戏名称',
     play: '玩法',
     bet_amount: '下注金额',
     status: '审核状态',
@@ -84,10 +91,14 @@ export default {
     message: '站内消息',
     announcement: '系统公告'
   },
+  common: {
+    all: '全部'
+  },
   action: {
     submit: '提交',
     reset: '重置',
-    modify: '修改'
+    modify: '修改',
+    save: '保存'
   },
   validate: {
     username_validate: '请输入4~10位英数字',
@@ -98,5 +109,8 @@ export default {
     required: '该栏位必须输入',
     required_num: '该栏位必须输入数字',
     email_validate: 'email格式无效'
+  },
+  message: {
+    save_success: '保存成功'
   }
 }
