@@ -115,7 +115,6 @@ export default {
   padding: 7px
 .top-bar
   display: inline-block
-  margin-top: 7px
 .clock
   float: left
   line-height: 32px
