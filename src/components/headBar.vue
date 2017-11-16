@@ -1,9 +1,12 @@
 <template>
   <div class="top-header">
-    <div class="header-bar" v-show="isFrontPage">
-        <TopBar/>
-    </div>
-
+    <transition name="el-fade-in">
+      <div class="header-bar" v-show="isFrontPage">
+        <div class="container">
+          <TopBar/>
+        </div>
+      </div>
+    </transition>
     <div class="header-nav container">
       <Logo/>
       <NavMenu v-if="isFrontPage" />
@@ -12,6 +15,20 @@
   </div>
 </template>
 
+
+
+
+<style lang="sass" scoped>
+.top-header
+  margin-bottom: 10px
+  .header-bar
+    width: 100%
+    height: 45px
+    background: #433e81
+    margin: 0 auto
+  .header-nav
+    margin-top: 10px
+</style>
 <script>
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
@@ -48,17 +65,3 @@ export default {
   }
 }
 </script>
-
-<style lang="sass" scoped>
-.top-header
-  margin-bottom: 10px
-  .header-bar
-    height: 33px
-    padding: 3px 0
-    width: 100%
-    background: #f0f0f0
-    text-align: center
-  .header-nav
-    height: 60px
-    margin-top: 10px
-</style>
