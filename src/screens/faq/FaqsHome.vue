@@ -16,7 +16,7 @@
 </template>
 
 <style lang="sass" scoped>
-$primary-color: #409EFF
+@import "../../style/vars.scss";
 
 .faq-titles
   position: relative
@@ -33,8 +33,8 @@ $primary-color: #409EFF
     margin-right: 10px
     margin-left: 10px
     &.active
-      color: $primary-color
-      border-bottom: 1.5px solid $primary-color
+      color: $primary
+      border-bottom: 1.5px solid $primary
       &:after
         content: ' '
         position: absolute
@@ -42,7 +42,7 @@ $primary-color: #409EFF
         margin: 0 auto
         bottom: 0
         border: 10px solid transparent
-        border-bottom-color: $primary-color
+        border-bottom-color: $primary
 .promo-title
   margin-bottom: 20px
   span
@@ -54,7 +54,7 @@ $primary-color: #409EFF
     display: inline-block
     font-size: 32px
     line-height: 40px
-    background: $primary-color
+    background: $primary
     color: #FFF
     margin: 10px 0 0 -20px
     padding: 10px 30px
@@ -68,7 +68,7 @@ $primary-color: #409EFF
     height: 0
     border-style: solid
     border-width: 0 20px 20px 0
-    border-color: rgba(0, 0, 0, 0) darken($primary-color, 20%) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
+    border-color: rgba(0, 0, 0, 0) darken($primary, 20%) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
     position: absolute
     z-index: 0
 </style>
