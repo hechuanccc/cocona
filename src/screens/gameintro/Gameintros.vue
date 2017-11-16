@@ -75,18 +75,18 @@ $primary-color: #409EFF
 </style>
 <script>
 import { fetchGames } from '../../api'
-import cqlf from './AllGameRules/cqlf'
-import gd11x5 from './AllGameRules/gd11x5'
-import jsk3 from './AllGameRules/jsk3'
-import mlaft from './AllGameRules/mlaft'
-import gdklsf from './AllGameRules/gdklsf'
-import bcr from './AllGameRules/bcr'
-import jsssc from './AllGameRules/jsssc'
-import jspk10 from './AllGameRules/jspk10'
-import cqssc from './AllGameRules/cqssc'
-import pcdd from './AllGameRules/pcdd'
-import hkl from './AllGameRules/hkl'
-import xjssc from './AllGameRules/xjssc'
+import cqlf from './rules/cqlf'
+import gd11x5 from './rules/gd11x5'
+import jsk3 from './rules/jsk3'
+import mlaft from './rules/mlaft'
+import gdklsf from './rules/gdklsf'
+import bcr from './rules/bcr'
+import jsssc from './rules/jsssc'
+import jspk10 from './rules/jspk10'
+import cqssc from './rules/cqssc'
+import pcdd from './rules/pcdd'
+import hkl from './rules/hkl'
+import xjssc from './rules/xjssc'
 
 export default {
   data () {

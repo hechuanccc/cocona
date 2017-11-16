@@ -3,85 +3,39 @@
     <router-link
       tag="li"
       :to="'/' + menu.path"
-      :class="menuMatchPath(menu)"
+      :class="getMenuClass(menu)"
       v-for="menu in menus"
-      :key="menu.icon"
-      @click.native="doMenuAction(menu)">
+      :key="menu.icon">
       <i class="icon">
         <icon :name="menu.icon" scale="1.4" />
       </i>
       <span class="txt">{{menu.name}}</span>
     </router-link>
-    <el-dialog
-      :title="$t('navMenu.pop_title')"
-      :visible.sync="popVisible"
-      width="480px"
-      center>
-    <loginPopup/>
-  </el-dialog>
   </ul>
 </template>
 
 <script>
-import 'vue-awesome/icons/home'
-import 'vue-awesome/icons/th-large'
-import 'vue-awesome/icons/user-plus'
-import 'vue-awesome/icons/info'
-import 'vue-awesome/icons/clone'
-import 'vue-awesome/icons/list-ul'
 import style from '../style'
-import loginPopup from './LoginPopup'
 export default {
+  props: {
+    menus: {
+      type: Array
+    }
+  },
   data () {
     return {
-      popVisible: false,
-      style,
-      menus: [{
-        icon: 'home',
-        name: this.$t('navMenu.home_page'),
-        path: ''
-      }, {
-        icon: 'th-large',
-        name: this.$t('navMenu.game_center'),
-        path: 'game',
-        action: this.popGuest
-      }, {
-        icon: 'list-ul',
-        name: this.$t('navMenu.promotion'),
-        path: 'promotions'
-      }, {
-        icon: 'info',
-        name: this.$t('navMenu.qa'),
-        path: 'faq'
-      }, {
-        icon: 'clone',
-        name: this.$t('navMenu.affliate'),
-        path: 'agent'
-      }]
+      style
     }
   },
   methods: {
-    menuMatchPath (menu) {
+    getMenuClass (menu) {
       return {
         'active': this.$route.path.split('/')[1] === menu.path,
         [menu.class]: menu.class
       }
-    },
-    popGuest () {
-      if (this.$store.state.user.logined !== true) {
-        this.popVisible = true
-      }
-    },
-    doMenuAction (menu) {
-      if (!menu.action) {
-        return
-      }
-      menu.action()
     }
-  },
-  components: {
-    loginPopup
   }
+
 }
 </script>
 
