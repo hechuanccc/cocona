@@ -52,7 +52,7 @@ $primary-color: #409EFF
 
 </style>
 <script>
-import promoBanner from './promoBanner.vue'
+import PromoBanner from './PromoBanner.vue'
 import { getPromotions } from '../../api'
 
 export default {
@@ -65,7 +65,7 @@ export default {
     }
   },
   components: {
-    promoBanner
+    PromoBanner
   },
   created () {
     getPromotions().then(result => {
