@@ -1,12 +1,24 @@
 <template>
-  <!-- 这里只处理了UI 部分，没有加上 router -->
   <ul class="menu">
-    <router-link tag="li" :to="'/' + menu.path" :class="currentPath(menu)" v-for="menu in menus" :key="menu.icon">
+    <router-link
+      tag="li"
+      :to="'/' + menu.path"
+      :class="currentPath(menu)"
+      v-for="menu in menus"
+      :key="menu.icon"
+      @click.native="doMenuAction(menu)">
       <i class="icon">
         <icon :name="menu.icon" scale="1.4" />
       </i>
       <span class="txt">{{menu.name}}</span>
     </router-link>
+    <el-dialog
+      title="login"
+      :visible.sync="popVisible"
+      width="480px"
+      center>
+    <loginPopup/>
+  </el-dialog>
   </ul>
 </template>
 
@@ -31,7 +43,8 @@ export default {
       }, {
         icon: 'th-large',
         name: this.$t('navMenu.game_center'),
-        path: 'game'
+        path: 'game',
+        action: this.popGuest
       }, {
         icon: 'list-ul',
         name: this.$t('navMenu.promotion'),
@@ -55,9 +68,15 @@ export default {
       }
     },
     popGuest () {
-      if (!this.$store.state.user.logined) {
+      if (this.$store.state.user.logined !== true) {
         this.popVisible = true
       }
+    },
+    doMenuAction (menu) {
+      if (!menu.action) {
+        return
+      }
+      menu.action()
     }
   },
   components: {

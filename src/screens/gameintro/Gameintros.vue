@@ -86,6 +86,7 @@ import jspk10 from './AllGameRules/jspk10'
 import cqssc from './AllGameRules/cqssc'
 import pcdd from './AllGameRules/pcdd'
 import hkl from './AllGameRules/hkl'
+import xjssc from './AllGameRules/xjssc'
 
 export default {
   data () {
@@ -113,7 +114,8 @@ export default {
     jspk10,
     cqssc,
     pcdd,
-    hkl
+    hkl,
+    xjssc
   }
 }
 </script>
