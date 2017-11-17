@@ -36,8 +36,6 @@
   </div>
 </template>
 
-
-
 <script>
 import { getBanner, getAnnouncements, fetchGames } from '../api'
 
