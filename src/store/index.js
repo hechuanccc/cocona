@@ -12,6 +12,7 @@ export function createStore () {
       user: {
         logined: ''
       },
+      loginDialogVisible: false,
       games: [],
       categories: []
     },

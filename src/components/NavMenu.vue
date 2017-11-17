@@ -1,7 +1,11 @@
 <template>
-  <!-- 这里只处理了UI 部分，没有加上 router -->
   <ul class="menu">
-    <router-link tag="li" :to="menu.path" :class="{'active': menu.active, [menu.class]: menu.class}" v-for="menu in menus" :key="menu.icon">
+    <router-link
+      tag="li"
+      :to="'/' + menu.path"
+      :class="getMenuClass(menu)"
+      v-for="menu in menus"
+      :key="menu.icon">
       <i class="icon">
         <icon :name="menu.icon" scale="1.4" />
       </i>
@@ -11,56 +15,27 @@
 </template>
 
 <script>
-import 'vue-awesome/icons/home'
-import 'vue-awesome/icons/th-large'
-import 'vue-awesome/icons/user-plus'
-import 'vue-awesome/icons/info'
-import 'vue-awesome/icons/clone'
-import 'vue-awesome/icons/list-ul'
 import style from '../style'
-import loginPopup from './LoginPopup'
 export default {
+  props: {
+    menus: {
+      type: Array
+    }
+  },
   data () {
     return {
-      popVisible: false,
-      style,
-      menus: [{
-        icon: 'home',
-        active: true,
-        name: this.$t('navMenu.home_page'),
-        path: '/'
-      }, {
-        icon: 'th-large',
-        name: this.$t('navMenu.game_center'),
-        path: '/game'
-      }, {
-        icon: 'list-ul',
-        name: this.$t('navMenu.promotion'),
-        path: '/promotions'
-      }, {
-        icon: 'info',
-        name: this.$t('navMenu.qa'),
-        path: '/faq'
-      }, {
-        icon: 'clone',
-        name: this.$t('navMenu.affliate'),
-        path: '/agent/register'
-      }]
+      style
     }
   },
   methods: {
-    handleSelect (key, keyPath) {
-      this.$router.push('/' + key) // key to that page set by index attribute
-    },
-    popGuest () {
-      if (!this.$store.state.user.logined) {
-        this.popVisible = true
+    getMenuClass (menu) {
+      return {
+        'active': this.$route.path.split('/')[1] === menu.path,
+        [menu.class]: menu.class
       }
     }
-  },
-  components: {
-    loginPopup
   }
+
 }
 </script>
 

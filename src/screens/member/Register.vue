@@ -1,48 +1,52 @@
-
 <template>
 <el-row class="row-bg">
-  <el-col :span="10" :offset="7">
-    <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
-      <el-form-item :label="$t('user.username')" prop="username">
-        <el-input :maxlength="10" v-model="user.username" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.password')" prop="password">
-        <el-input type="password" v-model="user.password" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
-        <el-input type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.realname')" prop="real_name">
-        <el-input v-model="user.real_name"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.phone')" prop="phone">
-        <el-input v-model="user.phone"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.email')" prop="email">
-        <el-input v-model="user.email"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
-        <el-input v-model="user.withdraw_password"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('user.captcha')" required>
-        <el-col :span="12">
-          <el-form-item  prop="verification_code_1">
-            <el-input :maxlength="4" v-model="user.verification_code_1">
-              <el-button slot="append" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
-            </el-input>
+  <div class="container">
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item>注册会员</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-col :span="7" :offset="7">
+      <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
+        <el-form-item :label="$t('user.username')" prop="username">
+          <el-input :maxlength="10" v-model="user.username" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.password')" prop="password">
+          <el-input type="password" v-model="user.password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
+          <el-input type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.realname')" prop="real_name">
+          <el-input v-model="user.real_name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.phone')" prop="phone">
+          <el-input v-model="user.phone"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.email')" prop="email">
+          <el-input v-model="user.email"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
+          <el-input v-model="user.withdraw_password"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.captcha')" required>
+          <el-col :span="12">
+            <el-form-item  prop="verification_code_1">
+              <el-input :maxlength="4" v-model="user.verification_code_1">
+                <el-button slot="append" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
+              </el-input>
 
-          </el-form-item>
-        </el-col>
-        <el-col :span="4" :offset="1">
-          <img :src="captcha_src" alt="">
-        </el-col>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm">{{$t('action.submit')}}</el-button>
-        <el-button @click="resetForm">{{$t('action.reset')}}</el-button>
-      </el-form-item>
-    </el-form>
-  </el-col>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4" :offset="1">
+            <img :src="captcha_src" alt="" height="30">
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="medium" class="block-button" @click="submitForm">{{$t('action.submit')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </div>
 </el-row>
 </template>
 
@@ -188,3 +192,12 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="sass">
+.row-bg
+  border-top: 1px solid #dedede
+.el-breadcrumb  
+  margin: 20px 0
+.block-button
+  width: 100%
+</style>

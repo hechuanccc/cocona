@@ -24,7 +24,7 @@
         <el-button>申请取款</el-button>
         <el-button>我的注单</el-button>
       </el-button-group>
-      <el-button class="account-trigger" 
+      <el-button class="account-trigger"
         @mouseenter.native="showDropdown=true"
         @mouseleave.native="showDropdown=false">我的账号<i class="el-icon-caret-bottom"></i>
         <ul v-show="showDropdown" class="dropdown">

@@ -4,7 +4,8 @@ import Home from '@/screens/Home'
 import GameHall from '@/screens/GameHall'
 import Game from '@/screens/games/Game'
 import GameCategory from '@/screens/games/GameCategory'
-import agentRegister from '@/screens/agent/agentRegister'
+import AgentRegister from '@/screens/agent/AgentRegister'
+import Agent from '@/screens/agent/Agent'
 import Register from '@/screens/member/Register'
 import Account from '@/screens/member/Account'
 import Withdraw from '@/screens/member/Withdraw'
@@ -35,9 +36,16 @@ export default new Router({
       component: Home
     },
     {
-      path: '/agent/register',
-      name: 'agentRegister',
-      component: agentRegister
+      path: '/agent',
+      name: 'Agent',
+      component: Agent,
+      children: [
+        {
+          path: 'agent_register',
+          name: 'AgentRegister',
+          component: AgentRegister
+        }
+      ]
     },
     {
       path: '/register',

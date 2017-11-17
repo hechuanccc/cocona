@@ -5,7 +5,7 @@
       <span>GAME INTRO</span>
     </div>
     <el-tabs type="border-card" :tab-position="tabposition" class="mb-20 container">
-      <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name" @click="switchIntro($event)">
+      <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name">
         <div class="rules-content">
           <h1>重要声明</h1>
           <ul>
@@ -75,17 +75,18 @@ $primary-color: #409EFF
 </style>
 <script>
 import { fetchGames } from '../../api'
-import cqlf from './AllGameRules/cqlf'
-import gd11x5 from './AllGameRules/gd11x5'
-import jsk3 from './AllGameRules/jsk3'
-import mlaft from './AllGameRules/mlaft'
-import gdklsf from './AllGameRules/gdklsf'
-import bcr from './AllGameRules/bcr'
-import jsssc from './AllGameRules/jsssc'
-import jspk10 from './AllGameRules/jspk10'
-import cqssc from './AllGameRules/cqssc'
-import pcdd from './AllGameRules/pcdd'
-import hkl from './AllGameRules/hkl'
+import cqlf from './rules/cqlf'
+import gd11x5 from './rules/gd11x5'
+import jsk3 from './rules/jsk3'
+import mlaft from './rules/mlaft'
+import gdklsf from './rules/gdklsf'
+import bcr from './rules/bcr'
+import jsssc from './rules/jsssc'
+import jspk10 from './rules/jspk10'
+import cqssc from './rules/cqssc'
+import pcdd from './rules/pcdd'
+import hkl from './rules/hkl'
+import xjssc from './rules/xjssc'
 
 export default {
   data () {
@@ -93,11 +94,6 @@ export default {
       tabposition: 'left',
       games: '',
       now_game: '132'
-    }
-  },
-  methods: {
-    switchIntro (el) {
-      console.log(el)
     }
   },
   created () {
@@ -118,8 +114,8 @@ export default {
     jspk10,
     cqssc,
     pcdd,
-    hkl
+    hkl,
+    xjssc
   }
 }
 </script>
-left
