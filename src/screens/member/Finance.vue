@@ -2,10 +2,10 @@
 <el-row>
   <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('user.payment_record')" name="PaymentRecord"></el-tab-pane>
-    <el-tab-pane :label="$t('user.remit_record')" name="RemitRecord"></el-tab-pane>
+    <el-tab-pane :label="$t('user.withdraw_record')" name="WithdrawRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.betrecord')" name="BetRecord"></el-tab-pane>
   </el-tabs>
-  <router-view class="content"/>
+  <router-view class="account-content"/>
 </el-row>
 </template>
 <script>
@@ -38,8 +38,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.content{
-  padding-top: 50px;
-}
-</style>

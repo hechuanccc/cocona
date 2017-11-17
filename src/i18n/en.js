@@ -62,12 +62,16 @@ export default {
     payment: 'Payment',
     online_payment: 'Online Payment',
     remit: 'Remit',
+    remitpayee: 'Remit Payee',
     withdraw: 'Withdraw',
     betrecord: 'Bet Record',
     my_account: 'My Account',
     primary_info: 'Primary Info',
     password_setting: 'Password Setting',
     bank_info: 'Bank Info',
+    bank: 'Bank',
+    city: 'City',
+    province: 'Province',
     amount: 'Amount',
     gender: 'Gender',
     male: 'male',
@@ -77,6 +81,10 @@ export default {
     payment_way: 'Payment Way',
     payment_record: 'Payment Record',
     remit_record: 'Remit Record',
+    remit_account: 'Remit Account',
+    remit_address: 'Remit Address',
+    remit_despositor: 'Despositor',
+    remit_time: 'Remit Time',
     issue_number: 'Issue Number',
     game_name: 'Game Name',
     play: 'Play Name',
@@ -92,7 +100,10 @@ export default {
     announcement: 'Announcement'
   },
   common: {
-    all: 'All'
+    all: 'All',
+    please_select: 'Please select',
+    memo: 'Memo',
+    select_date_time: 'Select Date Time'
   },
   action: {
     submit: 'Submit',
