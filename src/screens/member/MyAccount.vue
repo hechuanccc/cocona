@@ -6,7 +6,7 @@
     <el-tab-pane :label="$t('user.withdraw_password')" name="WithdrawPassword"></el-tab-pane>
     <el-tab-pane :label="$t('user.bank_info')" name="BankInfo"></el-tab-pane>
   </el-tabs>
-  <router-view class="content"/>
+  <router-view class="account-content"/>
 </el-row>
 </template>
 <script>
@@ -31,6 +31,9 @@ export default {
       }
     }
   },
+  created () {
+    this.activeName = this.$route.name
+  },
   methods: {
     handleClick (tab, event) {
       this.$router.push({ name: tab.name })
@@ -39,8 +42,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.content{
-  padding-top: 50px;
-}
-</style>

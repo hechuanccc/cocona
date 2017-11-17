@@ -196,7 +196,7 @@ export default {
 <style scoped lang="sass">
 .row-bg
   border-top: 1px solid #dedede
-.el-breadcrumb  
+.el-breadcrumb
   margin: 20px 0
 .block-button
   width: 100%

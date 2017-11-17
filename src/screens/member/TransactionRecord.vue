@@ -1,17 +1,17 @@
 <template>
   <div>
     <el-table v-loading="loading" :data="displayRecord" stripe>
-      <el-table-column :label="$t('user.payment_time')">
-          <template slot-scope="scope">
+      <el-table-column :label="$t('user.transaction_time')">
+        <template slot-scope="scope">
           <span>{{ scope.row.created_at | moment("YYYY-MM-DD HH:mm:ss")}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="amount" :label="$t('user.payment_amount')">
+      <el-table-column prop="amount" :label="$t('user.transaction_amount')">
         <template slot-scope="scope">
           <span>{{ `$${scope.row.amount}`}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="transaction_type.display_name" :label="$t('user.payment_way')">
+      <el-table-column prop="transaction_type.display_name" :label="$t('user.transaction_way')">
       </el-table-column>
       <el-table-column :label="$t('user.status')">
         <template slot-scope="scope">
@@ -28,7 +28,8 @@
   </div>
 </template>
 <script>
-import { fetchPaymentRecord } from '../../api'
+import { fetchTransactionRecord } from '../../api'
+import { msgFormatter } from '../../utils'
 import Vue from 'vue'
 export default {
   name: 'PaymentRecord',
@@ -53,20 +54,29 @@ export default {
       paymentRecords: [],
       currentPage: 1,
       pageSize: 10,
-      loading: true
+      loading: false
     }
   },
-  created () {
-    fetchPaymentRecord().then(datas => {
-      this.paymentRecords = datas
-      this.loading = false
-    })
-  },
   computed: {
+    transactionType () {
+      if (this.$route.name === 'PaymentRecord') {
+        return 'online_pay,remit'
+      } else {
+        return 'withdraw'
+      }
+    },
     displayRecord () {
       let groupIdx = (this.currentPage - 1) * this.pageSize
       return this.paymentRecords.slice(groupIdx, groupIdx + this.pageSize)
     }
+  },
+  watch: {
+    '$route': function () {
+      this.fetchTransactionRecord()
+    }
+  },
+  created () {
+    this.fetchTransactionRecord()
   },
   methods: {
     color (value) {
@@ -77,6 +87,20 @@ export default {
       } else {
         return 'red'
       }
+    },
+    fetchTransactionRecord () {
+      this.loading = true
+      fetchTransactionRecord(this.transactionType).then(datas => {
+        this.paymentRecords = datas
+        this.loading = false
+      }, errorRes => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorRes.response.data.error),
+          type: 'error'
+        })
+        this.loading = false
+      })
     }
   }
 }

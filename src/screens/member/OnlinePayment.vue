@@ -1,5 +1,5 @@
 <template>
-<el-row>
+<el-row class="account-content">
   <el-col :offset="4" :span="16">
     <el-form class="form" method="post" :action="paymentUrl" :model="user" ref="user" status-icon :rules="rule" label-width="100px">
       <el-form-item required :label="'支付方式'" prop="payway">
@@ -23,6 +23,7 @@
 
 <script>
 import { fetchPaymentType } from '../../api'
+import { msgFormatter } from '../../utils'
 import urls from '../../api/urls'
 import Vue from 'vue'
 export default {
@@ -68,15 +69,12 @@ export default {
           return true
         }
       })
-    }).catch(error => {
-      if (error.response.status > 400) {
-        this.$router.push({
-          path: '/',
-          query: {
-            next: this.$route.path
-          }
-        })
-      }
+    }, errorRes => {
+      this.$message({
+        showClose: true,
+        message: msgFormatter(errorRes.response.data.error),
+        type: 'error'
+      })
     })
   },
   watch: {
