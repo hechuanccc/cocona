@@ -29,6 +29,7 @@
 </template>
 <script>
 import { fetchTransactionRecord } from '../../api'
+import { msgFormatter } from '../../utils'
 import Vue from 'vue'
 export default {
   name: 'PaymentRecord',
@@ -53,7 +54,7 @@ export default {
       paymentRecords: [],
       currentPage: 1,
       pageSize: 10,
-      loading: true
+      loading: false
     }
   },
   computed: {
@@ -88,8 +89,16 @@ export default {
       }
     },
     fetchTransactionRecord () {
+      this.loading = true
       fetchTransactionRecord(this.transactionType).then(datas => {
         this.paymentRecords = datas
+        this.loading = false
+      }, errorRes => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorRes.response.data.error),
+          type: 'error'
+        })
         this.loading = false
       })
     }

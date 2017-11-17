@@ -35,7 +35,7 @@
     </el-col>
   </el-row>
   <el-row>
-    <el-table :data="showRecords" stripe>
+    <el-table v-loading="loading" :data="showRecords" stripe>
       <el-table-column
         :label="$t('user.issue_number')"
         prop="issue_number">
@@ -67,6 +67,7 @@
 </template>
 <script>
 import { fetchBetHistory } from '../../api'
+import { msgFormatter } from '../../utils'
 export default {
   name: 'BetRecord',
   data () {
@@ -76,12 +77,13 @@ export default {
       selectedIssueNumber: '',
       currentPage: 1,
       pageSize: 10,
-      loading: true,
+      loading: false,
       issueNumbers: [],
       gameNames: []
     }
   },
   created () {
+    this.loading = true
     fetchBetHistory()
       .then(records => {
         this.betRecords = records
@@ -99,6 +101,14 @@ export default {
             this.gameNames.push(gameName)
           }
         })
+        this.loading = false
+      }, errorRes => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorRes.response.data.error),
+          type: 'error'
+        })
+        this.loading = false
       })
   },
   computed: {

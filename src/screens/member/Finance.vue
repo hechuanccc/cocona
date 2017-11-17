@@ -5,7 +5,7 @@
     <el-tab-pane :label="$t('user.withdraw_record')" name="WithdrawRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.betrecord')" name="BetRecord"></el-tab-pane>
   </el-tabs>
-  <router-view class="content"/>
+  <router-view class="account-content"/>
 </el-row>
 </template>
 <script>
@@ -38,8 +38,3 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.content{
-  padding-top: 50px;
-}
-</style>
