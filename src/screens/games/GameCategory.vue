@@ -3,43 +3,53 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model="amount"/>
+        <el-input v-model="amount" />
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
-        <el-button size="small" @click="reset" >重置</el-button>
+        <el-button size="small" @click="reset">重置</el-button>
+      </el-col>
+     <el-col :span="9" class="game-result">
+        <el-button type="text">
+          最新开奖奖号：
+          <span v-for="result in formatResults"
+          :key="result"
+          :class="getResultClass(result)">
+            {{result}}
+          </span>
+        </el-button>
       </el-col>
     </el-row>
-
-    <div v-for="(playSection, index) in playSections" class="clearfix" v-if="playSections.length" >
-      <div 
-        :style="{width: getWidthForGroup(playSection)}" 
-        v-for="(playgroup, playgroupIndex) in playSection.playgroups" 
-        :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']">
-        <table class="play-table" align="center"  key="playgroup.code + index + '' + playgroupIndex">
+    <div v-for="(playSection, index) in playSections"
+    class="clearfix"
+    v-if="playSections.length">
+      <div :style="{width: getWidthForGroup(playSection)}"
+      v-for="(playgroup, playgroupIndex) in playSection.playgroups"
+      :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']">
+        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex">
           <tr>
-            <th class="group-name" :colspan="playSection.playCol">{{playgroup.length}}{{playgroup.display_name}}</th>
+            <th class="group-name" :colspan="playSection.playCol">
+              {{playgroup.length}}{{playgroup.display_name}}
+            </th>
           </tr>
           <tr v-for="(playChunk, playChunkIndex) in playgroup.plays">
-            <td v-for="play in playChunk" align="center" 
-              :class="['clickable', 
+            <td v-for="play in playChunk" align="center" :class="['clickable',
                 {
                   hover: plays[play.id].hover,
                   active: plays[play.id].active && !gameClosed
-                }]" 
-              @mouseover="toggleHover(play, true)" 
-              @mouseleave="toggleHover(play, false)" 
-              @click="toggleActive(plays[play.id], $event)">
+                }]"
+                @mouseover="toggleHover(play, true)"
+                @mouseleave="toggleHover(play, false)"
+                @click="toggleActive(plays[play.id], $event)">
               <el-col :span="7" class="name">
                 <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
               <el-col :span="7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
               </el-col>
-              <el-col :span="10" class="input" >
-                <el-input 
-                  v-if="!gameClosed" size="mini" class="extramini" 
-                  v-model="plays[play.id].amount" type="number" min="1" step="10"/>
+              <el-col :span="10" class="input">
+                <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" type="number" min="1" step="10"
+                />
                 <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
               </el-col>
             </td>
@@ -51,19 +61,21 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model="amount"/>
+        <el-input v-model="amount" />
       </el-col>
       <el-col :span="4">
-        <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
+        <el-button type="primary"
+          size="small"
+          @click="openDialog"
+          :disabled="gameClosed">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
-    <el-dialog 
-      title="确认注单"
+    <el-dialog title="确认注单"
       width="40%"
       :before-close="beforeClose"
-      :visible.sync="dialogVisible" 
-      :close-on-click-modal="false" 
+      :visible.sync="dialogVisible"
+      :close-on-click-modal="false"
       :close-on-press-escape="false">
       <el-table :data="activePlays" stripe max-height="350">
         <el-table-column property="display_name" label="号码" width="150">
@@ -78,7 +90,7 @@
         </el-table-column>
         <el-table-column property="bet_amount" label="金额">
           <template slot-scope="scope">
-            <el-input size="mini" v-model="scope.row.bet_amount" ></el-input>
+            <el-input size="mini" v-model="scope.row.bet_amount"></el-input>
           </template>
         </el-table-column>
         <el-table-column property="active" label="确认">
@@ -88,37 +100,27 @@
         </el-table-column>
       </el-table>
       <div class="summary">
-        共 {{playsForSubmit.length}} 组 总金额: <span class="red bet-amount">{{totalAmount}}</span>
+        共 {{playsForSubmit.length}} 组 总金额:
+        <span class="red bet-amount">{{totalAmount}}</span>
       </div>
-      <el-alert
-          v-if="errors"
-          :title="errors"
-          type="error"
-          center
-          :closable="false"
-          show-icon>
-        </el-alert>
+      <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
+      </el-alert>
       <div class="popup-actions" v-if="!submitted">
         <el-button size="medium" :loading="submitting" type="primary" :disabled="!playsForSubmit.length" @click="placeOrder">确认</el-button>
         <el-button size="medium" @click="dialogVisible = false" :disabled="submitting">取消</el-button>
       </div>
-      <el-alert
-        v-else
-        title="成功下单"
-        type="success"
-        center
-        :closable="false"
-        show-icon>
+      <el-alert v-else title="成功下单" type="success" center :closable="false" show-icon>
       </el-alert>
     </el-dialog>
   </div>
 </template>
 
+
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
 import '../../style/theme.scss'
-import { fetchPlaygroup, placeBet } from '../../api'
+import { fetchPlaygroup, placeBet, fetchGameResult } from '../../api'
 import { formatPlayGroup } from '../../utils'
 
 export default {
@@ -148,7 +150,8 @@ export default {
       totalAmount: 0,
       submitted: false,
       submitting: false,
-      errors: ''
+      errors: '',
+      gameLatestResult: ''
     }
   },
   computed: {
@@ -168,6 +171,9 @@ export default {
     // just to trigger watcher below
     rawAndFormatting () {
       return this.raw && this.formatting && (this.raw.length + this.formatting.length)
+    },
+    formatResults () {
+      return this.gameLatestResult.split(',')
     }
   },
   watch: {
@@ -201,8 +207,18 @@ export default {
     if (this.game) {
       this.updateBetrecords()
     }
+    fetchGameResult(this.$route.params.gameId).then(
+      result => {
+        this.gameLatestResult = result[0].result_str
+      }
+    )
   },
   methods: {
+    getResultClass (resultNum) {
+      let gameClass = `style-${this.$route.params.gameId}`
+      let resultClass = `style-${this.$route.params.gameId}-${resultNum}`
+      return [gameClass, resultClass]
+    },
     updateBetrecords () {
       this.$root.bus.$emit('new-betrecords', this.game.id)
     },
@@ -386,5 +402,16 @@ export default {
 .popup-actions {
   margin-top: 20px;
   text-align: center;
+}
+
+.game-result {
+  position: absolute;
+  right: 0;
+  button {
+    float: right;
+    font-size: 16px;
+  }
+
+  /*will add each style next(using sprites)*/
 }
 </style>

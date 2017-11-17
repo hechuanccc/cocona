@@ -107,7 +107,7 @@ export function fetchBetHistory () {
 }
 
 export function fetchResults (gameId) {
-  return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)
+  return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)  // ?
 }
 
 export function getToken (oldToken) {
@@ -125,4 +125,7 @@ export function getToken (oldToken) {
 }
 export function fetchBank () {
   return axios.get(urls.bank).then(res => res.data)
+}
+export function fetchGameResult (gameId) {
+  return axios.get(`${urls.game_result}?game=${gameId}`).then(res => res.data)
 }
