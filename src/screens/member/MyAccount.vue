@@ -31,6 +31,9 @@ export default {
       }
     }
   },
+  created () {
+    this.activeName = this.$route.name
+  },
   methods: {
     handleClick (tab, event) {
       this.$router.push({ name: tab.name })
@@ -40,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.content{
+.content {
   padding-top: 50px;
 }
 </style>
