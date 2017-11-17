@@ -108,12 +108,12 @@
           real_name: [{
             required: true,
             pattern: /^\D*$/,
-            message: this.$t('validate.username_required'),
+            message: this.$t('validate.required'),
             trigger: 'blur'
           }],
           phone: [{
             required: true,
-            message: this.$t('validate.phone_required'),
+            message: this.$t('validate.required'),
             trigger: 'blur'
           }],
           email: [{
@@ -124,7 +124,7 @@
           }],
           captcha_1: [{
             required: true,
-            message: this.$t('validate.captcha_required'),
+            message: this.$t('validate.required'),
             trigger: 'blur'
           }]
         },

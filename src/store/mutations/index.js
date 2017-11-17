@@ -13,6 +13,12 @@ export default {
       logined: false
     }
   },
+  [types.SHOW_LOGINDIALOG]: (state) => {
+    state.loginDialogVisible = true
+  },
+  [types.CLOSE_LOGINDIALOG]: (state) => {
+    state.loginDialogVisible = false
+  },
   [types.SET_GAMES]: (state, { games }) => {
     state.games = games
   },

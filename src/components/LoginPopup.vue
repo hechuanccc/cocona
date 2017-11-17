@@ -64,6 +64,7 @@ export default {
           password: this.password
         }
       }).then(result => {
+        this.$store.commit('CLOSE_LOGINDIALOG')
         const next = this.$route.query.next
         this.$router.push(next || 'game')
       }, errorRes => {
@@ -82,12 +83,6 @@ export default {
           type: 'error'
         })
       })
-      this.popVisible = false
-    }
-  },
-  computed: {
-    user () {
-      return this.$store.state.user
     }
   }
 }

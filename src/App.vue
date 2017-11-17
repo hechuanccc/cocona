@@ -2,20 +2,30 @@
   <div>
     <HeadBar />
     <router-view/>
+    <el-dialog :title="$t('navMenu.pop_title')"
+    :visible="showLoginDialog"
+    width="480px"
+    @close="closeLoginDialog()"
+    center>
+      <LoginPopup/>
+    </el-dialog>
   </div>
 </template>
+
 
 <script>
 import './style/reset.css'
 import './style/base.scss'
 import HeadBar from './components/HeadBar.vue'
+import LoginPopup from './components/LoginPopup'
 import {getToken} from './api'
 import axios from 'axios'
 
 export default {
   name: 'app',
   components: {
-    HeadBar
+    HeadBar,
+    LoginPopup
   },
   methods: {
     setToken () {
@@ -56,9 +66,18 @@ export default {
             this.$store.commit('RESET_USERs')
 
             this.$router.push('/')
+            return Promise.reject(errRes)
           }
         }
       )
+    },
+    closeLoginDialog () {
+      this.$store.commit('CLOSE_LOGINDIALOG')
+    }
+  },
+  computed: {
+    showLoginDialog () {
+      return this.$store.state.loginDialogVisible
     }
   },
   created () {
