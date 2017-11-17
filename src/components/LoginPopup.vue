@@ -20,6 +20,7 @@
 
 <style lang="sass" scoped>
 .pop-content
+  text-align: center
   position: relative
   div
     width: 200px
@@ -33,18 +34,16 @@
     display: block
     width: 80%
 
+
 .notguest-link
   vertical-align: top
-  margin-left: 10px
   div
     width: 80%
     margin: 7px
 
   > button
     position: relative
-    left: 50%
     width: 50%
-    margin-left: -33%
 .ipt-slot
   margin-top: 2px
 </style>
