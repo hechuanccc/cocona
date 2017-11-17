@@ -95,8 +95,8 @@ export function placeBet (data) {
   }).then(res => res.data)
 }
 
-export function fetchPaymentRecord () {
-  return axios.get(urls.payment_record).then(res => res.data)
+export function fetchTransactionRecord (type) {
+  return axios.get(`${urls.transaction_record}?transaction_type=${type}`).then(res => res.data)
 }
 
 export function fetchBet (gameId) {
@@ -121,8 +121,22 @@ export function getToken (oldToken) {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access_token
       return res.data
     }
-  )
+    )
 }
 export function fetchBank () {
   return axios.get(urls.bank).then(res => res.data)
+}
+
+export function withdraw (info) {
+  return axios.post(urls.withdraw, qs.stringify(info))
+}
+
+export function fetchRemitpayee () {
+  return axios.get(urls.remitpayee).then(res => res.data)
+}
+
+export function remit (info) {
+  return axios.post(urls.remit, info, {
+    'Content-Type': 'application/json'
+  })
 }

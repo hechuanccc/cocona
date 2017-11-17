@@ -1,5 +1,5 @@
 <template>
-<el-row>
+<el-row class="account-content">
   <el-col :offset="4" :span="16">
     <el-form class="form" method="post" :action="paymentUrl" :model="user" ref="user" status-icon :rules="rule" label-width="100px">
       <el-form-item required :label="'支付方式'" prop="payway">

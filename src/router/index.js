@@ -15,10 +15,10 @@ import MyAccount from '@/screens/member/MyAccount'
 import PrimaryInfo from '@/screens/member/PrimaryInfo'
 import PasswordSetting from '@/screens/member/PasswordSetting'
 import WithdrawPassword from '@/screens/member/WithdrawPassword'
+import BankInfo from '@/screens/member/BankInfo'
 
 import Finance from '@/screens/member/Finance'
-import PaymentRecord from '@/screens/member/PaymentRecord'
-import RemitRecord from '@/screens/member/RemitRecord'
+import TransactionRecord from '@/screens/member/TransactionRecord'
 import BetRecord from '@/screens/member/BetRecord'
 
 import Promotions from '@/screens/promotion/Promotions'
@@ -84,6 +84,11 @@ export default new Router({
               path: 'withdraw_password',
               name: 'WithdrawPassword',
               component: WithdrawPassword
+            },
+            {
+              path: 'bank_info',
+              name: 'BankInfo',
+              component: BankInfo
             }
           ]
         },
@@ -95,12 +100,12 @@ export default new Router({
             {
               path: 'payment_record',
               name: 'PaymentRecord',
-              component: PaymentRecord
+              component: TransactionRecord
             },
             {
-              path: 'remit_record',
-              name: 'RemitRecord',
-              component: RemitRecord
+              path: 'withdraw_record',
+              name: 'WithdrawRecord',
+              component: TransactionRecord
             },
             {
               path: 'betrecord',
