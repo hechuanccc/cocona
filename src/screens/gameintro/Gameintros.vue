@@ -87,6 +87,7 @@ import cqssc from './rules/cqssc'
 import pcdd from './rules/pcdd'
 import hkl from './rules/hkl'
 import xjssc from './rules/xjssc'
+import tjssc from './rules/tjssc'
 
 export default {
   data () {
@@ -115,7 +116,8 @@ export default {
     cqssc,
     pcdd,
     hkl,
-    xjssc
+    xjssc,
+    tjssc
   }
 }
 </script>
