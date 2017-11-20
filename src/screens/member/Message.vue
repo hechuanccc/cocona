@@ -1,19 +1,28 @@
 <template>
 <div>
-  <ul>
+  <ul class="text-center">
+    <li class="header">
+      <el-row>
+        <el-col :span="5">{{$t('user.sender')}}</el-col>
+        <el-col :span="16">{{$t('user.title')}}</el-col>
+        <el-col :span="3">{{$t('user.send_date')}}</el-col>
+      </el-row>
+    </li>
     <li class="msg" v-for="(msg,index) in displayMsg" :key="index" :title="msg.title" :name="index" @click="readMsg(index)">
-      <div class="title">
-        <el-row :class="msg.status?'read':'unread'">
-          <el-col class="name" :span="5">{{msg.sender_displayname}}</el-col>
-          <el-col :span="16">{{msg.title}}</el-col>
-          <el-col :span="3">{{msg.sent_at | moment("YYYY-MM-DD HH:mm")}}</el-col>
-        </el-row>
-      </div>
-        <el-collapse-transition>
-          <div v-show="msg.active">
-            <div class="content">{{msg.content}}</div>
-          </div>
-        </el-collapse-transition>
+      <el-row :class="['title',msg.status?'read':'unread']">
+        <el-col :span="5">{{msg.sender_displayname}}</el-col>
+        <el-col :span="16">{{msg.title}}</el-col>
+        <el-col :span="3">{{msg.sent_at | moment("YYYY-MM-DD HH:mm")}}</el-col>
+      </el-row>
+      <el-collapse-transition>
+        <div v-show="msg.active">
+          <el-row>
+            <el-col :offset="5" :span="16" class="content">
+              {{msg.content}}
+            </el-col>
+          </el-row>
+        </div>
+      </el-collapse-transition>
     </li>
   </ul>
   <el-pagination
@@ -63,26 +72,28 @@ export default {
 
 <style lang="scss" scoped>
 .read {
-  background-color: #acd6ff;
+  background-color: #f1f1f1;
 }
 .unread {
-  background-color: #ecf5ff;
+  background-color: #fff;
+}
+.sender {
+  padding-left: 10px;
+}
+.header {
+  margin-bottom: 12px;
 }
 .msg {
-  border-bottom: 1px #e5e5e5 solid;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   cursor: pointer;
   .title {
     height: 35px;
     line-height: 35px;
-    font-size: 16px;
-    .name {
-      padding-left: 10px;
-    }
+    border-top: 1px solid #e6ebf5;
   }
   .content {
     padding: 20px 50px;
-    font-size: 12px;
-    line-height: 25px;
   }
 }
 </style>

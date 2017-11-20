@@ -48,6 +48,7 @@ export default {
     new_withdraw_password: 'New Withdraw Password',
     prev_withdraw_password: 'New Withdraw ',
     confirm_withdraw_password: 'Confirm Withdraw Password',
+    balance: 'Balance',
     realname: 'Real Name',
     phone: 'Phone Number',
     email: 'Email',
@@ -97,7 +98,10 @@ export default {
     declined: 'Declined',
     finance: 'Financing',
     message: 'Message',
-    announcement: 'Announcement'
+    announcement: 'Announcement',
+    sender: 'Sender',
+    title: 'Title',
+    send_date: 'Send Date'
   },
   common: {
     all: 'All',

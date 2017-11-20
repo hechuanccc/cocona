@@ -40,7 +40,7 @@
 
 
 <script>
-import {gethomePage} from '../api'
+import { gethomePage } from '../api'
 export default {
   computed: {
     user () {
@@ -69,7 +69,11 @@ export default {
         }
       }).then(result => {
         const next = this.$route.query.next
-        this.$router.push(next || 'game')
+        if (next) {
+          this.$router.push(next)
+        } else {
+          this.$router.push({ path: '/game' })
+        }
       }, errorRes => {
         const errors = errorRes.response.data.error
         let messages = []

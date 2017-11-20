@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :offset="8">
+    <el-col :offset="8" :span="16">
       <el-form :model="bankInfo" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
         <el-form-item :label="$t('user.bank')" prop="bank">
           <el-select v-model="bankInfo.bank" placeholder="请选择">
