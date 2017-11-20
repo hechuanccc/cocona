@@ -1,5 +1,9 @@
 <template>
   <div class="agent-index container">
+    <div class="page-title">
+      <h1 class="title">{{$t('navMenu.affliate')}}</h1>
+      <span>JOIN US</span>
+    </div>
     <router-view/>
   </div>
 </template>

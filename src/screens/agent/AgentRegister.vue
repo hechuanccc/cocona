@@ -197,7 +197,7 @@
 
 <style lang="sass" scoped>
 .row-bg
-  padding: 10px 0
+  padding: 20px 0
   background-image: linear-gradient(180deg, #fdfbfb 0%, #ebedee 100%)
 </style>
 
