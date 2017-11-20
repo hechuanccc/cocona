@@ -140,3 +140,13 @@ export function remit (info) {
     'Content-Type': 'application/json'
   })
 }
+
+export function fetchMessages () {
+  return axios.get(urls.messages).then(res => res.data)
+}
+
+export function readMessage (ids) {
+  return axios.post(urls.readMessage,
+    { ids: ids },
+    { 'Content-Type': 'application/json' })
+}
