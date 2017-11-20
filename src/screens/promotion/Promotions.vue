@@ -12,11 +12,10 @@
 </template>
 
 <style lang="sass" scoped>
-$banner_width: 1280px
-$primary-color: #409EFF
+@import '../../style/vars.scss';
 
 .promo
-  width: $banner_width
+  width: $container_width
   height: auto
   background: #fff
   margin: 0 auto
@@ -32,7 +31,7 @@ $primary-color: #409EFF
     display: inline-block
     font-size: 32px
     line-height: 40px
-    background: $primary-color
+    background: $primary
     color: #FFF
     margin: 10px 0 0 -20px
     padding: 10px 30px
@@ -46,7 +45,7 @@ $primary-color: #409EFF
     height: 0
     border-style: solid
     border-width: 0 20px 20px 0
-    border-color: rgba(0, 0, 0, 0) darken($primary-color, 20%) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
+    border-color: rgba(0, 0, 0, 0) darken($primary, 20%) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
     position: absolute
     z-index: 0
 

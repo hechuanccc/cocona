@@ -80,7 +80,7 @@ export default {
   },
   computed: {
     isUserPage () {
-      let pat = new RegExp(/\/game\/|\/account\/|\/history|\/gameintro/)
+      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/history|\/gameintro/)
       return pat.test(this.$route.path)
     }
   },

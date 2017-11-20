@@ -54,7 +54,7 @@ export default {
           return
         }
         this.setToken()
-      }, 30000)
+      }, 300000)
 
       axios.interceptors.response.use(
         res => res,

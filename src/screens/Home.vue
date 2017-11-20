@@ -36,8 +36,6 @@
   </div>
 </template>
 
-
-
 <script>
 import { getBanner, getAnnouncements, fetchGames } from '../api'
 
@@ -60,7 +58,7 @@ export default {
       if (this.$store.state.user.logined) {
         this.$router.push(`/game/${game.id}/`)
       } else {
-        // show popup here
+        this.$store.commit('SHOW_LOGINDIALOG')
       }
     }
   },
