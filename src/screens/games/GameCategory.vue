@@ -9,14 +9,20 @@
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
-     <el-col :span="9" class="game-result">
+     <el-col :span="9" class="result-balls">
         <el-button type="text">
-          最新开奖奖号：
-          <span v-for="result in formatResults"
+          最新开奖奖号
+          <span v-for="result in resultBall"
           :key="result"
           :class="getResultClass(result)">
-            {{result}}
+            <b> {{result}} </b>
           </span>
+          <div class="result-sum" v-if="gameLatestResult.game_code === 'pcdd'">
+            總和:
+            <span>
+              <b>{{resultsSum}}</b>
+            </span>
+          </div>
         </el-button>
       </el-col>
     </el-row>
@@ -172,8 +178,18 @@ export default {
     rawAndFormatting () {
       return this.raw && this.formatting && (this.raw.length + this.formatting.length)
     },
-    formatResults () {
-      return this.gameLatestResult.split(',')
+    resultBall () {
+      if (!this.gameLatestResult.result_str) {
+        return '尚无开奖结果'
+      }
+      return this.gameLatestResult.result_str.split(',')
+    },
+    resultsSum () {
+      let sum = 0
+      for (let i = 0; i < this.resultBall.length; i++) {
+        sum = sum + Number(this.resultBall[i])
+      }
+      return sum
     }
   },
   watch: {
@@ -209,14 +225,14 @@ export default {
     }
     fetchGameResult(this.$route.params.gameId).then(
       result => {
-        this.gameLatestResult = result[0].result_str
+        this.gameLatestResult = result[0]
       }
     )
   },
   methods: {
     getResultClass (resultNum) {
-      let gameClass = `style-${this.$route.params.gameId}`
-      let resultClass = `style-${this.$route.params.gameId}-${resultNum}`
+      let gameClass = `result-${this.gameLatestResult.game_code}`
+      let resultClass = `resultnum-${resultNum}`
       return [gameClass, resultClass]
     },
     updateBetrecords () {
@@ -322,6 +338,7 @@ export default {
 
 <style scoped lang='scss'>
 @import '../../style/vars.scss';
+@import '../../style/resultsball.sass';
 
 .name {
   font-weight: bold;
@@ -404,14 +421,19 @@ export default {
   text-align: center;
 }
 
-.game-result {
+.result-balls {
   position: absolute;
   right: 0;
   button {
     float: right;
-    font-size: 16px;
+    position: relative;
+    bottom: 5px;
+    font-size: 12px;
   }
-
-  /*will add each style next(using sprites)*/
+  span {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
 }
 </style>
