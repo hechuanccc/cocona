@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="promo-title">
+    <div class="page-title">
       <h1 class="title">遊戲介紹</h1>
       <span>GAME INTRO</span>
     </div>
@@ -39,35 +39,6 @@
   h1
     font-size: 18px
     margin-bottom: 10px
-
-.promo-title
-  margin-bottom: 20px
-  span
-    color: #DDD
-    font-size: 28px
-    font-style: italic
-    letter-spacing: 1px
-  .title
-    display: inline-block
-    font-size: 32px
-    line-height: 40px
-    background: $primary
-    color: #FFF
-    margin: 10px 0 0 -20px
-    padding: 10px 30px
-    position: relative
-    font-weight: 500
-  .title:before
-    bottom: -20px
-    left: 0
-    content: " "
-    width: 0
-    height: 0
-    border-style: solid
-    border-width: 0 20px 20px 0
-    border-color: rgba(0, 0, 0, 0) darken($primary, 20%) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
-    position: absolute
-    z-index: 0
 
 .mb-20
   margin-bottom: 20px

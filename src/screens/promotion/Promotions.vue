@@ -1,6 +1,6 @@
 <template>
   <div class="promo">
-    <div class="promo-title">
+    <div class="page-title">
         <h1 class="title">{{$t('navMenu.promotion')}}</h1>
         <span>PREFERENTIAL</span>
       </div>
@@ -10,46 +10,6 @@
       />
   </div>
 </template>
-
-<style lang="sass" scoped>
-@import '../../style/vars.scss';
-
-.promo
-  width: $container_width
-  height: auto
-  background: #fff
-  margin: 0 auto
-
-.promo-title
-  margin-bottom: 20px
-  span
-    color: #DDD
-    font-size: 28px
-    font-style: italic
-    letter-spacing: 1px
-  .title
-    display: inline-block
-    font-size: 32px
-    line-height: 40px
-    background: $primary
-    color: #FFF
-    margin: 10px 0 0 -20px
-    padding: 10px 30px
-    position: relative
-    font-weight: 500
-  .title:before
-    bottom: -20px
-    left: 0
-    content: " "
-    width: 0
-    height: 0
-    border-style: solid
-    border-width: 0 20px 20px 0
-    border-color: rgba(0, 0, 0, 0) darken($primary, 20%) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0)
-    position: absolute
-    z-index: 0
-
-</style>
 <script>
 import PromoBanner from './PromoBanner.vue'
 import { getPromotions } from '../../api'
