@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="account-content">
   <ul class="text-center">
     <li class="header">
       <el-row>
