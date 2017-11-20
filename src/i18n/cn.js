@@ -48,6 +48,7 @@ export default {
     new_withdraw_password: '新取款密码',
     prev_withdraw_password: '当前取款密码',
     confirm_withdraw_password: '确认取款密码',
+    balance: '余额',
     realname: '真实姓名',
     phone: '手机号码',
     email: '邮件信箱',
@@ -99,7 +100,10 @@ export default {
     declined: '拒绝',
     finance: '财务记录',
     message: '站内消息',
-    announcement: '系统公告'
+    announcement: '系统公告',
+    sender: '寄件人',
+    title: '标题',
+    send_date: '寄件日期'
   },
   common: {
     all: '全部',

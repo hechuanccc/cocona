@@ -1,6 +1,6 @@
 <template>
 <el-row class="account-content">
-  <el-col :span="12" :offset="8">
+  <el-col :offset="8" :span="16">
     <el-row>
       <el-form :model="withdrawInfo" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="120px">
         <el-form-item :label="$t('user.amount')" prop="amount">

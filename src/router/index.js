@@ -22,6 +22,8 @@ import Finance from '@/screens/member/Finance'
 import TransactionRecord from '@/screens/member/TransactionRecord'
 import BetRecord from '@/screens/member/BetRecord'
 
+import Message from '@/screens/member/Message'
+
 import Promotions from '@/screens/promotion/Promotions'
 import Faq from '@/screens/faq/FaqsHome'
 import Gameintro from '@/screens/gameintro/Gameintros'
@@ -121,6 +123,11 @@ export default new Router({
               component: BetRecord
             }
           ]
+        },
+        {
+          path: 'message',
+          name: 'Message',
+          component: Message
         }
       ]
     }, {
