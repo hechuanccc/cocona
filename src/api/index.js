@@ -100,10 +100,10 @@ export function fetchTransactionRecord (type) {
 }
 
 export function fetchBet (gameId) {
-  return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameId}&status=ongoing`).then(res => res.data)
+  return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameId}&status=ongoing`).then(res => res.data.data)
 }
 export function fetchBetHistory () {
-  return axios.get(`${urls.betrecord}?opt_expand=play`).then(res => res.data)
+  return axios.get(`${urls.betrecord}?opt_expand=play`).then(res => res.data.data)
 }
 
 export function fetchResults (gameId) {

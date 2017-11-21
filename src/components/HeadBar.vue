@@ -65,7 +65,7 @@ export default {
       }, {
         icon: 'line-chart',
         name: this.$t('navMenu.draw_history'),
-        path: 'history'
+        path: 'gamehistory'
       }, {
         icon: 'star',
         name: this.$t('navMenu.game_intro'),
@@ -80,7 +80,7 @@ export default {
   },
   computed: {
     isUserPage () {
-      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/history|\/gameintro/)
+      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/gamehistory|\/gameintro/)
       return pat.test(this.$route.path)
     }
   },
