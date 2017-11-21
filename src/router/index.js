@@ -27,6 +27,7 @@ import Message from '@/screens/member/Message'
 import Promotions from '@/screens/promotion/Promotions'
 import Faq from '@/screens/faq/FaqsHome'
 import Gameintro from '@/screens/gameintro/Gameintros'
+import GameHistory from '@/screens/gameintro/GameHistory'
 
 Vue.use(Router)
 
@@ -144,6 +145,11 @@ export default new Router({
       path: '/gameintro',
       name: 'Gameintro',
       component: Gameintro
+
+    }, {
+      path: '/gamehistory',
+      name: 'GameHistory',
+      component: GameHistory
 
     },
     {

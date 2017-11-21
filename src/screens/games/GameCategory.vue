@@ -263,7 +263,7 @@ export default {
         .then(res => {
           this.submitting = false
           // TODO: update conditions
-          if (res[0].member) {
+          if (res.data && res.data[0].member) {
             this.submitted = true
             setTimeout(() => {
               this.submitted = false
@@ -272,12 +272,8 @@ export default {
             }, 1000)
           } else {
             let messages = []
-            res.forEach(error => {
-              Object.keys(error).forEach(key => {
-                if (messages.indexOf(error[key][0]) < 0) {
-                  messages.push(error[key][0])
-                }
-              })
+            res.msg.forEach(error => {
+              messages.push(error)
             })
             this.errors = messages.join(', ')
           }
@@ -329,7 +325,7 @@ export default {
       }
       Vue.set(play, 'active', !play.active)
       if (play.active) {
-        play.amount = this.amount
+        play.amount = parseFloat(this.amount)
       } else {
         play.amount = ''
       }
@@ -347,8 +343,8 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-@import '../../style/vars.scss';
-@import '../../style/resultsball.sass';
+@import "../../style/vars.scss";
+@import "../../style/resultsball.sass";
 
 .name {
   font-weight: bold;
@@ -381,7 +377,8 @@ export default {
   background: #ecf5ff;
   margin-bottom: 10px;
   border: $cell-border;
-  td, th {
+  td,
+  th {
     border: $cell-border;
     height: $cell-height;
   }
@@ -391,13 +388,17 @@ export default {
     font-weight: bold;
   }
   .hover {
-    .name, .odds, .input {
-      background: #DCE5EF;
+    .name,
+    .odds,
+    .input {
+      background: #dce5ef;
     }
   }
   .active {
-    .name, .odds, .input {
-      background: #F3DAB2;
+    .name,
+    .odds,
+    .input {
+      background: #f3dab2;
     }
   }
 }
@@ -406,7 +407,7 @@ export default {
 }
 .amount {
   line-height: $cell-height;
-  font-weight: 700
+  font-weight: 700;
 }
 .bet-amount {
   font-size: 14px;
