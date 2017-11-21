@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :offset="8" :span="12">
+    <el-col :offset="8" :span="16">
       <el-form :model="withdraw_password" status-icon :rules="withdrawRule" ref="withdraw_password" label-width="120px">
         <el-form-item :label="$t('user.prev_withdraw_password')" prop="current_password">
           <el-input class="input-width" type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>

@@ -1,13 +1,22 @@
 <template>
   <el-container class="container">
     <el-aside width="180px">
+      <ul class="side-menu">
+        <li>
+          <span>{{$t('user.username')}}</span>
+          {{user.username}}
+        </li>
+        <li>
+          <span>{{$t('user.balance')}}</span>
+          <strong class="balance">￥{{user.balance}}</strong>
+        </li>
+      </ul>
       <el-menu
         :default-active="currentPath"
         text-color="#fff"
         active-text-color="#fff"
         :background-color="style.primaryColor"
         :router="true">
-
         <el-menu-item index="/account/online_payment">
           <icon name="credit-card"></icon>
           <span slot="title" class="menu-text">{{$t('user.online_payment')}}</span>
@@ -67,13 +76,8 @@ export default {
     }
   },
   computed: {
-    username () {
-      let username = this.$store.state.user.username
-      if (username) {
-        return username
-      } else {
-        this.$store.dispatch('fetchUser')
-      }
+    user () {
+      return this.$store.state.user
     },
     currentPath () {
       const path = this.$route.path
@@ -128,6 +132,29 @@ export default {
 .el-submenu__title {
   height: 44px;
   line-height: 44px;
+}
+.side-menu {
+  padding: 10px 0;
+  border: 1px solid #efefef;
+  color: #333;
+
+  li {
+    padding: 3px 0;
+    span {
+      display: inline-block;
+      width: 60px;
+      text-align: center;
+      color: #999;
+    }
+    &.center {
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+}
+.balance {
+  color: #67C23A;
+  font-size: 14px;
 }
 </style>
 

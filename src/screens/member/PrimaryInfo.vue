@@ -2,8 +2,8 @@
 <el-row class="row-bg">
   <el-col :span="10" :offset="7">
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
-      <el-form-item :label="$t('user.level')">
-        {{level}}
+      <el-form-item :label="$t('user.username')">
+        {{userInfo.username}}
       </el-form-item>
       <el-form-item :label="$t('user.realname')">
         {{userInfo.real_name}}
@@ -64,13 +64,6 @@ export default {
     }
   },
   computed: {
-    level () {
-      if (this.$store.state.user.level) {
-        return this.$store.state.user.level.name
-      } else {
-        return ''
-      }
-    },
     userInfo () {
       let user = this.$store.state.user
       Object.keys(this.user).forEach(key => {
