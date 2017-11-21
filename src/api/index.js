@@ -92,7 +92,7 @@ export function fetchPaymentTypeDetail (id) {
 export function placeBet (data) {
   return axios.post(urls.betrecord, data, {
     'Content-Type': 'application/json'
-  }).then(res => res.data.data)
+  }).then(res => res.data)
 }
 
 export function fetchTransactionRecord (type) {

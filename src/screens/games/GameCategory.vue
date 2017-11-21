@@ -253,7 +253,7 @@ export default {
         .then(res => {
           this.submitting = false
           // TODO: update conditions
-          if (res[0].member) {
+          if (res.data && res.data[0].member) {
             this.submitted = true
             setTimeout(() => {
               this.submitted = false
@@ -262,12 +262,8 @@ export default {
             }, 1000)
           } else {
             let messages = []
-            res.forEach(error => {
-              Object.keys(error).forEach(key => {
-                if (messages.indexOf(error[key][0]) < 0) {
-                  messages.push(error[key][0])
-                }
-              })
+            res.msg.forEach(error => {
+              messages.push(error)
             })
             this.errors = messages.join(', ')
           }
