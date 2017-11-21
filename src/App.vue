@@ -23,6 +23,11 @@ import axios from 'axios'
 
 export default {
   name: 'app',
+  data () {
+    return {
+      timer: ''
+    }
+  },
   components: {
     HeadBar,
     LoginPopup
@@ -44,18 +49,15 @@ export default {
             this.$cookie.set('refresh_token', data.refresh_token, {
               expires: expires
             })
+            let tokenLifeTime = this.$moment(data.expires_in).diff(this.$moment(), 'ms') - 5 * 60 * 1000
+            this.timer = setTimeout(() => {
+              this.setToken()
+            }, tokenLifeTime) // iterate setToken: 5 mins before expired_in (refresh)
           }
         }
       )
     },
-    setAuth () {
-      this.refreshTokenInterval = window.setInterval(() => {  // this is refresh actually
-        if (!this.$cookie.get('access_token')) {
-          return
-        }
-        this.setToken()
-      }, 300000)
-
+    setInterceptor () {
       axios.interceptors.response.use(
         res => res,
         errRes => {
@@ -81,14 +83,14 @@ export default {
     }
   },
   created () {
-    this.setAuth()
+    this.setToken()
+    this.setInterceptor()
     if (this.$store.state.user.logined) {
       this.$store.dispatch('fetchUser')
     }
   },
   beforeDestroy () {
-    clearInterval(this.refreshTokenInterval)
+    clearTimeout(this.timer)
   }
-
 }
 </script>
