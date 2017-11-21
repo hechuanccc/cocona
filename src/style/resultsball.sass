@@ -34,10 +34,7 @@ $racing_length: length($results_racing)
       margin-left: 5px
 
     @for $num from 1 through 10
-      @if $num > 9
-        &.resultnum-#{$num}
-          background-position: 0 (-21px * ($num - 1))
-      &.resultnum-0#{$num}
+      &.resultnum-#{$num}
         background-position: 0 (-21px * ($num - 1))
 
 /*specific: guandong region games, common: ball_1.png*/
@@ -55,9 +52,6 @@ $gd_length: length($results_gd)
       margin-left: 5px
 
     @for $num from 1 through 20
-      @if $num < 10
-        &.resultnum-0#{$num}
-          background-position: 0 (-27px * ($num - 1))
       &.resultnum-#{$num}
         background-position: 0 (-27px * ($num - 1))
 
@@ -130,9 +124,23 @@ $gd_length: length($results_gd)
     margin-left: 9px
 
   @for $num from 1 through 20
-    &.resultnum-0#{$num}
+    &.resultnum-#{$num}
       background-position: 0 (-33px * ($num - 1))
-    @if $num > 10
-      &.resultnum-#{$num}
-        background-position: 0 (-33px * ($num - 1))
+
+
+.result-bjkl8
+  background: url("../../assets/ball_5_small.png") no-repeat
+  height: 22px
+  float: right
+  margin-bottom: 1px
+  b
+    display: inline-block
+    text-indent: -9999px
+    width: 25px
+    margin-left: 9px
+    margin-bottom: 1px
+
+  @for $num from 1 through 80
+    &.resultnum-#{$num}
+      background-position: 0 (-23px * ($num - 1))
 

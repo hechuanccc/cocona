@@ -182,7 +182,17 @@ export default {
       if (!this.gameLatestResult.result_str) {
         return '尚无开奖结果'
       }
-      return this.gameLatestResult.result_str.split(',')
+      let rawBalls = this.gameLatestResult.result_str.split(',')
+      let formattedBalls = []
+      rawBalls.forEach((rawBall) => {
+        if (rawBall[0] === '0' && rawBall !== '0') {
+          formattedBalls.push(rawBall.slice(1))
+          return
+        }
+        formattedBalls.push(rawBall)
+      })
+      console.log(formattedBalls)
+      return formattedBalls
     },
     resultsSum () {
       let sum = 0
@@ -425,8 +435,8 @@ export default {
   position: absolute;
   right: 0;
   button {
-    float: right;
     position: relative;
+    float: right;
     bottom: 5px;
     font-size: 12px;
   }
