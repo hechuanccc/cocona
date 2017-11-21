@@ -191,7 +191,6 @@ export default {
         }
         formattedBalls.push(rawBall)
       })
-      console.log(formattedBalls)
       return formattedBalls
     },
     resultsSum () {
