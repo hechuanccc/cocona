@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="page-title">
-      <h1 class="title">遊戲介紹</h1>
+      <h1 class="title">{{$t('navMenu.game_intro')}}</h1>
       <span>GAME INTRO</span>
     </div>
     <el-tabs type="border-card" :tab-position="tabposition" class="mb-20 container">
@@ -59,6 +59,7 @@ import pcdd from './rules/pcdd'
 import hkl from './rules/hkl'
 import xjssc from './rules/xjssc'
 import tjssc from './rules/tjssc'
+import bjkl8 from './rules/bjkl8'
 
 export default {
   data () {
@@ -88,7 +89,8 @@ export default {
     pcdd,
     hkl,
     xjssc,
-    tjssc
+    tjssc,
+    bjkl8
   }
 }
 </script>
