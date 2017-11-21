@@ -49,7 +49,7 @@ export default {
             this.$cookie.set('refresh_token', data.refresh_token, {
               expires: expires
             })
-            let tokenLifeTime = new Date(data.expires_in) - new Date(Date.now()) - 5 * 60 * 1000
+            let tokenLifeTime = this.$moment(data.expires_in).diff(this.$moment(), 'ms') - 5 * 60 * 1000
             this.timer = setTimeout(() => {
               this.setToken()
             }, tokenLifeTime) // iterate setToken: 5 mins before expired_in (refresh)
