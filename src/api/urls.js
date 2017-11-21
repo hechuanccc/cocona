@@ -36,5 +36,8 @@ export default {
   bank: apiv1 + '/bank/',
   withdraw: apiv1 + '/withdraw/',
   remitpayee: apiv1 + '/remitpayee/',
-  remit: apiv1 + '/remit_transaction/'
+  remit: apiv1 + '/remit_transaction/',
+  readMessage: apiv1 + '/message/read/',
+  messages: apiv1 + '/messages/'
+
 }

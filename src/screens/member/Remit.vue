@@ -1,6 +1,6 @@
 <template>
   <el-row class="account-content">
-    <el-col :offset="8">
+    <el-col :offset="8" :span="16">
       <el-form :model="remitData" status-icon ref="remitData" :rules="remitDataRules" label-width="128px">
         <el-form-item :label="$t('user.remitpayee')" prop="remit_info.remit_payee">
           <el-select v-model="remitData.remit_info.remit_payee" :placeholder="$t('common.please_select')">

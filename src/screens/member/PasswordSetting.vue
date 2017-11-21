@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :offset="8" :span="12">
+    <el-col :offset="8" :span="16">
       <el-form :model="password" status-icon :rules="passwordRule" ref="password" label-width="120px">
         <el-form-item :label="$t('user.prev_password')" prop="prev_password">
           <el-input class="input-width" type="password" v-model="password.prev_password" :maxlength="15" auto-complete="off"></el-input>
