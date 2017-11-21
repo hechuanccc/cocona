@@ -1,8 +1,8 @@
 <template>
   <div>
-    
+
     <GameMenu path="game"/>
-  
+
     <div class="container">
       <!-- user key props to force Vue to re-render router-view whenever route change -->
       <el-container>
@@ -23,6 +23,10 @@
             <li class="center">
               <el-button type="primary" plain>申请提款</el-button>
               <el-button type="primary" plain>我的注单</el-button>
+            </li>
+            <li class="center">
+              <el-button type="primary" plain>在线客服</el-button>
+              <el-button type="primary" plain>开奖直播</el-button>
             </li>
           </ul>
           <div class="betrecords">
