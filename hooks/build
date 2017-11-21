@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# THIS IS REQUIRED to put environment variables in DockerCloud as stated here https://forums.docker.com/t/docker-cloud-build-environment-variables-not-being-passed-to-the-auto-build/24010
+
+echo "------ HOOK START - BUILD -------"
+
+docker build --build-arg AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
+             --build-arg AZURE_STORAGE_ACCESS_KEY=$AZURE_STORAGE_ACCESS_KEY \
+             --build-arg CDN_ENDPOINT=$CDN_ENDPOINT \
+             --build-arg CDN_PROFILE=$CDN_PROFILE \
+             --build-arg BACKEND=$BACKEND \
+             -t $IMAGE_NAME .
+
+echo "------ HOOK END - BUILD -------"
