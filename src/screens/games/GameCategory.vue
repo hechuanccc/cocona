@@ -319,7 +319,7 @@ export default {
       }
       Vue.set(play, 'active', !play.active)
       if (play.active) {
-        play.amount = this.amount
+        play.amount = parseFloat(this.amount)
       } else {
         play.amount = ''
       }
@@ -337,8 +337,8 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-@import '../../style/vars.scss';
-@import '../../style/resultsball.sass';
+@import "../../style/vars.scss";
+@import "../../style/resultsball.sass";
 
 .name {
   font-weight: bold;
@@ -371,7 +371,8 @@ export default {
   background: #ecf5ff;
   margin-bottom: 10px;
   border: $cell-border;
-  td, th {
+  td,
+  th {
     border: $cell-border;
     height: $cell-height;
   }
@@ -381,13 +382,17 @@ export default {
     font-weight: bold;
   }
   .hover {
-    .name, .odds, .input {
-      background: #DCE5EF;
+    .name,
+    .odds,
+    .input {
+      background: #dce5ef;
     }
   }
   .active {
-    .name, .odds, .input {
-      background: #F3DAB2;
+    .name,
+    .odds,
+    .input {
+      background: #f3dab2;
     }
   }
 }
@@ -396,7 +401,7 @@ export default {
 }
 .amount {
   line-height: $cell-height;
-  font-weight: 700
+  font-weight: 700;
 }
 .bet-amount {
   font-size: 14px;

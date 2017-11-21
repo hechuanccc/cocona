@@ -1,5 +1,5 @@
 <template>
-<div class="account-content">
+<div>
   <ul class="text-center">
     <li class="header">
       <el-row>
@@ -81,7 +81,10 @@ export default {
   padding-left: 10px;
 }
 .header {
+  height: 35px;
+  line-height: 35px;
   margin-bottom: 12px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .msg {
   margin-bottom: 12px;
