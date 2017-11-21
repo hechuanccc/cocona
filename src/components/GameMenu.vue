@@ -22,7 +22,7 @@
               :default-active="activeIndex"
               @select="handleSelect"
               :background-color="style.primaryColor">
-               <el-menu-item v-for="(game, index) in allGames" :key="game.id" :index="index + ''" v-if="index >= 10">{{game.display_name}}</el-menu-item>
+               <el-menu-item v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index >= 10">{{game.display_name}}</el-menu-item>
             </el-menu>
           </div>
         </li>
