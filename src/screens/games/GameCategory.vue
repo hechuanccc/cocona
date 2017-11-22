@@ -17,11 +17,11 @@
           :class="getResultClass(ball)">
             <b> {{ball}} </b>
           </span>
-          <p class="ball-zodiacs"
-              v-if="gameLatestResult.game_code === 'hkl'"
-              :key="zodiac">
-              {{zodiac | zodiacFilter}}
-          </p>
+            <p class="ball-zodiacs" v-if="gameLatestResult.game_code === 'hkl'"
+               v-for = "zodiac in resultZodiac"
+               :key="zodiac">
+              <b>{{zodiac | zodiacFilter}}</b>
+            </p>
           <div class="ball-sum" v-if="gameLatestResult.game_code === 'pcdd'">
             總和:
             <span>
@@ -209,7 +209,9 @@ export default {
       return sum
     },
     resultZodiac () {
-      return this.gameLatestResult.zodiac
+      let zodiac = this.gameLatestResult.zodiac.split(',')
+      console.log(zodiac)
+      return zodiac
     }
   },
   watch: {
@@ -252,29 +254,29 @@ export default {
   filters: {
     zodiacFilter (val) {
       switch (val) {
-        case 'Rat':
+        case 'RAT':
           return '鼠'
-        case 'Ox':
+        case 'OX':
           return '牛'
-        case 'Tiger':
+        case 'TIGER':
           return '虎'
-        case 'Hare':
+        case 'RABBIT':
           return '兔'
-        case 'Dragon':
+        case 'DRAGON':
           return '龙'
-        case 'Snake':
+        case 'SNAKE':
           return '蛇'
-        case 'Horse':
+        case 'HORSE':
           return '马'
-        case 'Sheep':
+        case 'SHEEP':
           return '羊'
-        case 'Monkey':
+        case 'MONKEY':
           return '猴'
-        case 'Rookie':
+        case 'ROOKIE':
           return '鸡'
-        case 'Dog':
+        case 'DOG':
           return '狗'
-        case 'Pig':
+        case 'PIG':
           return '猪'
       }
     }
