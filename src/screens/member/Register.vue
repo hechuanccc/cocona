@@ -29,7 +29,7 @@
           <el-input v-model="user.withdraw_password"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.captcha')" required>
-          <el-col :span="12">
+          <el-col :span="14">
             <el-form-item  prop="verification_code_1">
               <el-input :maxlength="4" v-model="user.verification_code_1">
                 <el-button slot="append" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>

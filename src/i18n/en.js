@@ -61,6 +61,7 @@ export default {
     money: 'Money',
     unsettled: 'Unsettled',
     payment: 'Payment',
+    payway: 'Pay Way',
     online_payment: 'Online Payment',
     remit: 'Remit',
     remitpayee: 'Remit Payee',

@@ -61,6 +61,7 @@ export default {
     money: '钱包',
     unsettled: '未结金额',
     payment: '充值',
+    payway: '支付方式',
     online_payment: '线上存款',
     remit: '公司入款',
     remitpayee: '入款名称',
@@ -104,6 +105,11 @@ export default {
     sender: '寄件人',
     title: '标题',
     send_date: '寄件日期'
+  },
+  history: {
+    draw_period: '期数',
+    draw_time: '开奖时间',
+    result_ball: ''
   },
   common: {
     all: '全部',
