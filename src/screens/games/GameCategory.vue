@@ -11,17 +11,13 @@
       </el-col>
      <el-col :span="9" class="result-balls">
         <div>
-          <span v-show="!(gameLatestResult.game_code === 'bjkl8')">最新开奖奖号</span>
-          <span v-for="ball in resultBall"
+          <span v-show="gameLatestResult.game_code !== 'bjkl8'">最新开奖奖号</span>
+          <span v-for="(ball, index) in resultBall"
           :key="ball"
           :class="getResultClass(ball)">
             <b> {{ball}} </b>
+            <p class="ball-zodiac" v-if="gameLatestResult.game_code === 'hkl'"> {{hk6Zodiacs[index]| zodiacFilter}} </p>
           </span>
-            <p class="ball-zodiacs" v-if="gameLatestResult.game_code === 'hkl'"
-               v-for = "zodiac in resultZodiac"
-               :key="zodiac">
-              <b>{{zodiac | zodiacFilter}}</b>
-            </p>
           <div class="ball-sum" v-if="gameLatestResult.game_code === 'pcdd'">
             總和:
             <span>
@@ -162,7 +158,8 @@ export default {
       submitted: false,
       submitting: false,
       errors: '',
-      gameLatestResult: ''
+      gameLatestResult: '',
+      hk6Zodiacs: ''
     }
   },
   computed: {
@@ -207,11 +204,6 @@ export default {
         sum = sum + Number(this.resultBall[i])
       }
       return sum
-    },
-    resultZodiac () {
-      let zodiac = this.gameLatestResult.zodiac.split(',')
-      console.log(zodiac)
-      return zodiac
     }
   },
   watch: {
@@ -248,6 +240,7 @@ export default {
     fetchGameResult(this.$route.params.gameId).then(
       result => {
         this.gameLatestResult = result[0]
+        this.hk6Zodiacs = result[0].zodiac.split(',')
       }
     )
   },
