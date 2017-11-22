@@ -62,7 +62,6 @@ export default {
   },
   methods: {
     login () {
-      debugger
       this.$store.dispatch('login', {
         user: {
           username: this.username,
