@@ -10,20 +10,25 @@
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
      <el-col :span="9" class="result-balls">
-        <el-button type="text">
-          最新开奖奖号
-          <span v-for="result in resultBall"
-          :key="result"
-          :class="getResultClass(result)">
-            <b> {{result}} </b>
+        <div>
+          <span v-show="!(gameLatestResult.game_code === 'bjkl8')">最新开奖奖号</span>
+          <span v-for="ball in resultBall"
+          :key="ball"
+          :class="getResultClass(ball)">
+            <b> {{ball}} </b>
           </span>
-          <div class="result-sum" v-if="gameLatestResult.game_code === 'pcdd'">
+          <p class="ball-zodiacs"
+              v-if="gameLatestResult.game_code === 'hkl'"
+              :key="zodiac">
+              {{zodiac | zodiacFilter}}
+          </p>
+          <div class="ball-sum" v-if="gameLatestResult.game_code === 'pcdd'">
             總和:
             <span>
               <b>{{resultsSum}}</b>
             </span>
           </div>
-        </el-button>
+        </div>
       </el-col>
     </el-row>
     <div v-for="(playSection, index) in playSections"
@@ -184,6 +189,9 @@ export default {
       }
       let rawBalls = this.gameLatestResult.result_str.split(',')
       let formattedBalls = []
+      if (this.gameLatestResult.game_code === 'bjkl8') { // delete the 21th ball
+        rawBalls.pop()
+      }
       rawBalls.forEach((rawBall) => {
         if (rawBall[0] === '0' && rawBall !== '0') {
           formattedBalls.push(rawBall.slice(1))
@@ -199,6 +207,9 @@ export default {
         sum = sum + Number(this.resultBall[i])
       }
       return sum
+    },
+    resultZodiac () {
+      return this.gameLatestResult.zodiac
     }
   },
   watch: {
@@ -237,6 +248,36 @@ export default {
         this.gameLatestResult = result[0]
       }
     )
+  },
+  filters: {
+    zodiacFilter (val) {
+      switch (val) {
+        case 'Rat':
+          return '鼠'
+        case 'Ox':
+          return '牛'
+        case 'Tiger':
+          return '虎'
+        case 'Hare':
+          return '兔'
+        case 'Dragon':
+          return '龙'
+        case 'Snake':
+          return '蛇'
+        case 'Horse':
+          return '马'
+        case 'Sheep':
+          return '羊'
+        case 'Monkey':
+          return '猴'
+        case 'Rookie':
+          return '鸡'
+        case 'Dog':
+          return '狗'
+        case 'Pig':
+          return '猪'
+      }
+    }
   },
   methods: {
     getResultClass (resultNum) {
@@ -434,16 +475,18 @@ export default {
 .result-balls {
   position: absolute;
   right: 0;
-  button {
+  div {
     position: relative;
     float: right;
-    bottom: 5px;
+    top: 5px;
+    color: #409EFF;
     font-size: 12px;
   }
   span {
     display: inline-block;
     vertical-align: middle;
-    margin-left: 5px;
+    margin-left: 4px;
   }
 }
+
 </style>

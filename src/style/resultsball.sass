@@ -74,6 +74,21 @@ $gd_length: length($results_gd)
 .result-hkl
   background: url("../../assets/ball_hk6.png") no-repeat
   height: 26px
+  + .ball-zodiacs
+    position: relative
+    color: black
+    bottom: 3px
+    left: 90px
+    b
+      margin-right: 25px
+  &:nth-child(8)
+    &:before
+      content: '＋'
+      color: black
+      position: relative
+      right: 11px
+      top: 3px
+
   b
     display: inline-block
     text-indent: -9999px
@@ -87,16 +102,17 @@ $gd_length: length($results_gd)
 .result-pcdd
   background: url("../../assets/ball-sprites.png") no-repeat -117px -26px
   height: 27px
-  + .result-sum
-    display: inline-block
+  + .ball-sum
     span
       background: url("../../assets/ball-sprites.png") no-repeat -117px -26px
       height: 27px
+      position: relative
+      bottom: 5px
       b
         position: relative
         display: inline-block
         width: 16px
-        top: 6px
+        top: 4px
         right: 5px
         color: black
         font-size: 14px
@@ -105,7 +121,7 @@ $gd_length: length($results_gd)
   b
     display: inline-block
     position: relative
-    right: 4px
+    right: 1px
     top: 4px
     width: 16px
     font-size: 16px
@@ -128,19 +144,21 @@ $gd_length: length($results_gd)
       background-position: 0 (-33px * ($num - 1))
 
 
-// .result-bjkl8
-//   background: url("../../assets/ball_5_small.png") no-repeat
-//   height: 22px
-//   float: right
-//   margin-bottom: 1px
-//   b
-//     display: inline-block
-//     text-indent: -9999px
-//     width: 25px
-//     margin-left: 9px
-//     margin-bottom: 1px
+.result-bjkl8
+  background: url("../../assets/ball_5_small.png") no-repeat
+  height: 22px
+  float: right
+  position: relative
+  bottom: 10px
+  margin-bottom: 1px
+  b
+    display: inline-block
+    text-indent: -9999px
+    width: 25px
+    margin-left: 7px
+    margin-bottom: 1px
 
-//   @for $num from 1 through 80
-//     &.resultnum-#{$num}
-//       background-position: 0 (-23px * ($num - 1))
+  @for $num from 1 through 80
+    &.resultnum-#{$num}
+      background-position: 0 (-23px * ($num - 1))
 
