@@ -27,12 +27,11 @@ import 'vue-awesome/icons/th-large'
 import 'vue-awesome/icons/money'
 import 'vue-awesome/icons/line-chart'
 import 'vue-awesome/icons/star'
+import 'vue-awesome/icons/sign-out'
 
 export default {
   data () {
     return {
-      userInfo: '',
-      nowTime: new Date().toLocaleString(),
       menus: [{
         icon: 'home',
         name: this.$t('navMenu.home_page'),
@@ -83,15 +82,6 @@ export default {
       let pat = new RegExp(/\/game\/|\/game|\/account\/|\/gamehistory|\/gameintro/)
       return pat.test(this.$route.path)
     }
-  },
-  created () {
-    this.timing = setInterval(() => {
-      let now = new Date()
-      this.nowTime = now.toLocaleString()
-    }, 1000)
-  },
-  beforeDestroy () {
-    clearInterval(this.timing)
   }
 }
 </script>
