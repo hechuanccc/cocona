@@ -1,11 +1,11 @@
 <template>
   <div class="pop-content">
     <div class="guest-link">
-      <h1>{{$t('navMenu.guest')}}: </h1>
+      <h1>{{$t('navMenu.guest')}}:</h1>
       <el-button type="info">
-        <router-link tag="span" to="/rigister">{{$t('navMenu.user_register')}}: </router-link>
+        <router-link tag="span" to="/rigister">{{$t('navMenu.user_register')}}</router-link>
       </el-button>
-      <el-button type="warning">{{$t('navMenu.try_play')}}: </el-button>
+      <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
     </div>
     <div class="notguest-link">
       <h1>{{$t('navMenu.user')}}: </h1>
