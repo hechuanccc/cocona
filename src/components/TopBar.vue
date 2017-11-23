@@ -8,7 +8,7 @@
         <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
       </div>
       <div class="input">
-        <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')">
+        <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')" @keyup.enter.native="login">
           <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
         </el-input>
       </div>

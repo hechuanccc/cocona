@@ -2,8 +2,15 @@
 <el-row class="account-content">
   <el-col :offset="4" :span="16">
     <el-form class="form" method="post" :action="paymentUrl" :model="user" ref="user" status-icon :rules="rule" label-width="100px">
-      <el-form-item required :label="'支付方式'" prop="payway">
-        <el-radio :label="index" v-for="(paymentType, index) in paymentTypes" :key="paymentType.id" v-model="selectedPaymentTypeIndex">{{paymentType.display_name}}</el-radio>
+      <el-form-item required :label="$t('user.payway')" prop="payway">
+        <el-select v-model="selectedPaymentTypeIndex" :placeholder="$t('common.please_select')">
+          <el-option
+            v-for="(paymentType, index) in paymentTypes"
+            :key="paymentType.id"
+            :label="paymentType.display_name"
+            :value="index">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item required :label="$t('user.amount')" prop="amount">
         <el-input class="input-width" name="amount" v-model.number="user.amount"></el-input>

@@ -18,11 +18,11 @@
             </li>
             <li class="center">
               <el-button type="primary" plain>我的账号</el-button>
-              <el-button type="primary" plain>立即充值</el-button>
+              <el-button type="primary" plain @click="linkTo('/online_payment')">立即充值</el-button>
             </li>
             <li class="center">
-              <el-button type="primary" plain>申请提款</el-button>
-              <el-button type="primary" plain>我的注单</el-button>
+              <el-button type="primary" plain @click="linkTo('/withdraw')">申请提款</el-button>
+              <el-button type="primary" plain @click="linkTo('/finance/betrecord')">我的注单</el-button>
             </li>
             <li class="center">
               <el-button type="primary" plain>在线客服</el-button>
@@ -78,9 +78,12 @@ export default {
   methods: {
     fetchOngoingBet (gameId) {
       fetchBet(gameId)
-      .then(res => {
-        this.betrecords = res
-      })
+        .then(res => {
+          this.betrecords = res
+        })
+    },
+    linkTo (path) {
+      this.$router.push({ path: '/account' + path })
     }
   },
   created () {
@@ -108,7 +111,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../style/vars.scss';
+@import "../style/vars.scss";
 .el-main {
   padding: 0;
 }
@@ -155,7 +158,7 @@ export default {
   }
 }
 .balance {
-  color: #67C23A;
+  color: #67c23a;
   font-size: 14px;
 }
 .empty {
