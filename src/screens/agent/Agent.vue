@@ -1,11 +1,13 @@
 <template>
-  <div class="agent-index container">
-    <div class="page-title">
-      <h1 class="title">{{$t('navMenu.affliate')}}</h1>
-      <span>JOIN US</span>
+  <el-row class="row-bg">
+    <div class="container">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('agent.register')}}</el-breadcrumb-item>
+      </el-breadcrumb>
+      <router-view/>
     </div>
-    <router-view/>
-  </div>
+  </el-row>
 </template>
 
 <script>

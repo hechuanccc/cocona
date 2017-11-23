@@ -1,15 +1,15 @@
 <template>
-  <div class="promo">
-    <div class="page-title">
-        <h1 class="title">{{$t('navMenu.promotion')}}</h1>
-        <span>PREFERENTIAL</span>
-      </div>
-      <promoBanner v-for="promo in promotions"
-      :key="promo.id"
-      :promo="promo"
-      />
-  </div>
+  <el-row class="row-bg">
+    <div class="container">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item> {{$t('navMenu.promotion')}} </el-breadcrumb-item>
+      </el-breadcrumb>
+      <promoBanner v-for="promo in promotions" :key="promo.id" :promo="promo" />
+    </div>
+  </el-row>
 </template>
+
 <script>
 import PromoBanner from './PromoBanner.vue'
 import { getPromotions } from '../../api'
