@@ -41,8 +41,7 @@ export default {
   },
   computed: {
     currentPath () {
-      const path = this.$route.name
-      this.activeName = path
+      this.activeName = this.$route.name
     }
   }
 }
