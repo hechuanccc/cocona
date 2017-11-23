@@ -17,6 +17,7 @@ ARG AZURE_STORAGE_ACCESS_KEY
 ARG CDN_PROFILE
 ARG CDN_ENDPOINT
 ARG BACKEND
+ARG MAX_AGE
 
 # Cannot be made into one line as it has a possibility that it will return a 'text file busy' making the shell script unexecutable
 RUN chmod u+x cloud_deploy.sh
