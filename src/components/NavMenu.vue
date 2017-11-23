@@ -11,6 +11,10 @@
       </i>
       <span class="txt">{{menu.name}}</span>
     </router-link>
+    <li @click="logout()" class="logout" v-if="isUserPage">
+      <i class="icon"><icon name="sign-out" scale="1.4"></icon></i>
+      <span class="txt">{{$t('navMenu.logout')}}</span>
+    </li>
   </ul>
 </template>
 
@@ -33,9 +37,17 @@ export default {
         'active': this.$route.path.split('/')[1] === menu.path,
         [menu.class]: menu.class
       }
+    },
+    logout () {
+      this.$store.dispatch('logout')
+    }
+  },
+  computed: {
+    isUserPage () {
+      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/gamehistory|\/gameintro/)
+      return pat.test(this.$route.path)
     }
   }
-
 }
 </script>
 
@@ -72,5 +84,7 @@ export default {
         color: $yellow
   .txt
     display: block
-
+.logout
+  position: relative
+  right: 7px
 </style>
