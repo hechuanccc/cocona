@@ -68,8 +68,8 @@ export default {
             this.$store.commit('RESET_USERs')
 
             this.$router.push('/')
-            return Promise.reject(errRes)
           }
+          return Promise.reject(errRes)
         }
       )
     },
