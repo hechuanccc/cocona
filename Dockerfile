@@ -1,4 +1,3 @@
-hooks/build
 # Take note that the image itself is already logged-in in the cloud CLI
 FROM unnotechlottery/rico:latest as rico
 
