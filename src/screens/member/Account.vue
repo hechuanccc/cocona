@@ -1,12 +1,16 @@
 <template>
-  <el-container class="container">
-    <el-header>
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{$t('navMenu.personal_account')}}</el-breadcrumb-item>
-      </el-breadcrumb>
-    </el-header>
-    <el-container>
+  <div>
+    <header>
+      <el-row class="row-bg">
+        <div class="container">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>{{$t('navMenu.personal_account')}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+      </el-row>
+    </header>
+    <el-container class="container no-border">
       <el-aside width="180px">
         <ul class="side-menu">
           <li>
@@ -54,9 +58,8 @@
         <router-view/>
       </el-main>
     </el-container>
-  </el-container>
+  </div>
 </template>
-
 
 <script>
 import 'vue-awesome/icons/credit-card'
@@ -112,13 +115,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
+
 .el-main {
   padding-top: 0;
 }
-.container {
-  border-top: 1px solid #ededed;
-  padding-top: 20px;
-}
+
 .el-menu .el-menu-item {
   &.is-active {
     background: url("../../assets/active_menu_bg_right.png") no-repeat center
