@@ -20,17 +20,17 @@
     </div>
     <div v-else-if="user.logined" class="account-links" >
       <el-button-group>
-        <el-button>立即存款</el-button>
-        <el-button>申请取款</el-button>
-        <el-button>我的注单</el-button>
+        <router-link to="/account/online_payment"><el-button>立即存款</el-button></router-link>
+        <router-link to="/account/withdraw"><el-button>申请取款</el-button></router-link>
+        <router-link to="/account/finance/betrecord"><el-button>我的注单</el-button></router-link>
       </el-button-group>
       <el-button class="account-trigger"
         @mouseenter.native="showDropdown=true"
         @mouseleave.native="showDropdown=false">我的账号<i class="el-icon-caret-bottom"></i>
         <ul v-show="showDropdown" class="dropdown">
           <li><router-link to="/account/my/">账户余额 {{user.balance}}</router-link></li>
-          <li><router-link to="/account/my/">账号信息</router-link></li>
-          <li><router-link to="/account/my/">修改密码</router-link></li>
+          <li><router-link to="/account/message">账号信息</router-link></li>
+          <li><router-link to="/account/my/password_setting">修改密码</router-link></li>
           <li @click="logout()"><a>{{$t('navMenu.logout')}}</a></li>
         </ul>
       </el-button>
