@@ -1,6 +1,6 @@
 <template>
 <el-row>
-  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+  <el-tabs :default="currentPath" v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('user.payment_record')" name="PaymentRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.withdraw_record')" name="WithdrawRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.betrecord')" name="BetRecord"></el-tab-pane>
@@ -33,6 +33,12 @@ export default {
   methods: {
     handleClick (tab, event) {
       this.$router.push({ name: tab.name })
+    }
+  },
+  computed: {
+    currentPath () {
+      const path = this.$route.name
+      this.activeName = path
     }
   }
 }
