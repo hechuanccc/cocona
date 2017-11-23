@@ -16,7 +16,7 @@
           :key="ball"
           :class="getResultClass(ball)">
             <b> {{ball}} </b>
-            <p class="ball-zodiac" v-if="gameLatestResult.game_code === 'hkl'"> {{hk6Zodiacs[index]| zodiacFilter}} </p>
+            <p class="ball-zodiac" v-if="gameLatestResult.game_code === 'hkl'"> {{zodiacs[index]| zodiacFilter}} </p>
           </span>
           <div class="ball-sum" v-if="gameLatestResult.game_code === 'pcdd'">
             總和:
@@ -159,7 +159,7 @@ export default {
       submitting: false,
       errors: '',
       gameLatestResult: '',
-      hk6Zodiacs: ''
+      zodiacs: ''
     }
   },
   computed: {
@@ -240,7 +240,7 @@ export default {
     fetchGameResult(this.$route.params.gameId).then(
       result => {
         this.gameLatestResult = result[0]
-        this.hk6Zodiacs = result[0].zodiac.split(',')
+        this.zodiacs = result[0].zodiac.split(',')
       }
     )
   },
