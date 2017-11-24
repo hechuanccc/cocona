@@ -29,6 +29,7 @@ export default {
   display: inline-block
   height: 60px
   width: 240px
+  vertical-align: middle
   a
     display: inline-block
     height: 60px

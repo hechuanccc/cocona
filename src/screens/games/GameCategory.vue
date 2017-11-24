@@ -9,23 +9,6 @@
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
-     <el-col :span="9" class="result-balls">
-        <div>
-          <span v-show="gameLatestResult.game_code !== 'bjkl8'">最新开奖奖号</span>
-          <span v-for="(ball, index) in resultBall"
-          :key="ball"
-          :class="getResultClass(ball)">
-            <b> {{ball}} </b>
-            <p class="ball-zodiac" v-if="gameLatestResult.game_code === 'hkl'"> {{zodiacs[index]| zodiacFilter}} </p>
-          </span>
-          <div class="ball-sum" v-if="gameLatestResult.game_code === 'pcdd'">
-            總和:
-            <span>
-              <b>{{resultsSum}}</b>
-            </span>
-          </div>
-        </div>
-      </el-col>
     </el-row>
     <div v-for="(playSection, index) in playSections"
     class="clearfix"
@@ -127,7 +110,7 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import '../../style/theme.scss'
-import { fetchPlaygroup, placeBet, fetchGameResult } from '../../api'
+import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
 
 export default {
@@ -157,9 +140,7 @@ export default {
       totalAmount: 0,
       submitted: false,
       submitting: false,
-      errors: '',
-      gameLatestResult: '',
-      zodiacs: ''
+      errors: ''
     }
   },
   computed: {
@@ -179,31 +160,6 @@ export default {
     // just to trigger watcher below
     rawAndFormatting () {
       return this.raw && this.formatting && (this.raw.length + this.formatting.length)
-    },
-    resultBall () {
-      if (!this.gameLatestResult.result_str) {
-        return '尚无开奖结果'
-      }
-      let rawBalls = this.gameLatestResult.result_str.split(',')
-      let formattedBalls = []
-      if (this.gameLatestResult.game_code === 'bjkl8') { // delete the 21th ball
-        rawBalls.pop()
-      }
-      rawBalls.forEach((rawBall) => {
-        if (rawBall[0] === '0' && rawBall !== '0') {
-          formattedBalls.push(rawBall.slice(1))
-          return
-        }
-        formattedBalls.push(rawBall)
-      })
-      return formattedBalls
-    },
-    resultsSum () {
-      let sum = 0
-      for (let i = 0; i < this.resultBall.length; i++) {
-        sum = sum + Number(this.resultBall[i])
-      }
-      return sum
     }
   },
   watch: {
@@ -237,49 +193,8 @@ export default {
     if (this.game) {
       this.updateBetrecords()
     }
-    fetchGameResult(this.$route.params.gameId).then(
-      result => {
-        this.gameLatestResult = result[0]
-        this.zodiacs = result[0].zodiac.split(',')
-      }
-    )
-  },
-  filters: {
-    zodiacFilter (val) {
-      switch (val) {
-        case 'RAT':
-          return '鼠'
-        case 'OX':
-          return '牛'
-        case 'TIGER':
-          return '虎'
-        case 'RABBIT':
-          return '兔'
-        case 'DRAGON':
-          return '龙'
-        case 'SNAKE':
-          return '蛇'
-        case 'HORSE':
-          return '马'
-        case 'SHEEP':
-          return '羊'
-        case 'MONKEY':
-          return '猴'
-        case 'ROOKIE':
-          return '鸡'
-        case 'DOG':
-          return '狗'
-        case 'PIG':
-          return '猪'
-      }
-    }
   },
   methods: {
-    getResultClass (resultNum) {
-      let gameClass = `result-${this.gameLatestResult.game_code}`
-      let resultClass = `resultnum-${resultNum}`
-      return [gameClass, resultClass]
-    },
     updateBetrecords () {
       this.$root.bus.$emit('new-betrecords', this.game.id)
     },
@@ -379,7 +294,6 @@ export default {
 
 <style scoped lang='scss'>
 @import "../../style/vars.scss";
-@import "../../style/resultsball.sass";
 
 .name {
   font-weight: bold;
@@ -465,23 +379,6 @@ export default {
 .popup-actions {
   margin-top: 20px;
   text-align: center;
-}
-
-.result-balls {
-  position: absolute;
-  right: 0;
-  div {
-    position: relative;
-    float: right;
-    top: 5px;
-    color: #409EFF;
-    font-size: 12px;
-  }
-  span {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 4px;
-  }
 }
 
 </style>
