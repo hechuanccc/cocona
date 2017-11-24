@@ -1,56 +1,64 @@
 <template>
-  <el-container class="container">
-    <el-aside width="180px">
-      <ul class="side-menu">
-        <li>
-          <span>{{$t('user.username')}}</span>
-          {{user.username}}
-        </li>
-        <li>
-          <span>{{$t('user.balance')}}</span>
-          <strong class="balance">￥{{user.balance}}</strong>
-        </li>
-      </ul>
-      <el-menu
-        :default-active="currentPath"
-        text-color="#fff"
-        active-text-color="#fff"
-        :background-color="style.primaryColor"
-        :router="true">
-        <el-menu-item index="/account/online_payment">
-          <icon name="credit-card"></icon>
-          <span slot="title" class="menu-text">{{$t('user.online_payment')}}</span>
-        </el-menu-item>
-        <el-menu-item index="/account/remit">
-          <icon name="credit-card-alt"></icon>
-          <span slot="title" class="menu-text">{{$t('user.remit')}}</span>
-        </el-menu-item>
-        <el-menu-item index="/account/withdraw">
-          <icon name="file-text-o" />
-          <span slot="title" class="menu-text">{{$t('user.withdraw')}}</span>
-        </el-menu-item>
-        <el-menu-item index="/account/finance">
-          <icon name="list-ul" />
-          <span slot="title" class="menu-text">{{$t('user.finance')}}</span>
-        </el-menu-item>
-        <el-menu-item index="/account/my">
-          <icon name="user" />
-          <span slot="title" class="menu-text">{{$t('user.my_account')}}</span>
-        </el-menu-item>
-        <el-menu-item index="/account/message">
-          <icon name="envelope-o" />
-          <span slot="title" class="menu-text">{{$t('user.message')}}</span>
-        </el-menu-item>
-        <el-menu-item index="/account/announcement">
-          <icon name="bullhorn" />
-          <span slot="title" class="menu-text">{{$t('user.announcement')}}</span>
-        </el-menu-item>
-      </el-menu>
-    </el-aside>
-    <el-main>
-      <router-view/>
-    </el-main>
-  </el-container>
+  <div>
+    <header>
+      <el-row class="row-bg">
+        <div class="container">
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>{{$t('navMenu.personal_account')}}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+      </el-row>
+    </header>
+    <el-container class="container no-border">
+      <el-aside width="180px">
+        <ul class="side-menu">
+          <li>
+            <span>{{$t('user.username')}}</span>
+            {{user.username}}
+          </li>
+          <li>
+            <span>{{$t('user.balance')}}</span>
+            <strong class="balance">￥{{user.balance}}</strong>
+          </li>
+        </ul>
+        <el-menu :default-active="currentPath" text-color="#fff" active-text-color="#fff" :background-color="style.primaryColor"
+          :router="true">
+          <el-menu-item index="/account/online_payment">
+            <icon name="credit-card"></icon>
+            <span slot="title" class="menu-text">{{$t('user.online_payment')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/remit">
+            <icon name="credit-card-alt"></icon>
+            <span slot="title" class="menu-text">{{$t('user.remit')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/withdraw">
+            <icon name="file-text-o" />
+            <span slot="title" class="menu-text">{{$t('user.withdraw')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/finance">
+            <icon name="list-ul" />
+            <span slot="title" class="menu-text">{{$t('user.finance')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/my">
+            <icon name="user" />
+            <span slot="title" class="menu-text">{{$t('user.my_account')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/message">
+            <icon name="envelope-o" />
+            <span slot="title" class="menu-text">{{$t('user.message')}}</span>
+          </el-menu-item>
+          <el-menu-item index="/account/announcement">
+            <icon name="bullhorn" />
+            <span slot="title" class="menu-text">{{$t('user.announcement')}}</span>
+          </el-menu-item>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        <router-view/>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
@@ -107,13 +115,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
+
 .el-main {
   padding-top: 0;
 }
-.container {
-  border-top: 1px solid #ededed;
-  padding-top: 20px;
-}
+
 .el-menu .el-menu-item {
   &.is-active {
     background: url("../../assets/active_menu_bg_right.png") no-repeat center

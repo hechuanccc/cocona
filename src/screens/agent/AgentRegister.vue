@@ -1,55 +1,45 @@
 <template>
-  <div>
-    <el-row type="flex" class="row-bg container" justify="center">
-      <el-col :span="8">
-        <el-form :label-position="labelPosition"
-                 :model="ruleForm"
-                 status-icon
-                 :rules="formRules"
-                 ref="ruleForm"
-                 label-width="100px">
-          <el-tooltip :content="$t('validate.username_validate')" placement="right">
-            <el-form-item :label="$t('agent.username')" prop="username">
-              <el-input v-model.number="ruleForm.username"></el-input>
-            </el-form-item>
-          </el-tooltip>
-            <el-tooltip :content="$t('validate.password_validate')" placement="right">
-              <el-form-item :label="$t('agent.password')" prop="password">
-                <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
-              </el-form-item>
-            </el-tooltip>
-            <el-form-item :label="$t('agent.confirm_password')" prop="confirm_password">
-              <el-input type="password" v-model="ruleForm.confirm_password" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-tooltip :content="$t('agent.realname_tip')" placement="right">
-              <el-form-item :label="$t('agent.real_name')" prop="real_name">
-                <el-input v-model="ruleForm.real_name"> </el-input>
-              </el-form-item>
-            </el-tooltip>
-            <el-form-item :label="$t('agent.phone')" prop="phone">
-              <el-input v-model="ruleForm.phone" number></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('agent.email')" prop="email">
-              <el-input v-model="ruleForm.email"></el-input>
-            </el-form-item>
-            <el-tooltip placement="right" effect="light" :value="captcha.show" :manual="true">
-              <div slot="content">
-                <img :src="captcha.img" @click="grabCaptcha()">
-                <br/>{{$t('agent.captcha_reset')}}</div>
-              <el-form-item :label="$t('agent.captcha')" prop="captcha_1">
-                <el-input v-model="ruleForm.captcha_1"
-                          @focus="captcha.show = true"
-                          @blur="captcha.show = false"
-                          @keyup.enter.native="submitForm('ruleForm')"></el-input>
-              </el-form-item>
-            </el-tooltip>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm')" size="medium">{{$t('action.submit')}}</el-button>
-            </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
-  </div>
+  <el-row type="flex" class="container" justify="center">
+    <el-col :span="8">
+      <el-form :label-position="labelPosition" :model="ruleForm" status-icon :rules="formRules" ref="ruleForm" label-width="100px">
+        <el-tooltip :content="$t('validate.username_validate')" placement="right">
+          <el-form-item :label="$t('agent.username')" prop="username">
+            <el-input v-model.number="ruleForm.username"></el-input>
+          </el-form-item>
+        </el-tooltip>
+        <el-tooltip :content="$t('validate.password_validate')" placement="right">
+          <el-form-item :label="$t('agent.password')" prop="password">
+            <el-input type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-tooltip>
+        <el-form-item :label="$t('agent.confirm_password')" prop="confirm_password">
+          <el-input type="password" v-model="ruleForm.confirm_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-tooltip :content="$t('agent.realname_tip')" placement="right">
+          <el-form-item :label="$t('agent.real_name')" prop="real_name">
+            <el-input v-model="ruleForm.real_name"> </el-input>
+          </el-form-item>
+        </el-tooltip>
+        <el-form-item :label="$t('agent.phone')" prop="phone">
+          <el-input v-model="ruleForm.phone" number></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('agent.email')" prop="email">
+          <el-input v-model="ruleForm.email"></el-input>
+        </el-form-item>
+        <el-tooltip placement="right" effect="light" :value="captcha.show" :manual="true">
+          <div slot="content">
+            <img :src="captcha.img" @click="grabCaptcha()">
+            <br/>{{$t('agent.captcha_reset')}}</div>
+          <el-form-item :label="$t('agent.captcha')" prop="captcha_1">
+            <el-input v-model="ruleForm.captcha_1" @focus="captcha.show = true" @blur="captcha.show = false" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          </el-form-item>
+        </el-tooltip>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm('ruleForm')" size="medium">{{$t('action.submit')}}</el-button>
+        </el-form-item>
+      </el-form>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -194,11 +184,5 @@
     }
   }
 </script>
-
-<style lang="sass" scoped>
-.row-bg
-  padding: 20px 0
-  background-image: linear-gradient(180deg, #fdfbfb 0%, #ebedee 100%)
-</style>
 
 

@@ -1,21 +1,24 @@
 <template>
-  <div class="container">
-    <div class="page-title">
-      <h1 class="title">歷史開獎</h1>
-      <span>GAME HISTORY</span>
+  <el-row class="row-bg">
+    <div class="container">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('navMenu.draw_history')}}</el-breadcrumb-item>
+      </el-breadcrumb>
+      <el-row>
+        <el-col :span="3">
+          <el-tabs type="border-card" :tab-position="tabposition" class="mb-20 container">
+            <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name">
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+        <el-col :span="21">
+        </el-col>
+      </el-row>
     </div>
-    <el-row>
-      <el-col :span="3">
-        <el-tabs type="border-card" :tab-position="tabposition" class="mb-20 container">
-          <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name">
-          </el-tab-pane>
-        </el-tabs>
-      </el-col>
-      <el-col :span="21">
-      </el-col>
-    </el-row>
-  </div>
+  </el-row>
 </template>
+
 
 
 <style lang="scss" scoped>
