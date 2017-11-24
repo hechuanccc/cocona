@@ -20,7 +20,8 @@ export default {
     affliate: '加盟合作',
     promotion: '优惠活动',
     draw_history: '历史开奖',
-    game_intro: '游戏介绍'
+    game_intro: '游戏介绍',
+    result_period: '期开奖'
   },
   agent: {
     register: '代理注册',

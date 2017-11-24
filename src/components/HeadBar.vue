@@ -9,7 +9,7 @@
         <div class="result-balls">
           <div class="balls-text">
             <p>{{gameLatestResult.display_name}}</p>
-            <p>{{$t('user.issue_number')}}:{{gameLatestResult.issue_number}}</p>
+            <p>{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
           </div>
           <div class="balls-number">
             <span v-for="(ball, index) in resultBall" :key="ball" :class="getResultClass(ball)">
@@ -202,16 +202,21 @@ export default {
     .game-result
       display: inline-block
       text-align: left
+      margin-left: 10px
 .result-balls
   display: inline-block
-  width: 405px
+  width: 425px
+  font-weight: 700
+  .balls-text
+    text-align: center
+    width: 120px
   .balls-number
     width: 300px
   div
     display: inline-block
     position: relative
     vertical-align: middle
-    color: #409EFF
+    color: black
     font-size: 12px
   span
     display: inline-block

@@ -20,10 +20,11 @@ export default {
     affliate: 'Join Us',
     promotion: 'Preferential',
     draw_history: 'Draw History',
-    game_intro: 'Game Intro'
+    game_intro: 'Game Intro',
+    result_period: 'Period'
   },
   agent: {
-    register: '代理注册',
+    register: 'register',
     username: 'Username',
     password: 'Password',
     confirm_password: 'Confirm',
