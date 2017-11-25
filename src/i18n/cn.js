@@ -21,7 +21,8 @@ export default {
     promotion: '优惠活动',
     draw_history: '历史开奖',
     game_intro: '游戏介绍',
-    result_period: '期开奖'
+    result_period: '期开奖',
+    total: '总和'
   },
   agent: {
     register: '代理注册',

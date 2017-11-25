@@ -21,10 +21,11 @@ export default {
     promotion: 'Preferential',
     draw_history: 'Draw History',
     game_intro: 'Game Intro',
-    result_period: 'Period'
+    result_period: 'Period',
+    total: 'Total'
   },
   agent: {
-    register: 'register',
+    register: 'Register',
     username: 'Username',
     password: 'Password',
     confirm_password: 'Confirm',
