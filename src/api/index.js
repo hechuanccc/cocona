@@ -85,10 +85,6 @@ export function fetchPaymentType () {
   return axios.get(urls.paymentType).then(res => res.data)
 }
 
-export function fetchPaymentTypeDetail (id) {
-  return axios.get(`${urls.paymentType}?opt_expand=1`).then(res => res.data)
-}
-
 export function placeBet (data) {
   return axios.post(urls.betrecord, data, {
     'Content-Type': 'application/json'

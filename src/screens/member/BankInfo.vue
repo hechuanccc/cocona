@@ -100,10 +100,8 @@ export default {
               ...this.bankInfo
             }
           }).then(data => {
-            this.$message({
-              showClose: true,
-              message: msgFormatter(data.message),
-              type: 'success'
+            this.$store.commit('SET_USER', {
+              user: data
             })
           }, errorRes => {
             this.$message({
