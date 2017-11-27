@@ -1,5 +1,5 @@
 <template>
-  <div class="result-balls" :game="currentGame">
+  <div class="result-balls" v-if="gameLatestResult">
     <div class="balls-text">
       <p>{{gameLatestResult.display_name}}</p>
       <p>{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
@@ -7,9 +7,9 @@
     <div class="balls-number">
       <span v-for="(ball, index) in resultBall" :key="ball" :class="getResultClass(ball)">
         <b> {{ball}} </b>
-        <p class="ball-zodiac" v-if="gameLatestResult.game_code === 'hkl'"> {{zodiacs[index]| zodiacFilter}} </p>
+        <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]| zodiacFilter}} </p>
       </span>
-      <div class="ball-sum" v-if="gameLatestResult.game_code === 'pcdd'">
+      <div class="ball-sum" v-if="showSum">
         {{$t('navMenu.total')}}:
         <span>
           <b>{{resultsSum}}</b>
@@ -22,20 +22,27 @@
 <script>
 import {fetchGameResult} from '../api'
 export default {
+  props: {
+    game: {
+      type: String
+    }
+  },
   data () {
     return {
       gameLatestResult: '',
-      zodiacs: ''
+      zodiacs: '',
+      showZodiac: false,
+      showSum: false
     }
+  },
+  created () {
+    this.fetchResult(this.game)
   },
   computed: {
     resultBall () {
-      if (!this.gameLatestResult.result_str) {
-        return '尚无开奖结果'
-      }
       let rawBalls = this.gameLatestResult.result_str.split(',')
       let formattedBalls = []
-      if (this.gameLatestResult.game_code === 'bjkl8') { // delete the 21th ball
+      if (this.gameLatestResult.game_code === 'bjkl8') {
         rawBalls.pop()
       }
       rawBalls.forEach((rawBall) => {
@@ -53,15 +60,13 @@ export default {
         sum = sum + Number(this.resultBall[i])
       }
       return sum
-    },
-    currentGame () {
-      fetchGameResult(this.$route.params.gameId).then(
-      result => {
-        this.gameLatestResult = result[0]
-        this.zodiacs = result[0].zodiac.split(',')
-      }
-    )
-      return this.gameLatestResult.game_code
+    }
+  },
+  watch: {
+    'game': function (game) {
+      this.showZodiac = false
+      this.showSum = false
+      this.fetchResult(game)
     }
   },
   methods: {
@@ -69,10 +74,31 @@ export default {
       let gameClass = `result-${this.gameLatestResult.game_code}`
       let resultClass = `resultnum-${resultNum}`
       return [gameClass, resultClass]
+    },
+    fetchResult (gameId) {
+      fetchGameResult(gameId).then(
+      result => {
+        if (!result && !result[0].result_str) {
+          this.gameLatestResult = this.$t('navMenu.no_result')
+        }
+
+        if (result[0].game_code === 'hkl') {
+          this.showZodiac = true
+        }
+        if (result[0].game_code === 'pcdd') {
+          this.showSum = true
+        }
+        this.gameLatestResult = result[0]
+        this.zodiacs = result[0].zodiac.split(',')
+      }
+    )
     }
   },
   filters: {
     zodiacFilter (val) {
+      if (this.zodiacs) {
+        return ''
+      }
       switch (val) {
         case 'RAT':
           return '鼠'

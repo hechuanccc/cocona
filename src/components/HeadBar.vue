@@ -5,13 +5,11 @@
     </div>
     <div class="header-nav container">
       <Logo/>
-      <ResultBalls v-if="isGamePage"/>
+      <ResultBalls v-if="isGamePage" :game="$route.params.gameId"/>
       <NavMenu :menus="isUserPage ? userMenus : menus" />
     </div>
   </div>
 </template>
-
-
 
 <script>
 import TopBar from '../components/TopBar'

@@ -22,7 +22,8 @@ export default {
     draw_history: 'Draw History',
     game_intro: 'Game Intro',
     result_period: 'Period',
-    total: 'Total'
+    total: 'Total',
+    no_result: "There's no result now"
   },
   agent: {
     register: 'Register',

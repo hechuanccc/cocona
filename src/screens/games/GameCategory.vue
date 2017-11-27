@@ -109,7 +109,7 @@
 <script>
 import Vue from 'vue'
 import _ from 'lodash'
-import '../../style/theme.scss'
+import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
 
