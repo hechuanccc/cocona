@@ -1,12 +1,13 @@
 import _ from 'lodash'
 import * as types from './mutation-types'
+import Vue from 'vue'
 
 export default {
   [types.SET_USER]: (state, { user }) => {
-    state.user = {
+    Vue.set(state, 'user', {
       ...state.user,
       ...user
-    }
+    })
   },
   [types.RESET_USER]: (state) => {
     state.user = {

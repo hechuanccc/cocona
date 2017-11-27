@@ -78,7 +78,7 @@ export default {
         if (valid) {
           this.$store.dispatch('updateUser', this.user).then(
             (data) => {
-              this.$refs['user'].resetFields()
+              this.$refs['user'].clearValidate()
               this.$message({
                 showClose: true,
                 message: this.$t('message.save_success'),

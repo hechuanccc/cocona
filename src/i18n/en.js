@@ -102,7 +102,11 @@ export default {
     announcement: 'Announcement',
     sender: 'Sender',
     title: 'Title',
-    send_date: 'Send Date'
+    send_date: 'Send Date',
+    content: 'Content',
+    weixin: 'Weixin',
+    alipay: 'Alipay',
+    bankcard: 'Bank Card'
   },
   common: {
     all: 'All',
@@ -114,7 +118,8 @@ export default {
     submit: 'Submit',
     reset: 'Reset',
     modify: 'Modify',
-    save: 'save'
+    save: 'Save',
+    close: 'Close'
   },
   validate: {
     username_validate: 'User name should be 4-10 digit or character',

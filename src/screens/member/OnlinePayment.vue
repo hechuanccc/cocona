@@ -2,16 +2,6 @@
 <el-row class="account-content">
   <el-col :offset="8" :span="16">
     <el-form class="form" method="post" :action="paymentUrl" :model="user" ref="user" status-icon :rules="rule" label-width="100px">
-      <el-form-item required :label="$t('user.payway')" prop="payway">
-        <el-select v-model="selectedPaymentTypeIndex" :placeholder="$t('common.please_select')">
-          <el-option
-            v-for="(paymentType, index) in paymentTypes"
-            :key="paymentType.id"
-            :label="paymentType.display_name"
-            :value="index">
-          </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item required :label="$t('user.amount')" prop="amount">
         <el-input class="input-width" name="amount" v-model.number="user.amount"></el-input>
         <input name="payee" type="hidden" :value="user.payee_id" />
@@ -19,6 +9,22 @@
         <input name="payment_gateway" type="hidden" :value="user.gateway_id" />
         <input name="token" type="hidden" :value="token" />
         <input name="notify_page" type="hidden" :value="notify_page" />
+      </el-form-item>
+      <el-form-item>
+        <ul class="paymentTypes">
+          <li :class="['paymentType', activeType === 'wechat' ? 'active' : '']" @click="selectPaymentType('wechat')">
+            <div class="icon weixin-icon"></div>
+            <span>{{$t('user.weixin')}}</span>
+          </li>
+          <li :class="['paymentType', activeType === 'alipay' ? 'active' : '']" @click="selectPaymentType('alipay')">
+            <div class="icon alipay-icon"></div>
+            <span>{{$t('user.alipay')}}</span>
+          </li>
+          <li :class="['paymentType', activeType === 'bank' ? 'active' : '']" @click="selectPaymentType('bank')">
+            <div class="icon bankcard-icon"></div>
+            <span>{{$t('user.bankcard')}}</span>
+          </li>
+        </ul>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
@@ -36,13 +42,6 @@ import Vue from 'vue'
 export default {
   name: 'Payment',
   data () {
-    const paywayValidator = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error(this.$t('validate.required')))
-      } else {
-        callback()
-      }
-    }
     return {
       user: {
         amount: '',
@@ -53,12 +52,9 @@ export default {
       rule: {
         amount: [
           { type: 'number', message: this.$t('validate.required_num'), trigger: 'blur,change' }
-        ],
-        payway: [
-          { validator: paywayValidator, trigger: 'blur' }
         ]
       },
-      selectedPaymentTypeIndex: '',
+      activeType: '',
       paymentTypes: [],
       token: Vue.cookie.get('access_token'),
       paymentUrl: urls.payment,
@@ -67,13 +63,11 @@ export default {
   },
   created () {
     fetchPaymentType().then(datas => {
-      this.paymentTypes = datas.filter(data => {
-        if (data.detail.length === 0) {
-          return false
-        } else {
-          data.gateway_id = data.detail[0].gateway_id
-          data.payee_id = data.detail[0].payee_id
-          return true
+      datas.forEach((data, index) => {
+        this.paymentTypes[data.name] = data.detail[0] || {}
+        this.paymentTypes[data.name].id = data.id
+        if (index === 0) {
+          this.selectPaymentType(data.name)
         }
       })
     }, errorRes => {
@@ -84,15 +78,6 @@ export default {
       })
     })
   },
-  watch: {
-    'selectedPaymentTypeIndex': function (index) {
-      const paymentType = this.paymentTypes[index]
-      this.user.payway = paymentType.id
-      this.user.payee_id = paymentType.payee_id
-      this.user.gateway_id = paymentType.gateway_id
-      this.$refs['user'].validateField('payway')
-    }
-  },
   methods: {
     submit (e) {
       this.$refs['user'].validate((valid) => {
@@ -100,6 +85,15 @@ export default {
           this.$refs['user'].$el.submit()
         }
       })
+    },
+    selectPaymentType (type) {
+      this.activeType = type
+      let paymentType = this.paymentTypes[type]
+      if (paymentType) {
+        this.user.payway = paymentType.id
+        this.user.payee_id = paymentType.payee_id
+        this.user.gateway_id = paymentType.gateway_id
+      }
     }
   }
 }
@@ -109,5 +103,49 @@ export default {
 <style lang="scss" scoped>
 .form {
   margin-top: 20px;
+}
+.weixin-bg {
+  svg {
+    display: inline;
+  }
+  text-align: center;
+  vertical-align: middle;
+  line-height: 50px;
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  background: #62ad48;
+}
+
+.paymentTypes {
+  float: left;
+}
+.paymentType {
+  width: 80px;
+  float: left;
+  text-align: center;
+  margin-right: 5px;
+  cursor: pointer;
+  &:hover {
+    background: lighten(#dce5ef, 5%);
+  }
+  &.active {
+    background: #dce5ef;
+  }
+}
+.icon {
+  margin: 0 auto;
+  width: 50px;
+  height: 50px;
+  background: no-repeat center center;
+}
+.weixin-icon {
+  background-image: url("../../assets/weixin.png");
+}
+.alipay-icon {
+  background-image: url("../../assets/alipay.png");
+}
+.bankcard-icon {
+  background-image: url("../../assets/credit-card.png");
 }
 </style>

@@ -11,10 +11,10 @@
           <el-input class="input-width" :maxlength="10" v-model="user.username" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.password')" prop="password">
-          <el-input class="input-width" type="password" v-model="user.password" auto-complete="off"></el-input>
+          <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
-          <el-input class="input-width" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
+          <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.realname')" prop="real_name">
           <el-input class="input-width" v-model="user.real_name"></el-input>
@@ -31,7 +31,7 @@
         <el-form-item :label="$t('user.captcha')" required>
           <el-col :span="7">
             <el-form-item  prop="verification_code_1">
-              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" autocomplete="off">
+              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
                 <el-button slot="append" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
               </el-input>
             </el-form-item>
