@@ -78,7 +78,7 @@ export default {
     fetchResult (gameId) {
       fetchGameResult(gameId).then(
       result => {
-        if (!result && !result[0].result_str) {
+        if (!result || !result[0].result_str) {
           this.gameLatestResult = this.$t('navMenu.no_result')
         }
 
