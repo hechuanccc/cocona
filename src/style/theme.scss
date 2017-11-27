@@ -15,3 +15,17 @@
 .el-menu--horizontal {
   border: none;
 }
+
+.el-form-item--mini,.el-form-item--small {
+  &.el-form-item{
+    margin-bottom: 24px;
+  }
+}
+.el-tabs--top{
+  .el-tabs__nav-scroll{
+    padding-left: 40px;
+  }
+}
+.el-table__row.read {
+  background-color: #f1f1f1;
+}

@@ -108,7 +108,11 @@ export default {
     announcement: '系统公告',
     sender: '寄件人',
     title: '标题',
-    send_date: '寄件日期'
+    send_date: '寄件日期',
+    content: '内容',
+    weixin: '微信',
+    alipay: '支付宝',
+    bankcard: '银行卡'
   },
   history: {
     draw_period: '期数',
@@ -125,7 +129,8 @@ export default {
     submit: '提交',
     reset: '重置',
     modify: '修改',
-    save: '保存'
+    save: '保存',
+    close: '关闭'
   },
   validate: {
     username_validate: '请输入4~10位英数字',

@@ -28,7 +28,7 @@ export default {
   announcements: apiv1 + '/announcements/',
   check_username: host + '/v1/checkmember/',
   payment: apiv1 + '/payment/',
-  paymentType: apiv1 + '/paymenttype/?opt_expand=1/',
+  paymentType: apiv1 + '/paymenttype/?opt_expand=1&platform=pc/',
   betrecord: apiv1 + '/betrecord/',
   transaction_record: apiv1 + '/transaction/',
   result: '/result/',
