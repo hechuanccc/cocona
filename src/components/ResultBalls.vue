@@ -23,7 +23,7 @@
 import {fetchGameResult} from '../api'
 export default {
   props: {
-    game: {
+    gameid: {
       type: String
     }
   },
@@ -36,7 +36,7 @@ export default {
     }
   },
   created () {
-    this.fetchResult(this.game)
+    this.fetchResult(this.gameid)
   },
   computed: {
     resultBall () {
@@ -63,10 +63,10 @@ export default {
     }
   },
   watch: {
-    'game': function (game) {
+    'game': function (gameid) {
       this.showZodiac = false
       this.showSum = false
-      this.fetchResult(game)
+      this.fetchResult(gameid)
     }
   },
   methods: {

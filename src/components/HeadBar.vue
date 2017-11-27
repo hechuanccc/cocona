@@ -5,7 +5,7 @@
     </div>
     <div class="header-nav container">
       <Logo/>
-      <ResultBalls v-if="isGamePage" :game="$route.params.gameId"/>
+      <ResultBalls v-if="isGamePage" :gameid="$route.params.gameId"/>
       <NavMenu :menus="isUserPage ? userMenus : menus" />
     </div>
   </div>
