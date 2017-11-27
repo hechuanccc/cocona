@@ -23,6 +23,7 @@ export default {
     game_intro: '游戏介绍'
   },
   agent: {
+    register: '代理注册',
     username: '代理帐号',
     password: '設定密码',
     confirm_password: '确认密码',

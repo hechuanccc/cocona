@@ -1,19 +1,22 @@
 <template>
-  <div class="container">
-    <div class="page-title">
-      <h1 class="title">常見問題</h1>
-      <span>COMMON PROBLEM</span>
+  <el-row class="row-bg">
+    <div class="container">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('navMenu.qa')}}</el-breadcrumb-item>
+      </el-breadcrumb>
+      <ul class="faq-titles">
+        <li :class="{active: nowfaq === faq.source }" v-for="faq in faqs" :key="faq.source" :title="faq.source" @click="switchFaq($event)">{{faq.title}}</li>
+      </ul>
+      <div class="faq-content">
+        <el-collapse-transition>
+          <component :is="nowfaq"></component>
+        </el-collapse-transition>
+      </div>
     </div>
-    <ul class="faq-titles">
-      <li :class="{active: nowfaq === faq.source }" v-for="faq in faqs" :key="faq.source" :title="faq.source" @click="switchFaq($event)">{{faq.title}}</li>
-    </ul>
-    <div class="faq-content">
-      <el-collapse-transition>
-        <component :is="nowfaq"></component>
-      </el-collapse-transition>
-    </div>
-  </div>
+  </el-row>
 </template>
+
 
 <style lang="sass" scoped>
 @import "../../style/vars.scss";

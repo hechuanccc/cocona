@@ -23,6 +23,7 @@ export default {
     game_intro: 'Game Intro'
   },
   agent: {
+    register: '代理注册',
     username: 'Username',
     password: 'Password',
     confirm_password: 'Confirm',
