@@ -96,9 +96,6 @@ export default {
   },
   filters: {
     zodiacFilter (val) {
-      if (this.zodiacs) {
-        return ''
-      }
       switch (val) {
         case 'RAT':
           return '鼠'
