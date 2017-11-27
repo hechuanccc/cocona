@@ -5,17 +5,17 @@
     </div>
     <div class="header-nav container">
       <Logo/>
+      <ResultBalls v-if="isGamePage" :gameid="$route.params.gameId"/>
       <NavMenu :menus="isUserPage ? userMenus : menus" />
     </div>
   </div>
 </template>
 
-
-
 <script>
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
 import Logo from '../components/Logo'
+import ResultBalls from '../components/ResultBalls'
 
 import 'vue-awesome/icons/home'
 import 'vue-awesome/icons/user-plus'
@@ -75,18 +75,26 @@ export default {
   components: {
     TopBar,
     NavMenu,
-    Logo
+    Logo,
+    ResultBalls
   },
   computed: {
     isUserPage () {
       let pat = new RegExp(/\/game\/|\/game|\/account\/|\/gamehistory|\/gameintro/)
       return pat.test(this.$route.path)
+    },
+    isGamePage () {
+      let path = this.$route.path.split('/')
+      if (path[1] === 'game') {
+        return true
+      }
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
+
 .top-header
   margin-bottom: 10px
   .header-bar
