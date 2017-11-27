@@ -63,7 +63,7 @@ export default {
     }
   },
   watch: {
-    'game': function (gameid) {
+    'gameid': function (gameid) {
       this.showZodiac = false
       this.showSum = false
       this.fetchResult(gameid)

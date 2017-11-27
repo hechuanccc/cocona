@@ -56,24 +56,33 @@
 }
 @include bcr-num;
 
-@mixin cqssc-num {
-  @for $j from 1 through 5 {
-    @for $i from 1 through 9 {
-      .cqssc_pl_inte#{$j}b_#{$j}b_num_#{$i} {
-        display: inline-block;
-        background: #3389D5;
-        color: #fff;
-        width: 26px;
-        height: 26px;
-        line-height: 26px;
-        border-radius: 13px;
-        font-weight: normal;
-        font-size: 13px;
+
+$sscgames: tjssc, xjssc, cqssc, jsssc;
+
+%sscball{
+  display: inline-block;
+  background: url("../assets/ball_2.png") no-repeat;
+  text-indent: -9999px;
+  width: 26px;
+  line-height: 26px;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+@mixin ssc-num{
+  @each $game in $sscgames{
+    @for $j from 1 through 5 {
+      @for $i from 0 through 9 {
+        .#{$game}_pl_inte#{$j}b_#{$j}b_num_#{$i}{
+          @extend %sscball;
+          background-position: 0 (-27px * $i);
+        }
       }
     }
   }
 }
-@include cqssc-num;
+
+@include ssc-num;
 
 @mixin jsk3-num {
   .jsk3_pg_dxtb_sglnsz,
