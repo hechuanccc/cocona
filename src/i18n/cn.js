@@ -112,12 +112,14 @@ export default {
     content: '内容',
     weixin: '微信',
     alipay: '支付宝',
-    bankcard: '银行卡'
+    bankcard: '银行卡',
+    odd: '赔率',
+    profit: '盈亏'
   },
   history: {
     draw_period: '期数',
     draw_time: '开奖时间',
-    result_ball: ''
+    draw_result: '开奖结果'
   },
   common: {
     all: '全部',
