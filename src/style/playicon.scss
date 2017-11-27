@@ -5,13 +5,11 @@
 .gd11x5_pg_sn_b4,
 .gd11x5_pg_sn_b5 {
   display: inline-block;
-  background: #3389D5;
-  color: #fff;
-  width: 26px;
-  height: 26px;
-  line-height: 26px;
-  border-radius: 13px;
-  font-weight: normal;
+  background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
+  width: 24px;
+  height: 27px;
+  line-height: 27px;
+  font-weight: bold;
   font-size: 13px;
 }
 
@@ -83,6 +81,104 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
     }
   }
 }
-@include ssc-num
 
+@include ssc-num;
 
+@mixin jsk3-num {
+  .jsk3_pg_dxtb_sglnsz,
+  .jsk3_pg_dxtb_tri,
+  .jsk3_pg_dxtb_dbl,
+  .jsk3_pg_dxtb_2diff{
+    display: inline-block;
+    height: 27px;
+    line-height: 27px;
+  }
+  .jsk3_pg_dxtb_dbl{
+    background: url(../assets/ball_4.png) repeat-x;
+    width: 54px;
+    text-indent: -9999px;
+  }
+  .jsk3_pg_dxtb_2diff{
+    background-image: url(../assets/ball_4.png), url(../assets/ball_4.png);
+    background-repeat: no-repeat, repeat-x;
+    width: 54px;
+    text-indent: -9999px;
+  }
+  @for $i from 1 through 6 {
+    .jsk3_pl_dxtb_sglnsz_#{$i} {
+      background: url(../assets/ball_4.png) no-repeat;
+      background-position: 0 (-27px * ($i - 1));
+      width: 27px;
+      text-indent: -9999px;
+    }
+    .jsk3_pl_dxtb_tri_#{$i} {
+      background: url(../assets/ball_4.png) repeat-x;
+      background-position: 0 (-27px * ($i - 1));
+      width: 81px;
+      text-indent: -9999px;
+    }
+    .jsk3_pl_dxtb_dbl_#{$i}{
+      background-position: 0 (-27px * ($i - 1));
+      text-indent: -9999px;
+    }
+    @for $j from 1 through 6 {
+      .jsk3_pl_dxtb_2diff_#{$i}_#{$j} {
+        background-position: 0 (-27px * ($i - 1)), 0 (-27px * ($j - 1));
+      }
+    }
+  }
+}
+
+@include jsk3-num;
+
+@mixin bjkl8-num {
+  .bjkl8_pg_pc_pc{
+    display: inline-block;
+    background: url(../assets/ball_5_small.png) repeat-x;
+    width: 21px;
+    text-indent: -9999px;
+    height: 23px;
+    line-height: 23px;
+  }
+  @for $i from 1 through 80 {
+    .bjkl8_pl_pc_pc_#{$i} {
+      background-position: 0 (-23px * ($i - 1));
+    }
+  }
+}
+
+@include bjkl8-num;
+
+@mixin cqlf-num {
+  @for $i from 1 through 8 {
+    @for $j from 1 through 20 {
+      .cqlf_pl_sbssb#{$i}_sb_#{$j} {
+        display: inline-block;
+        background: url(../assets/ball_nc_top.png) repeat-x;
+        background-position: 0 (-33px * ($j - 1));
+        width: 32px;
+        text-indent: -9999px;
+        height: 33px;
+        line-height: 33px;
+      }
+    }
+  }
+}
+@include cqlf-num;
+
+@mixin gdklsf-num {
+  @for $i from 1 through 8 {
+    @for $j from 1 through 20 {
+      .gdklsf_pl_sbssb#{$i}_sb_#{$j} {
+        display: inline-block;
+        background: url(../assets/ball_1.png) repeat-x;
+        background-position: 0 (-27px * ($j - 1));
+        width: 27px;
+        text-indent: -9999px;
+        height: 27px;
+        line-height: 27px;
+      }
+    }
+  }
+}
+@include gdklsf-num;

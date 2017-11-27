@@ -54,6 +54,16 @@
           <span>{{ `$${scope.row.bet_amount}`}}</span>
         </template>
       </el-table-column>
+      <el-table-column
+        :label="$t('user.profit')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.profit?`$${scope.row.profit}`:''}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('user.odd')"
+        prop="odds">
+      </el-table-column>
     </el-table>
     <el-pagination
       :current-page.sync="currentPage"
