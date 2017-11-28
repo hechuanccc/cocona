@@ -56,24 +56,21 @@
 }
 @include bcr-num;
 
-
 $sscgames: tjssc, xjssc, cqssc, jsssc;
 
 %sscball{
-  display: inline-block;
   background: url("../assets/ball_2.png") no-repeat;
+  display: inline-block;
   text-indent: -9999px;
   width: 26px;
   line-height: 26px;
-  font-weight: normal;
-  font-size: 13px;
 }
 
 @mixin ssc-num{
   @each $game in $sscgames{
     @for $j from 1 through 5 {
       @for $i from 0 through 9 {
-        .#{$game}_pl_inte#{$j}b_#{$j}b_num_#{$i}{
+        .#{$game}_pl_inte#{$j}b_#{$j}b_num_#{$i} {
           @extend %sscball;
           background-position: 0 (-27px * $i);
         }
@@ -81,8 +78,47 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
     }
   }
 }
-
 @include ssc-num;
+
+$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6;
+$hk6_plays: spcb, spca, posc, poscspcnump1;
+
+%hklball{
+  background: url("../assets/ball_hk6.png") no-repeat;
+  display: inline-block;
+  text-indent: -9999px;
+  width: 26px;
+  line-height: 26px;
+}
+
+@mixin hkl-num{
+  @each $playgroup in $hk6_playgroups{
+    @each $play in $hk6_plays{
+      .hkl_pg_#{$playgroup}{
+        @extend %hklball;
+      }
+      @for $i from 1 through 49 {
+        .hkl_pl_#{$play}_#{$i}{
+          background-position: 0 (-27px * ($i - 1));
+        }
+        @if $playgroup == poscnum{
+          .hkl_pl_posc#{$i}{
+            background-position: 0 (-27px * ($i - 1));
+          }
+        }
+        @if str-slice($playgroup, 0, 7) == poscspc {
+          @for $j from 1 through 6 {
+            .hkl_pl_poscspcnum#{$i}p#{$j} {
+              background-position: 0 (-27px * ($i - 1));
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@include hkl-num;
+
 
 @mixin jsk3-num {
   .jsk3_pg_dxtb_sglnsz,
