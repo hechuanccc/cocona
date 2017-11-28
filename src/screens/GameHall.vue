@@ -31,7 +31,7 @@
           </ul>
           <div class="betrecords">
             <h3>最新注单</h3>
-            <ul  v-if="betrecords.length > 0">
+            <ul  v-if="betrecords && betrecords.length > 0">
               <li v-for="bet in betrecords">
                 <span class="issue-number">{{bet.issue_number}} 期</span>
                 <span class="amount">
