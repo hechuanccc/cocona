@@ -15,6 +15,7 @@ export function createStore () {
       loginDialogVisible: false,
       games: [],
       categories: [],
+      tokenPromise: '',
       customPlayGroups: [
         {
           code: 'cqlf_pg_wc_wc',
