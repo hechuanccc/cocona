@@ -110,7 +110,14 @@ export default {
     content: 'Content',
     weixin: 'Weixin',
     alipay: 'Alipay',
-    bankcard: 'Bank Card'
+    bankcard: 'Bank Card',
+    odd: 'Odds',
+    profit: 'Profit'
+  },
+  history: {
+    draw_period: 'Draw Period',
+    draw_time: 'Draw Time',
+    draw_result: 'Draw Result'
   },
   common: {
     all: 'All',
