@@ -36,7 +36,9 @@ export default {
     }
   },
   created () {
-    this.fetchResult(this.gameid)
+    if (this.gameid) {
+      this.fetchResult(this.gameid)
+    }
   },
   computed: {
     resultBall () {
