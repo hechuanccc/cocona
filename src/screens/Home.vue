@@ -19,11 +19,12 @@
           </div>
         </div>
         <el-row class="game-area container">
+          <h3 class="section-title">热门彩票</h3>
           <ul>
-            <li v-for="game in games" :key="game.id" v-if="game.icon" @click="navigate(game)">
+            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 13" @click="navigate(game)" >
               <span class="icon-wp">
                 <img class="icon" :src="game.icon" :alt="game.id" width="100" height="100">
-                <el-button type="primary">进入投注</el-button>
+                <el-button type="primary" plain>进入投注</el-button>
               </span>
             </li>
           </ul>
@@ -84,78 +85,59 @@ export default {
 
 <style scoped>
 /* banner */
-  .el-carousel__item img {
-    width: 100%;
-    height: 370px;
-  }
-/* footer */
-  .home-footer {
-    background-color: #433e81;
-    padding-top: 20px;
-  }
-  .home-footer ul{
-    display: inline-block;
-    width: 20%;
-    color: #ffffff;
-    font-size: 16px
-  }
-  .home-footer i{
-    font-size: 28px;
-    padding-right: 7px;
-    color: #ffffff;
-    vertical-align: middle
-  }
-/* marquee */
-  .home-speaker {
-    height: 36px;
-    width: 100%;
-    background: #433e81;
-  }
-  .home-speaker .wrap {
-    padding-left: 105px;
-    height: 36px;
-    color: #ddd;
-    background: url(../assets/account.png) no-repeat left center;
-  }
-  .wrap marquee{
-    line-height: 36px;
-    font-size: 14px;
-    width: 1195px;
-  }
+.el-carousel__item img {
+  width: 100%;
+  height: 370px;
+}
 
+.home-speaker {
+  height: 36px;
+  width: 100%;
+  background: #433e81;
+}
+.home-speaker .wrap {
+  padding-left: 105px;
+  height: 36px;
+  color: #ddd;
+  background: url(../assets/account.png) no-repeat left center;
+}
+.wrap marquee{
+  line-height: 36px;
+  font-size: 14px;
+  width: 1195px;
+}
 
-/* game-area */
-  .game-area ul{
-    position: relative;
-    overflow: hidden;
-    margin-top: 19px;
-    background: #fff;
-    border-right: 1px solid #e6e6e6;
-  }
+.game-area {
+  margin-top: 20px;
+}
 
-  .game-area li {
-    cursor: pointer;
-    float: left;
-    width: 16.66%;
-    position: relative;
-    text-align: center;
-    overflow: hidden;
-  }
-  .icon {
-    display: block;
-    margin: 0 auto 10px;
-  }
-  .icon-wp {
-    text-align: center;
-    padding: 10px;
-    margin-right: -1px;
-    display: block;
-    border-style: bold;
-    border: 1px solid #e6e6e6;
-  }
+.section-title {
+  font-size: 16px;
+  margin: 0 0 10px 5px;
+  color: #666;
+}
+
+.game-area li {
+  cursor: pointer;
+  float: left;
+  width: 16.66%;
+  position: relative;
+  text-align: center;
+}
+.icon {
+  display: block;
+  margin: 0 auto 20px;
+}
+.icon-wp {
+  background: #fff;
+  text-align: center;
+  margin: 5px;
+  padding: 20px 10px 10px;
+  display: block;
+}
 /* lay over the default padding */
-  .el-main {
-    padding: 0
-  }
+.el-main {
+  padding: 0
+}
 
 </style>

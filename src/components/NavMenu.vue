@@ -1,19 +1,16 @@
 <template>
   <ul class="menu">
     <router-link
+      v-if="menu.path"
       tag="li"
       :to="'/' + menu.path"
       :class="getMenuClass(menu)"
       v-for="menu in menus"
       :key="menu.icon">
-      <i class="icon">
-        <icon :name="menu.icon" scale="1.4" />
-      </i>
-      <span class="txt">{{menu.name}}</span>
+      {{menu.name}}
     </router-link>
-    <li @click="logout()" class="logout" v-if="isUserPage">
-      <i class="icon"><icon name="sign-out" scale="1.4"></icon></i>
-      <span class="txt">{{$t('navMenu.logout')}}</span>
+    <li @click="menu.onClick" v-else-if="menu.onClick">
+      {{menu.name}}
     </li>
   </ul>
 </template>
@@ -54,37 +51,23 @@ export default {
 
 <style lang="sass" scoped>
 @import "../style/vars.scss";
-.icon
-  color: #999
-  height: 20px
-  margin-top: 10px
-  display: inline-block
 .menu
   float: right
   li
-    margin-left: 5px
-    height: 60px
     cursor: pointer
-    width: 90px
-    color: #999
+    margin: 0 15px
+    color: #666
     float: left
     text-align: center
-    font-size: 13px
-    border-radius: 2px
-    a
-      text-decoration: none
-      color: #999
+    font-size: 15px
+    font-weight: bold
+    line-height: 77px
+    color: #999
     &:hover
-      background: #f5f5f5
+      color: #444
     &.active
-      background: #f0f0f0
+      color: #444
+      border-bottom: 3px solid $primary
     &.yellow
       color: $yellow
-      .icon
-        color: $yellow
-  .txt
-    display: block
-.logout
-  position: relative
-  right: 7px
 </style>
