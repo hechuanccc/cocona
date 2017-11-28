@@ -14,7 +14,8 @@ export function createStore () {
       },
       loginDialogVisible: false,
       games: [],
-      categories: []
+      categories: [],
+      tokenPromise: ''
     },
     actions,
     mutations,
