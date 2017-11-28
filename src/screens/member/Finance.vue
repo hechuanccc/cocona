@@ -1,6 +1,6 @@
 <template>
 <el-row>
-  <el-tabs :default="currentPath" v-model="activeName" type="card" @tab-click="handleClick">
+  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('user.payment_record')" name="PaymentRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.withdraw_record')" name="WithdrawRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.betrecord')" name="BetRecord"></el-tab-pane>
@@ -13,7 +13,7 @@ export default {
   name: 'Finance',
   data () {
     return {
-      activeName: 'PaymentRecord'
+      activeName: this.$route.name
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -28,16 +28,14 @@ export default {
       if (to.name === 'Finance') {
         this.$router.push({ name: 'PaymentRecord' })
       }
+    },
+    '$route.name': function () {
+      this.activeName = this.$route.name
     }
   },
   methods: {
     handleClick (tab, event) {
       this.$router.push({ name: tab.name })
-    }
-  },
-  computed: {
-    currentPath () {
-      this.activeName = this.$route.name
     }
   }
 }
