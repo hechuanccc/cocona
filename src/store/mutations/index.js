@@ -25,5 +25,11 @@ export default {
   },
   [types.SET_CATEGORIES]: (state, { categories }) => {
     state.categories = _.xorBy(state.categories, categories, 'id').filter(item => !!item)
+  },
+  [types.SET_TOKEN_PROMISE]: (state, tokenPromise) => {
+    state.tokenPromise = tokenPromise
+  },
+  [types.CLEAR_TOKEN_PROMISE]: (state, tokenPromise) => {
+    state.tokenPromise = ''
   }
 }
