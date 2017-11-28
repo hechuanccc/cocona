@@ -17,6 +17,7 @@
     "axios": "^0.16.2",
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.0.0-alpha.3",
+    "js-combinatorics": "^0.5.2",
     "lodash": "^4.17.4",
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.4",

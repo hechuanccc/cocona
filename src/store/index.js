@@ -14,7 +14,14 @@ export function createStore () {
       },
       loginDialogVisible: false,
       games: [],
-      categories: []
+      categories: [],
+      customPlayGroups: [
+        {
+          code: 'cqlf_pg_wc_wc',
+          options: Array.from(Array(20).keys()).map(item => item + 1),
+          cols: 5
+        }
+      ]
     },
     actions,
     mutations,

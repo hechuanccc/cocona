@@ -130,27 +130,32 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-@import "../style/resultsball.sass"
+<style lang="scss" scoped>
+@import "../style/resultsball.scss";
 
-.result-balls
-  display: inline-block
-  width: 425px
-  font-weight: 700
-  .balls-text
-    text-align: center
-    width: 120px
-  .balls-number
-    width: 300px
-  div
-    display: inline-block
-    position: relative
-    vertical-align: middle
-    color: rgba(20, 20, 20, 0.8)
-    font-size: 12px
-  span
-    display: inline-block
-    margin-left: 4px
+.result-balls {
+  display: inline-block;
+  width: 425px;
+  font-weight: 700;
+  .balls-text {
+    text-align: center;
+    width: 120px;
+  }
+  .balls-number {
+    width: 300px;
+  }
+  div {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    color: rgba(20, 20, 20, 0.8);
+    font-size: 12px;
+  }
+  span {
+    display: inline-block;
+    margin-left: 4px;
+  }
+}
 </style>
 
 
