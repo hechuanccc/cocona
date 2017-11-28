@@ -13,10 +13,13 @@
     <div v-for="(playSection, index) in playSections"
     class="clearfix"
     v-if="playSections.length">
-      <div :style="{width: getWidthForGroup(playSection)}"
-      v-for="(playgroup, playgroupIndex) in playSection.playgroups"
-      :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']">
-        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex">
+      <div 
+        :style="{width: getWidthForGroup(playSection)}"
+        v-for="(playgroup, playgroupIndex) in playSection.playgroups"
+        :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
+        >
+        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex" 
+          v-if="!getCustomFormatting(playgroup.code)">
           <tr>
             <th class="group-name" :colspan="playSection.playCol">
               {{playgroup.length}}{{playgroup.display_name}}
@@ -46,6 +49,14 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
+        <CustomPlayGroup 
+          :playReset="playReset"
+          @updatePlayForSubmit="updateCustomPlays"
+          :formatting="getCustomFormatting(playgroup.code)" 
+          :playgroup="playgroup"
+          :plays="plays"
+          :gameClosed="gameClosed"
+          v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
@@ -71,6 +82,7 @@
         <el-table-column property="display_name" label="号码" width="150">
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
+            <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -89,8 +101,12 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="summary">
-        共 {{playsForSubmit.length}} 组 总金额:
+      <div v-if="activePlays.length && activePlays[0].isCustom" class="summary">
+        共 {{ activePlays[0].combinations.length}} 组 总金额:
+        <span class="red bet-amount">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
+      </div>
+      <div class="summary" v-else>
+        共 {{ playsForSubmit.length}} 组 总金额:
         <span class="red bet-amount">{{totalAmount}}</span>
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
@@ -112,6 +128,7 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
+import CustomPlayGroup from '../../components/CustomPlayGroup'
 
 export default {
   props: {
@@ -127,20 +144,24 @@ export default {
     }
   },
   name: 'gameplay',
+  components: {
+    CustomPlayGroup
+  },
   data () {
     return {
       playSections: [],
       loading: true,
       plays: {},
       amount: localStorage.getItem('amount') || '',
-      // raw data in play group from API, used to generate playSections
+      // raw data in play group from API for generating playSections
       raw: [],
       dialogVisible: false,
       activePlays: [],
       totalAmount: 0,
       submitted: false,
       submitting: false,
-      errors: ''
+      errors: '',
+      playReset: false
     }
   },
   computed: {
@@ -148,8 +169,9 @@ export default {
       return _.filter(this.activePlays, play => play.active).map(play => {
         return {
           game_schedule: this.scheduleId,
-          bet_amount: play.bet_amount,
-          play: play.id
+          bet_amount: parseFloat(play.bet_amount),
+          play: play.id,
+          bet_options: play.selectedOptions ? play.selectedOptions : []
         }
       })
     },
@@ -195,6 +217,37 @@ export default {
     }
   },
   methods: {
+    // will be triggered by custom play components to recevie plays for submitting
+    updateCustomPlays (playOptions) {
+      _.each(this.plays, play => {
+        // if all of the options are valid, change the target play's status
+        if (play.id === playOptions.activePlayId && playOptions.valid) {
+          this.$set(play, 'active', true)
+          this.$set(play, 'amount', this.amount)
+          this.$set(play, 'isCustom', true)
+          this.$set(play, 'options', playOptions.options)
+          this.$set(play, 'combinations', playOptions.combinations)
+          this.$set(play, 'selectedOptions', playOptions.selectedOptions)
+        } else {
+          // if not, reset other plays
+          this.$set(play, 'active', false)
+          this.$set(play, 'isCustom', false)
+          this.$set(play, 'options', '')
+          this.$set(play, 'combinations', [])
+          this.$set(play, 'selectedOptions', [])
+        }
+      })
+    },
+    getCustomFormatting (groupCode) {
+      return _.find(this.$store.state.customPlayGroups, item => {
+        return item.code === groupCode
+      })
+    },
+    getResultClass (resultNum) {
+      let gameClass = `result-${this.gameLatestResult.game_code}`
+      let resultClass = `resultnum-${resultNum}`
+      return [gameClass, resultClass]
+    },
     updateBetrecords () {
       this.$root.bus.$emit('new-betrecords', this.game.id)
     },
@@ -219,6 +272,7 @@ export default {
               this.submitted = false
               this.dialogVisible = false
               this.updateBetrecords()
+              this.reset()
             }, 1000)
           } else {
             let messages = []
@@ -254,7 +308,10 @@ export default {
           bet_amount: play.amount,
           id: play.id,
           bet_options: [],
-          active: true
+          active: true,
+          isCustom: play.isCustom,
+          combinations: play.combinations,
+          selectedOptions: play.selectedOptions.map(option => option.num)
         }
       }))
       this.dialogVisible = true
@@ -287,6 +344,8 @@ export default {
           Vue.set(play, 'active', false)
         }
       })
+
+      Vue.set(this, 'playReset', !this.playReset)
     }
   }
 }
@@ -294,6 +353,7 @@ export default {
 
 <style scoped lang='scss'>
 @import "../../style/vars.scss";
+@import "../../style/gameplay.scss";
 
 .name {
   font-weight: bold;
@@ -306,50 +366,6 @@ export default {
   border-right: $cell-border;
   color: $red;
   font-weight: 700;
-}
-.input {
-  background: #fff;
-}
-.el-input {
-  width: 94%;
-  padding: 0 3%;
-}
-.group-table {
-  float: left;
-  margin-right: 1%;
-  &.last {
-    margin-right: 0;
-  }
-}
-.play-table {
-  width: 100%;
-  background: #ecf5ff;
-  margin-bottom: 10px;
-  border: $cell-border;
-  td,
-  th {
-    border: $cell-border;
-    height: $cell-height;
-  }
-  .group-name {
-    line-height: $cell-height;
-    text-align: center;
-    font-weight: bold;
-  }
-  .hover {
-    .name,
-    .odds,
-    .input {
-      background: #dce5ef;
-    }
-  }
-  .active {
-    .name,
-    .odds,
-    .input {
-      background: #f3dab2;
-    }
-  }
 }
 .clickable {
   cursor: pointer;

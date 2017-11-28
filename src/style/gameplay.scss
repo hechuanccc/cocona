@@ -1,0 +1,49 @@
+
+.el-input {
+  width: 94%;
+  padding: 0 3%;
+}
+.group-table {
+  float: left;
+  margin-right: 1%;
+  &.last {
+    margin-right: 0;
+  }
+}
+
+.input {
+  background: #fff;
+  height: 34px;
+}
+
+.play-table {
+  width: 100%;
+  background: #ecf5ff;
+  margin-bottom: 10px;
+  border: $cell-border;
+  td,
+  th {
+    border: $cell-border;
+    height: $cell-height;
+    line-height: $cell-height;
+  }
+  .group-name {
+    line-height: $cell-height;
+    text-align: center;
+    font-weight: bold;
+  }
+  .hover {
+    .name,
+    .odds,
+    .input {
+      background: #dce5ef;
+    }
+  }
+  .active {
+    .name,
+    .odds,
+    .input {
+      background: #f3dab2;
+    }
+  }
+}
