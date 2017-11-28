@@ -54,6 +54,11 @@ export default {
       }
     }
   },
+  watch: {
+    '$route.params.categoryId': function () {
+      this.activeName = this.$route.params.categoryId
+    }
+  },
   computed: {
     gameClosed () {
       const c = this.closeCountDown
