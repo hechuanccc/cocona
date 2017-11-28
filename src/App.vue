@@ -1,10 +1,11 @@
 <template>
   <div>
-    <HeadBar />
+    <Header />
     <router-view/>
+    <Footer />
     <el-dialog :title="$t('navMenu.pop_title')"
     :visible="showLoginDialog"
-    width="480px"
+    width="680px"
     @close="closeLoginDialog()"
     center>
       <LoginPopup/>
@@ -16,7 +17,8 @@
 <script>
 import './style/reset.css'
 import './style/base.scss'
-import HeadBar from './components/HeadBar.vue'
+import Header from './components/Header'
+import Footer from './components/Footer'
 import LoginPopup from './components/LoginPopup'
 import {getToken} from './api'
 import axios from 'axios'
@@ -29,7 +31,8 @@ export default {
     }
   },
   components: {
-    HeadBar,
+    Header,
+    Footer,
     LoginPopup
   },
   methods: {

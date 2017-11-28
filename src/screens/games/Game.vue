@@ -186,7 +186,6 @@ export default {
   text-align: center;
   color: #878d99;
   padding: 0 8px;
-  background: #f3f4f5;
   margin-top: -5px;
   margin-bottom: 10px;
 }

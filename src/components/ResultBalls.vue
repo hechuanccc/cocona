@@ -1,8 +1,8 @@
 <template>
   <div class="result-balls" v-if="gameLatestResult">
     <div class="balls-text">
-      <p>{{gameLatestResult.display_name}}</p>
-      <p>{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
+      <p class="game">{{gameLatestResult.display_name}}</p>
+      <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
     <div class="balls-number">
       <span v-for="(ball, index) in resultBall" :key="ball" :class="getResultClass(ball)">
@@ -134,12 +134,14 @@ export default {
 @import "../style/resultsball.scss";
 
 .result-balls {
-  display: inline-block;
-  width: 425px;
-  font-weight: 700;
+  padding-top: 10px;
+  display: block;
+  margin: 0 0 0 30px;
+  float: left;
+  text-align: center;
   .balls-text {
     text-align: center;
-    width: 120px;
+    padding: 10px;
   }
   .balls-number {
     width: 300px;
@@ -148,8 +150,14 @@ export default {
     display: inline-block;
     position: relative;
     vertical-align: middle;
-    color: rgba(20, 20, 20, 0.8);
     font-size: 12px;
+  }
+  .game {
+    color: #666;
+    font-size: 13px;
+  }
+  .issue {
+    color: #999;
   }
   span {
     display: inline-block;
