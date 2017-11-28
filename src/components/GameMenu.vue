@@ -95,6 +95,9 @@ export default {
     background-color: rgba(20, 94, 168, 1);
   }
 }
+.el-menu--horizontal {
+  border: none;
+}
 .el-menu--horizontal .el-menu-item, .el-menu--vertical .el-menu-item {
   height: 44px;
   line-height: 44px;

@@ -1,40 +1,47 @@
 <template>
   <div class="top-bar container" justify="space-between">
     <div class="clock">
-      {{nowTime}} {{$t('navMenu.bussiness_hours')}}
+      {{nowTime}}
     </div>
-    <div class="actions" v-if="!isLogin">
-      <div class="input">
-        <el-input v-model="username" :placeholder="$t('navMenu.user_login')"></el-input>
-      </div>
-      <div class="input">
-        <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')" @keyup.enter.native="login">
-          <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
-        </el-input>
-      </div>
-      <div class="buttons">
-        <el-button type="primary" @click="login()">{{$t('navMenu.user_login')}}</el-button>
-        <el-button type="info"><router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link></el-button>
-        <el-button type="warning">{{$t('navMenu.try_play')}}</el-button>
-      </div>
-    </div>
-    <div v-else-if="user.logined" class="account-links" >
-      <el-button-group>
-        <router-link to="/account/online_payment"><el-button>立即存款</el-button></router-link>
-        <router-link to="/account/withdraw"><el-button>申请取款</el-button></router-link>
-        <router-link to="/account/finance/betrecord"><el-button>我的注单</el-button></router-link>
-      </el-button-group>
-      <el-button class="account-trigger"
-        @mouseenter.native="showDropdown=true"
-        @mouseleave.native="showDropdown=false">我的账号<i class="el-icon-caret-bottom"></i>
-        <ul v-show="showDropdown" class="dropdown">
-          <li><router-link to="/account/my/">账户余额 {{user.balance}}</router-link></li>
-          <li><router-link to="/account/message">账号信息</router-link></li>
-          <li><router-link to="/account/my/password_setting">修改密码</router-link></li>
-          <li @click="logout()"><a>{{$t('navMenu.logout')}}</a></li>
-        </ul>
-      </el-button>
-    </div>
+    <ul class="account-links" v-if="!isLogin">
+      <li>
+        <span @click="login">{{$t('navMenu.user_login')}}</span>
+      </li>
+      <li>
+        <router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link>
+      </li>
+      <li>
+        <span class="red">{{$t('navMenu.try_play')}}</span>
+      </li>
+    </ul>
+    <ul v-else-if="user.logined" class="account-links" >
+      <li>
+        <router-link to="/account/online_payment">立即存款</router-link>
+      </li>
+      <li>
+        <router-link to="/account/withdraw">申请取款</router-link>
+      </li>
+      <li>
+        <router-link to="/account/finance/betrecord">我的注单</router-link>
+      </li>
+      <li>
+        <span :class="['account-trigger', {
+            active: showDropdown
+          }]"
+          @mouseenter="showDropdown=true"
+          @mouseleave="showDropdown=false">
+          我的账号
+          <i class="el-icon-caret-bottom" v-if="!showDropdown" />
+          <i class="el-icon-caret-top" v-else />
+          <ul v-show="showDropdown" class="dropdown">
+            <li><router-link to="/account/my/">账户余额: ￥{{user.balance}}</router-link></li>
+            <li><router-link to="/account/message">账号信息</router-link></li>
+            <li><router-link to="/account/my/password_setting">修改密码</router-link></li>
+            <li @click="logout()"><a>{{$t('navMenu.logout')}}</a></li>
+          </ul>
+        </span>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -62,34 +69,7 @@ export default {
   },
   methods: {
     login () {
-      this.$store.dispatch('login', {
-        user: {
-          username: this.username,
-          password: this.password
-        }
-      }).then(result => {
-        const next = this.$route.query.next
-        if (next) {
-          this.$router.push(next)
-        } else {
-          this.$router.push({ path: '/game' })
-        }
-      }, errorRes => {
-        const errors = errorRes.response.data.error
-        let messages = []
-
-        errors.forEach(error => {
-          Object.keys(error).forEach(key => {
-            messages.push(error[key])
-          })
-        })
-
-        this.$message({
-          showClose: true,
-          message: messages.join(', '),
-          type: 'error'
-        })
-      })
+      this.$store.commit('SHOW_LOGINDIALOG')
     },
     logout () {
       this.$store.dispatch('logout')
@@ -136,26 +116,43 @@ export default {
 .account-links
   position: relative
   float: right
-  color: #666
+  color: #999
+  li
+    cursor: pointer
+    display: inline-block
+    line-height: 32px
   a, span
     text-decoration: none
-    padding: 0 5px
-    color: #666
+    padding: 0 10px
+    color: #999
     &:hover
       color: $primary
+    &.red
+      color: $red
+
+.account-trigger
+  border: 1px solid #f2f2f2
+  border-width: 0 1px
+  &.active
+    padding-bottom: 1px
+    background: #fff
+    border-color: #eee
+  display: block
 
 .dropdown
   padding: 10px 0
   text-align: left
   position: absolute
-  top: 30px
+  top: 33px
   right: 0
-  border: 1px solid #d8dce5
+  border: 1px solid #eee
+  border-top: none
   border-radius: 2px
   background: #fff
   width: 160px
   z-index: 10
   li
+    display: block
     cursor: pointer
     line-height: 32px
     padding: 0 10px

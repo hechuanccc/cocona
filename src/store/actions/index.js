@@ -37,7 +37,7 @@ export default {
       return Promise.resolve(res.data)
     }, error => Promise.reject(error))
   },
-  logout: ({commit, state}) => {
+  logout: ({ commit, state }) => {
     return logout().then(
       res => {
         router.push('/')
@@ -87,7 +87,7 @@ export default {
       })
     })
   },
-  fetchCategories: ({commit, state}, gameId) => {
+  fetchCategories: ({ commit, state }, gameId) => {
     return fetchCategories(gameId).then(res => {
       const categories = _.map(res, item => {
         item['game_id'] = gameId
@@ -98,5 +98,11 @@ export default {
       })
       return categories
     })
+  },
+  setTokenPromise: ({ commit, state }, tokenPromise) => {
+    commit(types.SET_TOKEN_PROMISE, tokenPromise)
+  },
+  clearTokenPromise: ({ commit }) => {
+    commit(types.CLEAR_TOKEN_PROMISE)
   }
 }

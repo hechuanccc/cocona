@@ -118,7 +118,7 @@ export default {
 .side-menu {
   padding: 10px 0;
   margin-top: 10px;
-  border: 1px solid #efefef;
+  background: #fff;
   color: #333;
   margin-right: 20px;
   li {
@@ -137,16 +137,14 @@ export default {
 }
 .betrecords {
   margin: 10px 20px 0 0;
-  border: 1px solid #efefef;
+  background: #fff;
   ul {
     max-height: 400px;
     overflow-y: scroll;
   }
   li {
-    background: #f5f5f5;
     color: #999;
     padding: 10px;
-    margin-top: 1px;
   }
   h3 {
     display: block;
