@@ -314,7 +314,7 @@ export default {
           active: true,
           isCustom: play.isCustom,
           combinations: play.combinations,
-          selectedOptions: play.selectedOptions.map(option => option.num)
+          selectedOptions: play.selectedOptions ? play.selectedOptions.map(option => option.num) : []
         }
       }))
       this.dialogVisible = true

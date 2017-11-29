@@ -84,6 +84,7 @@ export default {
 @import '../style/vars.scss';
 .game-menu {
   background: $primary;
+  text-transform: uppercase;
 }
 .more-menu {
   float: right;
@@ -94,6 +95,9 @@ export default {
   &:hover {
     background-color: rgba(20, 94, 168, 1);
   }
+}
+.el-menu--horizontal {
+  border: none;
 }
 .el-menu--horizontal .el-menu-item, .el-menu--vertical .el-menu-item {
   height: 44px;

@@ -5,7 +5,7 @@
     </div>
     <div class="header-nav container">
       <Logo/>
-      <ResultBalls v-if="isGamePage" :gameid="$route.params.gameId"/>
+      <GameResult v-if="$route.params.gameId && isGamePage" :gameid="$route.params.gameId"/>
       <NavMenu :menus="isUserPage ? userMenus : menus" />
     </div>
   </div>
@@ -15,60 +15,44 @@
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
 import Logo from '../components/Logo'
-import ResultBalls from '../components/ResultBalls'
-
-import 'vue-awesome/icons/home'
-import 'vue-awesome/icons/user-plus'
-import 'vue-awesome/icons/info'
-import 'vue-awesome/icons/clone'
-import 'vue-awesome/icons/list-ul'
-
-import 'vue-awesome/icons/th-large'
-import 'vue-awesome/icons/money'
-import 'vue-awesome/icons/line-chart'
-import 'vue-awesome/icons/star'
-import 'vue-awesome/icons/sign-out'
+import GameResult from '../components/GameResult'
 
 export default {
   data () {
     return {
       menus: [{
-        icon: 'home',
         name: this.$t('navMenu.home_page'),
         path: ''
       }, {
-        icon: 'th-large',
         name: this.$t('navMenu.game_center'),
         path: 'game'
       }, {
-        icon: 'list-ul',
         name: this.$t('navMenu.promotion'),
         path: 'promotions'
       }, {
-        icon: 'info',
         name: this.$t('navMenu.qa'),
         path: 'faq'
       }, {
-        icon: 'clone',
         name: this.$t('navMenu.affliate'),
         path: 'agent'
       }],
       userMenus: [{
-        icon: 'th-large',
         name: this.$t('navMenu.game_center'),
         path: 'game'
       }, {
-        icon: 'money',
         name: this.$t('navMenu.personal_account'),
         path: 'account'
       }, {
-        icon: 'line-chart',
         name: this.$t('navMenu.draw_history'),
         path: 'gamehistory'
       }, {
-        icon: 'star',
         name: this.$t('navMenu.game_intro'),
         path: 'gameintro'
+      }, {
+        name: this.$t('navMenu.logout'),
+        onClick: () => {
+          this.$store.dispatch('logout')
+        }
       }]
     }
   },
@@ -76,7 +60,7 @@ export default {
     TopBar,
     NavMenu,
     Logo,
-    ResultBalls
+    GameResult
   },
   computed: {
     isUserPage () {
@@ -96,14 +80,13 @@ export default {
 <style lang="sass" scoped>
 
 .top-header
-  margin-bottom: 10px
+  background: #fff
   .header-bar
-    height: 33px
-    padding: 3px 0
+    height: 32px
     width: 100%
-    background: #f0f0f0
+    background: #f2f2f2
+    border-bottom: 1px solid #e5e5e5
     text-align: center
   .header-nav
-    height: 60px
-    margin-top: 10px
+    height: 80px
 </style>

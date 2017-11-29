@@ -26,7 +26,9 @@ export default {
 
 <style lang="sass" scoped>
 .logo
+  float: left
   display: inline-block
+  padding: 10px
   height: 60px
   width: 240px
   vertical-align: middle
