@@ -60,7 +60,6 @@ export default {
     float: left
     text-align: center
     font-size: 15px
-    font-weight: bold
     line-height: 77px
     color: #999
     &:hover
