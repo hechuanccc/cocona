@@ -36,7 +36,7 @@ export default {
     }
   },
   created () {
-    this.fetchResult(this.gameid)
+    this.pollLatestResult(this.gameid)
   },
   computed: {
     resultBall () {
@@ -76,7 +76,7 @@ export default {
       return [gameClass, resultClass]
     },
     fetchResult (gameId) {
-      fetchGameResult(gameId).then(
+      return fetchGameResult(gameId).then(
       result => {
         if (!result || !result[0].result_str) {
           this.gameLatestResult = this.$t('navMenu.no_result')
@@ -88,11 +88,26 @@ export default {
         if (result[0].game_code === 'pcdd') {
           this.showSum = true
         }
+
+        this.drawTimeGap = this.$moment(result[0].created_at).diff(result[1].created_at, 'ms')
         this.gameLatestResult = result[0]
         this.zodiacs = result[0].zodiac.split(',')
+        return result
       }
     )
+    },
+    pollLatestResult (gameid) {
+      let drawTime = this.drawTimeGap + (5 * 1000)
+      this.timer = setTimeout(() => {
+        this.fetchResult(gameid).then(result => {
+          this.pollLatestResult(gameid)
+        }
+        )
+      }, drawTime)
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
   },
   filters: {
     zodiacFilter (val) {
