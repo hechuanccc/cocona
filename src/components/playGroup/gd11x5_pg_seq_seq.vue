@@ -88,12 +88,12 @@
           </el-col>
         </td>
       </tr>
-      <tr>
+      <tr v-if="showBall3">
         <td :colspan="customPlayGroup.cols" align="center">
           <div>第三球</div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup3">
+      <tr v-if="showBall3" v-for="row in optionGroup3">
         <td
           @click="selectOption(option, $event)"
           @mouseover="option.hover = true"
@@ -147,62 +147,9 @@ export default {
     if (!customPlayGroup) {
       return []
     }
-    const options = customPlayGroup.options
-    const rows = Math.ceil(options.length / customPlayGroup.cols)
-    const optionGroup = _.flatMap(options.slice(0, rows), n => {
-      let index = 0
-      let result = []
-      while (index < customPlayGroup.cols) {
-        let num = customPlayGroup.cols * n + index + 1
-        if (num > 11) {
-          break
-        }
-        result.push({
-          num: num,
-          selected: false,
-          hover: false,
-          disabled: false
-        })
-        index++
-      }
-      return [result]
-    })
-    const optionGroup2 = _.flatMap(options.slice(0, rows), n => {
-      let index = 0
-      let result = []
-      while (index < customPlayGroup.cols) {
-        let num = customPlayGroup.cols * n + index + 1
-        if (num > 11) {
-          break
-        }
-        result.push({
-          num: num,
-          selected: false,
-          hover: false,
-          disabled: false
-        })
-        index++
-      }
-      return [result]
-    })
-    const optionGroup3 = _.flatMap(options.slice(0, rows), n => {
-      let index = 0
-      let result = []
-      while (index < customPlayGroup.cols) {
-        let num = customPlayGroup.cols * n + index + 1
-        if (num > 11) {
-          break
-        }
-        result.push({
-          num: num,
-          selected: false,
-          hover: false,
-          disabled: false
-        })
-        index++
-      }
-      return [result]
-    })
+    const optionGroup = this.createOptions(customPlayGroup)
+    const optionGroup2 = this.createOptions(customPlayGroup)
+    const optionGroup3 = this.createOptions(customPlayGroup)
 
     let activePlayId = ''
     let plays = this.playgroup.plays
@@ -220,6 +167,9 @@ export default {
     }
   },
   computed: {
+    showBall3 () {
+      return this.activePlayId === 26006
+    },
     selectedOptions () {
       return _.filter(_.flatten(this.optionGroup), option => {
         return option.selected
@@ -253,46 +203,22 @@ export default {
       this.calculateCombinations()
     },
     'activePlayId': function () {
-      _.map(_.flatten(this.optionGroup), option => {
+      _.each(_.flatten(this.optionGroup), option => {
+        this.$set(option, 'selected', false)
+      })
+      _.each(_.flatten(this.optionGroup2), option => {
+        this.$set(option, 'selected', false)
+      })
+      _.each(_.flatten(this.optionGroup3), option => {
         this.$set(option, 'selected', false)
       })
       this.combinations = []
       this.calculateCombinations()
     },
     'selectedNums': function (currentSelectedOptions) {
-      _.each(this.optionGroup, (options, mainIndex) => {
-        _.each(options, (option, subIndex) => {
-          if (currentSelectedOptions.includes(option.num)) {
-            if (!option.selected) {
-              this.$set(this.optionGroup[mainIndex][subIndex], 'disabled', true)
-            }
-          } else {
-            this.$set(this.optionGroup[mainIndex][subIndex], 'disabled', false)
-          }
-        })
-      })
-      _.each(this.optionGroup2, (options, mainIndex) => {
-        _.each(options, (option, subIndex) => {
-          if (currentSelectedOptions.includes(option.num)) {
-            if (!option.selected) {
-              this.$set(this.optionGroup2[mainIndex][subIndex], 'disabled', true)
-            }
-          } else {
-            this.$set(this.optionGroup2[mainIndex][subIndex], 'disabled', false)
-          }
-        })
-      })
-      _.each(this.optionGroup3, (options, mainIndex) => {
-        _.each(options, (option, subIndex) => {
-          if (currentSelectedOptions.includes(option.num)) {
-            if (!option.selected) {
-              this.$set(this.optionGroup3[mainIndex][subIndex], 'disabled', true)
-            }
-          } else {
-            this.$set(this.optionGroup3[mainIndex][subIndex], 'disabled', false)
-          }
-        })
-      })
+      this.resetOption(this.optionGroup, currentSelectedOptions)
+      this.resetOption(this.optionGroup2, currentSelectedOptions)
+      this.resetOption(this.optionGroup3, currentSelectedOptions)
     },
     'playReset': function () {
       _.flatten(this.optionGroup).forEach(option => {
@@ -305,22 +231,31 @@ export default {
       let numbers = this.selectedOptions.map(option => option.num)
       let numbers2 = this.selectedOptions2.map(option => option.num)
       let numbers3 = this.selectedOptions3.map(option => option.num)
-      if (numbers.length > 0 && numbers2.length > 0 && numbers3.length > 0) {
-        this.combinations = Combinatorics.cartesianProduct(numbers, numbers2, numbers3).toArray()
-        this.valid = true
+      if (this.showBall3) {
+        if (numbers.length > 0 && numbers2.length > 0 && numbers3.length > 0) {
+          this.combinations = Combinatorics.cartesianProduct(numbers, numbers2, numbers3).toArray()
+          this.valid = true
+        } else {
+          this.valid = false
+        }
       } else {
-        this.valid = false
+        if (numbers.length > 0 && numbers2.length) {
+          this.combinations = Combinatorics.cartesianProduct(numbers, numbers2).toArray()
+          this.valid = true
+        } else {
+          this.valid = false
+        }
       }
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.activePlayId,
         options: this.selectedOptions.join(','),
         combinations: this.combinations,
-        selectedOptions: this.selectedOptions,
+        selectedOptions: '',
         valid: this.valid
       })
     },
     selectOption (option, event) {
-      if (this.gameClosed) {
+      if (this.gameClosed || option.disabled) {
         return false
       }
       event.preventDefault()
@@ -332,6 +267,41 @@ export default {
       } else {
         option.selected = false
       }
+    },
+    createOptions (customPlayGroup) {
+      const options = customPlayGroup.options
+      const rows = Math.ceil(options.length / customPlayGroup.cols)
+      return _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < customPlayGroup.cols) {
+          let num = customPlayGroup.cols * n + index + 1
+          if (num > 11) {
+            break
+          }
+          result.push({
+            num: num,
+            selected: false,
+            hover: false,
+            disabled: false
+          })
+          index++
+        }
+        return [result]
+      })
+    },
+    resetOption (targetOption, currentSelectedOptions) {
+      _.each(targetOption, (options, mainIndex) => {
+        _.each(options, (option, subIndex) => {
+          if (currentSelectedOptions.includes(option.num)) {
+            if (!option.selected) {
+              this.$set(targetOption[mainIndex][subIndex], 'disabled', true)
+            }
+          } else {
+            this.$set(targetOption[mainIndex][subIndex], 'disabled', false)
+          }
+        })
+      })
     }
   }
 }
