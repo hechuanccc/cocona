@@ -95,8 +95,9 @@ $gd_length: length($results_gd);
   height: 26px;
   .ball-zodiac {
     position: relative;
+    text-align: left;
     left: 5px;
-    top: 5px;
+    top: 7px;
     margin-left: 1px;
   }
   &:nth-child(7) {
@@ -149,11 +150,9 @@ $gd_length: length($results_gd);
   b {
     display: inline-block;
     position: relative;
-    right: 1px;
     top: 4px;
-    width: 16px;
+    width: 24px;
     font-size: 16px;
-    margin-left: 8px;
     color: black;
   }
 }

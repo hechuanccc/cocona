@@ -84,6 +84,7 @@ export default {
 @import '../style/vars.scss';
 .game-menu {
   background: $primary;
+  text-transform: uppercase;
 }
 .more-menu {
   float: right;

@@ -155,6 +155,7 @@ export default {
   .game {
     color: #666;
     font-size: 13px;
+    text-transform: uppercase;
   }
   .issue {
     color: #999;
