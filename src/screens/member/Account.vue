@@ -12,16 +12,6 @@
     </header>
     <el-container class="container no-border">
       <el-aside width="180px">
-        <ul class="side-menu">
-          <li>
-            <span>{{$t('user.username')}}</span>
-            {{user.username}}
-          </li>
-          <li>
-            <span>{{$t('user.balance')}}</span>
-            <strong class="balance">￥{{user.balance}}</strong>
-          </li>
-        </ul>
         <el-menu :default-active="currentPath" text-color="#fff" active-text-color="#fff" :background-color="style.primaryColor"
           :router="true">
           <el-menu-item index="/account/online_payment">
@@ -117,7 +107,8 @@ export default {
 @import "../../style/vars.scss";
 
 .el-main {
-  padding-top: 0;
+  margin-left: 20px;
+  background: #fff;
 }
 
 .el-menu .el-menu-item {
@@ -138,25 +129,6 @@ export default {
 .el-submenu__title {
   height: 44px;
   line-height: 44px;
-}
-.side-menu {
-  padding: 10px 0;
-  border: 1px solid #efefef;
-  color: #333;
-
-  li {
-    padding: 3px 0;
-    span {
-      display: inline-block;
-      width: 60px;
-      text-align: center;
-      color: #999;
-    }
-    &.center {
-      margin-top: 10px;
-      text-align: center;
-    }
-  }
 }
 .balance {
   color: #67C23A;

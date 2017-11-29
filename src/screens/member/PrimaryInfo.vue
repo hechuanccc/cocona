@@ -1,5 +1,5 @@
 <template>
-<el-row class="row-bg">
+<el-row >
   <el-col :span="10" :offset="7">
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
       <el-form-item :label="$t('user.username')">
