@@ -86,26 +86,36 @@ export default {
       this.$router.push({ path: '/account' + path })
     }
   },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.$store.dispatch('fetchGames')
+      .catch(error => {
+        if (error.response.status > 400) {
+          vm.performLogin()
+        }
+      })
+    })
+  },
   created () {
     this.$root.bus = bus
     this.$root.bus.$on('new-betrecords', (gameId) => {
       this.fetchOngoingBet(gameId)
     })
-    this.$store.dispatch('fetchUser')
-      .then(res => {
-        this.$store.dispatch('fetchGames')
-        // this.fetchOngoingBet()
-      })
-      .catch(error => {
-        if (error.response.status > 400) {
-          this.$router.push({
-            path: '/',
-            query: {
-              next: this.$route.path
-            }
-          })
-        }
-      })
+    // this.$store.dispatch('fetchUser')
+    //   .then(res => {
+    //     this.$store.dispatch('fetchGames')
+    //   })
+    //   .catch(error => {
+    //     console.log(error)
+    //     if (error.response.status > 400) {
+    //       this.$router.push({
+    //         path: '/',
+    //         query: {
+    //           next: this.$route.path
+    //         }
+    //       })
+    //     }
+    //   })
   }
 }
 </script>

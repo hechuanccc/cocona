@@ -59,11 +59,14 @@ export default {
       if (this.$store.state.user.logined) {
         this.$router.push(`/game/${game.id}/`)
       } else {
-        this.$store.commit('SHOW_LOGINDIALOG')
+        this.$store.commit('SHOW_LOGIN_DIALOG')
       }
     }
   },
   created () {
+    if (this.$route.query.login) {
+      this.$store.commit('SHOW_LOGIN_DIALOG')
+    }
     getBanner().then(
       response => {
         this.banners = response.data

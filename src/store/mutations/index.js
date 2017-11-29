@@ -14,7 +14,7 @@ export default {
       logined: false
     }
   },
-  [types.SHOW_LOGINDIALOG]: (state) => {
+  [types.SHOW_LOGIN_DIALOG]: (state) => {
     state.loginDialogVisible = true
   },
   [types.CLOSE_LOGINDIALOG]: (state) => {

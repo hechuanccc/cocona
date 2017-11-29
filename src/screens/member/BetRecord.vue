@@ -1,24 +1,8 @@
 <template>
 <div>
-  <el-row>
+  <el-row class="m-b">
     <el-col :span="8">
-      <span class="title">{{$t('user.issue_number')}}</span>
-      <el-select v-model="selectedIssueNumber">
-        <el-option
-          key="all"
-          :label="$t('common.all')"
-          value="">
-        </el-option>
-        <el-option
-          v-for="num in issueNumbers"
-          :key="num"
-          :label="num"
-          :value="num">
-        </el-option>
-      </el-select>
-    </el-col>
-    <el-col :span="8">
-      <span class="title">{{$t('user.game_name')}}</span>
+      <span class="m-r filter-title">{{$t('user.game_name')}}</span>
       <el-select v-model="selectedGame">
         <el-option
           key="all"
@@ -33,20 +17,36 @@
         </el-option>
       </el-select>
     </el-col>
+    <el-col :span="8">
+      <span class="m-r filter-title">{{$t('user.issue_number')}}</span>
+      <el-select v-model="selectedIssueNumber">
+        <el-option
+          key="all"
+          :label="$t('common.all')"
+          value="">
+        </el-option>
+        <el-option
+          v-for="num in issueNumbers"
+          :key="num"
+          :label="num"
+          :value="num">
+        </el-option>
+      </el-select>
+    </el-col>
   </el-row>
   <el-row>
     <el-table v-loading="loading" :data="showRecords" stripe>
+      <el-table-column :label="$t('user.game_name')"
+        prop="game.display_name">
+      </el-table-column>
       <el-table-column
         :label="$t('user.issue_number')"
         prop="issue_number">
       </el-table-column>
       <el-table-column :label="$t('user.play')">
         <template slot-scope="scope">
-          <span>{{ `${scope.row.play.playgroup} ${scope.row.play.display_name}`}}</span>
+          <span>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</span>
         </template>
-      </el-table-column>
-      <el-table-column :label="$t('user.game_name')"
-        prop="game.display_name">
       </el-table-column>
       <el-table-column
         :label="$t('user.bet_amount')">
@@ -57,7 +57,7 @@
       <el-table-column
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span>{{ scope.row.profit?`$${scope.row.profit}`:''}}</span>
+          <span>{{ scope.row.profit?`$${-scope.row.profit}`:''}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -66,6 +66,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      v-if="betRecords.length > pageSize"
       :current-page.sync="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"
@@ -152,8 +153,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.title {
-  margin-right: 20px;
+.filter-title {
+  color: #666;
 }
 </style>
 
