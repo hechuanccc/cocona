@@ -13,12 +13,12 @@
     <div v-for="(playSection, index) in playSections"
     class="clearfix"
     v-if="playSections.length">
-      <div 
+      <div
         :style="{width: getWidthForGroup(playSection)}"
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
         :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
         >
-        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex" 
+        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
           <tr>
             <th class="group-name" :colspan="playSection.playCol">
@@ -49,10 +49,11 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
-        <CustomPlayGroup 
+        <component
+          :is="chooseComponentByCode(playgroup.code)"
           :playReset="playReset"
           @updatePlayForSubmit="updateCustomPlays"
-          :formatting="getCustomFormatting(playgroup.code)" 
+          :formatting="getCustomFormatting(playgroup.code)"
           :playgroup="playgroup"
           :plays="plays"
           :gameClosed="gameClosed"
@@ -128,7 +129,8 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import CustomPlayGroup from '../../components/CustomPlayGroup'
+import common from '../../components/playGroup/common'
+import gd11x5Seq from '../../components/playGroup/gd11x5_pg_seq_seq'
 
 export default {
   props: {
@@ -145,7 +147,8 @@ export default {
   },
   name: 'gameplay',
   components: {
-    CustomPlayGroup
+    common,
+    gd11x5Seq
   },
   data () {
     return {
@@ -346,6 +349,14 @@ export default {
       })
 
       Vue.set(this, 'playReset', !this.playReset)
+    },
+    chooseComponentByCode (code) {
+      switch (code) {
+        case 'gd11x5_pg_seq_seq':
+          return 'gd11x5Seq'
+        default:
+          return 'common'
+      }
     }
   }
 }
@@ -396,5 +407,4 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-
 </style>
