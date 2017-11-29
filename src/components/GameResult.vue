@@ -36,7 +36,7 @@ export default {
     }
   },
   created () {
-    this.pollLatestResult(this.gameid)
+    this.pollResult(this.gameid)
   },
   computed: {
     resultBall () {
@@ -96,11 +96,11 @@ export default {
       }
     )
     },
-    pollLatestResult (gameid) {
+    pollResult (gameid) {
       let drawTime = this.drawTimeGap + (5 * 1000)
       this.timer = setTimeout(() => {
         this.fetchResult(gameid).then(result => {
-          this.pollLatestResult(gameid)
+          this.pollResult(gameid)
         }
         )
       }, drawTime)
