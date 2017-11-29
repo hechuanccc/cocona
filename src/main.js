@@ -37,21 +37,41 @@ Object.keys(locales).forEach(lang => {
   Vue.locale(lang, locales[lang])
 })
 
+const store = createStore()
+
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
   if ((to || firstMatched).meta.requiresAuth) {
-    const token = Vue.cookie.get('access_token')
-    if (!token) {
-      store.commit('SHOW_LOGINDIALOG')
-      return next('/')
-    }
+    store.dispatch('fetchUser')
+      .then(res => {
+        next()
+      })
+      .catch(error => {
+        store.commit('SHOW_LOGIN_DIALOG')
+        return Promise.resolve(error)
+      })
+  } else {
+    next()
   }
-  next()
 })
 
-const store = createStore()
 sync(store, router)
+
+Vue.mixin({
+  methods: {
+    performLogin () {
+      console.log(this)
+      this.$router.push({
+        path: '/',
+        query: {
+          login: 1,
+          next: this.$route.path
+        }
+      })
+    }
+  }
+})
 
 /* eslint-disable no-new */
 new Vue({

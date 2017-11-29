@@ -16,21 +16,24 @@
     </ul>
     <ul v-else-if="user.logined" class="account-links" >
       <li>
-        <router-link to="/account/online_payment">立即存款</router-link>
+        欢迎, {{user.username}}
       </li>
       <li>
-        <router-link to="/account/withdraw">申请取款</router-link>
+        <router-link to="/account/online_payment" class="link">立即存款</router-link>
       </li>
       <li>
-        <router-link to="/account/finance/betrecord">我的注单</router-link>
+        <router-link to="/account/withdraw" class="link">申请取款</router-link>
       </li>
       <li>
-        <span :class="['account-trigger', {
+        <router-link to="/account/finance/betrecord" class="link">我的注单</router-link>
+      </li>
+      <li>
+        <span :class="['account-trigger', 'link', {
             active: showDropdown
           }]"
           @mouseenter="showDropdown=true"
           @mouseleave="showDropdown=false">
-          我的账号
+          <router-link tag="span" to="/account"> 我的账号</router-link>
           <i class="el-icon-caret-bottom" v-if="!showDropdown" />
           <i class="el-icon-caret-top" v-else />
           <ul v-show="showDropdown" class="dropdown">
@@ -69,13 +72,19 @@ export default {
   },
   methods: {
     login () {
-      this.$store.commit('SHOW_LOGINDIALOG')
+      this.$store.commit('SHOW_LOGIN_DIALOG')
     },
     logout () {
       this.$store.dispatch('logout')
     }
   },
   created () {
+    if (this.$cookie.get('access_token')) {
+      this.$store.dispatch('fetchUser')
+        .catch(error => {
+          Promise.resolve(error)
+        })
+    }
     gethomePage().then(
       response => {
         this.homepage = response.data
@@ -121,14 +130,16 @@ export default {
     cursor: pointer
     display: inline-block
     line-height: 32px
-  a, span
+  a
     text-decoration: none
-    padding: 0 10px
     color: #999
     &:hover
       color: $primary
     &.red
       color: $red
+  .link
+    padding: 0 10px
+    
 
 .account-trigger
   border: 1px solid #f2f2f2

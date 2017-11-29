@@ -1,6 +1,6 @@
 export const SET_USER = 'SET_USERs'
 export const RESET_USER = 'RESET_USERs'
-export const SHOW_LOGINDIALOG = 'SHOW_LOGINDIALOG'
+export const SHOW_LOGIN_DIALOG = 'SHOW_LOGIN_DIALOG'
 export const CLOSE_LOGINDIALOG = 'CLOSE_LOGINDIALOG'
 export const SET_GAMES = 'SET_GAMES'
 export const SET_CATEGORIES = 'SET_FORMATTING'

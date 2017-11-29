@@ -75,8 +75,6 @@ export default {
       return this.$store.getters.gameById(this.$route.params.gameId)
     }
   },
-  components: {
-  },
   created () {
     const categoryId = this.$route.params.categoryId
     this.categories = this.$store.getters.categoriesByGameId(this.$route.params.gameId)

@@ -1,13 +1,14 @@
 <template>
   <div>
-    <Header />
+    <Top />
     <router-view/>
-    <Footer />
-    <el-dialog :title="$t('navMenu.pop_title')"
-    :visible="showLoginDialog"
-    width="680px"
-    @close="closeLoginDialog()"
-    center>
+    <Bottom v-if="!$route.params.gameId && $route.path.indexOf('/account') < 0"/>
+    <el-dialog 
+      :title="$t('navMenu.pop_title')"
+      :visible="showLoginDialog"
+      width="680px"
+      @close="closeLoginDialog()"
+      center>
       <LoginPopup/>
     </el-dialog>
   </div>
@@ -17,11 +18,13 @@
 <script>
 import './style/reset.css'
 import './style/base.scss'
-import Header from './components/Header'
-import Footer from './components/Footer'
+import './style/theme.scss'
+import Top from './components/Header'
+import Bottom from './components/Footer'
 import LoginPopup from './components/LoginPopup'
 import { getToken } from './api'
 import axios from 'axios'
+import { setIndicator } from './utils'
 
 export default {
   name: 'app',
@@ -31,69 +34,29 @@ export default {
     }
   },
   components: {
-    Header,
-    Footer,
+    Top,
+    Bottom,
     LoginPopup
   },
   methods: {
-    setAutoReplaceToken (expiresIn) {
-      let tokenLifeTime
-      if (expiresIn) {
-        tokenLifeTime = this.$moment(expiresIn).diff(this.$moment(), 'ms') - 5 * 60 * 1000
-      } else {
-        tokenLifeTime = 50 * 60 * 1000
-      }
-      clearTimeout(this.timer)
-      this.timer = setTimeout(() => {
-        this.replaceToken()
-      }, tokenLifeTime) // iterate setAutoReplaceToken: 5 mins before expired_in (refresh)
+    closeLoginDialog () {
+      this.$store.commit('CLOSE_LOGINDIALOG')
     },
     replaceToken () {
       let refreshToken = this.$cookie.get('refresh_token')
-      if (refreshToken) {
-        let tokenPromise = getToken(refreshToken).then(result => {
-          let data = result
-          let expires = new Date(data.expires_in)
-          if (data.access_token && data.refresh_token) {
-            axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token
-            this.$cookie.set('access_token', data.access_token, {
-              expires: expires
-            })
-            this.$cookie.set('refresh_token', data.refresh_token, {
-              expires: expires
-            })
-          }
-          this.setAutoReplaceToken(data.expires_in)
-          this.$store.dispatch('clearTokenPromise')
-        })
-        this.$store.dispatch('setTokenPromise', tokenPromise)
-        return tokenPromise
-      } else {
-        this.setAutoReplaceToken()
+      if (!refreshToken) {
+        return
       }
-    },
-    setInterceptor () {
-      axios.interceptors.response.use(
-        res => res,
-        errRes => {
-          if (errRes.response.status === 401 || errRes.response.status === 403) {
-            let tokenPromise = this.$store.state.tokenPromise
-            if (!tokenPromise) {
-              tokenPromise = this.replaceToken()
-            }
-            return tokenPromise.then(res => {
-              // use latest access token
-              errRes.config.headers.Authorization = 'Bearer ' + this.$cookie.get('access_token')
-              return axios(errRes.config)
-            })
-          } else {
-            return Promise.reject(errRes)
-          }
-        }
-      )
-    },
-    closeLoginDialog () {
-      this.$store.commit('CLOSE_LOGINDIALOG')
+      getToken(refreshToken).then(res => {
+        let expires = new Date(res.expires_in)
+        this.$cookie.set('access_token', res.access_token, {
+          expires: expires
+        })
+        this.$cookie.set('refresh_token', res.refresh_token, {
+          expires: expires
+        })
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
+      })
     }
   },
   computed: {
@@ -102,12 +65,14 @@ export default {
     }
   },
   created () {
-    this.setInterceptor()
-    this.setAutoReplaceToken()
-    let oldtoken = this.$cookie.get('refresh_token')
-    if (oldtoken) {
-      this.$store.dispatch('fetchUser')
-    }
+    let refreshTokenInterval
+    setIndicator(() => {
+      refreshTokenInterval = window.setInterval(() => {
+        this.replaceToken()
+      }, 300000)
+    }, () => {
+      window.clearInterval(refreshTokenInterval)
+    })
   },
   beforeDestroy () {
     clearTimeout(this.timer)

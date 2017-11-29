@@ -1,28 +1,33 @@
 <template>
 <el-row class="account-content">
-  <el-col :offset="8" :span="16">
-    <el-form class="form" method="post" :action="paymentUrl" :model="user" ref="user" status-icon :rules="rule" label-width="100px">
+  <el-alert
+    :title="limitAlert"
+    type="info"
+    :closable="false">
+    </el-alert>
+  <div class="form-wp">
+    <el-form class="m-t-lg" method="post" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <el-form-item required :label="$t('user.amount')" prop="amount">
-        <el-input class="input-width" name="amount" v-model.number="user.amount"></el-input>
-        <input name="payee" type="hidden" :value="user.payee_id" />
-        <input name="payment_type" type="hidden" :value="user.payway" />
-        <input name="payment_gateway" type="hidden" :value="user.gateway_id" />
+        <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount"></el-input>
+        <input name="payee" type="hidden" :value="payment.payee_id" />
+        <input name="payment_type" type="hidden" :value="payment.payway" />
+        <input name="payment_gateway" type="hidden" :value="payment.gateway_id" />
         <input name="token" type="hidden" :value="token" />
         <input name="notify_page" type="hidden" :value="notify_page" />
       </el-form-item>
       <el-form-item>
-        <ul class="paymentTypes">
-          <li :class="['paymentType', activeType === 'wechat' ? 'active' : '']" @click="selectPaymentType('wechat')">
-            <div class="icon weixin-icon"></div>
-            <span>{{$t('user.weixin')}}</span>
+        <ul class="payment-types">
+          <li :class="['payment-type', activeType === 'wechat' ? 'active' : '']" @click="select('wechat')">
+            <i class="icon weixin-icon"></i>
+            <span class="name">{{$t('user.weixin')}}</span>
           </li>
-          <li :class="['paymentType', activeType === 'alipay' ? 'active' : '']" @click="selectPaymentType('alipay')">
-            <div class="icon alipay-icon"></div>
-            <span>{{$t('user.alipay')}}</span>
+          <li :class="['payment-type', activeType === 'alipay' ? 'active' : '']" @click="select('alipay')">
+            <i class="icon alipay-icon"></i>
+            <span class="name">{{$t('user.alipay')}}</span>
           </li>
-          <li :class="['paymentType', activeType === 'bank' ? 'active' : '']" @click="selectPaymentType('bank')">
-            <div class="icon bankcard-icon"></div>
-            <span>{{$t('user.bankcard')}}</span>
+          <li :class="['payment-type', activeType === 'bank' ? 'active' : '']" @click="select('bank')">
+            <i class="icon bankcard-icon"></i>
+            <span class="name">{{$t('user.bankcard')}}</span>
           </li>
         </ul>
       </el-form-item>
@@ -30,7 +35,7 @@
         <el-button type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
       </el-form-item>
     </el-form>
-  </el-col>
+  </div>
 </el-row>
 </template>
 
@@ -42,8 +47,19 @@ import Vue from 'vue'
 export default {
   name: 'Payment',
   data () {
+    let limitPass = (rule, value, callback) => {
+      const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
+      const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
+      if (lower && value < lower) {
+        callback(new Error('必须大于最小充值金额'))
+      } else if (upper && value > upper) {
+        callback(new Error('必须小于于最大充值金额'))
+      } else {
+        callback()
+      }
+    }
     return {
-      user: {
+      payment: {
         amount: '',
         payway: '',
         payee_id: '',
@@ -51,7 +67,8 @@ export default {
       },
       rule: {
         amount: [
-          { type: 'number', message: this.$t('validate.required_num'), trigger: 'blur,change' }
+          { type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
+          { validator: limitPass, trigger: 'blur' }
         ]
       },
       activeType: '',
@@ -61,13 +78,31 @@ export default {
       notify_page: 'xxx'
     }
   },
+  computed: {
+    limit () {
+      const level = this.$store.state.user.level
+      return level ? level.online_limit : {}
+    },
+    limitAlert () {
+      let alerts = []
+      const lowerAlert = this.limit.lower ? `最小金额: ￥${this.limit.lower}` : null
+      const upperAlert = this.limit.upper ? `最大金额: ￥${this.limit.upper}` : null
+      if (lowerAlert) {
+        alerts.push(lowerAlert)
+      }
+      if (upperAlert) {
+        alerts.push(upperAlert)
+      }
+      return alerts.join(', ')
+    }
+  },
   created () {
     fetchPaymentType().then(datas => {
       datas.forEach((data, index) => {
         this.paymentTypes[data.name] = data.detail[0] || {}
         this.paymentTypes[data.name].id = data.id
         if (index === 0) {
-          this.selectPaymentType(data.name)
+          this.select(data.name)
         }
       })
     }, errorRes => {
@@ -80,19 +115,19 @@ export default {
   },
   methods: {
     submit (e) {
-      this.$refs['user'].validate((valid) => {
+      this.$refs['payment'].validate((valid) => {
         if (valid) {
-          this.$refs['user'].$el.submit()
+          this.$refs['payment'].$el.submit()
         }
       })
     },
-    selectPaymentType (type) {
+    select (type) {
       this.activeType = type
       let paymentType = this.paymentTypes[type]
       if (paymentType) {
-        this.user.payway = paymentType.id
-        this.user.payee_id = paymentType.payee_id
-        this.user.gateway_id = paymentType.gateway_id
+        this.payment.payway = paymentType.id
+        this.payment.payee_id = paymentType.payee_id
+        this.payment.gateway_id = paymentType.gateway_id
       }
     }
   }
@@ -101,43 +136,41 @@ export default {
 
 
 <style lang="scss" scoped>
-.form {
-  margin-top: 20px;
+.form-wp {
+  width: 400px;
+  margin: auto;
 }
-.weixin-bg {
-  svg {
-    display: inline;
-  }
-  text-align: center;
-  vertical-align: middle;
-  line-height: 50px;
-  height: 50px;
-  width: 50px;
-  color: #fff;
-  background: #62ad48;
-}
-
-.paymentTypes {
+.payment-types {
   float: left;
 }
-.paymentType {
+.payment-type {
   width: 80px;
   float: left;
   text-align: center;
-  margin-right: 5px;
+  margin-right: 10px;
   cursor: pointer;
   &:hover {
-    background: lighten(#dce5ef, 5%);
+    background: #f0f0f0;
   }
   &.active {
-    background: #dce5ef;
+    background: #eee;
   }
 }
 .icon {
+  display: block;
   margin: 0 auto;
   width: 50px;
   height: 50px;
   background: no-repeat center center;
+}
+.name {
+  display: block;
+  margin-top: -10px;
+  font-size: 12px;
+  color: #666;
+}
+.el-button {
+  width: 200px;
 }
 .weixin-icon {
   background-image: url("../../assets/weixin.png");

@@ -20,6 +20,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      v-if="paymentRecords.length > pageSize"
       :current-page.sync="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"

@@ -30,6 +30,24 @@ body {
   margin: 0 auto;
 }
 
+.m-l-lg {
+  margin-left: 20px;
+}
+.m-l {
+  margin-left: 10px;
+}
+.m-l-sm {
+  margin-left: 5px;
+}
+.m-r-lg {
+  margin-right: 20px;
+}
+.m-r {
+  margin-right: 10px;
+}
+.m-r-sm {
+  margin-right: 5px;
+}
 .m-t-lg {
   margin-top: 20px;
 }
@@ -39,8 +57,18 @@ body {
 .m-t-sm {
   margin-top: 5px;
 }
-
-// faq repeated style
+.m-b-lg {
+  margin-bottom: 20px;
+}
+.m-b {
+  margin-bottom: 10px;
+}
+.m-b-sm {
+  margin-bottom: 5px;
+}
+.p-l-lg {
+  padding-left: 20px;
+}
 
 .faq-content{
   .el-card {
@@ -97,9 +125,6 @@ body {
 
 .input-width {
   width: 200px;
-}
-.account-content {
-  padding-top: 50px;
 }
 
 /*breadcrumb & the line*/

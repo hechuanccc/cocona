@@ -144,6 +144,7 @@ export default new Router({
     }, {
       path: '/gameintro',
       name: 'Gameintro',
+      meta: { requiresAuth: true },
       component: Gameintro
 
     }, {

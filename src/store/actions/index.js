@@ -65,12 +65,12 @@ export default {
       }
       return Promise.resolve(res)
     }, error => {
-      console.log(error)
       commit(types.SET_USER, {
         user: {
           logined: false
         }
       })
+      return Promise.reject(error)
     })
   },
   updateUser: ({ commit, state }, updateData) => {
