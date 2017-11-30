@@ -17,10 +17,22 @@ export function unionChunked (raw, size, groupCodes) {
   groupCodes.forEach(code => {
     const matchedGroup = _.find(raw, group => group.code === code)
     if (matchedGroup) {
-      playgroups.push(matchedGroup)
+      let aliases = _.uniqBy(matchedGroup.plays, 'alias').map(play => play.alias)
+      if (aliases[0]) {
+        aliases.forEach(alias => {
+          playgroups.push({
+            ...matchedGroup,
+            alias,
+            plays: _.filter(matchedGroup.plays, play => {
+              return play.alias === alias
+            })
+          })
+        })
+      } else {
+        playgroups.push(matchedGroup)
+      }
     }
   })
-
   // turn plays in playgroups into chunks
   playgroups.forEach(playgroup => {
     playgroup['plays'] = _.chunk(playgroup['plays'], size)
@@ -29,27 +41,32 @@ export function unionChunked (raw, size, groupCodes) {
     return playgroups
   }
 
-  let obj = {}
+  let groupResult = {}
 
   playgroups.forEach(item => {
-    if (!obj[item['display_name']]) {
-      obj[item['display_name']] = item
+    const key = item['alias'] || item['display_name']
+    if (!groupResult[key]) {
+      groupResult[key] = item
     } else {
-      obj[item['display_name']]['plays'] = obj[item['display_name']]['plays'].concat(item['plays'])
+      groupResult[key]['plays'] = groupResult[key]['plays'].concat(item['plays'])
     }
   })
-  return _.map(obj, n => n)
+
+  let result = _.map(groupResult, playgroup => playgroup)
+  result[0]['active'] = true
+
+  return result
 }
 
 export function formatPlayGroup (raw, formatting) {
   let sections = []
   formatting.forEach(format => {
-    let chunkedRaw = unionChunked(raw, format.play_col, format.grp_code)
+    let chunkedRawGroups = unionChunked(raw, format.play_col, format.grp_code)
     let playgroups = []
     format.grp_code.forEach(code => {
-      let targetGroup = _.find(chunkedRaw, x => x.code === code)
+      let targetGroup = _.filter(chunkedRawGroups, x => x.code === code)
       if (targetGroup) {
-        playgroups.push(targetGroup)
+        playgroups = playgroups.concat(targetGroup)
       }
     })
     sections.push({

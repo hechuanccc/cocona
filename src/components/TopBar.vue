@@ -5,13 +5,13 @@
     </div>
     <ul class="account-links" v-if="!isLogin">
       <li>
-        <span @click="login">{{$t('navMenu.user_login')}}</span>
+        <a @click="login" class="link">{{$t('navMenu.user_login')}}</a>
       </li>
       <li>
-        <router-link tag="span" to="/register">{{$t('navMenu.user_register')}}</router-link>
+        <router-link to="/register" class="link">{{$t('navMenu.user_register')}}</router-link>
       </li>
       <li>
-        <span class="red">{{$t('navMenu.try_play')}}</span>
+        <a class="red link">{{$t('navMenu.try_play')}}</a>
       </li>
     </ul>
     <ul v-else-if="user.logined" class="account-links" >

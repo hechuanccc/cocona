@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="game-container">
     <el-tabs v-model="activeName" @tab-click="switchTab" v-if="categories.length > 0">
-      <el-tab-pane v-for="(category, index) in categories" :key="'category' + index" :name="''+category.id" :label="category.display_name" ></el-tab-pane>
+      <el-tab-pane v-for="(category, index) in categories" :key="'category' + category.id" :name="''+category.id" :label="category.display_name" ></el-tab-pane>
     </el-tabs>
     <div class="schedule-tips">
       <div class="current-game" v-if="currentGame && currentCategory">
@@ -90,6 +90,7 @@ export default {
       this.forward(this.categories[0])
     }
     this.updateSchedule()
+    this.$root.bus.$emit('new-betrecords', this.gameId)
   },
   beforeDestroy () {
     clearInterval(this.timer)
@@ -172,11 +173,19 @@ export default {
 
 <style scoped lang="scss">
 @import '../../style/vars.scss';
+.game-container {
+  background: #fff;
+  padding: 0 10px 10px;
+  margin-top: 10px;
+}
 .current-game {
   position: absolute;
 }
 .el-tabs__header {
   margin-bottom: 5px;
+}
+.game-container /deep/ .el-tabs__item {
+  padding: 0 12px;
 }
 .schedule-tips {
   height: 30px;
