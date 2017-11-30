@@ -195,8 +195,7 @@ export default {
               game_schedule: this.scheduleId,
               bet_amount: parseFloat(play.bet_amount),
               play: play.id,
-              bet_options: { options: combination },
-              odds: play.odds
+              bet_options: { options: combination }
             }
           })
         } else {
@@ -204,7 +203,6 @@ export default {
             game_schedule: this.scheduleId,
             bet_amount: parseFloat(play.bet_amount),
             play: play.id,
-            odds: play.odds,
             bet_options: play.selectedOptions ? play.selectedOptions : []
           }
         }
