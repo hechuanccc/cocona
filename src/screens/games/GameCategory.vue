@@ -12,25 +12,28 @@
     </el-row>
     <div v-for="(playSection, index) in playSections"
     class="clearfix"
-    v-if="playSections.length">
-      <div 
+    v-if="playSections.length"
+    :key="playSection+'-ps-'+index">
+      <div
         :style="{width: getWidthForGroup(playSection)}"
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
         :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
+        :key="playgroup+'-pg-'+playgroupIndex"
         >
-        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex" 
+        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
           <tr>
             <th class="group-name" :colspan="playSection.playCol">
               {{playgroup.length}}{{playgroup.display_name}}
             </th>
           </tr>
-          <tr v-for="(playChunk, playChunkIndex) in playgroup.plays">
-            <td v-for="play in playChunk" align="center" :class="['clickable',
+          <tr v-for="(playChunk, playChunkIndex) in playgroup.plays" :key="playChunk+'-pc-'+playChunkIndex">
+            <td v-for="(play, index) in playChunk" align="center" :class="['clickable',
                 {
                   hover: plays[play.id].hover,
                   active: plays[play.id].active && !gameClosed
                 }]"
+                :key="play+'-'+index"
                 @mouseover="toggleHover(play, true)"
                 @mouseleave="toggleHover(play, false)"
                 @click="toggleActive(plays[play.id], $event)">
@@ -49,14 +52,16 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
-        <CustomPlayGroup 
-          :playReset="playReset"
-          @updatePlayForSubmit="updateCustomPlays"
-          :formatting="getCustomFormatting(playgroup.code)" 
-          :playgroup="playgroup"
-          :plays="plays"
-          :gameClosed="gameClosed"
-          v-else />
+        <component
+           :is="chooseComponentByCode(playgroup.code)"
+           :playReset="playReset"
+           @updatePlayForSubmit="updateCustomPlays"
+           :formatting="getCustomFormatting(playgroup.code)"
+           :playgroup="playgroup"
+           :plays="plays"
+           :gameClosed="gameClosed"
+           :zodiacs="zodiacs"
+           v-else/>
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
@@ -83,6 +88,7 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
+            <div v-if="scope.row.isCustom" class="combinations">已选号码：{{scope.row.selectedOptions.map(option=>zodiacs[option].xiao)}}</div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -128,7 +134,8 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import CustomPlayGroup from '../../components/CustomPlayGroup'
+import common from '../../components/playGroup/common'
+import HklPgShxiaoSpczdc from '../../components/playGroup/hkl_pg_shxiao_spczdc'
 
 export default {
   props: {
@@ -145,7 +152,8 @@ export default {
   },
   name: 'gameplay',
   components: {
-    CustomPlayGroup
+    common,
+    HklPgShxiaoSpczdc
   },
   data () {
     return {
@@ -161,7 +169,57 @@ export default {
       submitted: false,
       submitting: false,
       errors: '',
-      playReset: false
+      playReset: false,
+      zodiacs: [
+        {
+          xiao: '鼠',
+          nums: '10,22,34,46'
+        },
+        {
+          xiao: '牛',
+          nums: '09,21,33,45'
+        },
+        {
+          xiao: '虎',
+          nums: '08,20,32,44'
+        },
+        {
+          xiao: '兔',
+          nums: '07,19,31,43'
+        },
+        {
+          xiao: '龙',
+          nums: '06,18,30,42'
+        },
+        {
+          xiao: '蛇',
+          nums: '05,17,29,41'
+        },
+        {
+          xiao: '马',
+          nums: '04,16,28,40'
+        },
+        {
+          xiao: '羊',
+          nums: '03,15,27,39'
+        },
+        {
+          xiao: '猴',
+          nums: '02,14,26,38'
+        },
+        {
+          xiao: '鸡',
+          nums: '01,13,25,37,49'
+        },
+        {
+          xiao: '狗',
+          nums: '12,24,36,48'
+        },
+        {
+          xiao: '猪',
+          nums: '11,23,35,47'
+        }
+      ]
     }
   },
   computed: {
@@ -237,6 +295,16 @@ export default {
           this.$set(play, 'selectedOptions', [])
         }
       })
+    },
+    chooseComponentByCode (code) {
+      switch (code) {
+        case 'hkl_pg_shxiao_spczdc':
+          return 'HklPgShxiaoSpczdc'
+        case 'gd11x5_pg_seq_seq':
+          return 'gd11x5Seq'
+        default:
+          return 'common'
+      }
     },
     getCustomFormatting (groupCode) {
       return _.find(this.$store.state.customPlayGroups, item => {
@@ -396,5 +464,8 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-
+.combinations {
+  padding-left: 10px;
+  font-weight: 700;
+}
 </style>
