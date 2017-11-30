@@ -5,7 +5,10 @@
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
     <div class="balls-number">
-      <span v-for="(ball, index) in resultBall" :key="ball" :class="getResultClass(ball)">
+      <span 
+        v-for="(ball, index) in resultBall" 
+        :key="gameLatestResult.issue_number + index" 
+        :class="getResultClass(ball)">
         <b> {{ball}} </b>
         <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]| zodiacFilter}} </p>
       </span>
