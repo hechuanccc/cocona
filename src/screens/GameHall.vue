@@ -101,21 +101,6 @@ export default {
     this.$root.bus.$on('new-betrecords', (gameId) => {
       this.fetchOngoingBet(gameId)
     })
-    // this.$store.dispatch('fetchUser')
-    //   .then(res => {
-    //     this.$store.dispatch('fetchGames')
-    //   })
-    //   .catch(error => {
-    //     console.log(error)
-    //     if (error.response.status > 400) {
-    //       this.$router.push({
-    //         path: '/',
-    //         query: {
-    //           next: this.$route.path
-    //         }
-    //       })
-    //     }
-    //   })
   }
 }
 </script>

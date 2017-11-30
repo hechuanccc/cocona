@@ -61,7 +61,6 @@ sync(store, router)
 Vue.mixin({
   methods: {
     performLogin () {
-      console.log(this)
       this.$router.push({
         path: '/',
         query: {

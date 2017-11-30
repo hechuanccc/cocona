@@ -10,30 +10,49 @@
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
-    <div v-for="(playSection, index) in playSections"
-    class="clearfix"
-    v-if="playSections.length">
+    <div 
+      v-for="(playSection, index) in playSections"
+      class="clearfix"
+      :key="game.id + 'playSection' + index"
+      v-if="playSections.length">
+      <ul v-if="getAliases(playSection).length" class="alias-tab">
+        <li 
+          :class="playSection.playgroups[tabIndex].active ? 'active' : ''" 
+          v-for="(alias, tabIndex) in getAliases(playSection)" 
+          :key="index + game.id + 'tab' + tabIndex"
+          @click="selectAlias(playSection, tabIndex)">
+          {{alias}}
+        </li>
+      </ul>
       <div 
         :style="{width: getWidthForGroup(playSection)}"
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
         :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
-        >
+        :key="'playgroup' + playgroup.name"
+        v-if="playgroup.alias ? playgroup.active : true">
         <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex" 
           v-if="!getCustomFormatting(playgroup.code)">
-          <tr>
+          <tr v-if="!playgroup.alias">
             <th class="group-name" :colspan="playSection.playCol">
               {{playgroup.length}}{{playgroup.display_name}}
             </th>
           </tr>
-          <tr v-for="(playChunk, playChunkIndex) in playgroup.plays">
-            <td v-for="play in playChunk" align="center" :class="['clickable',
+          <tr 
+            v-for="(playChunk, playChunkIndex) in playgroup.plays"
+            :key="playgroup.name + 'playChunk' + playChunkIndex">
+            <td 
+              v-for="play in playChunk" 
+              :key="play.id + 'play'"
+              align="center" 
+              :class="['clickable',
                 {
-                  hover: plays[play.id].hover,
-                  active: plays[play.id].active && !gameClosed
+                  hover: plays[play.id] ? plays[play.id].hover : false,
+                  active: plays[play.id] ? plays[play.id].active && !gameClosed : false
                 }]"
-                @mouseover="toggleHover(play, true)"
-                @mouseleave="toggleHover(play, false)"
-                @click="toggleActive(plays[play.id], $event)">
+              @mouseover="toggleHover(play, true)"
+              @mouseleave="toggleHover(play, false)"
+              @click="toggleActive(plays[play.id], $event)" 
+              v-if="play.code">
               <el-col :span="7" class="name">
                 <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
@@ -205,18 +224,28 @@ export default {
       if (this.raw.length && this.formatting.length) {
         this.playSections = formatPlayGroup(this.raw, this.formatting)
       }
-    },
-    'game': function (game) {
-      this.updateBetrecords()
     }
   },
   created () {
     this.initPlaygroups()
-    if (this.game) {
-      this.updateBetrecords()
-    }
   },
   methods: {
+    selectAlias (playSection, tabIndex) {
+      let activePlaygroup = _.find(playSection.playgroups, playgroup => playgroup.active)
+      // reset 'active' for plays in inactive playgroups
+      _.each(_.filter(this.plays, play => play.active && play.alias === activePlaygroup.alias), play => {
+        this.$set(play, 'active', false)
+        this.$set(play, 'amount', '')
+      })
+      // switch 'active' between play groups
+      _.map(playSection.playgroups, (playgroup, index) => {
+        this.$set(playgroup, 'active', index === tabIndex)
+      })
+    },
+    getAliases (section) {
+      let aliases = _.map(section.playgroups, playgroup => playgroup.alias)
+      return aliases[0] ? aliases : []
+    },
     // will be triggered by custom play components to recevie plays for submitting
     updateCustomPlays (playOptions) {
       _.each(this.plays, play => {
@@ -354,7 +383,23 @@ export default {
 <style scoped lang='scss'>
 @import "../../style/vars.scss";
 @import "../../style/gameplay.scss";
-
+.alias-tab {
+  li {
+    display: inline-block;
+    cursor: pointer;
+    float: left;
+    padding: 8px 20px;
+    margin: 0 -1px 2px 0;
+    background: #fff;
+    color: #666;
+    border: 1px solid #dedede;
+    &.active {
+      border: 1px solid $primary;
+      background: $primary;
+      color: #fff;
+    }
+  }
+}
 .name {
   font-weight: bold;
   line-height: $cell-height;
