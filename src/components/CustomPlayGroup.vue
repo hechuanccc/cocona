@@ -151,8 +151,9 @@ export default {
   methods: {
     calculateCombinations () {
       let numbers = this.selectedOptions.map(option => option.num)
-      if (numbers.length > 1) {
-        this.combinations = Combinatorics.combination(numbers, this.plays[this.activePlayId].options_count || 2).toArray()
+      let rules = this.plays[this.activePlayId].rules
+      if (numbers.length > 1 && rules) {
+        this.combinations = Combinatorics.combination(numbers, rules.min_opts).toArray()
         this.valid = true
       } else {
         this.valid = false
@@ -170,9 +171,10 @@ export default {
         return false
       }
       event.preventDefault()
-      if (!option.selected) {
+      let rules = this.plays[this.activePlayId].rules
+      if (!option.selected && rules) {
         // 7 is hard coded, will update it when API is done
-        if (this.selectedOptions.length < 7) {
+        if (this.selectedOptions.length < rules.max_opts) {
           option.selected = true
         }
       } else {
