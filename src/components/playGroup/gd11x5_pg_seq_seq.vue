@@ -20,10 +20,9 @@
       </tbody>
     </table>
     <table class="play-table">
-      <tr>
+      <tr v-if="combinations.length !== 0">
         <td :colspan="customPlayGroup.cols" align="center">
-          <div v-if="combinations.length === 0">第一球</div>
-          <div v-else >
+          <div>
             已选择
             <el-popover
               ref="popover"
@@ -41,79 +40,34 @@
           </div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup">
-        <td
-          @click="selectOption(option, $event)"
-          @mouseover="option.hover = true"
-          @mouseleave="option.hover = false"
-          v-for="option in row"
-          :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
-            {
-              hover: option.hover,
-              active: option.selected && !gameClosed
-            }
-          ]">
-          <el-col :span="12" class="name">
-            <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
-          </el-col>
-          <el-col :span="12" class="checkbox input">
-            <el-checkbox v-model="option.selected" v-if="!gameClosed&&!option.disabled"></el-checkbox>
-            <el-checkbox disabled v-else></el-checkbox>
-          </el-col>
-        </td>
-      </tr>
-      <tr>
-        <td :colspan="customPlayGroup.cols" align="center">
-          <div>第二球</div>
-        </td>
-      </tr>
-      <tr v-for="row in optionGroup2">
-        <td
-          @click="selectOption(option, $event)"
-          @mouseover="option.hover = true"
-          @mouseleave="option.hover = false"
-          v-for="option in row"
-          :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
-            {
-              hover: option.hover,
-              active: option.selected && !gameClosed
-            }
-          ]">
-          <el-col :span="12" class="name">
-            <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
-          </el-col>
-          <el-col :span="12" class="checkbox input">
-            <el-checkbox v-model="option.selected" v-if="!gameClosed&&!option.disabled"></el-checkbox>
-            <el-checkbox disabled v-else></el-checkbox>
-          </el-col>
-        </td>
-      </tr>
-      <tr v-if="showBall3">
-        <td :colspan="customPlayGroup.cols" align="center">
-          <div>第三球</div>
-        </td>
-      </tr>
-      <tr v-if="showBall3" v-for="row in optionGroup3">
-        <td
-          @click="selectOption(option, $event)"
-          @mouseover="option.hover = true"
-          @mouseleave="option.hover = false"
-          v-for="option in row"
-          :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
-            {
-              hover: option.hover,
-              active: option.selected && !gameClosed
-            }
-          ]">
-          <el-col :span="12" class="name">
-            <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
-          </el-col>
-          <el-col :span="12" class="checkbox input">
-            <el-checkbox v-model="option.selected" v-if="!gameClosed&&!option.disabled"></el-checkbox>
-            <el-checkbox disabled v-else></el-checkbox>
-          </el-col>
-        </td>
-      </tr>
+      <template v-for="(views,index) in showOptionGroupViews">
+        <tr>
+          <td :colspan="customPlayGroup.cols" align="center">
+            <div>{{`第${index+1}球`}}</div>
+          </td>
+        </tr>
+        <tr v-for="row in views">
+          <td
+            @click="selectOption(option, $event)"
+            @mouseover="option.hover = true"
+            @mouseleave="option.hover = false"
+            v-for="option in row"
+            :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
+              {
+                hover: option.hover,
+                active: option.selected && !gameClosed
+              }
+            ]">
+            <el-col :span="12" class="name">
+              <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
+            </el-col>
+            <el-col :span="12" class="checkbox input">
+              <el-checkbox v-model="option.selected" v-if="!gameClosed&&!option.disabled"></el-checkbox>
+              <el-checkbox disabled v-else></el-checkbox>
+            </el-col>
+          </td>
+        </tr>
+      </template>
     </table>
   </div>
 </template>
@@ -147,9 +101,35 @@ export default {
     if (!customPlayGroup) {
       return []
     }
-    const optionGroup = this.createOptions(customPlayGroup)
-    const optionGroup2 = this.createOptions(customPlayGroup)
-    const optionGroup3 = this.createOptions(customPlayGroup)
+
+    const optionGroups = [[], [], []]
+    const optionGroupViews = [[], [], []]
+
+    const options = customPlayGroup.options
+    const rows = Math.ceil(options.length / customPlayGroup.cols)
+    optionGroups.forEach((optionGroup, index) => {
+      optionGroupViews[index] = _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < customPlayGroup.cols) {
+          let num = customPlayGroup.cols * n + index + 1
+          if (num > 11) {
+            break
+          }
+
+          let option = {
+            num: num,
+            selected: false,
+            hover: false,
+            disabled: false
+          }
+          result.push(option)
+          optionGroup.push(option)
+          index++
+        }
+        return [result]
+      })
+    })
 
     let activePlayId = ''
     let plays = this.playgroup.plays
@@ -158,99 +138,76 @@ export default {
     }
     return {
       activePlayId,
-      optionGroup,
-      optionGroup2,
-      optionGroup3,
+      optionGroups,
+      optionGroupViews,
       customPlayGroup,
       combinations: [],
       valid: false
     }
   },
   computed: {
-    showBall3 () {
-      return this.activePlayId === 26006
+    showOptionGroupViews () {
+      if (this.activePlayId === 26005) {
+        return this.optionGroupViews.slice(0, 2)
+      } else {
+        return this.optionGroupViews
+      }
     },
     selectedOptions () {
-      return _.filter(_.flatten(this.optionGroup), option => {
-        return option.selected
-      })
-    },
-    selectedOptions2 () {
-      return _.filter(_.flatten(this.optionGroup2), option => {
-        return option.selected
-      })
-    },
-    selectedOptions3 () {
-      return _.filter(_.flatten(this.optionGroup3), option => {
-        return option.selected
-      })
+      return _.map(this.optionGroups, group => {
+        return _.filter(group, option => {
+          return option.selected
+        })
+      }).filter(group => group.length > 0)
     },
     selectedNums () {
-      return [
-        ...this.selectedOptions.map(option => option.num),
-        ...this.selectedOptions2.map(option => option.num),
-        ...this.selectedOptions3.map(option => option.num)]
+      return _.map(_.flatten(this.selectedOptions), option => option.num)
     }
   },
   watch: {
     'selectedOptions': function () {
       this.calculateCombinations()
     },
-    'selectedOptions2': function () {
-      this.calculateCombinations()
-    },
-    'selectedOptions3': function () {
-      this.calculateCombinations()
-    },
     'activePlayId': function () {
-      _.each(_.flatten(this.optionGroup), option => {
-        this.$set(option, 'selected', false)
-      })
-      _.each(_.flatten(this.optionGroup2), option => {
-        this.$set(option, 'selected', false)
-      })
-      _.each(_.flatten(this.optionGroup3), option => {
-        this.$set(option, 'selected', false)
-      })
+      this.resetOption()
       this.combinations = []
       this.calculateCombinations()
     },
     'selectedNums': function (currentSelectedOptions) {
-      this.resetOption(this.optionGroup, currentSelectedOptions)
-      this.resetOption(this.optionGroup2, currentSelectedOptions)
-      this.resetOption(this.optionGroup3, currentSelectedOptions)
+      _.each(this.optionGroups, group => {
+        _.each(group, option => {
+          if (currentSelectedOptions.includes(option.num)) {
+            if (!option.selected) {
+              this.$set(option, 'disabled', true)
+            }
+          } else {
+            this.$set(option, 'disabled', false)
+          }
+        })
+      })
     },
     'playReset': function () {
-      _.flatten(this.optionGroup).forEach(option => {
-        option.selected = false
-      })
+      this.resetOption()
     }
   },
   methods: {
     calculateCombinations () {
-      let numbers = this.selectedOptions.map(option => option.num)
-      let numbers2 = this.selectedOptions2.map(option => option.num)
-      let numbers3 = this.selectedOptions3.map(option => option.num)
-      if (this.showBall3) {
-        if (numbers.length > 0 && numbers2.length > 0 && numbers3.length > 0) {
-          this.combinations = Combinatorics.cartesianProduct(numbers, numbers2, numbers3).toArray()
-          this.valid = true
-        } else {
-          this.valid = false
-        }
+      let selectedOptionNumbers = _.map(this.selectedOptions, options => {
+        return _.map(options, option => option.num)
+      })
+
+      if (selectedOptionNumbers.length === this.showOptionGroupViews.length) {
+        this.combinations = Combinatorics.cartesianProduct.apply(Combinatorics, selectedOptionNumbers).toArray()
+        this.valid = true
       } else {
-        if (numbers.length > 0 && numbers2.length) {
-          this.combinations = Combinatorics.cartesianProduct(numbers, numbers2).toArray()
-          this.valid = true
-        } else {
-          this.valid = false
-        }
+        this.combinations = []
+        this.valid = false
       }
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.activePlayId,
-        options: this.selectedOptions.join(','),
+        options: null,
         combinations: this.combinations,
-        selectedOptions: '',
+        selectedOptions: null,
         valid: this.valid
       })
     },
@@ -260,7 +217,7 @@ export default {
       }
       event.preventDefault()
       if (!option.selected) {
-        // 7 is hard coded, will update it when API is done
+        // will update it when rules.max_opts update
         if (this.selectedOptions.length < 7) {
           option.selected = true
         }
@@ -268,38 +225,11 @@ export default {
         option.selected = false
       }
     },
-    createOptions (customPlayGroup) {
-      const options = customPlayGroup.options
-      const rows = Math.ceil(options.length / customPlayGroup.cols)
-      return _.flatMap(options.slice(0, rows), n => {
-        let index = 0
-        let result = []
-        while (index < customPlayGroup.cols) {
-          let num = customPlayGroup.cols * n + index + 1
-          if (num > 11) {
-            break
-          }
-          result.push({
-            num: num,
-            selected: false,
-            hover: false,
-            disabled: false
-          })
-          index++
-        }
-        return [result]
-      })
-    },
-    resetOption (targetOption, currentSelectedOptions) {
-      _.each(targetOption, (options, mainIndex) => {
-        _.each(options, (option, subIndex) => {
-          if (currentSelectedOptions.includes(option.num)) {
-            if (!option.selected) {
-              this.$set(targetOption[mainIndex][subIndex], 'disabled', true)
-            }
-          } else {
-            this.$set(targetOption[mainIndex][subIndex], 'disabled', false)
-          }
+    resetOption () {
+      _.each(this.optionGroups, group => {
+        _.each(group, option => {
+          this.$set(option, 'selected', false)
+          this.$set(option, 'disabled', false)
         })
       })
     }

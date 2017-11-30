@@ -170,7 +170,7 @@ export default {
   computed: {
     playsForSubmit () {
       return _.filter(this.activePlays, play => play.active).map(play => {
-        if (play.combinations) {
+        if (!play.selectedOptions || play.selectedOptions.length === 0) {
           return _.map(play.combinations, combination => {
             return {
               game_schedule: this.scheduleId,
