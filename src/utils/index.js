@@ -82,11 +82,14 @@ export function msgFormatter (msgs) {
   let formatMsg
   if (Array.isArray(msgs)) {
     let arr = []
-
     msgs.forEach(msg => {
-      Object.keys(msg).forEach(key => {
-        arr.push(msg[key])
-      })
+      if (typeof msg === 'string') {
+        arr.push(msg)
+      } else {
+        Object.keys(msg).forEach(key => {
+          arr.push(msg[key])
+        })
+      }
     })
     formatMsg = arr.join(', ')
   } else {
@@ -141,6 +144,6 @@ export function setIndicator (onActivate, onInactivate) {
 
   // set the initial state (but only if browser supports the Page Visibility API)
   if (document[hidden] !== undefined) {
-    onchange({type: document[hidden] ? 'blur' : 'focus'})
+    onchange({ type: document[hidden] ? 'blur' : 'focus' })
   }
 }

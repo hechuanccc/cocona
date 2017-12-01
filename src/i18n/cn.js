@@ -133,17 +133,20 @@ export default {
     reset: '重置',
     modify: '修改',
     save: '保存',
-    close: '关闭'
+    close: '关闭',
+    setting: '设定'
   },
   validate: {
     username_validate: '请输入4~10位英数字',
     password_validate: '请输入8~15字元，其中至少包含一大写字母及一数字',
+    qq_validate: 'qq号码格式无效',
     password_again: '请再次输入密码',
     password_diff: '两次输入密码不一致',
     username_exist: '该帐号已存在',
     required: '该栏位必须输入',
     required_num: '该栏位必须输入数字',
-    email_validate: 'email格式无效'
+    email_validate: 'email格式无效',
+    not_set_bank_info: '尚未设定银行信息'
   },
   message: {
     save_success: '保存成功'
