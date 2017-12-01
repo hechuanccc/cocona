@@ -53,15 +53,14 @@
           </tr>
         </table>
         <component
-           :is="chooseComponentByCode(playgroup.code)"
-           :playReset="playReset"
-           @updatePlayForSubmit="updateCustomPlays"
-           :formatting="getCustomFormatting(playgroup.code)"
-           :playgroup="playgroup"
-           :plays="plays"
-           :gameClosed="gameClosed"
-           :zodiacs="zodiacs"
-           v-else/>
+          :is="chooseComponentByCode(playgroup.code)"
+          :playReset="playReset"
+          @updatePlayForSubmit="updateCustomPlays"
+          :formatting="getCustomFormatting(playgroup.code)"
+          :playgroup="playgroup"
+          :plays="plays"
+          :gameClosed="gameClosed"
+          v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
@@ -134,7 +133,6 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import common from '../../components/playGroup/common'
 import HklPgShxiaoSpczdc from '../../components/playGroup/hkl_pg_shxiao_spczdc'
 const zodiacs = [
   {
@@ -203,6 +201,8 @@ const zodiacMap = {}
 zodiacs.forEach(zodiac => {
   zodiacMap[zodiac.englishName] = zodiac.xiao
 })
+const common = (resolve) => require(['../../components/playGroup/common'], resolve)
+const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 
 export default {
   props: {
@@ -220,7 +220,8 @@ export default {
   name: 'gameplay',
   components: {
     common,
-    HklPgShxiaoSpczdc
+    HklPgShxiaoSpczdc,
+    gd11x5Seq
   },
   data () {
     return {
@@ -253,7 +254,7 @@ export default {
           game_schedule: this.scheduleId,
           bet_amount: parseFloat(play.bet_amount),
           play: play.id,
-          bet_options: play.selectedOptions ? play.selectedOptions : []
+          bet_options: play.bet_options
         }
       })
     },
@@ -324,6 +325,8 @@ export default {
       switch (code) {
         case 'CustomPlayGroup':
           return 'common'
+        case 'gd11x5_pg_seq_seq':
+          return 'gd11x5Seq'
         case 'hkl_pg_shxiao_spczdc':
           return 'HklPgShxiaoSpczdc'
         case 'gd11x5_pg_seq_seq':
@@ -393,20 +396,40 @@ export default {
       })
     },
     openDialog () {
-      const validedPlays = _.filter(this.plays, play => play.active && parseFloat(play.amount) > 0)
-
+      const validedPlays = _.flatMap(
+        _.filter(this.plays, play => play.active && parseFloat(play.amount) > 0),
+        play => {
+          if (play.combinations && !play.selectedOptions) {
+            return _.map(play.combinations, combination => {
+              return {
+                ...play,
+                combinations: combination
+              }
+            })
+          } else {
+            return [play]
+          }
+        }
+      )
       this.activePlays = _.values(validedPlays.map(play => {
+        let betOptions
+        if (play.selectedOptions) {
+          betOptions = { options: _.map(play.selectedOptions, option => option.num) }
+        } else if (play.combinations) {
+          betOptions = { options: play.combinations }
+        } else {
+          betOptions = []
+        }
         return {
           game_schedule: 10,
           display_name: `${play.group} - ${play.display_name}`,
           odds: play.odds,
           bet_amount: play.amount,
           id: play.id,
-          bet_options: [],
+          bet_options: betOptions,
           active: true,
           isCustom: play.isCustom,
-          combinations: play.combinations,
-          selectedOptions: play.selectedOptions ? play.selectedOptions.map(option => option) : []
+          combinations: play.combinations
         }
       }
         )
