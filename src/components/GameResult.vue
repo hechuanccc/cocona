@@ -44,22 +44,22 @@ export default {
   },
   computed: {
     resultNums () {
-      let rawBalls = this.gameLatestResult.result_str.split(',')
-      let formattedBalls = []
+      let rawNums = this.gameLatestResult.result_str.split(',')
+      let formattedNums = []
       if (this.gameLatestResult.game_code === 'bjkl8') {
-        rawBalls.pop()
+        rawNums.pop()
       }
-      rawBalls.forEach((rawBall) => {
+      rawNums.forEach((rawBall) => {
         if (rawBall[0] === '0' && rawBall !== '0') {
-          formattedBalls.push(rawBall.slice(1))
+          formattedNums.push(rawBall.slice(1))
           return
         }
-        formattedBalls.push(rawBall)
+        formattedNums.push(rawBall)
       })
       if (!this.gameLatestResult.result_str) {
         return this.$t('navMenu.no_result')
       }
-      return formattedBalls
+      return formattedNums
     },
     resultsSum () {
       let sum = 0
