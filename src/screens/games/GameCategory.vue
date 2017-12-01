@@ -68,16 +68,6 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
-        <component
-           :is="chooseComponentByCode(playgroup.code)"
-           :playReset="playReset"
-           @updatePlayForSubmit="updateCustomPlays"
-           :formatting="getCustomFormatting(playgroup.code)"
-           :playgroup="playgroup"
-           :plays="plays"
-           :gameClosed="gameClosed"
-           :zodiacs="zodiacs"
-           v-else/>
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
@@ -184,57 +174,7 @@ export default {
       submitted: false,
       submitting: false,
       errors: '',
-      playReset: false,
-      zodiacs: [
-        {
-          xiao: '鼠',
-          nums: '10,22,34,46'
-        },
-        {
-          xiao: '牛',
-          nums: '09,21,33,45'
-        },
-        {
-          xiao: '虎',
-          nums: '08,20,32,44'
-        },
-        {
-          xiao: '兔',
-          nums: '07,19,31,43'
-        },
-        {
-          xiao: '龙',
-          nums: '06,18,30,42'
-        },
-        {
-          xiao: '蛇',
-          nums: '05,17,29,41'
-        },
-        {
-          xiao: '马',
-          nums: '04,16,28,40'
-        },
-        {
-          xiao: '羊',
-          nums: '03,15,27,39'
-        },
-        {
-          xiao: '猴',
-          nums: '02,14,26,38'
-        },
-        {
-          xiao: '鸡',
-          nums: '01,13,25,37,49'
-        },
-        {
-          xiao: '狗',
-          nums: '12,24,36,48'
-        },
-        {
-          xiao: '猪',
-          nums: '11,23,35,47'
-        }
-      ]
+      playReset: false
     }
   },
   computed: {

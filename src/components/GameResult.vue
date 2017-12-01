@@ -6,10 +6,10 @@
     </div>
     <div class="balls-number">
       <span
-        v-for="(ball, index) in resultBall"
+        v-for="(num, index) in resultBall"
         :key="gameLatestResult.issue_number + index"
-        :class="getResultClass(ball)">
-        <b> {{ball}} </b>
+        :class="getResultClass(num)">
+        <b> {{num}} </b>
         <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]| zodiacFilter}} </p>
       </span>
       <div class="ball-sum" v-if="showSum">
@@ -93,9 +93,6 @@ export default {
     fetchResult (gameId) {
       return fetchGameResult(gameId).then(
       result => {
-        if (!result[0] || !result) {
-          return Promise.reject(result)
-        }
         this.gameLatestResult = result[0]
         this.zodiacs = result[0].zodiac.split(',')
         return result
@@ -113,14 +110,13 @@ export default {
         this.interval = setInterval(() => {
           let oldIssue = this.gameLatestResult.issue_number
           this.fetchResult(gameid).then(result => {
+            if (!result[0] || !result) {
+              clearInterval(this.interval)
+            }
             let newIssue = result[0].issue_number
             if (newIssue !== oldIssue) {
               clearInterval(this.interval)
             }
-          },
-          err => {
-            console.log(err)
-            clearInterval(this.interval)
           })
         }, (2 * 1000))
         this.pollResult(gameid)
