@@ -68,6 +68,14 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
+        <CustomPlayGroup
+          :playReset="playReset"
+          @updatePlayForSubmit="updateCustomPlays"
+          :formatting="getCustomFormatting(playgroup.code)"
+          :playgroup="playgroup"
+          :plays="plays"
+          :gameClosed="gameClosed"
+-         v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
