@@ -1,17 +1,32 @@
-.gd11x5_pg_sn_1f1,
-.gd11x5_pg_sn_b1,
-.gd11x5_pg_sn_b2,
-.gd11x5_pg_sn_b3,
-.gd11x5_pg_sn_b4,
-.gd11x5_pg_sn_b5 {
-  display: inline-block;
-  background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
-  width: 24px;
-  height: 27px;
-  line-height: 27px;
-  font-weight: bold;
-  font-size: 13px;
+@mixin gd11x5-num {
+  .gd11x5_pg_sn_1f1,
+  .gd11x5_pg_sn_b1,
+  .gd11x5_pg_sn_b2,
+  .gd11x5_pg_sn_b3,
+  .gd11x5_pg_sn_b4,
+  .gd11x5_pg_sn_b5 {
+    display: inline-block;
+    background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
+    width: 24px;
+    height: 27px;
+    line-height: 27px;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  @for $i from 1 through 11 {
+    .gd11x5_pg_seq_seq_#{$i}{
+      display: inline-block;
+      background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
+      width: 24px;
+      height: 27px;
+      line-height: 27px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+  }
 }
+
+@include gd11x5-num;
 
 @mixin bcr-num {
   @for $i from 1 through 10 {

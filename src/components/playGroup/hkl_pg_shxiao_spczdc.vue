@@ -1,19 +1,15 @@
 <template>
   <div>
-    <table class="play-table" align="center" v-for="(playChunk, playChunkIndex) in playgroup.plays" >
-      <tr>
-        <td v-for="play in playChunk"  class="group-name" @click="activePlayId = play.id">
-          <el-radio
-            name="radio"
-            v-model="activePlayId"
-            :label="play.id"
-            key="'radio' + index">{{play.display_name}}</el-radio>
-        </td>
+    <table class="play-table" align="center" >
+      <tr class="group-name">
+        <td>种类</td>
+        <td>合肖</td>
       </tr>
       <tbody class="tbody">
         <tr>
-          <td v-for="play in playChunk" @click="activePlayId = play.id">
-            <span v-if="!gameClosed" class="odds">{{ play.odds }}</span>
+          <td align="center">赔率</td>
+          <td>
+            <span v-if="!gameClosed" class="odds">{{currentPlayOdds}}</span>
             <span v-else class="disabled">封盘</span>
           </td>
         </tr>
@@ -22,41 +18,34 @@
     <table class="play-table">
       <tr>
         <td :colspan="customPlayGroup.cols" align="center">
-          <div v-if="combinations.length === 0">请选择</div>
-          <div v-else >
-            已选择
-            <el-popover
-              ref="popover"
-              placement="bottom"
-              :title="'已选择 ' + combinations.length + ' 组'"
-              width="300"
-              trigger="hover">
-              <ul class="combinations">
-                <li v-for="combination in combinations">[{{combination.join(', ')}}]</li>
-              </ul>
-            </el-popover>
-            <el-button v-popover:popover size="mini" round type="info">
-              {{combinations.length}} 组
-            </el-button>
-          </div>
+          <div v-if="!gameClosed">请勾选</div>
+          <div v-else>封盘</div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup">
+      <tr v-for="row in optionGroup" :key="row+'optionGroup'">
         <td
           @click="selectOption(option, $event)"
           @mouseover="option.hover = true"
           @mouseleave="option.hover = false"
           v-for="option in row"
+          :key="option+'in_row'"
           :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
             {
               hover: option.hover,
               active: option.selected && !gameClosed
             }
           ]">
-          <el-col :span="12" class="name">
-            <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
+          <el-col :span="3" class="name">
+            <span :class="playgroup.code + '_' + option.num">{{zodiacs[option.num - 1].xiao}}</span>
           </el-col>
-          <el-col :span="12" class="checkbox input">
+          <el-col :span="17" class="number" align="left">
+            <span v-for="(zodiacNum, index) in formattedZodiacNum[option.num - 1]"
+              :class="playgroup.code + '-zodiac-' + zodiacNum"
+              :key="index">
+                {{zodiacNum}}
+            </span>
+          </el-col>
+          <el-col :span="4" class="checkbox input">
             <el-checkbox v-model="option.selected" v-if="!gameClosed"></el-checkbox>
             <el-checkbox disabled v-else></el-checkbox>
           </el-col>
@@ -68,7 +57,7 @@
 
 <script>
 import _ from 'lodash'
-import Combinatorics from 'js-combinatorics'
+
 export default {
   props: {
     formatting: {
@@ -85,9 +74,12 @@ export default {
     },
     playReset: {
       type: Boolean
+    },
+    zodiacs: {
+      typr: Array
     }
   },
-  name: 'customPlaygroup',
+  name: 'hklPgShxiaoSpczdc',
   data () {
     const customPlayGroup = _.find(this.$store.state.customPlayGroups, item => {
       return item.code === this.playgroup.code
@@ -104,14 +96,14 @@ export default {
         result.push({
           num: n + (rows) * index,
           selected: false,
-          hover: false
+          hover: false,
+          xiao: this.zodiacs[n + (rows) * index - 1].xiao
         })
         index++
       }
       return [result]
     })
-
-    let activePlayId = ''
+    let activePlayId
     let plays = this.playgroup.plays
     if (plays[0] && plays[0].length) {
       activePlayId = plays[0][0].id
@@ -121,7 +113,12 @@ export default {
       optionGroup,
       customPlayGroup,
       combinations: [],
-      valid: false
+      valid: false,
+      currentPlay: {
+        id: '',
+        display_name: '',
+        odds: ''
+      }
     }
   },
   computed: {
@@ -129,18 +126,31 @@ export default {
       return _.filter(_.flatten(this.optionGroup), option => {
         return option.selected
       })
+    },
+    currentPlayOdds () {
+      if (this.selectedOptions.length < 2) {
+        return '--'
+      }
+      return this.currentPlay.odds
+    },
+    formattedZodiacNum () {
+      return _.map(this.zodiacs, zodiac => zodiac.nums.split(','))
     }
   },
   watch: {
     'selectedOptions': function () {
-      this.calculateCombinations()
-    },
-    'activePlayId': function () {
-      _.map(_.flatten(this.optionGroup), option => {
-        this.$set(option, 'selected', false)
+      if (this.selectedOptions.length < 2) {
+        this.updateForSubmit()
+      }
+      _.forEach(this.plays, (play) => {
+        if (play.display_name.slice(-3, -1) === '' + (this.selectedOptions.length)) {
+          this.currentPlay.odds = play.odds
+          this.currentPlay.id = play.id
+          this.currentPlay.display_name = play.display_name
+
+          this.updateForSubmit()
+        }
       })
-      this.combinations = []
-      this.calculateCombinations()
     },
     'playReset': function () {
       _.flatten(this.optionGroup).forEach(option => {
@@ -149,20 +159,18 @@ export default {
     }
   },
   methods: {
-    calculateCombinations () {
+    updateForSubmit () {
       let numbers = this.selectedOptions.map(option => option.num)
-      let rules = this.plays[this.activePlayId].rules
-      if (numbers.length > 1 && rules) {
-        this.combinations = Combinatorics.combination(numbers, rules.min_opts).toArray()
+      if (numbers.length > 1) {
         this.valid = true
       } else {
         this.valid = false
       }
       this.$emit('updatePlayForSubmit', {
-        activePlayId: this.activePlayId,
+        activePlayId: this.currentPlay.id,
         options: this.selectedOptions.join(','),
-        combinations: this.combinations,
-        selectedOptions: this.selectedOptions,
+        selectedOptions: this.selectedOptions.map(option => this.zodiacs[option.num - 1].englishName),
+        combinations: [''],
         valid: this.valid
       })
     },
@@ -171,10 +179,8 @@ export default {
         return false
       }
       event.preventDefault()
-      let rules = this.plays[this.activePlayId].rules
-      if (!option.selected && rules) {
-        // 7 is hard coded, will update it when API is done
-        if (this.selectedOptions.length < rules.max_opts) {
+      if (!option.selected) {
+        if (this.selectedOptions.length < 11) {
           option.selected = true
         }
       } else {
@@ -192,6 +198,10 @@ export default {
 .group-name {
   cursor: pointer;
 }
+
+.warn {
+  color: $red
+}
 .odds {
   line-height: $cell-height;
   color: $red;
@@ -205,6 +215,14 @@ export default {
   display: block;
 }
 .tbody {
+  .odds{
+    width: 100%;
+  }
+  td {
+    width: 50%;
+    text-align: center;
+    font-weight: bold
+  }
   background: #fff;
   cursor: pointer;
 }
@@ -214,9 +232,5 @@ export default {
 .checkbox {
   border-left: $cell-border;
 }
-.combinations li {
-  width: 25%;
-  display: inline-block;
-  color: $red;
-}
+
 </style>

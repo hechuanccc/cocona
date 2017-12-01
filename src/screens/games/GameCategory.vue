@@ -3,56 +3,40 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model="amount" />
+        <el-input v-model.number="amount" type="number"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
-    <div
-      v-for="(playSection, index) in playSections"
-      class="clearfix"
-      :key="game.id + 'playSection' + index"
-      v-if="playSections.length">
-      <ul v-if="getAliases(playSection).length" class="alias-tab">
-        <li
-          :class="playSection.playgroups[tabIndex].active ? 'active' : ''"
-          v-for="(alias, tabIndex) in getAliases(playSection)"
-          :key="index + game.id + 'tab' + tabIndex"
-          @click="selectAlias(playSection, tabIndex)">
-          {{alias}}
-        </li>
-      </ul>
+    <div v-for="(playSection, index) in playSections"
+    class="clearfix"
+    v-if="playSections.length"
+    :key="playSection+'-ps-'+index">
       <div
         :style="{width: getWidthForGroup(playSection)}"
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
         :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
-        :key="'playgroup' + playgroup.name"
-        v-if="playgroup.alias ? playgroup.active : true">
+        :key="playgroup+'-pg-'+playgroupIndex"
+        >
         <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
-          <tr v-if="!playgroup.alias">
+          <tr>
             <th class="group-name" :colspan="playSection.playCol">
               {{playgroup.length}}{{playgroup.display_name}}
             </th>
           </tr>
-          <tr
-            v-for="(playChunk, playChunkIndex) in playgroup.plays"
-            :key="playgroup.name + 'playChunk' + playChunkIndex">
-            <td
-              v-for="play in playChunk"
-              :key="play.id + 'play'"
-              align="center"
-              :class="['clickable',
+          <tr v-for="(playChunk, playChunkIndex) in playgroup.plays" :key="playChunk+'-pc-'+playChunkIndex">
+            <td v-for="(play, index) in playChunk" align="center" :class="['clickable',
                 {
-                  hover: plays[play.id] ? plays[play.id].hover : false,
-                  active: plays[play.id] ? plays[play.id].active && !gameClosed : false
+                  hover: plays[play.id].hover,
+                  active: plays[play.id].active && !gameClosed
                 }]"
-              @mouseover="toggleHover(play, true)"
-              @mouseleave="toggleHover(play, false)"
-              @click="toggleActive(plays[play.id], $event)"
-              v-if="play.code">
+                :key="play+'-'+index"
+                @mouseover="toggleHover(play, true)"
+                @mouseleave="toggleHover(play, false)"
+                @click="toggleActive(plays[play.id], $event)">
               <el-col :span="7" class="name">
                 <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
@@ -68,26 +52,28 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
-        <CustomPlayGroup
-          :playReset="playReset"
-          @updatePlayForSubmit="updateCustomPlays"
-          :formatting="getCustomFormatting(playgroup.code)"
-          :playgroup="playgroup"
-          :plays="plays"
-          :gameClosed="gameClosed"
--         v-else />
+        <component
+           :is="chooseComponentByCode(playgroup.code)"
+           :playReset="playReset"
+           @updatePlayForSubmit="updateCustomPlays"
+           :formatting="getCustomFormatting(playgroup.code)"
+           :playgroup="playgroup"
+           :plays="plays"
+           :gameClosed="gameClosed"
+           :zodiacs="zodiacs"
+           v-else/>
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model="amount" />
+        <el-input v-model.number="amount" type="number"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary"
           size="small"
           @click="openDialog"
-          :disabled="gameClosed">下单</el-button>
+          :disabled="gameClosed || dialogDisabled">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
@@ -102,6 +88,7 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
+            <div v-if="scope.row.isCustom" class="combinations"> 已选号码：{{scope.row.selectedOptions | zodiacFilter}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -111,7 +98,7 @@
         </el-table-column>
         <el-table-column property="bet_amount" label="金额">
           <template slot-scope="scope">
-            <el-input size="mini" v-model="scope.row.bet_amount"></el-input>
+            <el-input size="mini" v-model.number="scope.row.bet_amount" type="number"></el-input>
           </template>
         </el-table-column>
         <el-table-column property="active" label="确认">
@@ -147,7 +134,75 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import CustomPlayGroup from '../../components/CustomPlayGroup'
+import common from '../../components/playGroup/common'
+import HklPgShxiaoSpczdc from '../../components/playGroup/hkl_pg_shxiao_spczdc'
+const zodiacs = [
+  {
+    xiao: '鼠',
+    nums: '10,22,34,46',
+    englishName: 'RAT'
+  },
+  {
+    xiao: '牛',
+    nums: '09,21,33,45',
+    englishName: 'OX'
+  },
+  {
+    xiao: '虎',
+    nums: '08,20,32,44',
+    englishName: 'TIGER'
+  },
+  {
+    xiao: '兔',
+    nums: '07,19,31,43',
+    englishName: 'RABBIT'
+  },
+  {
+    xiao: '龙',
+    nums: '06,18,30,42',
+    englishName: 'DRAGON'
+  },
+  {
+    xiao: '蛇',
+    nums: '05,17,29,41',
+    englishName: 'SNAKE'
+  },
+  {
+    xiao: '马',
+    nums: '04,16,28,40',
+    englishName: 'HORSE'
+  },
+  {
+    xiao: '羊',
+    nums: '03,15,27,39',
+    englishName: 'SHEEP'
+  },
+  {
+    xiao: '猴',
+    nums: '02,14,26,38',
+    englishName: 'MONKEY'
+  },
+  {
+    xiao: '鸡',
+    nums: '01,13,25,37,49',
+    englishName: 'ROOSTER'
+  },
+  {
+    xiao: '狗',
+    nums: '12,24,36,48',
+    englishName: 'DOG'
+  },
+  {
+    xiao: '猪',
+    nums: '11,23,35,47',
+    englishName: 'PIG'
+  }
+]
+const zodiacMap = {}
+
+zodiacs.forEach(zodiac => {
+  zodiacMap[zodiac.englishName] = zodiac.xiao
+})
 
 export default {
   props: {
@@ -164,7 +219,8 @@ export default {
   },
   name: 'gameplay',
   components: {
-    CustomPlayGroup
+    common,
+    HklPgShxiaoSpczdc
   },
   data () {
     return {
@@ -175,12 +231,19 @@ export default {
       // raw data in play group from API for generating playSections
       raw: [],
       dialogVisible: false,
+      dialogDisabled: false,
       activePlays: [],
       totalAmount: 0,
       submitted: false,
       submitting: false,
       errors: '',
-      playReset: false
+      playReset: false,
+      zodiacs
+    }
+  },
+  filters: {
+    zodiacFilter (arr) {
+      return arr.map(xiao => zodiacMap[xiao])
     }
   },
   computed: {
@@ -224,28 +287,18 @@ export default {
       if (this.raw.length && this.formatting.length) {
         this.playSections = formatPlayGroup(this.raw, this.formatting)
       }
+    },
+    'game': function (game) {
+      this.updateBetrecords()
     }
   },
   created () {
     this.initPlaygroups()
+    if (this.game) {
+      this.updateBetrecords()
+    }
   },
   methods: {
-    selectAlias (playSection, tabIndex) {
-      let activePlaygroup = _.find(playSection.playgroups, playgroup => playgroup.active)
-      // reset 'active' for plays in inactive playgroups
-      _.each(_.filter(this.plays, play => play.active && play.alias === activePlaygroup.alias), play => {
-        this.$set(play, 'active', false)
-        this.$set(play, 'amount', '')
-      })
-      // switch 'active' between play groups
-      _.map(playSection.playgroups, (playgroup, index) => {
-        this.$set(playgroup, 'active', index === tabIndex)
-      })
-    },
-    getAliases (section) {
-      let aliases = _.map(section.playgroups, playgroup => playgroup.alias)
-      return aliases[0] ? aliases : []
-    },
     // will be triggered by custom play components to recevie plays for submitting
     updateCustomPlays (playOptions) {
       _.each(this.plays, play => {
@@ -266,6 +319,18 @@ export default {
           this.$set(play, 'selectedOptions', [])
         }
       })
+    },
+    chooseComponentByCode (code) {
+      switch (code) {
+        case 'CustomPlayGroup':
+          return 'common'
+        case 'hkl_pg_shxiao_spczdc':
+          return 'HklPgShxiaoSpczdc'
+        case 'gd11x5_pg_seq_seq':
+          return 'gd11x5Seq'
+        default:
+          return 'common'
+      }
     },
     getCustomFormatting (groupCode) {
       return _.find(this.$store.state.customPlayGroups, item => {
@@ -329,6 +394,7 @@ export default {
     },
     openDialog () {
       const validedPlays = _.filter(this.plays, play => play.active && parseFloat(play.amount) > 0)
+
       this.activePlays = _.values(validedPlays.map(play => {
         return {
           game_schedule: 10,
@@ -340,9 +406,11 @@ export default {
           active: true,
           isCustom: play.isCustom,
           combinations: play.combinations,
-          selectedOptions: play.selectedOptions ? play.selectedOptions.map(option => option.num) : []
+          selectedOptions: play.selectedOptions ? play.selectedOptions.map(option => option) : []
         }
-      }))
+      }
+        )
+      )
       this.dialogVisible = true
     },
     getWidthForGroup (playSection) {
@@ -383,23 +451,7 @@ export default {
 <style scoped lang='scss'>
 @import "../../style/vars.scss";
 @import "../../style/gameplay.scss";
-.alias-tab {
-  li {
-    display: inline-block;
-    cursor: pointer;
-    float: left;
-    padding: 8px 20px;
-    margin: 0 -1px 2px 0;
-    background: #fff;
-    color: #666;
-    border: 1px solid #dedede;
-    &.active {
-      border: 1px solid $primary;
-      background: $primary;
-      color: #fff;
-    }
-  }
-}
+
 .name {
   font-weight: bold;
   line-height: $cell-height;
@@ -441,5 +493,8 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-
+.combinations {
+  padding-left: 10px;
+  font-weight: 700;
+}
 </style>

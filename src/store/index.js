@@ -21,6 +21,26 @@ export function createStore () {
           code: 'cqlf_pg_wc_wc',
           options: Array.from(Array(20).keys()).map(item => item + 1),
           cols: 5
+        },
+        {
+          code: 'hkl_pg_shxiao_spczdc',
+          options: Array.from(Array(12).keys()).map(item => item + 1),
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_withcode',
+          options: Array.from(Array(49).keys()).map(item => item + 1),
+          cols: 7
+        },
+        {
+          code: 'gd11x5_pg_seq_seq',
+          options: Array.from(Array(11).keys()),
+          cols: 6
+        },
+        {
+          code: 'gdklsf_pg_wc_wc',
+          options: Array.from(Array(20).keys()).map(item => item + 1),
+          cols: 5
         }
       ]
     },

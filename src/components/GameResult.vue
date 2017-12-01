@@ -6,7 +6,7 @@
     </div>
     <div class="balls-number">
       <span
-        v-for="(num, index) in resultBall"
+        v-for="(num, index) in resultNums"
         :key="gameLatestResult.issue_number + index"
         :class="getResultClass(num)">
         <b> {{num}} </b>
@@ -43,7 +43,7 @@ export default {
     this.fetchResult(this.gameid).then(res => { this.pollResult(this.gameid) })
   },
   computed: {
-    resultBall () {
+    resultNums () {
       let rawBalls = this.gameLatestResult.result_str.split(',')
       let formattedBalls = []
       if (this.gameLatestResult.game_code === 'bjkl8') {
@@ -63,8 +63,8 @@ export default {
     },
     resultsSum () {
       let sum = 0
-      for (let i = 0; i < this.resultBall.length; i++) {
-        sum = sum + Number(this.resultBall[i])
+      for (let i = 0; i < this.resultNums.length; i++) {
+        sum = sum + Number(this.resultNums[i])
       }
       return sum
     }
@@ -73,6 +73,8 @@ export default {
     'gameid': function (gameid) {
       this.showZodiac = false
       this.showSum = false
+      clearInterval(this.interval)
+      clearTimeout(this.timer)
       this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
     },
     'gameLatestResult.game_code': function (code) {
