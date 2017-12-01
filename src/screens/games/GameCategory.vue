@@ -139,7 +139,7 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import common from '../../components/playGroup/common'
+import CustomPlayGroup from '../../components/CustomPlayGroup'
 import HklPgShxiaoSpczdc from '../../components/playGroup/hkl_pg_shxiao_spczdc'
 
 export default {
@@ -157,8 +157,7 @@ export default {
   },
   name: 'gameplay',
   components: {
-    common,
-    HklPgShxiaoSpczdc
+    CustomPlayGroup
   },
   data () {
     return {
@@ -260,16 +259,6 @@ export default {
           this.$set(play, 'selectedOptions', [])
         }
       })
-    },
-    chooseComponentByCode (code) {
-      switch (code) {
-        case 'hkl_pg_shxiao_spczdc':
-          return 'HklPgShxiaoSpczdc'
-        case 'gd11x5_pg_seq_seq':
-          return 'gd11x5Seq'
-        default:
-          return 'common'
-      }
     },
     getCustomFormatting (groupCode) {
       return _.find(this.$store.state.customPlayGroups, item => {
