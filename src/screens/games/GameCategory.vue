@@ -24,18 +24,13 @@
           {{alias}}
         </li>
       </ul>
-    </div>
-    <div v-for="(playSection, index) in playSections"
-    class="clearfix"
-    v-if="playSections.length"
-    :key="playSection+'-ps-'+index">
-      <div
-        :style="{width: getWidthForGroup(playSection)}"
-        v-for="(playgroup, playgroupIndex) in playSection.playgroups"
-        :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
-        :key="'playgroup' + playgroup.name"
-        v-if="playgroup.alias ? playgroup.active : true"
-        >
+    <div
+      :style="{width: getWidthForGroup(playSection)}"
+      v-for="(playgroup, playgroupIndex) in playSection.playgroups"
+      :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
+      :key="'playgroup' + playgroup.name"
+      v-if="playgroup.alias ? playgroup.active : true"
+      >
         <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
           <tr v-if="!playgroup.alias">
@@ -47,7 +42,7 @@
             v-for="(playChunk, playChunkIndex) in playgroup.plays"
             :key="playgroup.name + 'playChunk' + playChunkIndex">
             <td
-              v-for="(play, index) in playChunk"
+              v-for="play in playChunk"
               :key="play.id + 'play'"
               align="center"
               :class="['clickable',
@@ -55,10 +50,10 @@
                   hover: plays[play.id] ? plays[play.id].hover : false,
                   active: plays[play.id] ? plays[play.id].active && !gameClosed : false
                 }]"
-                @mouseover="toggleHover(play, true)"
-                @mouseleave="toggleHover(play, false)"
-                @click="toggleActive(plays[play.id], $event)"
-                v-if="play.code">
+              @mouseover="toggleHover(play, true)"
+              @mouseleave="toggleHover(play, false)"
+              @click="toggleActive(plays[play.id], $event)"
+              v-if="play.code">
               <el-col :span="7" class="name">
                 <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
