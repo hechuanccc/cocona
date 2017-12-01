@@ -93,7 +93,7 @@ export default {
       type: Boolean
     }
   },
-  name: 'customPlaygroup',
+  name: 'gd11x5Seq',
   data () {
     const customPlayGroup = _.find(this.$store.state.customPlayGroups, item => {
       return item.code === this.playgroup.code

@@ -76,7 +76,7 @@
           :playgroup="playgroup"
           :plays="plays"
           :gameClosed="gameClosed"
--         v-else />
+          v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
@@ -189,31 +189,11 @@ export default {
   computed: {
     playsForSubmit () {
       return _.filter(this.activePlays, play => play.active).map(play => {
-        if (!play.selectedOptions || play.selectedOptions.length === 0) {
-          if (play.combinations) {
-            return _.map(play.combinations, combination => {
-              return {
-                game_schedule: this.scheduleId,
-                bet_amount: parseFloat(play.bet_amount),
-                play: play.id,
-                bet_options: { options: combination }
-              }
-            })
-          } else {
-            return {
-              game_schedule: this.scheduleId,
-              bet_amount: parseFloat(play.bet_amount),
-              play: play.id,
-              bet_options: []
-            }
-          }
-        } else {
-          return {
-            game_schedule: this.scheduleId,
-            bet_amount: parseFloat(play.bet_amount),
-            play: play.id,
-            bet_options: play.selectedOptions
-          }
+        return {
+          game_schedule: this.scheduleId,
+          bet_amount: parseFloat(play.bet_amount),
+          play: play.id,
+          bet_options: play.bet_options
         }
       })
     },
@@ -351,19 +331,40 @@ export default {
       })
     },
     openDialog () {
-      const validedPlays = _.filter(this.plays, play => play.active && parseFloat(play.amount) > 0)
+      const validedPlays = _.flatMap(
+        _.filter(this.plays, play => play.active && parseFloat(play.amount) > 0),
+        play => {
+          if (play.combinations && !play.selectedOptions) {
+            return _.map(play.combinations, combination => {
+              return {
+                ...play,
+                combinations: combination
+              }
+            })
+          } else {
+            return [play]
+          }
+        }
+      )
       this.activePlays = _.values(validedPlays.map(play => {
+        let betOptions
+        if (play.selectedOptions) {
+          betOptions = { options: _.map(play.selectedOptions, option => option.num) }
+        } else if (play.combinations) {
+          betOptions = { options: play.combinations }
+        } else {
+          betOptions = []
+        }
         return {
           game_schedule: 10,
           display_name: `${play.group} - ${play.display_name}`,
           odds: play.odds,
           bet_amount: play.amount,
           id: play.id,
-          bet_options: [],
+          bet_options: betOptions,
           active: true,
           isCustom: play.isCustom,
-          combinations: play.combinations,
-          selectedOptions: play.selectedOptions ? play.selectedOptions.map(option => option.num) : []
+          combinations: play.combinations
         }
       }))
       this.dialogVisible = true
