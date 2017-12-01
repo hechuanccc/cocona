@@ -88,7 +88,7 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
-            <div v-if="scope.row.isCustom" class="combinations"> 已选号码：{{scope.row.bet_options.options | zodiacFilter}} </div>
+            <div v-if="scope.row.isCustom && hasZodiacs" class="result-zodiacs"> 已选号码：{{scope.row.bet_options.options | zodiacFilter}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -241,6 +241,7 @@ export default {
       submitting: false,
       errors: '',
       playReset: false,
+      hasZodiacs: false,
       zodiacMap,
       zodiacs
     }
@@ -314,6 +315,7 @@ export default {
           this.$set(play, 'options', playOptions.options)
           this.$set(play, 'combinations', playOptions.combinations)
           this.$set(play, 'selectedOptions', playOptions.selectedOptions)
+          this.$set(this, 'hasZodiacs', playOptions.hasZodiacs)
         } else {
           // if not, reset other plays
           this.$set(play, 'active', false)
@@ -516,7 +518,7 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-.combinations {
+.result-zodiacs {
   padding-left: 10px;
   font-weight: 700;
 }

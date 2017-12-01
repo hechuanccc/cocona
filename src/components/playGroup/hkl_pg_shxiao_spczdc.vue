@@ -9,7 +9,7 @@
         <tr>
           <td align="center">赔率</td>
           <td>
-            <span v-if="!gameClosed" class="odds">{{currentPlayOdds}}</span>
+            <span v-if="!gameClosed" class="odds">{{activePlayOdds}}</span>
             <span v-else class="disabled">封盘</span>
           </td>
         </tr>
@@ -103,18 +103,13 @@ export default {
       }
       return [result]
     })
-    let activePlayId
-    let plays = this.playgroup.plays
-    if (plays[0] && plays[0].length) {
-      activePlayId = plays[0][0].id
-    }
+
     return {
-      activePlayId,
       optionGroup,
       customPlayGroup,
       combinations: [],
       valid: false,
-      currentPlay: {
+      activePlay: {
         id: '',
         display_name: '',
         odds: ''
@@ -127,11 +122,11 @@ export default {
         return option.selected
       })
     },
-    currentPlayOdds () {
+    activePlayOdds () {
       if (this.selectedOptions.length < 2) {
         return '--'
       }
-      return this.currentPlay.odds
+      return this.activePlay.odds
     },
     formattedZodiacNum () {
       return _.map(this.zodiacs, zodiac => zodiac.nums.split(','))
@@ -142,11 +137,12 @@ export default {
       if (this.selectedOptions.length < 2) {
         this.updateForSubmit()
       }
+      this.selectedOptions.sort((a, b) => { return a.num - b.num })
       _.forEach(this.plays, (play) => {
         if (play.display_name.slice(-3, -1) === '' + (this.selectedOptions.length)) {
-          this.currentPlay.odds = play.odds
-          this.currentPlay.id = play.id
-          this.currentPlay.display_name = play.display_name
+          this.activePlay.odds = play.odds
+          this.activePlay.id = play.id
+          this.activePlay.display_name = play.display_name
 
           this.updateForSubmit()
         }
@@ -167,16 +163,15 @@ export default {
         this.valid = false
       }
       this.$emit('updatePlayForSubmit', {
-        activePlayId: this.currentPlay.id,
-        options: this.selectedOptions.join(','),
+        activePlayId: this.activePlay.id,
         selectedOptions: this.selectedOptions.map(option => {
           return {
             num: this.zodiacs[option.num - 1].englishName
           }
         }),
-        // selectedOptions: this.selectedOptions.map(option => option),
-        combinations: [''],
-        valid: this.valid
+        combinations: ['1'],
+        valid: this.valid,
+        hasZodiacs: true
       })
     },
     selectOption (option, event) {
@@ -200,13 +195,6 @@ export default {
 @import "../../style/vars.scss";
 @import "../../style/gameplay.scss";
 
-.group-name {
-  cursor: pointer;
-}
-
-.warn {
-  color: $red
-}
 .odds {
   line-height: $cell-height;
   color: $red;
@@ -225,11 +213,9 @@ export default {
   }
   td {
     width: 50%;
-    text-align: center;
     font-weight: bold
   }
   background: #fff;
-  cursor: pointer;
 }
 .option-td {
   cursor: pointer;
