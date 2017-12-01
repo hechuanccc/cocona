@@ -5,7 +5,10 @@
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
     <div class="balls-number">
-      <span v-for="(ball, index) in resultBall" :key="'zodiac-'+ball+'-'+index" :class="getResultClass(ball)">
+      <span
+        v-for="(ball, index) in resultBall"
+        :key="gameLatestResult.issue_number + index"
+        :class="getResultClass(ball)">
         <b> {{ball}} </b>
         <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]| zodiacFilter}} </p>
       </span>
@@ -37,8 +40,7 @@ export default {
     }
   },
   created () {
-    this.fetchResult(this.gameid)
-    // .then(res => { this.pollResult(this.gameid) })
+    this.fetchResult(this.gameid).then(res => { this.pollResult(this.gameid) })
   },
   computed: {
     resultBall () {
@@ -54,6 +56,9 @@ export default {
         }
         formattedBalls.push(rawBall)
       })
+      if (!this.gameLatestResult.result_str) {
+        return this.$t('navMenu.no_result')
+      }
       return formattedBalls
     },
     resultsSum () {
@@ -62,17 +67,13 @@ export default {
         sum = sum + Number(this.resultBall[i])
       }
       return sum
-    },
-    latestResult () {
-      return this.gameLatestResult
     }
   },
   watch: {
     'gameid': function (gameid) {
       this.showZodiac = false
       this.showSum = false
-      this.fetchResult(gameid)
-      // .then(res => { this.pollResult(this.gameid) })
+      this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
     },
     'gameLatestResult.game_code': function (code) {
       if (code === 'hkl') {
@@ -92,10 +93,9 @@ export default {
     fetchResult (gameId) {
       return fetchGameResult(gameId).then(
       result => {
-        if (!result || !result[0].result_str) {
-          this.gameLatestResult = this.$t('navMenu.no_result')
+        if (!result[0] || !result) {
+          return Promise.reject(result)
         }
-
         this.gameLatestResult = result[0]
         this.zodiacs = result[0].zodiac.split(',')
         return result
@@ -103,28 +103,29 @@ export default {
     )
     },
     pollResult (gameid) {
-      if (!this.gameLatestResult || this.gameLatestResult.next_draw === null) {
+      if (!this.gameLatestResult) {
         return
       }
-      let startPollingTime = this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms') - (20 * 1000)
-      let oldResult = this.gameLatestResult.issue_number
+      let drawFromNow = Math.abs(this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms'))
+      let startPollingTime = drawFromNow < (20 * 1000) ? 3000 : drawFromNow - (20 * 1000)
       this.timer = setTimeout(() => {
+        clearInterval(this.interval)
         this.interval = setInterval(() => {
+          let oldIssue = this.gameLatestResult.issue_number
           this.fetchResult(gameid).then(result => {
-            if (result[0].issue_number) {
-              let newResult = result[0].issue_number
-              if (newResult !== oldResult) {
-                clearInterval(this.interval)
-              }
+            let newIssue = result[0].issue_number
+            if (newIssue !== oldIssue) {
+              clearInterval(this.interval)
             }
+          },
+          err => {
+            console.log(err)
+            clearInterval(this.interval)
           })
         }, (2 * 1000))
         this.pollResult(gameid)
       }, startPollingTime)
     }
-  },
-  updated () {
-    clearInterval(this.interval)
   },
   beforeDestroy () {
     clearTimeout(this.timer)
