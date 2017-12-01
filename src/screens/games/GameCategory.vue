@@ -10,40 +10,40 @@
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
-    <div 
+    <div
       v-for="(playSection, index) in playSections"
       class="clearfix"
       :key="game.id + 'playSection' + index"
       v-if="playSections.length">
       <ul v-if="getAliases(playSection).length" class="alias-tab">
-        <li 
-          :class="playSection.playgroups[tabIndex].active ? 'active' : ''" 
-          v-for="(alias, tabIndex) in getAliases(playSection)" 
+        <li
+          :class="playSection.playgroups[tabIndex].active ? 'active' : ''"
+          v-for="(alias, tabIndex) in getAliases(playSection)"
           :key="index + game.id + 'tab' + tabIndex"
           @click="selectAlias(playSection, tabIndex)">
           {{alias}}
         </li>
       </ul>
-      <div 
+      <div
         :style="{width: getWidthForGroup(playSection)}"
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
         :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
         :key="'playgroup' + playgroup.name"
         v-if="playgroup.alias ? playgroup.active : true">
-        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex" 
+        <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
           <tr v-if="!playgroup.alias">
             <th class="group-name" :colspan="playSection.playCol">
               {{playgroup.length}}{{playgroup.display_name}}
             </th>
           </tr>
-          <tr 
+          <tr
             v-for="(playChunk, playChunkIndex) in playgroup.plays"
             :key="playgroup.name + 'playChunk' + playChunkIndex">
-            <td 
-              v-for="play in playChunk" 
+            <td
+              v-for="play in playChunk"
               :key="play.id + 'play'"
-              align="center" 
+              align="center"
               :class="['clickable',
                 {
                   hover: plays[play.id] ? plays[play.id].hover : false,
@@ -51,7 +51,7 @@
                 }]"
               @mouseover="toggleHover(play, true)"
               @mouseleave="toggleHover(play, false)"
-              @click="toggleActive(plays[play.id], $event)" 
+              @click="toggleActive(plays[play.id], $event)"
               v-if="play.code">
               <el-col :span="7" class="name">
                 <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
@@ -68,14 +68,14 @@
             <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
           </tr>
         </table>
-        <CustomPlayGroup 
+        <CustomPlayGroup
           :playReset="playReset"
           @updatePlayForSubmit="updateCustomPlays"
-          :formatting="getCustomFormatting(playgroup.code)" 
+          :formatting="getCustomFormatting(playgroup.code)"
           :playgroup="playgroup"
           :plays="plays"
           :gameClosed="gameClosed"
-          v-else />
+-         v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
