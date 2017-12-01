@@ -147,11 +147,7 @@ export default {
   },
   computed: {
     showOptionGroupViews () {
-      if (this.activePlayId === 26005) {
-        return this.optionGroupViews.slice(0, 2)
-      } else {
-        return this.optionGroupViews
-      }
+      return this.optionGroupViews.slice(0, this.plays[this.activePlayId].rules.min_opts)
     },
     selectedOptions () {
       return _.map(this.optionGroups, group => {
@@ -217,17 +213,14 @@ export default {
       }
       event.preventDefault()
       if (!option.selected) {
-        // will update it when rules.max_opts update
-        if (this.selectedOptions.length < 7) {
-          option.selected = true
-        }
+        option.selected = true
       } else {
         option.selected = false
       }
     },
     resetOption () {
-      _.each(this.optionGroups, group => {
-        _.each(group, option => {
+      _.each(this.optionGroups, options => {
+        _.each(options, option => {
           this.$set(option, 'selected', false)
           this.$set(option, 'disabled', false)
         })

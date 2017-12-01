@@ -148,8 +148,8 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import common from '../../components/playGroup/common'
-import gd11x5Seq from '../../components/playGroup/gd11x5_pg_seq_seq'
+const common = (resolve) => require(['../../components/playGroup/common'], resolve)
+const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 
 export default {
   props: {
@@ -190,20 +190,29 @@ export default {
     playsForSubmit () {
       return _.filter(this.activePlays, play => play.active).map(play => {
         if (!play.selectedOptions || play.selectedOptions.length === 0) {
-          return _.map(play.combinations, combination => {
+          if (play.combinations) {
+            return _.map(play.combinations, combination => {
+              return {
+                game_schedule: this.scheduleId,
+                bet_amount: parseFloat(play.bet_amount),
+                play: play.id,
+                bet_options: { options: combination }
+              }
+            })
+          } else {
             return {
               game_schedule: this.scheduleId,
               bet_amount: parseFloat(play.bet_amount),
               play: play.id,
-              bet_options: { options: combination }
+              bet_options: []
             }
-          })
+          }
         } else {
           return {
             game_schedule: this.scheduleId,
             bet_amount: parseFloat(play.bet_amount),
             play: play.id,
-            bet_options: play.selectedOptions ? play.selectedOptions : []
+            bet_options: play.selectedOptions
           }
         }
       })
