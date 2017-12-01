@@ -57,7 +57,7 @@
       <el-table-column
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span>{{ scope.row.profit?`$${-scope.row.profit}`:''}}</span>
+          <span>{{ scope.row.profit||scope.row.profit === 0 ? `$${scope.row.profit}`:''}}</span>
         </template>
       </el-table-column>
       <el-table-column

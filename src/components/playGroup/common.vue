@@ -3,7 +3,7 @@
     <table class="play-table" align="center" v-for="(playChunk, playChunkIndex) in playgroup.plays" >
       <tr>
         <td v-for="play in playChunk"  class="group-name" @click="activePlayId = play.id">
-          <el-radio 
+          <el-radio
             name="radio"
             v-model="activePlayId"
             :label="play.id"
@@ -42,11 +42,11 @@
         </td>
       </tr>
       <tr v-for="row in optionGroup">
-        <td 
+        <td
           @click="selectOption(option, $event)"
           @mouseover="option.hover = true"
           @mouseleave="option.hover = false"
-          v-for="option in row" 
+          v-for="option in row"
           :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
             {
               hover: option.hover,
@@ -186,8 +186,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/vars.scss";
-@import "../style/gameplay.scss";
+@import "../../style/vars.scss";
+@import "../../style/gameplay.scss";
 
 .group-name {
   cursor: pointer;

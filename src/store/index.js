@@ -21,6 +21,16 @@ export function createStore () {
           code: 'cqlf_pg_wc_wc',
           options: Array.from(Array(20).keys()).map(item => item + 1),
           cols: 5
+        },
+        {
+          code: 'gd11x5_pg_seq_seq',
+          options: Array.from(Array(11).keys()),
+          cols: 6
+        },
+        {
+          code: 'gdklsf_pg_wc_wc',
+          options: Array.from(Array(20).keys()).map(item => item + 1),
+          cols: 5
         }
       ]
     },
