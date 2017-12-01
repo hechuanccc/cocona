@@ -76,7 +76,7 @@
           :playgroup="playgroup"
           :plays="plays"
           :gameClosed="gameClosed"
-          v-else />
+-         v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">

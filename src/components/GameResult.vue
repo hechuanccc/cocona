@@ -5,11 +5,11 @@
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
     <div class="balls-number">
-      <span 
-        v-for="(ball, index) in resultBall" 
-        :key="gameLatestResult.issue_number + index" 
-        :class="getResultClass(ball)">
-        <b> {{ball}} </b>
+      <span
+        v-for="(num, index) in resultBall"
+        :key="gameLatestResult.issue_number + index"
+        :class="getResultClass(num)">
+        <b> {{num}} </b>
         <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]| zodiacFilter}} </p>
       </span>
       <div class="ball-sum" v-if="showSum">
@@ -33,13 +33,14 @@ export default {
   data () {
     return {
       gameLatestResult: '',
+      drawTimeGap: '',
       zodiacs: '',
       showZodiac: false,
       showSum: false
     }
   },
   created () {
-    this.fetchResult(this.gameid)
+    this.fetchResult(this.gameid).then(res => { this.pollResult(this.gameid) })
   },
   computed: {
     resultBall () {
@@ -55,6 +56,9 @@ export default {
         }
         formattedBalls.push(rawBall)
       })
+      if (!this.gameLatestResult.result_str) {
+        return this.$t('navMenu.no_result')
+      }
       return formattedBalls
     },
     resultsSum () {
@@ -69,7 +73,15 @@ export default {
     'gameid': function (gameid) {
       this.showZodiac = false
       this.showSum = false
-      this.fetchResult(gameid)
+      this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
+    },
+    'gameLatestResult.game_code': function (code) {
+      if (code === 'hkl') {
+        this.showZodiac = true
+      }
+      if (code === 'pcdd') {
+        this.showSum = true
+      }
     }
   },
   methods: {
@@ -79,23 +91,41 @@ export default {
       return [gameClass, resultClass]
     },
     fetchResult (gameId) {
-      fetchGameResult(gameId).then(
+      return fetchGameResult(gameId).then(
       result => {
-        if (!result || !result[0].result_str) {
-          this.gameLatestResult = this.$t('navMenu.no_result')
-        }
-
-        if (result[0].game_code === 'hkl') {
-          this.showZodiac = true
-        }
-        if (result[0].game_code === 'pcdd') {
-          this.showSum = true
-        }
         this.gameLatestResult = result[0]
         this.zodiacs = result[0].zodiac.split(',')
+        return result
       }
     )
+    },
+    pollResult (gameid) {
+      if (!this.gameLatestResult) {
+        return
+      }
+      let drawFromNow = Math.abs(this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms'))
+      let startPollingTime = drawFromNow < (20 * 1000) ? 3000 : drawFromNow - (20 * 1000)
+      this.timer = setTimeout(() => {
+        clearInterval(this.interval)
+        this.interval = setInterval(() => {
+          let oldIssue = this.gameLatestResult.issue_number
+          this.fetchResult(gameid).then(result => {
+            if (!result[0] || !result) {
+              clearInterval(this.interval)
+            }
+            let newIssue = result[0].issue_number
+            if (newIssue !== oldIssue) {
+              clearInterval(this.interval)
+            }
+          })
+        }, (2 * 1000))
+        this.pollResult(gameid)
+      }, startPollingTime)
     }
+  },
+  beforeDestroy () {
+    clearTimeout(this.timer)
+    clearInterval(this.interval)
   },
   filters: {
     zodiacFilter (val) {
