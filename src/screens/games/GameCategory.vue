@@ -251,7 +251,6 @@ export default {
       // raw data in play group from API for generating playSections
       raw: [],
       dialogVisible: false,
-      dialogDisabled: false,
       activePlays: [],
       totalAmount: 0,
       submitted: false,
@@ -309,16 +308,10 @@ export default {
       if (this.raw.length && this.formatting.length) {
         this.playSections = formatPlayGroup(this.raw, this.formatting)
       }
-    },
-    'game': function (game) {
-      this.updateBetrecords()
     }
   },
   created () {
     this.initPlaygroups()
-    if (this.game) {
-      this.updateBetrecords()
-    }
   },
   methods: {
     selectAlias (playSection, tabIndex) {
@@ -519,7 +512,7 @@ export default {
     background: #fff;
     color: #666;
     border: 1px solid #dedede;
-   &.active {
+     &.active {
       border: 1px solid $primary;
       background: $primary;
       color: #fff;
