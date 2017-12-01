@@ -1,5 +1,5 @@
-export const SET_USER = 'SET_USERs'
-export const RESET_USER = 'RESET_USERs'
+export const SET_USER = 'SET_USER'
+export const RESET_USER = 'RESET_USER'
 export const SHOW_LOGIN_DIALOG = 'SHOW_LOGIN_DIALOG'
 export const CLOSE_LOGINDIALOG = 'CLOSE_LOGINDIALOG'
 export const SET_GAMES = 'SET_GAMES'

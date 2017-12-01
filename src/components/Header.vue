@@ -1,6 +1,6 @@
 <template>
   <div class="top-header">
-    <div class="header-bar" v-show="!isUserPage">
+    <div class="header-bar">
       <TopBar/>
     </div>
     <div class="header-nav container">
@@ -21,38 +21,33 @@ export default {
   data () {
     return {
       menus: [{
-        name: this.$t('navMenu.home_page'),
-        path: ''
-      }, {
         name: this.$t('navMenu.game_center'),
-        path: 'game'
+        path: '/game'
       }, {
         name: this.$t('navMenu.promotion'),
-        path: 'promotions'
+        path: '/promotions'
       }, {
         name: this.$t('navMenu.qa'),
-        path: 'faq'
+        path: '/faq'
       }, {
         name: this.$t('navMenu.affliate'),
-        path: 'agent'
+        path: '/agent'
       }],
       userMenus: [{
         name: this.$t('navMenu.game_center'),
-        path: 'game'
+        path: '/game'
       }, {
-        name: this.$t('navMenu.personal_account'),
-        path: 'account'
+        name: this.$t('navMenu.home_page'),
+        path: '/'
       }, {
         name: this.$t('navMenu.draw_history'),
-        path: 'gamehistory'
+        path: '/gamehistory'
       }, {
         name: this.$t('navMenu.game_intro'),
-        path: 'gameintro'
+        path: '/gameintro'
       }, {
-        name: this.$t('navMenu.logout'),
-        onClick: () => {
-          this.$store.dispatch('logout')
-        }
+        name: this.$t('navMenu.personal_account'),
+        path: '/account'
       }]
     }
   },

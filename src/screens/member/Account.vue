@@ -91,7 +91,14 @@ export default {
     if (to.name === 'Account') {
       next({ name: 'MyAccount' })
     } else {
-      next()
+      next(vm => {
+        vm.$store.dispatch('fetchUser')
+        .catch(error => {
+          if (error.response.status > 400) {
+            vm.performLogin()
+          }
+        })
+      })
     }
   },
   watch: {

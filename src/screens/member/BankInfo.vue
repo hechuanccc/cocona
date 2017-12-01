@@ -1,9 +1,16 @@
 <template>
   <el-row>
+    <el-alert
+      v-if="updateStatus !== 0"
+      :title="message"
+      :type="updateStatus === 1 ? 'success' : 'error'"
+      :closable="false"
+      center>
+    </el-alert>
     <el-col :offset="8" :span="16">
-      <el-form :model="bankInfo" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
+      <el-form :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
         <el-form-item :label="$t('user.bank')" prop="bank">
-          <el-select v-model="bankInfo.bank" placeholder="请选择">
+          <el-select :disabled="!!user.bank" class="input-width" v-model="bankInfo.bank" placeholder="请选择">
             <el-option
               v-for="option in bankOptions"
               :key="option.key"
@@ -13,16 +20,18 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('user.city')" prop="city">
-          <el-input class="input-width" type="text" v-model="bankInfo.city"></el-input>
+          <el-input :disabled="!!user.bank" class="input-width" type="text" v-model="bankInfo.city"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.province')" prop="province">
-          <el-input class="input-width" type="text" v-model="bankInfo.province"></el-input>
+          <el-input :disabled="!!user.bank" class="input-width" type="text" v-model="bankInfo.province"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.username')" prop="account">
-          <el-input class="input-width" type="text" v-model="bankInfo.account"></el-input>
+          <el-input :disabled="!!user.bank" class="input-width" type="text" v-model="bankInfo.account"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitBankInfo">{{$t('action.submit')}}</el-button>
+          <el-button :disabled="!!user.bank" class="input-width" type="primary" @click="submitBankInfo">{{$t('action.submit')}}</el-button>
+          <div class="tips" v-if="user.bank">您的银行卡信息已提交，如需修改请联系客服</div>
+          <div v-else>银行卡信息提交之后需联系客服方可修改，请谨慎填写。</div>
         </el-form-item>
       </el-form>
     </el-col>
@@ -32,6 +41,7 @@
 <script>
 import { fetchBank, updateUser } from '../../api'
 import { msgFormatter } from '../../utils'
+import { mapGetters } from 'vuex'
 export default {
   name: 'BankInfo',
   data () {
@@ -42,10 +52,8 @@ export default {
         province: '',
         account: ''
       },
-      withdrawInfo: {
-        amount: '',
-        withdraw_password: ''
-      },
+      updateStatus: 0,
+      message: '',
       bankInfoRules: {
         bank: [
           { required: true, message: this.$t('validate.required'), trigger: 'change' }
@@ -60,21 +68,16 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ]
       },
-      withdrawRules: {
-        amount: [
-          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur,change' }
-        ],
-        withdraw_password: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
-        ]
-      },
       bankOptions: []
     }
   },
   computed: {
     originBankInfo () {
       return this.$store.state.user.bank
-    }
+    },
+    ...mapGetters([
+      'user'
+    ])
   },
   watch: {
     'originBankInfo': function (info) {
@@ -103,12 +106,14 @@ export default {
             this.$store.commit('SET_USER', {
               user: data
             })
+            this.updated = 1
+            this.message = '银行信息已更新'
+            setTimeout(() => {
+              this.updateStatus = 0
+            }, 3000)
           }, errorRes => {
-            this.$message({
-              showClose: true,
-              message: msgFormatter(errorRes.response.data.error),
-              type: 'error'
-            })
+            this.updateStatus = -1
+            this.message = msgFormatter(errorRes.response.data.error)
           })
         }
       })
@@ -121,3 +126,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .tips {
+    color: #999;
+    font-size: 12px;
+  }
+</style>
