@@ -38,8 +38,12 @@
           <i class="el-icon-caret-top" v-else />
           <ul v-show="showDropdown" class="dropdown">
             <li><router-link to="/account/my/">账户余额: ￥{{user.balance}}</router-link></li>
-            <li><router-link to="/account/message">账号信息</router-link></li>
-            <li><router-link to="/account/my/password_setting">修改密码</router-link></li>
+            <li><router-link to="/account/my/primary_info">{{$t('user.my_account')}}</router-link></li>
+            <li><router-link to="/account/online_payment">{{$t('user.online_payment')}}</router-link></li>
+            <li><router-link to="/account/remit">{{$t('user.remit')}}</router-link></li>
+            <li><router-link to="/account/withdraw">{{$t('user.withdraw')}}</router-link></li>
+            <li><router-link to="/account/finance/payment_record">{{$t('user.finance')}}</router-link></li>
+            <li><router-link to="/account/message">{{$t('user.message')}}</router-link></li>
             <li @click="logout()"><a>{{$t('navMenu.logout')}}</a></li>
           </ul>
         </span>
@@ -151,7 +155,7 @@ export default {
   display: block
 
 .dropdown
-  padding: 10px 0
+  padding: 5px 0
   text-align: left
   position: absolute
   top: 33px
@@ -165,12 +169,14 @@ export default {
   li
     display: block
     cursor: pointer
-    line-height: 32px
+    line-height: 30px
     padding: 0 10px
     a
       display: block
     &:hover
-      background: #f0f0f0
+      background: $primary
+      a
+        color: #fff
 </style>
 
 

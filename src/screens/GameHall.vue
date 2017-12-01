@@ -9,36 +9,34 @@
         <el-aside width="220px">
           <ul class="side-menu">
             <li>
-              <span>账号</span>
-              {{user.username}}
+              <span>账户余额</span>
+              <span class="balance">￥{{user.balance}}</span>
             </li>
             <li>
-              <span>余额</span>
-              <strong class="balance">￥{{user.balance}}</strong>
+              <span>未结余额</span>
+              <span>￥{{user.balance}}</span>
             </li>
             <li class="center">
               <el-button type="primary" plain>我的账号</el-button>
               <el-button type="primary" plain @click="linkTo('/online_payment')">立即充值</el-button>
             </li>
             <li class="center">
-              <el-button type="primary" plain @click="linkTo('/withdraw')">申请提款</el-button>
               <el-button type="primary" plain @click="linkTo('/finance/betrecord')">我的注单</el-button>
-            </li>
-            <li class="center">
               <el-button type="primary" plain>在线客服</el-button>
-              <el-button type="primary" plain>开奖直播</el-button>
             </li>
           </ul>
           <div class="betrecords">
-            <h3>最新注单</h3>
+            <h3>
+              最新注单  
+            </h3>
             <ul  v-if="betrecords && betrecords.length > 0">
-              <li v-for="bet in betrecords">
+              <li v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
                 <span class="issue-number">{{bet.issue_number}} 期</span>
                 <span class="amount">
                 ￥{{bet.bet_amount}}</span>
                 <div>
-                  <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span> @
-                  <span class="odds">{{bet.play.odds}}</span>
+                  <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span>
+                  <span class="odds">{{bet.odds}}</span>
                 </div>
               </li>
             </ul>
@@ -112,17 +110,21 @@ export default {
 }
 .side-menu {
   padding: 10px 0;
-  margin-top: 10px;
+  margin-top: 20px;
   background: #fff;
   color: #333;
   margin-right: 20px;
   li {
-    padding: 3px 0;
+    padding: 3px 10px;
     span {
       display: inline-block;
       width: 60px;
       text-align: center;
       color: #999;
+      &.balance {
+        color: #67c23a;
+        font-size: 14px;
+      }
     }
     &.center {
       margin-top: 10px;
@@ -139,21 +141,20 @@ export default {
   }
   li {
     color: #999;
-    padding: 10px;
+    margin:0 10px;
+    padding: 5px 0;
+    border-top: 1px solid #f5f5f5;
   }
   h3 {
     display: block;
     color: #999;
-    padding-left: 10px;
-    margin-top: 5px;
-    line-height: 30px;
-    height: 30px;
+    padding-left: 15px;
+    margin-top: 10px;
+    line-height: 36px;
+    height: 36px;
   }
 }
-.balance {
-  color: #67c23a;
-  font-size: 14px;
-}
+
 .empty {
   text-align: center;
   line-height: 30px;
@@ -165,10 +166,11 @@ export default {
   color: $red;
 }
 .play-name {
-  color: $primary;
+  color: #666;
 }
 .amount {
-  color: #333;
+  color: #666;
+  line-height: 36px;
   float: right;
   font-size: 13px;
 }

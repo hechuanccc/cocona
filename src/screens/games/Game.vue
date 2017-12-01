@@ -176,7 +176,7 @@ export default {
 .game-container {
   background: #fff;
   padding: 0 10px 10px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 .current-game {
   position: absolute;
