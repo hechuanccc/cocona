@@ -148,7 +148,6 @@ import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
 import CustomPlayGroup from '../../components/CustomPlayGroup'
-import HklPgShxiaoSpczdc from '../../components/playGroup/hkl_pg_shxiao_spczdc'
 
 export default {
   props: {
