@@ -41,6 +41,9 @@ export default {
       bankOptions: []
     }
   },
+  created () {
+    console.log(this.$store.state.user)
+  },
   methods: {
     submitWithdraw () {
       this.$refs['withdrawInfo'].validate((valid) => {
