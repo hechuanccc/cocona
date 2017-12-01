@@ -104,7 +104,6 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
-            <div v-if="scope.row.isCustom" class="combinations">已选号码：{{scope.row.selectedOptions.map(option=>zodiacs[option].xiao)}}</div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -506,8 +505,5 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-.combinations {
-  padding-left: 10px;
-  font-weight: 700;
-}
+
 </style>
