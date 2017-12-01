@@ -42,7 +42,16 @@ export default {
     }
   },
   created () {
-    console.log(this.$store.state.user)
+    if (!this.$store.state.user.bank) {
+      this.$alert(this.$t('validate.not_set_bank_info'), '', {
+        type: 'warning',
+        showClose: false,
+        confirmButtonText: this.$t('action.setting'),
+        callback: () => {
+          this.$router.push({ 'path': '/account/my/bank_info' })
+        }
+      })
+    }
   },
   methods: {
     submitWithdraw () {

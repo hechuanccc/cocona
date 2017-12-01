@@ -132,17 +132,20 @@ export default {
     reset: 'Reset',
     modify: 'Modify',
     save: 'Save',
-    close: 'Close'
+    close: 'Close',
+    setting: 'Setting'
   },
   validate: {
     username_validate: 'User name should be 4-10 digit or character',
     password_validate: 'Password must be 8-15 characters and must contain at least one capital letter and a digit',
+    qq_validate: 'This QQ number is invalid',
     password_again: 'Please enter password again',
     password_diff: 'twice password are different',
     username_exist: 'This usernam has existed',
     required: 'This field is required',
     required_num: 'Number is required',
-    email_validate: 'This email is invalid'
+    email_validate: 'This email is invalid',
+    not_set_bank_info: 'Bank Info has not yet been setted'
   },
   message: {
     save_success: 'Save Success'

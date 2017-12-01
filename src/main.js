@@ -13,9 +13,11 @@ import locales from './i18n/locales'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Icon from 'vue-awesome/components/Icon'
+import Vue2Filters from 'vue2-filters'
 
 Vue.component('icon', Icon)
 Vue.use(require('vue-moment'))
+Vue.use(Vue2Filters)
 Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
