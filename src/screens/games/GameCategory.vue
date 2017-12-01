@@ -29,8 +29,7 @@
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
         :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
         :key="'playgroup' + playgroup.name"
-        v-if="playgroup.alias ? playgroup.active : true"
-        >
+        v-if="playgroup.alias ? playgroup.active : true">
         <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
           <tr v-if="!playgroup.alias">
@@ -321,7 +320,7 @@ export default {
         this.$set(play, 'active', false)
         this.$set(play, 'amount', '')
       })
-     // switch 'active' between play groups
+       // switch 'active' between play groups
       _.map(playSection.playgroups, (playgroup, index) => {
         this.$set(playgroup, 'active', index === tabIndex)
       })
@@ -510,7 +509,7 @@ export default {
     background: #fff;
     color: #666;
     border: 1px solid #dedede;
-     &.active {
+    &.active {
       border: 1px solid $primary;
       background: $primary;
       color: #fff;
