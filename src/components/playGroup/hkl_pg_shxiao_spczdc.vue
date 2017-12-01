@@ -169,7 +169,12 @@ export default {
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.currentPlay.id,
         options: this.selectedOptions.join(','),
-        selectedOptions: this.selectedOptions.map(option => this.zodiacs[option.num - 1].englishName),
+        selectedOptions: this.selectedOptions.map(option => {
+          return {
+            num: this.zodiacs[option.num - 1].englishName
+          }
+        }),
+        // selectedOptions: this.selectedOptions.map(option => option),
         combinations: [''],
         valid: this.valid
       })

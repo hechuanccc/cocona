@@ -60,6 +60,7 @@
           :playgroup="playgroup"
           :plays="plays"
           :gameClosed="gameClosed"
+          :zodiacs = "zodiacs"
           v-else />
       </div>
     </div>
@@ -87,7 +88,7 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
-            <div v-if="scope.row.isCustom" class="combinations"> 已选号码：{{scope.row.selectedOptions | zodiacFilter}} </div>
+            <div v-if="scope.row.isCustom" class="combinations"> 已选号码：{{scope.row.bet_options.options | zodiacFilter}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -133,7 +134,10 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import HklPgShxiaoSpczdc from '../../components/playGroup/hkl_pg_shxiao_spczdc'
+const common = (resolve) => require(['../../components/playGroup/common'], resolve)
+const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
+const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
+
 const zodiacs = [
   {
     xiao: '鼠',
@@ -201,8 +205,6 @@ const zodiacMap = {}
 zodiacs.forEach(zodiac => {
   zodiacMap[zodiac.englishName] = zodiac.xiao
 })
-const common = (resolve) => require(['../../components/playGroup/common'], resolve)
-const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 
 export default {
   props: {
@@ -220,7 +222,7 @@ export default {
   name: 'gameplay',
   components: {
     common,
-    HklPgShxiaoSpczdc,
+    hklPgShxiaoSpczdc,
     gd11x5Seq
   },
   data () {
@@ -239,6 +241,7 @@ export default {
       submitting: false,
       errors: '',
       playReset: false,
+      zodiacMap,
       zodiacs
     }
   },
@@ -323,14 +326,10 @@ export default {
     },
     chooseComponentByCode (code) {
       switch (code) {
-        case 'CustomPlayGroup':
-          return 'common'
         case 'gd11x5_pg_seq_seq':
           return 'gd11x5Seq'
         case 'hkl_pg_shxiao_spczdc':
-          return 'HklPgShxiaoSpczdc'
-        case 'gd11x5_pg_seq_seq':
-          return 'gd11x5Seq'
+          return 'hklPgShxiaoSpczdc'
         default:
           return 'common'
       }
@@ -420,6 +419,7 @@ export default {
         } else {
           betOptions = []
         }
+
         return {
           game_schedule: 10,
           display_name: `${play.group} - ${play.display_name}`,
