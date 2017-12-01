@@ -449,9 +449,7 @@ export default {
           isCustom: play.isCustom,
           combinations: play.combinations
         }
-      }
-        )
-      )
+      }))
       this.dialogVisible = true
     },
     getWidthForGroup (playSection) {
