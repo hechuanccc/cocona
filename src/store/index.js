@@ -28,11 +28,6 @@ export function createStore () {
           cols: 2
         },
         {
-          code: 'hkl_pg_withcode',
-          options: Array.from(Array(49).keys()).map(item => item + 1),
-          cols: 7
-        },
-        {
           code: 'gd11x5_pg_seq_seq',
           options: Array.from(Array(11).keys()),
           cols: 6
