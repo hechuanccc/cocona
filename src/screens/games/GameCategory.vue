@@ -24,13 +24,13 @@
           {{alias}}
         </li>
       </ul>
-    <div
-      :style="{width: getWidthForGroup(playSection)}"
-      v-for="(playgroup, playgroupIndex) in playSection.playgroups"
-      :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
-      :key="'playgroup' + playgroup.name"
-      v-if="playgroup.alias ? playgroup.active : true"
-      >
+      <div
+        :style="{width: getWidthForGroup(playSection)}"
+        v-for="(playgroup, playgroupIndex) in playSection.playgroups"
+        :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
+        :key="'playgroup' + playgroup.name"
+        v-if="playgroup.alias ? playgroup.active : true"
+        >
         <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
           v-if="!getCustomFormatting(playgroup.code)">
           <tr v-if="!playgroup.alias">
