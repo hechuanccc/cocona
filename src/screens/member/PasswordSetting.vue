@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row class="m-t-lg">
     <el-col :offset="8" :span="16">
       <el-form :model="password" status-icon :rules="passwordRule" ref="password" label-width="120px">
         <el-form-item :label="$t('user.prev_password')" prop="prev_password">

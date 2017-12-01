@@ -3,7 +3,7 @@
     <router-link
       v-if="menu.path"
       tag="li"
-      :to="'/' + menu.path"
+      :to="menu.path"
       :class="getMenuClass(menu)"
       v-for="menu in menus"
       :key="menu.icon">
@@ -32,7 +32,8 @@ export default {
     getMenuClass (menu) {
       return {
         'active': this.$route.path.split('/')[1] === menu.path,
-        [menu.class]: menu.class
+        [menu.class]: menu.class,
+        'nav-link': true
       }
     },
     logout () {
@@ -53,15 +54,15 @@ export default {
 @import "../style/vars.scss";
 .menu
   float: right
-  li
+  .nav-link
     cursor: pointer
     margin: 0 15px
-    color: #666
     float: left
     text-align: center
     font-size: 15px
     line-height: 77px
     color: #999
+    position: relative
     &:hover
       color: #444
     &.active
@@ -69,4 +70,17 @@ export default {
       border-bottom: 3px solid $primary
     &.yellow
       color: $yellow
+.sub-menu
+  position: absolute
+  background: #fff
+  width: 200px
+  top: 80px
+  right: 0
+  border: 1px solid #f0f0f0
+  text-align: left
+  li 
+    line-height: 32px
+    padding: 2px 10px
+    font-size: 13
+    cursor: pointer
 </style>
