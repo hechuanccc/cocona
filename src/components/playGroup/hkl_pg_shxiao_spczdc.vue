@@ -39,7 +39,7 @@
             <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacs[option.num - 1].xiao}}</span>
           </el-col>
           <el-col :span="17" class="number" align="left">
-            <span v-for="(zodiacNum, index) in formattedZodiacNum[option.num - 1]"
+            <span v-for="(zodiacNum, index) in formattedZodiacNums[option.num - 1]"
               :class="[playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
               :key="index">
                 {{zodiacNum}}
@@ -128,7 +128,7 @@ export default {
       }
       return this.activePlay.odds
     },
-    formattedZodiacNum () {
+    formattedZodiacNums () {
       return _.map(this.zodiacs, zodiac => zodiac.nums.split(','))
     }
   },
