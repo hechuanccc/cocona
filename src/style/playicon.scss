@@ -95,7 +95,8 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
 }
 @include ssc-num;
 
-$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6;
+
+$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc;
 $hk6_plays: spcb, spca, posc, poscspcnump1;
 
 %hklball{
@@ -116,11 +117,18 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
         .hkl_pl_#{$play}_#{$i}{
           background-position: 0 (-27px * ($i - 1));
         }
+        @if $playgroup == shxiao_spczdc{
+          .hkl_pg_#{$playgroup}-zodiacnums-#{$i} {
+            background-position: 0 (-27px * ($i - 1));
+          }
+        }
+
         @if $playgroup == poscnum{
           .hkl_pl_posc#{$i}{
             background-position: 0 (-27px * ($i - 1));
           }
         }
+
         @if str-slice($playgroup, 0, 7) == poscspc {
           @for $j from 1 through 6 {
             .hkl_pl_poscspcnum#{$i}p#{$j} {
@@ -233,3 +241,4 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
   }
 }
 @include gdklsf-num;
+

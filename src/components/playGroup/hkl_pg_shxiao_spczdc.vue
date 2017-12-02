@@ -36,11 +36,11 @@
             }
           ]">
           <el-col :span="3" class="name">
-            <span :class="playgroup.code + '_' + option.num">{{zodiacs[option.num - 1].xiao}}</span>
+            <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacs[option.num - 1].xiao}}</span>
           </el-col>
           <el-col :span="17" class="number" align="left">
             <span v-for="(zodiacNum, index) in formattedZodiacNum[option.num - 1]"
-              :class="playgroup.code + '-zodiac-' + zodiacNum"
+              :class="[playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
               :key="index">
                 {{zodiacNum}}
             </span>
