@@ -60,9 +60,6 @@ import _ from 'lodash'
 
 export default {
   props: {
-    formatting: {
-      type: Object
-    },
     playgroup: {
       type: Object
     },
