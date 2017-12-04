@@ -3,7 +3,7 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model="amount" />
+        <el-input v-model.number="amount" type="number"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
@@ -13,7 +13,7 @@
     <div
       v-for="(playSection, index) in playSections"
       class="clearfix"
-      :key="game.id + 'playSection' + index"
+      :key="playSection.id + 'playSection' + index"
       v-if="playSections.length">
       <ul v-if="getAliases(playSection).length" class="alias-tab">
         <li
@@ -69,20 +69,21 @@
           </tr>
         </table>
         <component
-          :is="chooseComponentByCode(playgroup.code)"
+          :is="$store.getters.customPlayGroupsById(playgroup.code)"
           :playReset="playReset"
           @updatePlayForSubmit="updateCustomPlays"
           :formatting="getCustomFormatting(playgroup.code)"
           :playgroup="playgroup"
           :plays="plays"
           :gameClosed="gameClosed"
+          :zodiacs = "zodiacs"
           v-else />
       </div>
     </div>
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model="amount" />
+        <el-input v-model.number="amount" type="number"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary"
@@ -103,6 +104,7 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
+            <div v-if="scope.row.isCustom && hasZodiacs" class="result-zodiacs"> 已选号码：{{scope.row.bet_options.options | zodiacFilter}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -112,7 +114,7 @@
         </el-table-column>
         <el-table-column property="bet_amount" label="金额">
           <template slot-scope="scope">
-            <el-input size="mini" v-model="scope.row.bet_amount"></el-input>
+            <el-input size="mini" v-model.number="scope.row.bet_amount" type="number"></el-input>
           </template>
         </el-table-column>
         <el-table-column property="active" label="确认">
@@ -148,8 +150,10 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
+import {zodiacs, zodiacMap} from '../../utils/zodiacs'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
+const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
 
 export default {
   props: {
@@ -167,6 +171,7 @@ export default {
   name: 'gameplay',
   components: {
     common,
+    hklPgShxiaoSpczdc,
     gd11x5Seq
   },
   data () {
@@ -183,7 +188,15 @@ export default {
       submitted: false,
       submitting: false,
       errors: '',
-      playReset: false
+      playReset: false,
+      hasZodiacs: false,
+      zodiacMap,
+      zodiacs
+    }
+  },
+  filters: {
+    zodiacFilter (arr) {
+      return arr.map(xiao => zodiacMap[xiao])
     }
   },
   computed: {
@@ -240,7 +253,7 @@ export default {
         this.$set(play, 'active', false)
         this.$set(play, 'amount', '')
       })
-      // switch 'active' between play groups
+       // switch 'active' between play groups
       _.map(playSection.playgroups, (playgroup, index) => {
         this.$set(playgroup, 'active', index === tabIndex)
       })
@@ -260,6 +273,7 @@ export default {
           this.$set(play, 'options', playOptions.options)
           this.$set(play, 'combinations', playOptions.combinations)
           this.$set(play, 'selectedOptions', playOptions.selectedOptions)
+          this.$set(this, 'hasZodiacs', playOptions.hasZodiacs)
         } else {
           // if not, reset other plays
           this.$set(play, 'active', false)
@@ -355,6 +369,7 @@ export default {
         } else {
           betOptions = []
         }
+
         return {
           game_schedule: 10,
           display_name: `${play.group} - ${play.display_name}`,
@@ -399,14 +414,6 @@ export default {
       })
 
       Vue.set(this, 'playReset', !this.playReset)
-    },
-    chooseComponentByCode (code) {
-      switch (code) {
-        case 'gd11x5_pg_seq_seq':
-          return 'gd11x5Seq'
-        default:
-          return 'common'
-      }
     }
   }
 }
@@ -472,5 +479,9 @@ export default {
 .popup-actions {
   margin-top: 20px;
   text-align: center;
+}
+.result-zodiacs {
+  padding-left: 10px;
+  font-weight: 700;
 }
 </style>
