@@ -34,6 +34,7 @@
   }
   .hover {
     .name,
+    .number,
     .odds,
     .input {
       background: #dce5ef;
@@ -41,6 +42,7 @@
   }
   .active {
     .name,
+    .number,
     .odds,
     .input {
       background: #f3dab2;

@@ -15,5 +15,9 @@ export default {
   },
   categoriesById: (state, getters) => categoryId => {
     return _.find(state.categories, item => (item.id + '') === categoryId)
+  },
+  customPlayGroupsById: (state, getters) => gameCode => {
+    let playGroup = _.find(state.customPlayGroups, item => (item.code + '') === gameCode)
+    return playGroup.component
   }
 }

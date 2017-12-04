@@ -6,7 +6,7 @@
     </div>
     <div class="balls-number">
       <span
-        v-for="(num, index) in resultBall"
+        v-for="(num, index) in resultNums"
         :key="gameLatestResult.issue_number + index"
         :class="getResultClass(num)">
         <b> {{num}} </b>
@@ -24,6 +24,8 @@
 
 <script>
 import {fetchGameResult} from '../api'
+import _ from 'lodash'
+
 export default {
   props: {
     gameid: {
@@ -43,36 +45,34 @@ export default {
     this.fetchResult(this.gameid).then(res => { this.pollResult(this.gameid) })
   },
   computed: {
-    resultBall () {
-      let rawBalls = this.gameLatestResult.result_str.split(',')
-      let formattedBalls = []
+    resultNums () {
+      let rawNums = this.gameLatestResult.result_str.split(',')
+      let formattedNums = []
       if (this.gameLatestResult.game_code === 'bjkl8') {
-        rawBalls.pop()
+        rawNums.pop()
       }
-      rawBalls.forEach((rawBall) => {
+      rawNums.forEach((rawBall) => {
         if (rawBall[0] === '0' && rawBall !== '0') {
-          formattedBalls.push(rawBall.slice(1))
+          formattedNums.push(rawBall.slice(1))
           return
         }
-        formattedBalls.push(rawBall)
+        formattedNums.push(rawBall)
       })
       if (!this.gameLatestResult.result_str) {
         return this.$t('navMenu.no_result')
       }
-      return formattedBalls
+      return formattedNums
     },
     resultsSum () {
-      let sum = 0
-      for (let i = 0; i < this.resultBall.length; i++) {
-        sum = sum + Number(this.resultBall[i])
-      }
-      return sum
+      return _.reduce(this.resultNums, (sum, nums) => { return sum + Number(nums) }, 0)
     }
   },
   watch: {
     'gameid': function (gameid) {
       this.showZodiac = false
       this.showSum = false
+      clearInterval(this.interval)
+      clearTimeout(this.timer)
       this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
     },
     'gameLatestResult.game_code': function (code) {
