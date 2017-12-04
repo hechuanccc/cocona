@@ -1,3 +1,12 @@
+%gd11x5ball{
+  display: inline-block;
+  background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
+  width: 24px;
+  height: 27px;
+  line-height: 27px;
+  font-weight: bold;
+  font-size: 13px;
+}
 @mixin gd11x5-num {
   .gd11x5_pg_sn_1f1,
   .gd11x5_pg_sn_b1,
@@ -5,23 +14,12 @@
   .gd11x5_pg_sn_b3,
   .gd11x5_pg_sn_b4,
   .gd11x5_pg_sn_b5 {
-    display: inline-block;
-    background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
-    width: 24px;
-    height: 27px;
-    line-height: 27px;
-    font-weight: bold;
-    font-size: 13px;
+    @extend %gd11x5ball;
   }
   @for $i from 1 through 11 {
+    .gd11x5_pg_wc_wc_#{$i},
     .gd11x5_pg_seq_seq_#{$i}{
-      display: inline-block;
-      background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
-      width: 24px;
-      height: 27px;
-      line-height: 27px;
-      font-weight: bold;
-      font-size: 13px;
+      @extend %gd11x5ball;
     }
   }
 }
@@ -212,35 +210,48 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 }
 
 @include bjkl8-num;
-
+%cqlfball{
+  display: inline-block;
+  background: url(../assets/ball_nc_top.png) repeat-x;
+  width: 32px;
+  text-indent: -9999px;
+  height: 33px;
+  line-height: 33px;
+}
 @mixin cqlf-num {
-  @for $i from 1 through 8 {
-    @for $j from 1 through 20 {
+  @for $j from 1 through 20 {
+    .cqlf_pg_wc_wc_#{$j} {
+      background-position: 0 (-33px * ($j - 1));
+      @extend %cqlfball;
+    }
+    @for $i from 1 through 8 {
       .cqlf_pl_sbssb#{$i}_sb_#{$j} {
-        display: inline-block;
-        background: url(../assets/ball_nc_top.png) repeat-x;
         background-position: 0 (-33px * ($j - 1));
-        width: 32px;
-        text-indent: -9999px;
-        height: 33px;
-        line-height: 33px;
+        @extend %cqlfball;
       }
     }
   }
 }
 @include cqlf-num;
 
+%gdklsfball{
+  display: inline-block;
+  background: url(../assets/ball_1.png) repeat-x;
+  width: 27px;
+  text-indent: -9999px;
+  height: 27px;
+  line-height: 27px;
+}
 @mixin gdklsf-num {
-  @for $i from 1 through 8 {
-    @for $j from 1 through 20 {
+  @for $j from 1 through 20 {
+    .gdklsf_pg_wc_wc_#{$j} {
+      background-position: 0 (-27px * ($j - 1));
+      @extend %gdklsfball;
+    }
+    @for $i from 1 through 8 {
       .gdklsf_pl_sbssb#{$i}_sb_#{$j} {
-        display: inline-block;
-        background: url(../assets/ball_1.png) repeat-x;
         background-position: 0 (-27px * ($j - 1));
-        width: 27px;
-        text-indent: -9999px;
-        height: 27px;
-        line-height: 27px;
+        @extend %gdklsfball;
       }
     }
   }

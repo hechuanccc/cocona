@@ -90,11 +90,13 @@ export default {
       let index = 0
       let result = []
       while (index < customPlayGroup.cols) {
+        let num = n + (rows) * index
         result.push({
-          num: n + (rows) * index,
+          num: num,
           selected: false,
           hover: false,
-          xiao: this.zodiacs[n + (rows) * index - 1].xiao
+          xiao: this.zodiacs[num - 1].xiao,
+          englishName: this.zodiacs[num - 1].englishName
         })
         index++
       }
@@ -154,13 +156,13 @@ export default {
   },
   methods: {
     updateForSubmit () {
-      let numbers = this.selectedOptions.map(option => option.num)
-      this.valid = !!(numbers.length > 1)
+      this.valid = this.selectedOptions.length > 1
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.activePlay.id,
         selectedOptions: this.selectedOptions.map(option => {
           return {
-            num: this.zodiacs[option.num - 1].englishName
+            num: option.englishName,
+            displayName: option.xiao
           }
         }),
         combinations: ['1'], // rules for ho_xiao is always 1 combination
@@ -202,12 +204,12 @@ export default {
   display: block;
 }
 .tbody {
-  .odds{
+  .odds {
     width: 100%;
   }
   td {
     width: 50%;
-    font-weight: bold
+    font-weight: bold;
   }
   background: #fff;
 }
@@ -217,5 +219,4 @@ export default {
 .checkbox {
   border-left: $cell-border;
 }
-
 </style>

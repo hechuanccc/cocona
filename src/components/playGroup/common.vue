@@ -152,19 +152,42 @@ export default {
     }
     const options = customPlayGroup.options
     const rows = Math.ceil(options.length / customPlayGroup.cols)
-    const optionGroup = _.flatMap(options.slice(0, rows), n => {
-      let index = 0
-      let result = []
-      while (index < customPlayGroup.cols) {
-        result.push({
-          num: n + (rows) * index,
-          selected: false,
-          hover: false
-        })
-        index++
-      }
-      return [result]
-    })
+
+    let optionGroup
+    if (customPlayGroup.transpose) {
+      const cols = customPlayGroup.cols
+      optionGroup = _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < cols) {
+          let num = n * cols + index + 1
+          if (num > options.length) {
+            break
+          }
+          result.push({
+            num: num,
+            selected: false,
+            hover: false
+          })
+          index++
+        }
+        return [result]
+      })
+    } else {
+      optionGroup = _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < customPlayGroup.cols) {
+          result.push({
+            num: n + (rows) * index,
+            selected: false,
+            hover: false
+          })
+          index++
+        }
+        return [result]
+      })
+    }
 
     let activePlayId = ''
     let plays = this.playgroup.plays
