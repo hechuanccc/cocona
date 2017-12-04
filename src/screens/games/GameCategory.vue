@@ -103,8 +103,7 @@
         <el-table-column property="display_name" label="号码" width="150">
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
-            <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
-            <div v-if="scope.row.isCustom && hasZodiacs" class="result-zodiacs"> 已选号码：{{scope.row.bet_options.options | zodiacFilter}} </div>
+            <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -150,7 +149,7 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import {zodiacs, zodiacMap} from '../../utils/zodiacs'
+import { zodiacs } from '../../utils/zodiacs'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
@@ -189,14 +188,7 @@ export default {
       submitting: false,
       errors: '',
       playReset: false,
-      hasZodiacs: false,
-      zodiacMap,
       zodiacs
-    }
-  },
-  filters: {
-    zodiacFilter (arr) {
-      return arr.map(xiao => zodiacMap[xiao])
     }
   },
   computed: {
@@ -253,7 +245,7 @@ export default {
         this.$set(play, 'active', false)
         this.$set(play, 'amount', '')
       })
-       // switch 'active' between play groups
+      // switch 'active' between play groups
       _.map(playSection.playgroups, (playgroup, index) => {
         this.$set(playgroup, 'active', index === tabIndex)
       })
@@ -273,7 +265,6 @@ export default {
           this.$set(play, 'options', playOptions.options)
           this.$set(play, 'combinations', playOptions.combinations)
           this.$set(play, 'selectedOptions', playOptions.selectedOptions)
-          this.$set(this, 'hasZodiacs', playOptions.hasZodiacs)
         } else {
           // if not, reset other plays
           this.$set(play, 'active', false)
@@ -362,14 +353,27 @@ export default {
       )
       this.activePlays = _.values(validedPlays.map(play => {
         let betOptions
+        let isCustom = play.isCustom
+        let optionDisplayNames = []
         if (play.selectedOptions) {
-          betOptions = { options: _.map(play.selectedOptions, option => option.num) }
+          let options = []
+          _.each(play.selectedOptions, option => {
+            options.push(option.num)
+            optionDisplayNames.push(option.displayName || option.num)
+          })
+          betOptions = { options: options }
         } else if (play.combinations) {
+          isCustom = false
           betOptions = { options: play.combinations }
+          optionDisplayNames = [...play.combinations]
         } else {
           betOptions = []
         }
-
+        if (optionDisplayNames.length > 0) {
+          optionDisplayNames = optionDisplayNames.join(',')
+        } else {
+          optionDisplayNames = ''
+        }
         return {
           game_schedule: 10,
           display_name: `${play.group} - ${play.display_name}`,
@@ -378,8 +382,9 @@ export default {
           id: play.id,
           bet_options: betOptions,
           active: true,
-          isCustom: play.isCustom,
-          combinations: play.combinations
+          isCustom: isCustom,
+          combinations: play.combinations,
+          optionDisplayNames: optionDisplayNames
         }
       }))
       this.dialogVisible = true
@@ -480,7 +485,7 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-.result-zodiacs {
+.optionDisplayNames {
   padding-left: 10px;
   font-weight: 700;
 }
