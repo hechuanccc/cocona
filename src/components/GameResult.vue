@@ -24,6 +24,8 @@
 
 <script>
 import {fetchGameResult} from '../api'
+import _ from 'lodash'
+
 export default {
   props: {
     gameid: {
@@ -62,11 +64,7 @@ export default {
       return formattedNums
     },
     resultsSum () {
-      let sum = 0
-      for (let i = 0; i < this.resultNums.length; i++) {
-        sum = sum + Number(this.resultNums[i])
-      }
-      return sum
+      return _.reduce(this.resultNums, (sum, nums) => { return sum + Number(nums) }, 0)
     }
   },
   watch: {
