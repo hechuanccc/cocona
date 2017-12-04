@@ -133,6 +133,7 @@ export default {
     'selectedOptions': function () {
       if (this.selectedOptions.length < 2) {
         this.updateForSubmit()
+        return
       }
       this.selectedOptions.sort((a, b) => { return a.num - b.num })
       _.forEach(this.plays, (play) => {
@@ -154,11 +155,7 @@ export default {
   methods: {
     updateForSubmit () {
       let numbers = this.selectedOptions.map(option => option.num)
-      if (numbers.length > 1) {
-        this.valid = true
-      } else {
-        this.valid = false
-      }
+      this.valid = !!(numbers.length > 1)
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.activePlay.id,
         selectedOptions: this.selectedOptions.map(option => {
@@ -166,7 +163,7 @@ export default {
             num: this.zodiacs[option.num - 1].englishName
           }
         }),
-        combinations: ['1'],
+        combinations: ['1'], // rules for ho_xiao is always 1 combination
         valid: this.valid,
         hasZodiacs: true
       })
