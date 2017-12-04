@@ -148,7 +148,6 @@ export default {
     not_set_bank_info: 'Bank Info has not yet been setted'
   },
   message: {
-    save_success: 'Save Success',
-    please_keyinforlogin: 'Please key in correctly for login'
+    save_success: 'Save Success'
   }
 }

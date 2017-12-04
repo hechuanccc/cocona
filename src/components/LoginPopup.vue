@@ -16,20 +16,27 @@
     <el-col :span="12" class="login">
       <div class="login">
         <span>{{$t('navMenu.user')}} </span>
-        <el-input v-model="username"
-          :placeholder="$t('navMenu.user_login')"
-          class="m-t-sm"
-          @keyup.enter.native="login"
-          :autofocus="true"
-          ref="username"/>
-        <el-input v-model="password"
-          type="password"
-          :placeholder="$t('navMenu.password')"
-          class="m-t"
-          @keyup.enter.native="login">
-          <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
-        </el-input>
-        <el-button type="primary" class="submit m-t" @click="login">{{$t('navMenu.login')}}</el-button>
+        <el-form :model="user" status-icon :rules="rules" ref="user">
+          <el-form-item prop="username">
+            <el-input v-model="user.username"
+              :placeholder="$t('navMenu.user_login')"
+              class="m-t-sm"
+              @keyup.enter.native="login"
+              :autofocus="true"
+              ref="username"/>
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input v-model="user.password"
+              type="password"
+              :placeholder="$t('navMenu.password')"
+              @keyup.enter.native="login">
+              <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
+          </el-form-item>
+        </el-form>
       </div>
     </el-col>
   </el-row>
@@ -39,8 +46,18 @@
 export default {
   data () {
     return {
-      username: '',
-      password: ''
+      user: {
+        username: '',
+        password: ''
+      },
+      rules: {
+        username: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -49,19 +66,14 @@ export default {
       this.$router.push('/register')
     },
     login () {
-      if (!this.username || !this.password) {
+      if (!this.user.username || !this.user.password) {
         this.$refs.username.focus()
-        this.$message({
-          showClose: true,
-          message: this.$t('message.please_keyinforlogin'),
-          type: 'warning'
-        })
         return
       }
       this.$store.dispatch('login', {
         user: {
-          username: this.username,
-          password: this.password
+          username: this.user.username,
+          password: this.user.password
         }
       }).then(result => {
         this.$store.commit('CLOSE_LOGINDIALOG')
@@ -121,7 +133,10 @@ export default {
     width: 100%;
   }
 }
+
 .el-button.ipt-slot {
-  margin-top: 2px;
+  position: absolute;
+  right: 20px;
+  top: 2px
 }
 </style>
