@@ -348,9 +348,11 @@ export default {
       )
       this.activePlays = _.values(validedPlays.map(play => {
         let betOptions
+        let isCustom = play.isCustom
         if (play.selectedOptions) {
           betOptions = { options: _.map(play.selectedOptions, option => option.num) }
         } else if (play.combinations) {
+          isCustom = false
           betOptions = { options: play.combinations }
         } else {
           betOptions = []
@@ -363,7 +365,7 @@ export default {
           id: play.id,
           bet_options: betOptions,
           active: true,
-          isCustom: play.isCustom,
+          isCustom: isCustom,
           combinations: play.combinations
         }
       }))

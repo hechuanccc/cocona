@@ -28,6 +28,12 @@ export function createStore () {
           cols: 6
         },
         {
+          code: 'gd11x5_pg_wc_wc',
+          options: Array.from(Array(11).keys()),
+          cols: 6,
+          transpose: true
+        },
+        {
           code: 'gdklsf_pg_wc_wc',
           options: Array.from(Array(20).keys()).map(item => item + 1),
           cols: 5
