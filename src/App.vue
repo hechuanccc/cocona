@@ -3,10 +3,10 @@
     <Top />
     <router-view/>
     <Bottom v-if="!$route.params.gameId && $route.path.indexOf('/account') < 0"/>
-    <el-dialog 
+    <el-dialog
       :title="$t('navMenu.pop_title')"
       :visible="showLoginDialog"
-      width="680px"
+      width="720px"
       @close="closeLoginDialog()"
       center>
       <LoginPopup/>
