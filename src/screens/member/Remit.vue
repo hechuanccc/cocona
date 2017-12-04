@@ -29,7 +29,7 @@
             v-model="remitData.remit_info.deposited_at"
             type="datetime"
             :placeholder="$t('common.select_date_time')"
-            format="yyyy-MM-dd HH-mm"
+            format="yyyy-MM-dd HH:mm"
             value-format="yyyy-MM-dd HH-mm">
           </el-date-picker>
         </el-form-item>

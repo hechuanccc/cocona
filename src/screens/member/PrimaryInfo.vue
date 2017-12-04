@@ -23,7 +23,7 @@
           <el-radio :label="'F'">{{$t('user.female')}}</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="QQ" prop="qq">
+      <el-form-item label="QQ" prop="qq" ref="qq">
         <el-input class="input-width" v-model="user.qq"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.wechat')" prop="wechat">
@@ -38,6 +38,7 @@
 </template>
 <script>
 import { msgFormatter } from '../../utils'
+import { validateQQ } from '../../validate'
 import Vue from 'vue'
 export default {
   name: 'PrimaryInfo',
@@ -47,6 +48,15 @@ export default {
     }
   },
   data () {
+    const qqValidator = (rule, value, callback) => {
+      if (!value) {
+        this.$refs.qq.clearValidate()
+      } else if (!validateQQ(value)) {
+        callback(new Error(this.$t('validate.qq_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       user: {
         id: '',
@@ -59,6 +69,9 @@ export default {
       rules: {
         email: [
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
+        ],
+        qq: [
+          { validator: qqValidator, trigger: 'change' }
         ]
       }
     }
