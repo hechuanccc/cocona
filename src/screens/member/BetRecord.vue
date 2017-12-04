@@ -51,13 +51,13 @@
       <el-table-column
         :label="$t('user.bet_amount')">
         <template slot-scope="scope">
-          <span>{{ `$${scope.row.bet_amount}`}}</span>
+          <span>{{ scope.row.bet_amount | currency('￥')}}</span>
         </template>
       </el-table-column>
       <el-table-column
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span>{{ scope.row.profit||scope.row.profit === 0 ? `$${scope.row.profit}`:''}}</span>
+          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | placeholder('x') | currency('￥')}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -70,7 +70,7 @@
       :current-page.sync="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"
-      :total="betRecords.length">
+      :total="filtRecords.length">
     </el-pagination>
   </el-row>
 </div>
@@ -123,7 +123,7 @@ export default {
       })
   },
   computed: {
-    showRecords () {
+    filtRecords () {
       let gameFilter
       if (this.selectedGame) {
         gameFilter = (value) => {
@@ -144,17 +144,36 @@ export default {
           return true
         }
       }
-
       return this.betRecords.filter(rec => {
         return gameFilter(rec.game.display_name) && issueNumberFilter(rec.issue_number)
       })
+    },
+    showRecords () {
+      let groupIdx = (this.currentPage - 1) * this.pageSize
+      return this.filtRecords.slice(groupIdx, groupIdx + this.pageSize)
+    }
+  },
+  methods: {
+    profitColor (amount) {
+      if (amount > 0) {
+        return 'gain'
+      } else if (amount < 0) {
+        return 'loss'
+      }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+@import "../../style/vars.scss";
 .filter-title {
   color: #666;
+}
+.gain {
+  color: $green;
+}
+.loss {
+  color: $red;
 }
 </style>
 

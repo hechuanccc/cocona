@@ -17,7 +17,7 @@
               <span>￥{{user.balance}}</span>
             </li>
             <li class="center">
-              <el-button type="primary" plain>我的账号</el-button>
+              <el-button type="primary" plain @click="linkTo('/my/primary_info')">我的账号</el-button>
               <el-button type="primary" plain @click="linkTo('/online_payment')">立即充值</el-button>
             </li>
             <li class="center">
