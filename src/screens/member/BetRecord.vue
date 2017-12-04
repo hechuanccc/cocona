@@ -57,7 +57,7 @@
       <el-table-column
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span>{{ scope.row.profit | placeholder('x') | currency('￥')}}</span>
+          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | placeholder('x') | currency('￥')}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -152,12 +152,28 @@ export default {
       let groupIdx = (this.currentPage - 1) * this.pageSize
       return this.filtRecords.slice(groupIdx, groupIdx + this.pageSize)
     }
+  },
+  methods: {
+    profitColor (amount) {
+      if (amount > 0) {
+        return 'gain'
+      } else if (amount < 0) {
+        return 'loss'
+      }
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
+@import "../../style/vars.scss";
 .filter-title {
   color: #666;
+}
+.gain {
+  color: $green;
+}
+.loss {
+  color: $red;
 }
 </style>
 
