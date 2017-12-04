@@ -16,8 +16,17 @@
     <el-col :span="12" class="login">
       <div class="login">
         <span>{{$t('navMenu.user')}} </span>
-        <el-input v-model="username" :placeholder="$t('navMenu.user_login')" class="m-t-sm"/>
-        <el-input v-model="password" type="password" :placeholder="$t('navMenu.password')" class="m-t">
+        <el-input v-model="username"
+          :placeholder="$t('navMenu.user_login')"
+          class="m-t-sm"
+          @keyup.enter.native="login"
+          :autofocus="true"
+          ref="username"/>
+        <el-input v-model="password"
+          type="password"
+          :placeholder="$t('navMenu.password')"
+          class="m-t"
+          @keyup.enter.native="login">
           <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
         </el-input>
         <el-button type="primary" class="submit m-t" @click="login">{{$t('navMenu.login')}}</el-button>
@@ -40,6 +49,15 @@ export default {
       this.$router.push('/register')
     },
     login () {
+      if (!this.username || !this.password) {
+        this.$refs.username.focus()
+        this.$message({
+          showClose: true,
+          message: this.$t('message.please_keyinforlogin'),
+          type: 'warning'
+        })
+        return
+      }
       this.$store.dispatch('login', {
         user: {
           username: this.username,
@@ -66,6 +84,11 @@ export default {
         })
       })
     }
+  },
+  watch: {
+    '$store.state.loginDialogVisible': function () {
+      this.$refs.username.focus()
+    }
   }
 }
 </script>
@@ -77,11 +100,21 @@ export default {
 .register {
   text-align: center;
   margin: auto;
-  border-right: 1px solid #eee;
+  &:after {
+    content: ' ';
+    display: inline-block;
+    position: absolute;
+    height: 200px;
+    right: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right: 1px solid #eee;
+  }
   .el-button {
     width: 150px;
   }
 }
+
 .login {
   padding: 0 40px;
   .submit {

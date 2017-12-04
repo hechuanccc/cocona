@@ -149,6 +149,7 @@ export default {
     not_set_bank_info: '尚未设定银行信息'
   },
   message: {
-    save_success: '保存成功'
+    save_success: '保存成功',
+    please_keyinforlogin: '请正确输入帐号密码'
   }
 }

@@ -40,7 +40,7 @@
           </el-col>
           <el-col :span="17" class="number" align="left">
             <span v-for="(zodiacNum, index) in formattedZodiacNums[option.num - 1]"
-              :class="[playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
+              :class="['m-r-sm',playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
               :key="index">
                 {{zodiacNum}}
             </span>
