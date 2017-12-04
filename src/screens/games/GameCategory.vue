@@ -103,7 +103,7 @@
         <el-table-column property="display_name" label="号码" width="150">
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
-            <div v-if="scope.row.optionDisplayNames" class="result-zodiacs"> 已选号码：{{scope.row.optionDisplayNames}} </div>
+            <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -485,7 +485,7 @@ export default {
   margin-top: 20px;
   text-align: center;
 }
-.result-zodiacs {
+.optionDisplayNames {
   padding-left: 10px;
   font-weight: 700;
 }
