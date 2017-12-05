@@ -105,6 +105,7 @@
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
+            <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
             <div v-if="scope.row.isCustom && showCombinationDetails" class="detail-popover">
                 <el-tooltip :disabled="showCombinationsTips" class="item" effect="light" placement="bottom">
                   <div slot="content"
@@ -119,7 +120,6 @@
                   <el-button @click="showCombinationsTips = !showCombinationsTips" size="mini" type="info" round>查看明細</el-button>
                 </el-tooltip>
             </div>
-            <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -205,7 +205,6 @@ export default {
       errors: '',
       playReset: false,
       hasZodiacs: false,
-      zodiacMap,
       showCombinationDetails: false,
       showCombinationsTips: false,
       zodiacs

@@ -39,7 +39,9 @@
             name="radio"
             v-model="activePlayId"
             :label="play.id"
-            key="'radio' + index"></el-radio>
+            key="'radio' + index">
+            <span v-show="false"></span> <!--just for hiding label of el-radio-->
+          </el-radio>
         </td>
       </tr>
       <tr>
@@ -47,26 +49,26 @@
           :key="play.code + '-play-' + play.id"
           class="group-name"
           @click="activePlayId = play.id">
-          {{play.display_name}}{{play.id}}
+          {{play.display_name}}
         </td>
       </tr>
       <tbody class="tbody">
         <tr>
-          <td v-for="play in formattedPlaysInOptionGroup"
-            class="sameid-odds">
-            <span v-for="sameIdPlay in play"
+          <td v-for="plays in playGroupPlays"
+            :key = "plays[0].id"
+            v-if="!gameClosed">
+            <span v-for="sameIdPlay in plays"
               :key= "sameIdPlay.code+'-pl-'+sameIdPlay.id"
               class="odds"
               @click="activePlayId = sameIdPlay.id"
-              v-if="!gameClosed"
               :style="{
                 'width':1 / play.length * 99+'%',
                 'display':'inline-block'
               }">
                 {{ sameIdPlay.odds }}
             </span>
-            <span v-else class="disabled">封盘</span>
           </td>
+          <td v-else><span class="disabled">封盘</span></td>
         </tr>
       </tbody>
     </table>
@@ -223,7 +225,7 @@ export default {
 
       return _.flatten(this.playgroup.plays).length > playsArray.length
     },
-    formattedPlaysInOptionGroup () {
+    playGroupPlays () {
       let formatted = _.flatten(this.playgroup.plays).reduce((origin, next) => {
         let index = _.findIndex(origin, item => item.some(element => element.id === next.id))
         index >= 0 ? origin[index].push(next) : origin.push([next])
