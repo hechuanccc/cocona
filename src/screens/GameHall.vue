@@ -10,11 +10,11 @@
           <ul class="side-menu">
             <li>
               <span>账户余额</span>
-              <span class="balance">￥{{user.balance}}</span>
+              <span class="balance">{{user.balance | currency('￥')}}</span>
             </li>
             <li>
               <span>未结余额</span>
-              <span>￥{{user.balance}}</span>
+              <span>{{user.unsettled | currency('￥')}}</span>
             </li>
             <li class="center">
               <el-button type="primary" plain @click="linkTo('/my/primary_info')">我的账号</el-button>
@@ -27,7 +27,7 @@
           </ul>
           <div class="betrecords">
             <h3>
-              最新注单  
+              最新注单
             </h3>
             <ul  v-if="betrecords && betrecords.length > 0">
               <li v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
