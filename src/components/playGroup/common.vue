@@ -1,34 +1,5 @@
 <template>
   <div>
-    <table class="play-table"
-      align="center"
-      v-for="(playChunk, playChunkIndex) in playgroup.plays"
-      :key="playChunk.code + '-playChunk-' + playChunkIndex"
-       v-if="!hasDifferentOddsInOnePlay">
-      <tr>
-        <td v-for="play in playChunk"
-          :key="play.code + '-play-' + play.id"
-          class="group-name"
-          @click="activePlayId = play.id">
-          <el-radio
-            name="radio"
-            v-model="activePlayId"
-            :label="play.id"
-            key="'radio' + index">{{play.display_name}}</el-radio>
-        </td>
-      </tr>
-      <tbody class="tbody">
-        <tr>
-          <td v-for="play in playChunk"
-            @click="activePlayId = play.id"
-            :key="play.code+'-pl-'+play.id">
-            <span v-if="!gameClosed" class="odds">{{ play.odds }}</span>
-            <span v-else class="disabled">封盘</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
     <table class="play-table" align="center" v-if="hasDifferentOddsInOnePlay">
       <tr>
         <td  v-for="play in formattedPlays"
@@ -40,7 +11,7 @@
             v-model="activePlayId"
             :label="play.id"
             key="'radio' + index">
-            <span v-show="false"></span> <!--just for hiding label of el-radio-->
+            <span class="placeholder"></span> <!--just for hiding label of el-radio-->
           </el-radio>
         </td>
       </tr>
@@ -72,7 +43,34 @@
         </tr>
       </tbody>
     </table>
-
+    <table class="play-table"
+      align="center"
+      v-for="(playChunk, playChunkIndex) in playgroup.plays"
+      :key="playChunk.code + '-playChunk-' + playChunkIndex"
+       v-else>
+      <tr>
+        <td v-for="play in playChunk"
+          :key="play.code + '-play-' + play.id"
+          class="group-name"
+          @click="activePlayId = play.id">
+          <el-radio
+            name="radio"
+            v-model="activePlayId"
+            :label="play.id"
+            key="'radio' + index">{{play.display_name}}</el-radio>
+        </td>
+      </tr>
+      <tbody class="tbody">
+        <tr>
+          <td v-for="play in playChunk"
+            @click="activePlayId = play.id"
+            :key="play.code+'-pl-'+play.id">
+            <span v-if="!gameClosed" class="odds">{{ play.odds }}</span>
+            <span v-else class="disabled">封盘</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <table class="play-table">
       <tr>
         <td :colspan="customPlayGroup.cols" align="center">
@@ -225,6 +223,7 @@ export default {
 
       return _.flatten(this.playgroup.plays).length > playsArray.length
     },
+
     playGroupPlays () {
       let formatted = _.flatten(this.playgroup.plays).reduce((origin, next) => {
         let index = _.findIndex(origin, item => item.some(element => element.id === next.id))
@@ -275,7 +274,7 @@ export default {
         combinations: this.combinations,
         selectedOptions: this.selectedOptions,
         valid: this.valid,
-        showCombinationDetailsPopover: this.hasDifferentOddsInOnePlay
+        showCombinationsPopover: this.hasDifferentOddsInOnePlay
       })
     },
     selectOption (option, event) {
@@ -331,7 +330,6 @@ export default {
   display: inline-block;
   color: $red;
 }
-
 .odds {
   &:nth-child(2) {
     border-left: 1px solid #ddd

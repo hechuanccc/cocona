@@ -113,7 +113,7 @@
                       'width': scope.row.combinations.length * 100 + '%',
                       'max-width' : '480px'
                       }" >已选: <br/>
-                    <span v-for="(detail, serial) in formattedCombinationaDetails" class="combination-detail">
+                    <span v-for="(detail, serial) in formattedCombinations" class="combination-detail">
                       <el-tag type="info">{{Number(serial)+1}}: {{detail}}</el-tag>
                     </span>
                   </div>
@@ -229,7 +229,7 @@ export default {
     rawAndFormatting () {
       return this.raw && this.formatting && (this.raw.length + this.formatting.length)
     },
-    formattedCombinationaDetails () {
+    formattedCombinations () {
       let formattedDetails = {}
       _.each(this.activePlays, (activePlay) => {
         _.each(Object.keys(this.plays[activePlay.id].combinations), (key) => {
@@ -293,7 +293,7 @@ export default {
           this.$set(play, 'options', playOptions.options)
           this.$set(play, 'combinations', playOptions.combinations)
           this.$set(play, 'selectedOptions', playOptions.selectedOptions)
-          this.$set(this, 'showCombinationDetails', playOptions.showCombinationDetailsPopover)
+          this.$set(this, 'showCombinationDetails', playOptions.showCombinationsPopover)
         } else {
           // if not, reset other plays
           this.$set(play, 'active', false)
@@ -524,10 +524,6 @@ export default {
 
 .detail-popover {
   text-align: center;
-}
-
-.combination-detail {
-  margin: 1px
 }
 </style>
 
