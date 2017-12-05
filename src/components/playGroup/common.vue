@@ -62,7 +62,7 @@
               class="odds"
               @click="activePlayId = sameIdPlay.id"
               :style="{
-                'width':1 / play.length * 99+'%',
+                'width':1 / plays.length * 99+'%',
                 'display':'inline-block'
               }">
                 {{ sameIdPlay.odds }}
