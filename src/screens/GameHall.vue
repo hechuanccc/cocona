@@ -74,8 +74,8 @@ export default {
     GameMenu
   },
   methods: {
-    fetchOngoingBet (gameId) {
-      fetchBet(gameId)
+    fetchOngoingBet (gameData) {
+      fetchBet(gameData)
         .then(res => {
           this.betrecords = res
         })
@@ -96,8 +96,8 @@ export default {
   },
   created () {
     this.$root.bus = bus
-    this.$root.bus.$on('new-betrecords', (gameId) => {
-      this.fetchOngoingBet(gameId)
+    this.$root.bus.$on('new-betrecords', (gameData) => {
+      this.fetchOngoingBet(gameData)
     })
   }
 }

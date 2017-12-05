@@ -1,5 +1,5 @@
 <template>
-  <div class="top-bar container" justify="space-between">
+  <div class="top-bar container" >
     <div class="clock">
       {{nowTime}}
     </div>
@@ -51,7 +51,6 @@
     </ul>
   </div>
 </template>
-
 
 <script>
 import { gethomePage } from '../api'

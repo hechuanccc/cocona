@@ -29,7 +29,7 @@
           <el-col :span="7">
             <el-form-item  prop="captcha_1">
               <el-input class="input-width" :maxlength="4" v-model="ruleForm.captcha_1" auto-complete="off">
-                <el-button slot="append" icon="el-icon-refresh" @click="grabCaptcha"></el-button>
+                <el-button slot="suffix" type="info"  icon="el-icon-refresh" @click="grabCaptcha"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -154,8 +154,7 @@
         })
       },
       grabCaptcha () {
-        getCaptcha().then(
-        response => {
+        getCaptcha().then(response => {
           this.captcha.show = true
           this.ruleForm.captcha_0 = response.data.captcha_val
           this.captcha.img = api.domain + response.data.captcha_src
@@ -188,4 +187,7 @@
   }
 </script>
 
-
+<style lang="sass" scoped="">
+.el-input /deep/ .el-input__suffix
+  right: 0
+</style>
