@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <el-row type="flex" class="actions" justify="center" :gutter="10">
@@ -103,7 +104,22 @@
         <el-table-column property="display_name" label="号码" width="150">
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
+            <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
             <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
+            <div v-if="scope.row.isCustom && showCombinationDetails" class="detail-popover">
+                <el-tooltip :disabled="showCombinationsTips" class="item" effect="light" placement="bottom">
+                  <div slot="content"
+                    :style="{
+                      'width': scope.row.combinations.length * 100 + '%',
+                      'max-width' : '480px'
+                      }" >已选: <br/>
+                    <span v-for="(detail, serial) in formattedCombinations" class="combination-detail">
+                      <el-tag type="info">{{Number(serial)+1}}: {{detail}}</el-tag>
+                    </span>
+                  </div>
+                  <el-button @click="showCombinationsTips = !showCombinationsTips" size="mini" type="info" round>查看明細</el-button>
+                </el-tooltip>
+            </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
@@ -188,6 +204,9 @@ export default {
       submitting: false,
       errors: '',
       playReset: false,
+      hasZodiacs: false,
+      showCombinationDetails: false,
+      showCombinationsTips: false,
       zodiacs
     }
   },
@@ -209,6 +228,15 @@ export default {
     // just to trigger watcher below
     rawAndFormatting () {
       return this.raw && this.formatting && (this.raw.length + this.formatting.length)
+    },
+    formattedCombinations () {
+      let formattedDetails = {}
+      _.each(this.activePlays, (activePlay) => {
+        _.each(Object.keys(this.plays[activePlay.id].combinations), (key) => {
+          formattedDetails[key] = this.plays[activePlay.id].combinations[key]
+        })
+      })
+      return formattedDetails
     }
   },
   watch: {
@@ -265,6 +293,7 @@ export default {
           this.$set(play, 'options', playOptions.options)
           this.$set(play, 'combinations', playOptions.combinations)
           this.$set(play, 'selectedOptions', playOptions.selectedOptions)
+          this.$set(this, 'showCombinationDetails', playOptions.showCombinationsPopover)
         } else {
           // if not, reset other plays
           this.$set(play, 'active', false)
@@ -492,4 +521,9 @@ export default {
   padding-left: 10px;
   font-weight: 700;
 }
+
+.detail-popover {
+  text-align: center;
+}
 </style>
+

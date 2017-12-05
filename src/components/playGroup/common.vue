@@ -1,8 +1,58 @@
 <template>
   <div>
-    <table class="play-table" align="center" v-for="(playChunk, playChunkIndex) in playgroup.plays" >
+    <table class="play-table" align="center" v-if="hasDifferentOddsInOnePlay">
       <tr>
-        <td v-for="play in playChunk"  class="group-name" @click="activePlayId = play.id">
+        <td  v-for="play in formattedPlays"
+          :key="play.code + '-play-' + play.id"
+          class="group-name"
+          @click="activePlayId = play.id">
+          <el-radio
+            name="radio"
+            v-model="activePlayId"
+            :label="play.id"
+            key="'radio' + index">
+            <span class="placeholder"></span> <!--just for hiding label of el-radio-->
+          </el-radio>
+        </td>
+      </tr>
+      <tr>
+        <td v-for="play in formattedPlays"
+          :key="play.code + '-play-' + play.id"
+          class="group-name"
+          @click="activePlayId = play.id">
+          {{play.display_name}}
+        </td>
+      </tr>
+      <tbody class="tbody">
+        <tr>
+          <td v-for="plays in playGroupPlays"
+            :key = "plays[0].id"
+            v-if="!gameClosed">
+            <span v-for="sameIdPlay in plays"
+              :key= "sameIdPlay.code+'-pl-'+sameIdPlay.id"
+              class="odds"
+              @click="activePlayId = sameIdPlay.id"
+              :style="{
+                'width':1 / plays.length * 99+'%',
+                'display':'inline-block'
+              }">
+                {{ sameIdPlay.odds }}
+            </span>
+          </td>
+          <td v-else><span class="disabled">封盘</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="play-table"
+      align="center"
+      v-for="(playChunk, playChunkIndex) in playgroup.plays"
+      :key="playChunk.code + '-playChunk-' + playChunkIndex"
+       v-else>
+      <tr>
+        <td v-for="play in playChunk"
+          :key="play.code + '-play-' + play.id"
+          class="group-name"
+          @click="activePlayId = play.id">
           <el-radio
             name="radio"
             v-model="activePlayId"
@@ -12,7 +62,9 @@
       </tr>
       <tbody class="tbody">
         <tr>
-          <td v-for="play in playChunk" @click="activePlayId = play.id">
+          <td v-for="play in playChunk"
+            @click="activePlayId = play.id"
+            :key="play.code+'-pl-'+play.id">
             <span v-if="!gameClosed" class="odds">{{ play.odds }}</span>
             <span v-else class="disabled">封盘</span>
           </td>
@@ -41,12 +93,15 @@
           </div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup">
+      <tr
+        v-for="(row,index) in optionGroup"
+        :key="'row'+index">
         <td
           @click="selectOption(option, $event)"
           @mouseover="option.hover = true"
           @mouseleave="option.hover = false"
           v-for="option in row"
+          :key="option.num + 'option'"
           :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
             {
               hover: option.hover,
@@ -54,7 +109,7 @@
             }
           ]">
           <el-col :span="12" class="name">
-            <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
+            <span :class="[playgroup.code, playgroup.code + '_' + option.num]">{{option.num}}</span>
           </el-col>
           <el-col :span="12" class="checkbox input">
             <el-checkbox v-model="option.selected" v-if="!gameClosed"></el-checkbox>
@@ -152,10 +207,41 @@ export default {
       return _.filter(_.flatten(this.optionGroup), option => {
         return option.selected
       })
+    },
+    formattedPlays () {
+      let formatted = []
+      _.forEach(Object.keys(this.plays), (play) => {
+        formatted.push(this.plays[play])
+      })
+      return formatted
+    },
+    hasDifferentOddsInOnePlay () {
+      let playsArray = []
+      _.each(this.plays, (value, key) => {
+        playsArray.push(value)
+      })
+
+      return _.flatten(this.playgroup.plays).length > playsArray.length
+    },
+
+    playGroupPlays () {
+      let formatted = _.flatten(this.playgroup.plays).reduce((origin, next) => {
+        let index = _.findIndex(origin, item => item.some(element => element.id === next.id))
+        index >= 0 ? origin[index].push(next) : origin.push([next])
+        return origin
+      }, [])
+      formatted.sort((a, b) => {
+        return a[0].id - b[0].id
+      })
+      return formatted
     }
   },
   watch: {
     'selectedOptions': function () {
+      if (this.selectedOptions.length < this.plays[this.activePlayId].rules.min_opts) {
+        this.combinations.length = 0
+        return
+      }
       this.calculateCombinations()
     },
     'activePlayId': function () {
@@ -169,6 +255,7 @@ export default {
       _.flatten(this.optionGroup).forEach(option => {
         option.selected = false
       })
+      this.combinations.length = 0
     }
   },
   methods: {
@@ -186,7 +273,8 @@ export default {
         options: this.selectedOptions.join(','),
         combinations: this.combinations,
         selectedOptions: this.selectedOptions,
-        valid: this.valid
+        valid: this.valid,
+        showCombinationsPopover: this.hasDifferentOddsInOnePlay
       })
     },
     selectOption (option, event) {
@@ -241,5 +329,10 @@ export default {
   width: 25%;
   display: inline-block;
   color: $red;
+}
+.odds {
+  &:nth-child(2) {
+    border-left: 1px solid #ddd
+  }
 }
 </style>

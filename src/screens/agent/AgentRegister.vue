@@ -29,7 +29,7 @@
           <el-col :span="7">
             <el-form-item  prop="captcha_1">
               <el-input class="input-width" :maxlength="4" v-model="ruleForm.captcha_1" auto-complete="off">
-                <el-button slot="suffix" type="info" icon="el-icon-refresh" @click="grabCaptcha"></el-button>
+                <el-button slot="suffix" type="info"  icon="el-icon-refresh" @click="grabCaptcha"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -174,7 +174,8 @@
             message: messages.join(', '),
             type: 'error'
           })
-        })
+        }
+      )
       }
     },
     created () {
