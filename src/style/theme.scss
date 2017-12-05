@@ -23,5 +23,8 @@
   }
 }
 .el-table__row.read {
-  background-color: #f1f1f1;
+  color: #999
+}
+.el-table__row.unread {
+  color: #666
 }

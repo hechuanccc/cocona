@@ -64,16 +64,19 @@ export default new Router({
         {
           path: 'withdraw',
           name: 'Withdraw',
+          meta: { requiresAuth: true },
           component: Withdraw
         },
         {
           path: 'online_payment',
           name: 'OnlinePayment',
+          meta: { requiresAuth: true },
           component: OnlinePayment
         },
         {
           path: 'remit',
           name: 'Remit',
+          meta: { requiresAuth: true },
           component: Remit
         },
         {
@@ -84,21 +87,25 @@ export default new Router({
             {
               path: 'primary_info',
               name: 'PrimaryInfo',
+              meta: { requiresAuth: true },
               component: PrimaryInfo
             },
             {
               path: 'password_setting',
               name: 'PasswordSetting',
+              meta: { requiresAuth: true },
               component: PasswordSetting
             },
             {
               path: 'withdraw_password',
               name: 'WithdrawPassword',
+              meta: { requiresAuth: true },
               component: WithdrawPassword
             },
             {
               path: 'bank_info',
               name: 'BankInfo',
+              meta: { requiresAuth: true },
               component: BankInfo
             }
           ]
@@ -111,16 +118,19 @@ export default new Router({
             {
               path: 'payment_record',
               name: 'PaymentRecord',
+              meta: { requiresAuth: true },
               component: TransactionRecord
             },
             {
               path: 'withdraw_record',
               name: 'WithdrawRecord',
+              meta: { requiresAuth: true },
               component: TransactionRecord
             },
             {
               path: 'betrecord',
               name: 'BetRecord',
+              meta: { requiresAuth: true },
               component: BetRecord
             }
           ]
@@ -128,6 +138,7 @@ export default new Router({
         {
           path: 'message',
           name: 'Message',
+          meta: { requiresAuth: true },
           component: Message
         }
       ]
@@ -150,6 +161,7 @@ export default new Router({
     }, {
       path: '/gamehistory',
       name: 'GameHistory',
+      meta: { requiresAuth: true },
       component: GameHistory
 
     },
@@ -161,10 +173,12 @@ export default new Router({
       children: [
         {
           path: ':gameId',
+          meta: { requiresAuth: true },
           component: Game,
           children: [
             {
               path: ':categoryId',
+              meta: { requiresAuth: true },
               component: GameCategory
             }
           ]
