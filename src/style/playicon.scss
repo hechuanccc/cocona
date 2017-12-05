@@ -116,6 +116,11 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
           background-position: 0 (-27px * ($i - 1));
         }
         @if $playgroup == shxiao_spczdc{
+          @if $i < 10 {
+            .hkl_pg_#{$playgroup}-zodiacnums-0#{$i} {
+              background-position: 0 (-27px * ($i - 1));
+            }
+          }
           .hkl_pg_#{$playgroup}-zodiacnums-#{$i} {
             background-position: 0 (-27px * ($i - 1));
           }
