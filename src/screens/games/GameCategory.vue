@@ -27,7 +27,7 @@
       <div
         :style="{width: getWidthForGroup(playSection)}"
         v-for="(playgroup, playgroupIndex) in playSection.playgroups"
-        :class="['group-table', playgroupIndex === playSection.playgroups.length - 1 ? 'last' : '']"
+        :class="['group-table', {'last': (playgroupIndex + 1) % playSection.groupCol === 0}]"
         :key="'playgroup' + playgroup.name"
         v-if="playgroup.alias ? playgroup.active : true">
         <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
@@ -286,7 +286,10 @@ export default {
       return [gameClass, resultClass]
     },
     updateBetrecords () {
-      this.$root.bus.$emit('new-betrecords', this.game.id)
+      this.$root.bus.$emit('new-betrecords', {
+        gameId: this.game.id,
+        scheduleId: this.scheduleId
+      })
     },
     beforeClose (done) {
       if (this.submitting) {

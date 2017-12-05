@@ -30,7 +30,7 @@
               type="password"
               :placeholder="$t('navMenu.password')"
               @keyup.enter.native="login">
-              <el-button slot="suffix" size="mini" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
+              <el-button slot="suffix" size="small" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -133,10 +133,7 @@ export default {
     width: 100%;
   }
 }
-
-.el-button.ipt-slot {
-  position: absolute;
-  right: 20px;
-  top: 2px
+.el-input /deep/ .el-input__suffix{
+  right: 0;
 }
 </style>
