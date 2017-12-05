@@ -414,7 +414,7 @@ export default {
           betOptions = { options: play.combinations }
           optionDisplayNames = [...play.combinations]
         } else {
-          betOptions = []
+          betOptions = {}
         }
         if (optionDisplayNames.length > 0) {
           optionDisplayNames = optionDisplayNames.join(',')

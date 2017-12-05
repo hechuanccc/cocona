@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-table v-loading="loading" :data="displayMsg" :row-class-name="rowClassName" @row-click="readMsg">
+  <el-table v-loading="loading" :data="displayMsg" stripe :row-class-name="rowClassName" @row-click="readMsg">
     <el-table-column
       :label="$t('user.sender')"
       prop="sender_displayname">
@@ -15,7 +15,7 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-pagination v-if="messages.length>0"
+  <el-pagination v-if="messages.length>pageSize"
     :current-page.sync="currentPage"
     :page-size="pageSize"
     layout="total, prev, pager, next"
@@ -61,10 +61,19 @@ export default {
     },
     rowClassName (row) {
       row.row.index = row.rowIndex
-      return row.row.status ? 'read' : ''
+      return row.row.status ? 'read' : 'unread'
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.read {
+  color: #999
+}
+.unread {
+  color: #666
+}
+</style>
+
 
 
