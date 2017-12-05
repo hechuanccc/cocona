@@ -28,7 +28,7 @@ export function getAnnouncements () {
 }
 
 export function gethomePage () {
-  return axios.get(urls.homePage)
+  return axios.get(urls.homePage).then(res => res.data)
 }
 export function getPromotions () {
   return axios.get(urls.promotions).then(res => res.data)
@@ -43,11 +43,11 @@ export function checkUserName (username) {
 }
 
 export function fetchGames () {
-  return axios.get(urls.games).then(res => res.data)
+  return axios.get(urls.games).then(res => res.data.data)
 }
 
 export function fetchUser () {
-  return axios.get(urls.user).then(res => res.data)
+  return axios.get(urls.user).then(res => res.data.data)
 }
 export function updateUser (user) {
   return axios.put(`${urls.user}${user.id}/`, user).then(res => res.data)
@@ -62,15 +62,15 @@ export function updateWithdrawPassword (withdrawPassword) {
 }
 
 export function fetchCategories (gameId) {
-  return axios.get(`${urls.category}?&game=${gameId}`).then(res => res.data)
+  return axios.get(`${urls.category}?&game=${gameId}`).then(res => res.data.data)
 }
 
 export function fetchPlaygroup (categoryId) {
-  return axios.get(`${urls.playgroup}?&category=${categoryId}`).then(res => res.data)
+  return axios.get(`${urls.playgroup}?&category=${categoryId}`).then(res => res.data.data)
 }
 
 export function fetchSchedule (gameId) {
-  return axios.get(`${urls.schedule}?&game=${gameId}`).then(res => res.data)
+  return axios.get(`${urls.schedule}?&game=${gameId}`).then(res => res.data.data)
 }
 
 export function fetchCaptcha () {

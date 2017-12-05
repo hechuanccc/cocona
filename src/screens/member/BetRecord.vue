@@ -1,38 +1,35 @@
 <template>
 <div>
   <el-row class="m-b">
-    <el-col :span="8">
-      <span class="m-r filter-title">{{$t('user.game_name')}}</span>
-      <el-select v-model="selectedGame">
-        <el-option
-          key="all"
-          :label="$t('common.all')"
-          value="">
-        </el-option>
-        <el-option
-          v-for="name in gameNames"
-          :key="name"
-          :label="name"
-          :value="name">
-        </el-option>
-      </el-select>
-    </el-col>
-    <el-col :span="8">
-      <span class="m-r filter-title">{{$t('user.issue_number')}}</span>
-      <el-select v-model="selectedIssueNumber">
-        <el-option
-          key="all"
-          :label="$t('common.all')"
-          value="">
-        </el-option>
-        <el-option
-          v-for="num in issueNumbers"
-          :key="num"
-          :label="num"
-          :value="num">
-        </el-option>
-      </el-select>
-    </el-col>
+    <el-form :inline="true">
+      <el-form-item :label="$t('user.game_name')">
+        <el-date-picker
+          v-model="selectedDate"
+          type="date"
+          :placeholder="$t('user.choose_date')"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item :label="$t('user.issue_number')">
+        <el-select v-model="selectedIssueNumber">
+          <el-option
+            key="all"
+            :label="$t('common.all')"
+            value="">
+          </el-option>
+          <el-option
+            v-for="num in issueNumbers"
+            :key="num"
+            :label="num"
+            :value="num">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="">
+        <el-checkbox v-model="isUnsettled">{{$t('user.unsettled_period')}}</el-checkbox>
+      </el-form-item>
+    </el-form>
   </el-row>
   <el-row>
     <el-table v-loading="loading" :data="showRecords" stripe>
@@ -57,12 +54,16 @@
       <el-table-column
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | placeholder('x') | currency('￥')}}</span>
+          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥') | placeholder($t('user.unsettled'))}}</span>
         </template>
       </el-table-column>
       <el-table-column
         :label="$t('user.odd')"
         prop="odds">
+      </el-table-column>
+      <el-table-column
+        :label="$t('user.betdate')"
+        prop="created_at">
       </el-table-column>
     </el-table>
     <el-pagination
@@ -84,13 +85,14 @@ export default {
   data () {
     return {
       betRecords: [],
-      selectedGame: '',
+      selectedDate: '',
       selectedIssueNumber: '',
       currentPage: 1,
       pageSize: 10,
       loading: false,
       issueNumbers: [],
-      gameNames: []
+      gameNames: [],
+      isUnsettled: false
     }
   },
   created () {
@@ -99,18 +101,13 @@ export default {
       .then(records => {
         this.betRecords = records
         const issueNumbersSet = new Set()
-        const gameNameSet = new Set()
         this.betRecords.forEach(record => {
           const issueNumber = record.issue_number
           if (!issueNumbersSet.has(issueNumber)) {
             issueNumbersSet.add(issueNumber)
             this.issueNumbers.push(issueNumber)
           }
-          const gameName = record.game.display_name
-          if (!gameNameSet.has(gameName)) {
-            gameNameSet.add(gameName)
-            this.gameNames.push(gameName)
-          }
+          record.created_at = this.$moment(record.created_at).format('YYYY-MM-DD')
         })
         this.loading = false
       }, errorRes => {
@@ -124,29 +121,17 @@ export default {
   },
   computed: {
     filtRecords () {
-      let gameFilter
-      if (this.selectedGame) {
-        gameFilter = (value) => {
-          return value === this.selectedGame
-        }
-      } else {
-        gameFilter = () => {
-          return true
-        }
+      let filtRecords = this.betRecords
+      if (this.selectedDate) {
+        filtRecords = filtRecords.filter(record => record.created_at === this.selectedDate)
       }
-      let issueNumberFilter
       if (this.selectedIssueNumber) {
-        issueNumberFilter = (value) => {
-          return value === this.selectedIssueNumber
-        }
-      } else {
-        issueNumberFilter = () => {
-          return true
-        }
+        filtRecords = filtRecords.filter(record => record.issue_number === this.selectedIssueNumber)
       }
-      return this.betRecords.filter(rec => {
-        return gameFilter(rec.game.display_name) && issueNumberFilter(rec.issue_number)
-      })
+      if (this.isUnsettled) {
+        filtRecords = filtRecords.filter(record => !record.profit && record.profit !== 0)
+      }
+      return filtRecords
     },
     showRecords () {
       let groupIdx = (this.currentPage - 1) * this.pageSize
@@ -159,6 +144,8 @@ export default {
         return 'gain'
       } else if (amount < 0) {
         return 'loss'
+      } else {
+        return 'unsettle'
       }
     }
   }
@@ -166,14 +153,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
-.filter-title {
-  color: #666;
-}
 .gain {
   color: $green;
 }
 .loss {
   color: $red;
+}
+.unsettle {
+  color: $primary;
 }
 </style>
 
