@@ -2,7 +2,7 @@
 <div>
   <el-row class="m-b">
     <el-form :inline="true">
-      <el-form-item :label="$t('user.game_name')">
+      <el-form-item :label="$t('user.betdate')">
         <el-date-picker
           v-model="selectedDate"
           type="date"
@@ -11,15 +11,15 @@
           value-format="yyyy-MM-dd">
         </el-date-picker>
       </el-form-item>
-      <el-form-item :label="$t('user.issue_number')">
-        <el-select v-model="selectedIssueNumber">
+      <el-form-item :label="$t('user.game_name')">
+        <el-select v-model="selectedGame">
           <el-option
             key="all"
             :label="$t('common.all')"
             value="">
           </el-option>
           <el-option
-            v-for="num in issueNumbers"
+            v-for="num in gameNames"
             :key="num"
             :label="num"
             :value="num">
@@ -37,8 +37,8 @@
         prop="game.display_name">
       </el-table-column>
       <el-table-column
-        :label="$t('user.issue_number')"
-        prop="issue_number">
+        :label="$t('user.betdate')"
+        prop="created_at">
       </el-table-column>
       <el-table-column :label="$t('user.play')">
         <template slot-scope="scope">
@@ -61,10 +61,6 @@
         :label="$t('user.odd')"
         prop="odds">
       </el-table-column>
-      <el-table-column
-        :label="$t('user.betdate')"
-        prop="created_at">
-      </el-table-column>
     </el-table>
     <el-pagination
       v-if="betRecords.length > pageSize"
@@ -86,11 +82,10 @@ export default {
     return {
       betRecords: [],
       selectedDate: '',
-      selectedIssueNumber: '',
+      selectedGame: '',
       currentPage: 1,
       pageSize: 10,
       loading: false,
-      issueNumbers: [],
       gameNames: [],
       isUnsettled: false
     }
@@ -100,12 +95,12 @@ export default {
     fetchBetHistory()
       .then(records => {
         this.betRecords = records
-        const issueNumbersSet = new Set()
+        const gameNamesSet = new Set()
         this.betRecords.forEach(record => {
-          const issueNumber = record.issue_number
-          if (!issueNumbersSet.has(issueNumber)) {
-            issueNumbersSet.add(issueNumber)
-            this.issueNumbers.push(issueNumber)
+          const gameName = record.game.display_name
+          if (!gameNamesSet.has(gameName)) {
+            gameNamesSet.add(gameName)
+            this.gameNames.push(gameName)
           }
           record.created_at = this.$moment(record.created_at).format('YYYY-MM-DD')
         })
@@ -125,8 +120,8 @@ export default {
       if (this.selectedDate) {
         filtRecords = filtRecords.filter(record => record.created_at === this.selectedDate)
       }
-      if (this.selectedIssueNumber) {
-        filtRecords = filtRecords.filter(record => record.issue_number === this.selectedIssueNumber)
+      if (this.selectedGame) {
+        filtRecords = filtRecords.filter(record => record.game.display_name === this.selectedGame)
       }
       if (this.isUnsettled) {
         filtRecords = filtRecords.filter(record => !record.profit && record.profit !== 0)

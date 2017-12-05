@@ -37,6 +37,7 @@ export function createStore () {
         },
         {
           code: 'gd11x5_pg_wc_wc',
+          component: 'common',
           options: Array.from(Array(11).keys()),
           cols: 6,
           transpose: true
