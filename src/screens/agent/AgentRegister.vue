@@ -188,4 +188,7 @@
   }
 </script>
 
-
+<style lang="sass" scoped="">
+.el-input /deep/ .el-input__suffix
+  right: 0
+</style>
