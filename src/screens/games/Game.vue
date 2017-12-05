@@ -38,7 +38,9 @@ export default {
       activeName: this.$route.params.categoryId,
       categories: [],
       gameId: this.$route.params.gameId,
-      schedule: '',
+      schedule: {
+        id: null
+      },
       timer: '',
       closeCountDown: {
         days: 0,
@@ -57,6 +59,12 @@ export default {
   watch: {
     '$route.params.categoryId': function () {
       this.activeName = this.$route.params.categoryId
+    },
+    'schedule.id': function (newId, oldId) {
+      this.$root.bus.$emit('new-betrecords', {
+        gameId: this.gameId,
+        scheduleId: newId
+      })
     }
   },
   computed: {
@@ -90,7 +98,6 @@ export default {
       this.forward(this.categories[0])
     }
     this.updateSchedule()
-    this.$root.bus.$emit('new-betrecords', this.gameId)
   },
   beforeDestroy () {
     clearInterval(this.timer)

@@ -32,7 +32,7 @@
           <el-col :span="7">
             <el-form-item  prop="verification_code_1">
               <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
-                <el-button slot="append" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
+                <el-button slot="suffix" type="info" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -53,6 +53,7 @@
 import { fetchCaptcha, checkUserName } from '../../api'
 import { validateUserName, validatePassword } from '../../validate'
 import { msgFormatter } from '../../utils'
+import api from '../../api/urls'
 export default {
   name: 'register',
   data () {
@@ -183,9 +184,9 @@ export default {
       this.fetchCaptcha()
     },
     fetchCaptcha () {
-      fetchCaptcha().then(data => {
-        this.captcha_src = data.captcha_src
-        this.user.verification_code_0 = data.captcha_val
+      fetchCaptcha().then(res => {
+        this.captcha_src = api.domain + res.data.captcha_src
+        this.user.verification_code_0 = res.data.captcha_val
       })
     }
   }
@@ -193,6 +194,8 @@ export default {
 </script>
 
 <style scoped lang="sass">
+.el-input /deep/ .el-input__suffix
+  right: 0
 .el-breadcrumb
   margin: 20px 0
 .block-button
