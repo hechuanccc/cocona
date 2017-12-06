@@ -106,8 +106,24 @@
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
             <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
-            <div v-if="scope.row.isCustom && showCombinationDetails" class="detail-popover">
-                <el-tooltip :disabled="showCombinationsTips" class="item" effect="light" placement="bottom">
+            <div v-if="scope.row.isCustom && showCombinationDetails">
+              <el-popover
+                ref="popover4"
+                placement="bottom"
+                title="已选組合"
+                trigger="hover">
+                <div
+                    :style="{
+                      'width': scope.row.combinations.length * 100 + '%',
+                      'max-width' : '480px'
+                      }" >
+                    <span v-for="(detail, serial) in formattedCombinations" class="combination-detail">
+                      <el-tag type="info">{{Number(serial)+1}}: {{detail}}</el-tag>
+                    </span>
+                  </div>
+              </el-popover>
+              <el-button type="text" class="combination-detail" v-popover:popover4>[查看明細]</el-button>              
+                <!-- <el-tooltip :disabled="showCombinationsTips" class="item" effect="light" placement="bottom">
                   <div slot="content"
                     :style="{
                       'width': scope.row.combinations.length * 100 + '%',
@@ -117,8 +133,7 @@
                       <el-tag type="info">{{Number(serial)+1}}: {{detail}}</el-tag>
                     </span>
                   </div>
-                  <el-button @click="showCombinationsTips = !showCombinationsTips" size="mini" type="info" round>查看明細</el-button>
-                </el-tooltip>
+                </el-tooltip> -->
             </div>
           </template>
         </el-table-column>
@@ -521,9 +536,9 @@ export default {
   padding-left: 10px;
   font-weight: 700;
 }
-
-.detail-popover {
-  text-align: center;
+.combination-detail {
+  padding-left: 10px;
+  font-weight: 700;
 }
 </style>
 

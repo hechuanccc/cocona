@@ -30,11 +30,16 @@
               type="password"
               :placeholder="$t('navMenu.password')"
               @keyup.enter.native="login">
-              <el-button slot="suffix" size="small" type="info" class="ipt-slot">{{$t('navMenu.forget_password')}}</el-button>
             </el-input>
           </el-form-item>
+          <transition name="el-fade-in">
+            <span class="error" v-if="errorMsg">{{errorMsg}}</span>
+          </transition>
           <el-form-item>
             <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
+          </el-form-item>
+          <el-form-item class="forgot-password">
+            <router-link to="./forget">{{$t('navMenu.forget_password')}}?</router-link>
           </el-form-item>
         </el-form>
       </div>
@@ -57,7 +62,8 @@ export default {
         password: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ]
-      }
+      },
+      errorMsg: ''
     }
   },
   methods: {
@@ -88,24 +94,26 @@ export default {
             messages.push(error[key])
           })
         })
-
-        this.$message({
-          showClose: true,
-          message: messages.join(', '),
-          type: 'error'
-        })
+        this.errorMsg = messages.join(', ')
       })
     }
   },
   watch: {
     '$store.state.loginDialogVisible': function () {
       this.$refs.username.focus()
+    },
+    'errorMsg': function () {
+      setTimeout(() => {
+        this.errorMsg = ''
+      }, 3000)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import "../style/vars.scss";
+
 .pop-content {
   padding: 60px 0;
 }
@@ -135,5 +143,19 @@ export default {
 }
 .el-input /deep/ .el-input__suffix{
   right: 0;
+}
+.forgot-password {
+  position: relative;
+  bottom: 20px;
+  a{
+    color: $primary;
+    text-decoration: none;
+  }
+}
+.error {
+  position: absolute;
+  font-size: 13px;
+  color: $red;
+  top: 180px;
 }
 </style>
