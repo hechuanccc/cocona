@@ -122,18 +122,7 @@
                     </span>
                   </div>
               </el-popover>
-              <el-button type="text" class="combination-detail" v-popover:popover4>[查看明細]</el-button>              
-                <!-- <el-tooltip :disabled="showCombinationsTips" class="item" effect="light" placement="bottom">
-                  <div slot="content"
-                    :style="{
-                      'width': scope.row.combinations.length * 100 + '%',
-                      'max-width' : '480px'
-                      }" >已选: <br/>
-                    <span v-for="(detail, serial) in formattedCombinations" class="combination-detail">
-                      <el-tag type="info">{{Number(serial)+1}}: {{detail}}</el-tag>
-                    </span>
-                  </div>
-                </el-tooltip> -->
+              <el-button type="text" class="combination-detail" v-popover:popover4>[查看明細]</el-button>
             </div>
           </template>
         </el-table-column>
