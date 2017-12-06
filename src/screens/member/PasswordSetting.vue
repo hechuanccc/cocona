@@ -40,8 +40,7 @@ export default {
 
     const passwordFormatValidator = (rule, value, callback) => {
       if (!validatePassword(value)) {
-        // callback(new Error(this.$t('validate.password_validate')))
-        callback()
+        callback(new Error(this.$t('validate.password_validate')))
       } else {
         callback()
       }
