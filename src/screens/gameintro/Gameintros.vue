@@ -34,13 +34,13 @@
 }
 
 .rule-details {
-$common-pixel: 10px !default;
-$lg: $common-pixel * 2 !default;
-$sm: $common-pixel * 1/2 !default;
-$title-size: 18px !default;
-$text-size: 13px !default;
-$text-color: #666 !default;
-$title-color: black !default;
+  $common-pixel: 10px !default;
+  $lg: $common-pixel * 2 !default;
+  $sm: $common-pixel * 1/2 !default;
+  $title-size: 18px !default;
+  $text-size: 13px !default;
+  $text-color: #666 !default;
+  $title-color: black !default;
 
   font-size: $text-size;
   color: $text-color;
