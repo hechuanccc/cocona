@@ -31,51 +31,16 @@
   background-color: white;
   height: 100%;
   min-height: 100vh;
-  .rule-details {
-  $common-pixel: 10px !default;
-  $lg: $common-pixel * 2 !default;
-  $sm: $common-pixel * 1/2 !default;
-  $title-size: 18px !default;
-  $text-size: 13px !default;
-  $text-color: #666 !default;
-  $title-color: black !default;
-
-    font-size: $text-size;
-    color: $text-color;
-    h1 {
-      font-size: $title-size;
-      margin-bottom: $common-pixel;
-      color: $title-color
-    }
-    h2 {
-      margin-bottom: $common-pixel;
-    }
-    h3 {
-      margin-bottom: $sm;
-    }
-    .warn {
-      color: $red
-    }
-    ul {
-      margin: $sm auto
-    }
-    li {
-      margin: $sm 0;
-      &:before {
-        content: ' ● '
-      }
-    }
-}
 }
 
 .rule-details {
-  $common-pixel: 10px !default;
-  $lg: $common-pixel * 2 !default;
-  $sm: $common-pixel * 1/2 !default;
-  $title-size: 18px !default;
-  $text-size: 13px !default;
-  $text-color: #666 !default;
-  $title-color: black !default;
+$common-pixel: 10px !default;
+$lg: $common-pixel * 2 !default;
+$sm: $common-pixel * 1/2 !default;
+$title-size: 18px !default;
+$text-size: 13px !default;
+$text-color: #666 !default;
+$title-color: black !default;
 
   font-size: $text-size;
   color: $text-color;
@@ -91,16 +56,15 @@
     margin-bottom: $sm;
   }
   .warn {
-    color: $red
+    color: $red;
   }
   ul {
-    margin: $sm auto
+    margin: $sm auto;
   }
   li {
     margin: $sm 0;
-    &:before {
-      content: ' ● '
-    }
+    list-style: initial;
+    margin-left: $lg;
   }
 }
 </style>
