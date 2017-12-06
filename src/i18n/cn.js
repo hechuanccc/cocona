@@ -8,7 +8,7 @@ export default {
     user: '已有账号，请登录',
     try_play: '免费试玩',
     user_login: '登录',
-    forget_password: '忘记?',
+    forget_password: '忘记密码',
     login: '登录',
     logout: '退出登录',
     password: '密码',
