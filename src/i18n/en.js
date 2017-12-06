@@ -9,7 +9,7 @@ export default {
     try_play: 'Try it Free',
     user_login: 'Login',
     logout: 'Logout',
-    forget_password: 'Forget?',
+    forget_password: 'Forget Password',
     login: 'Login',
     password: 'Password',
     user_register: 'Register',

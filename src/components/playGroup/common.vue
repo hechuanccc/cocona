@@ -11,16 +11,8 @@
             v-model="activePlayId"
             :label="play.id"
             key="'radio' + index">
-            <span class="placeholder"></span> <!--just for hiding label of el-radio-->
+            {{play.display_name}}
           </el-radio>
-        </td>
-      </tr>
-      <tr>
-        <td v-for="play in formattedPlays"
-          :key="play.code + '-play-' + play.id"
-          class="group-name"
-          @click="activePlayId = play.id">
-          {{play.display_name}}
         </td>
       </tr>
       <tbody class="tbody">
@@ -326,8 +318,9 @@ export default {
   border-left: $cell-border;
 }
 .combinations li {
-  width: 25%;
+  max-width: 300px;
   display: inline-block;
+  margin: 5px;
   color: $red;
 }
 .odds {

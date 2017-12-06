@@ -69,6 +69,9 @@ body {
 .p-l-lg {
   padding-left: 20px;
 }
+.p-t {
+  padding-top: 10px;
+}
 
 .faq-content{
   .el-card {
@@ -87,41 +90,7 @@ body {
     font-size: 16px;
     margin-bottom: 8px;}
 }
-//gameintro repeated style
 
-.rule-details {
-  font-size: 16px;
-  p {
-    margin-top: 10px;
-    margin-bottom: 10px
-  }
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px
-  }
-  h2 {
-    font-size: 20px;
-    margin-bottom: 15px;
-    margin-top: 15px;
-  }
-  h3 {
-    margin-top: 5px;
-    margin-bottom: 7px;
-    line-height: 24px
-  }
-  .warn {
-    color: $red
-  }
-  ul {
-    margin: 10px auto
-  }
-  li {
-    line-height: 24px;
-    &:before {
-      content: ' ＊ '
-    }
-  }
-}
 
 .input-width {
   width: 200px;

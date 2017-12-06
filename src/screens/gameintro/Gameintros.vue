@@ -5,48 +5,70 @@
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.game_intro')}}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-tabs type="border-card" :tab-position="tabposition" class="mb-20 container">
-        <el-tab-pane v-for="game in games" :key="game.id" :label="game.display_name">
-          <div class="rules-content">
-            <h1>重要声明</h1>
-            <ul>
-              <li>1.如果客户怀疑自己的资料被盗用，应立即通知本公司，并更改详细数据，以前的使用者名称及密码将全部无效。</li>
-              <li>2.客户有责任确保自己的账户及登入资料的保密性。以使用者名称及密码进行的任何网上投注将被视为有效。</li>
-              <li>3.公布赔率时出现的任何打字错误或非故意人为失误，本公司保留改正错误和按正确赔率结算投注的权力。您居住所在地的法律有可能规定网络博弈不合法；若此情况属实，本公司将不会批准您使用付账卡进行交易。</li>
-              <li>4.每次登入时客户都应该核对自己的账户结余额。如对余额有任何疑问，请在第一时间内通知本公司。</li>
-              <li>5.一旦投注被接受，则不得取消或修改。</li>
-              <li>6.所有号码赔率将不时浮动，派彩时的赔率将以确认投注时之赔率为准。</li>
-              <li>7.每注最高投注金额按不同[场次]及[投注项目]及[会员账号]设定浮动。如投注金额超过上述设定，本公司有权取消超过之投注金额。</li>
-              <li>8.所有投注都必须在开奖前时间内进行否则投注无效。</li>
-              <li>9.所有投注派彩彩金皆含本金。</li>
-            </ul>
-            <component :is="game.code"></component>
-          </div>
-        </el-tab-pane>
-      </el-tabs>
+      <el-row class="rules-container">
+        <el-col :span="3">
+          <el-menu default-active="1" class="el-menu-vertical-demo">
+            <el-menu-item v-for="(game, index) in games"
+              :key="game.id"
+              :index="index + 1 + ''"
+              @click="currentGame = game.code">
+              <span slot="title">{{game.display_name}}</span>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
+        <el-col :span="21" class="p-l-lg p-t">
+          <component :is="currentGame"></component>
+        </el-col>
+      </el-row>
     </div>
   </el-row>
 </template>
 
-
-
-<style lang="sass" scoped>
+<style lang="scss">
 @import "../../style/vars.scss";
 
-.rules-content
-  ul
-    margin-bottom: 20px
-  li
-    font-size: 16px
-    line-height: 24px
-  h1
-    font-size: 18px
-    margin-bottom: 10px
+.rules-container {
+  background-color: white;
+  height: 100%;
+  min-height: 100vh;
+}
 
-.mb-20
-  margin-bottom: 20px
+.rule-details {
+  $common-pixel: 10px !default;
+  $lg: $common-pixel * 2 !default;
+  $sm: $common-pixel * 1/2 !default;
+  $title-size: 18px !default;
+  $text-size: 13px !default;
+  $text-color: #666 !default;
+  $title-color: black !default;
 
+  font-size: $text-size;
+  color: $text-color;
+  h1 {
+    font-size: $title-size;
+    margin-bottom: $common-pixel;
+    color: $title-color
+  }
+  h2 {
+    margin-bottom: $common-pixel;
+  }
+  h3 {
+    margin-bottom: $sm;
+  }
+  .warn {
+    color: $red;
+  }
+  ul {
+    margin: $sm auto;
+  }
+  li {
+    margin: $sm 0;
+    list-style: initial;
+    margin-left: $lg;
+  }
+}
 </style>
+
 <script>
 import { fetchGames } from '../../api'
 import cqlf from './rules/cqlf'
@@ -67,9 +89,8 @@ import bjkl8 from './rules/bjkl8'
 export default {
   data () {
     return {
-      tabposition: 'left',
       games: '',
-      now_game: '132'
+      currentGame: 'bcr'
     }
   },
   created () {
