@@ -39,7 +39,7 @@
             <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
           </el-form-item>
           <el-form-item class="forgot-password">
-            <el-button type="info" class="submit" @click="login">{{$t('navMenu.forget_password')}}</el-button>
+            <router-link to="./forget">{{$t('navMenu.forget_password')}}?</router-link>
           </el-form-item>
         </el-form>
       </div>
@@ -147,6 +147,10 @@ export default {
 .forgot-password {
   position: relative;
   bottom: 20px;
+  a{
+    color: $primary;
+    text-decoration: none;
+  }
 }
 .error {
   position: absolute;
