@@ -41,7 +41,7 @@ export function register (user) {
 }
 
 export function checkUserName (username) {
-  return axios.get(urls.check_username, { params: { username: username } }).then(res => res.data)
+  return axios.get(urls.check_username, { params: { username: username } }).then(res => res.data.data)
 }
 
 export function fetchGames () {
