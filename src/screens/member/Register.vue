@@ -8,7 +8,7 @@
     <el-col :span="16" :offset="8">
       <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
         <el-form-item :label="$t('user.username')" prop="username">
-          <el-input class="input-width" :maxlength="10" v-model="user.username" auto-complete="off"></el-input>
+          <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.password')" prop="password">
           <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { fetchCaptcha, checkUserName } from '../../api'
+import { fetchCaptcha, checkUserName, register } from '../../api'
 import { validateUserName, validatePassword } from '../../validate'
 import { msgFormatter } from '../../utils'
 import api from '../../api/urls'
@@ -156,9 +156,7 @@ export default {
     submitForm () {
       this.$refs['user'].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('register', {
-            user: this.user
-          }).then(result => {
+          register(this.user).then(result => {
             return this.$store.dispatch('login', {
               user: {
                 username: this.user.username,

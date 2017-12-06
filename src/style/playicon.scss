@@ -94,8 +94,8 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
 @include ssc-num;
 
 
-$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode;
-$hk6_plays: spcb, spca, posc, poscspcnump1;
+$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode, '5elmnts';
+$hk6_plays: spcb, spca, posc, poscspcnump1, '5elmntsearth', '5elmntsfire', '5elmntswater', '5elmntswood', '5elmntsgold';
 
 %hklball{
   background: url("../assets/ball_hk6.png") no-repeat;

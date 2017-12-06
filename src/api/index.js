@@ -16,17 +16,15 @@ export function agentRegister (userInfo) {
 }
 
 export function getCaptcha () {
-  return axios.get(urls.agent_captcha).then(res => {
-    return res.data
-  })
+  return axios.get(urls.agent_captcha).then(res => res.data)
 }
 
 export function getBanner () {
-  return axios.get(urls.banner)
+  return axios.get(urls.banner).then(res => res.data)
 }
 
 export function getAnnouncements () {
-  return axios.get(urls.announcements)
+  return axios.get(urls.announcements).then(res => res.data)
 }
 
 export function gethomePage () {
@@ -37,7 +35,7 @@ export function getPromotions () {
 }
 
 export function register (user) {
-  return axios.post(urls.register, qs.stringify(user))
+  return axios.post(urls.register, qs.stringify(user)).then(res => res.data.data)
 }
 
 export function checkUserName (username) {
@@ -132,7 +130,7 @@ export function withdraw (info) {
 }
 
 export function fetchRemitpayee () {
-  return axios.get(urls.remitpayee).then(res => res.data.data)
+  return axios.get(urls.remitpayee).then(res => res.data)
 }
 
 export function remit (info) {

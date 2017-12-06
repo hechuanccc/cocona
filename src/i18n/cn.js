@@ -69,7 +69,7 @@ export default {
     payway: '支付方式',
     online_payment: '线上存款',
     remit: '公司入款',
-    remitpayee: '入款名称',
+    remit_bank: '入款银行',
     withdraw: '申请取款',
     betrecord: '下注纪录',
     betdate: '下注日期',
@@ -91,8 +91,8 @@ export default {
     payment_record: '充值纪录',
     withdraw_record: '取款纪录',
     remit_record: '公司入款纪录',
-    remit_account: '入款银行帐号',
-    remit_address: '入款银行地址',
+    remit_account: '帐户',
+    remit_address: '开户行网点',
     remit_despositor: '入款人',
     remit_time: '入款时间',
     issue_number: '期数',
@@ -139,7 +139,7 @@ export default {
     setting: '设定'
   },
   validate: {
-    username_validate: '请输入4~10位英数字',
+    username_validate: '请输入8~15位英数字',
     password_validate: '请输入8~15字元，其中至少包含一大写字母及一数字',
     qq_validate: 'qq号码格式无效',
     password_again: '请再次输入密码',
@@ -151,6 +151,7 @@ export default {
     not_set_bank_info: '尚未设定银行信息'
   },
   message: {
-    save_success: '保存成功'
+    save_success: '保存成功',
+    submit_success: '提交成功'
   }
 }
