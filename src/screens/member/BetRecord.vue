@@ -37,6 +37,10 @@
         prop="game.display_name">
       </el-table-column>
       <el-table-column
+        :label="$t('user.issue_number')"
+        prop="issue_number">
+      </el-table-column>
+      <el-table-column
         :label="$t('user.betdate')"
         prop="created_at">
       </el-table-column>
@@ -63,7 +67,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="betRecords.length > pageSize"
+      v-if="filtRecords.length > pageSize"
       :current-page.sync="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"

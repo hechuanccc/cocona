@@ -11,7 +11,7 @@
         <router-link to="/register" class="link">{{$t('navMenu.user_register')}}</router-link>
       </li>
       <li>
-        <a class="red link">{{$t('navMenu.try_play')}}</a>
+        <a class="red link" @click="tryplay">{{$t('navMenu.try_play')}}</a>
       </li>
     </ul>
     <ul v-else-if="user.logined" class="account-links" >
@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import { gethomePage } from '../api'
+import { gethomePage, register } from '../api'
+import { msgFormatter } from '../utils'
 export default {
   computed: {
     user () {
@@ -79,6 +80,19 @@ export default {
     },
     logout () {
       this.$store.dispatch('logout')
+    },
+    tryplay () {
+      register({ account_type: 0 }).then(user => {
+        return this.$store.dispatch('login', { user })
+      }).then(result => {
+        this.$router.push({ name: 'Game' })
+      }, errorRes => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorRes.response.data.error),
+          type: 'error'
+        })
+      })
     }
   },
   created () {
@@ -142,7 +156,7 @@ export default {
       color: $red
   .link
     padding: 0 10px
-    
+
 
 .account-trigger
   border: 1px solid #f2f2f2

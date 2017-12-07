@@ -8,7 +8,6 @@ import * as types from '../mutations/mutation-types'
 import {
   login,
   logout,
-  register,
   fetchUser,
   updateUser,
   fetchGames,
@@ -18,7 +17,7 @@ import {
 export default {
   login: ({ commit, state }, { user }) => {
     return login(user).then(res => {
-      let data = res.data
+      let data = res.data.data
       let expires = new Date(data.expires_in)
       if (data.access_token && data.refresh_token) {
         Vue.cookie.set('access_token', data.access_token, {
@@ -47,11 +46,6 @@ export default {
       },
       errRes => Promise.reject(errRes)
     )
-  },
-  register: ({ commit, state }, { user }) => {
-    return register(user).then(res => {
-      return Promise.resolve(res.data)
-    }, error => Promise.reject(error))
   },
   fetchUser: ({ commit, state }) => {
     return fetchUser().then(res => {
