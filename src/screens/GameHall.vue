@@ -38,6 +38,9 @@
                   <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span>
                   <span class="odds">{{bet.odds}}</span>
                 </div>
+                <div v-if="bet.bet_options.options">
+                  已选号码：{{bet.bet_options.options | betOptionFilter}}
+                </div>
               </li>
             </ul>
             <div class="empty" v-else>暂无注单</div>
@@ -60,6 +63,15 @@ let bus = new Vue()
 
 export default {
   name: 'gamehall',
+  filters: {
+    betOptionFilter (options) {
+      if (options) {
+        return options.join(',')
+      } else {
+        return ''
+      }
+    }
+  },
   data () {
     return {
       betrecords: []
@@ -87,11 +99,11 @@ export default {
   beforeRouteEnter (to, from, next) {
     next(vm => {
       vm.$store.dispatch('fetchGames')
-      .catch(error => {
-        if (error.response.status > 400) {
-          vm.performLogin()
-        }
-      })
+        .catch(error => {
+          if (error.response.status > 400) {
+            vm.performLogin()
+          }
+        })
     })
   },
   created () {
@@ -141,7 +153,7 @@ export default {
   }
   li {
     color: #999;
-    margin:0 10px;
+    margin: 0 10px;
     padding: 5px 0;
     border-top: 1px solid #f5f5f5;
   }

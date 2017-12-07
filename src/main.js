@@ -41,6 +41,11 @@ Object.keys(locales).forEach(lang => {
 
 const store = createStore()
 
+const token = Vue.cookie.get('access_token')
+if (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
+
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
@@ -80,11 +85,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App },
-  created () {
-    const token = Vue.cookie.get('access_token')
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-    }
-  }
+  components: { App }
 })

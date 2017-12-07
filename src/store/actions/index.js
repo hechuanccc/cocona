@@ -8,7 +8,6 @@ import * as types from '../mutations/mutation-types'
 import {
   login,
   logout,
-  register,
   fetchUser,
   updateUser,
   fetchGames,
@@ -47,11 +46,6 @@ export default {
       },
       errRes => Promise.reject(errRes)
     )
-  },
-  register: ({ commit, state }, { user }) => {
-    return register(user).then(res => {
-      return Promise.resolve(res.data)
-    }, error => Promise.reject(error))
   },
   fetchUser: ({ commit, state }) => {
     return fetchUser().then(res => {

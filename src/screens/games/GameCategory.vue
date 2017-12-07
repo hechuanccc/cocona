@@ -54,15 +54,16 @@
               @mouseleave="toggleHover(play, false)"
               @click="toggleActive(plays[play.id], $event)"
               v-if="play.code">
-              <el-col :span="7" class="name">
-                <span :class="[playgroup.code, play.code.replace(',', '')]">
-                  {{play.display_name}}
-                </span>
+              <el-col :span="play.value?2:7" class="name">
+                <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
-              <el-col :span="7" class="odds">
+              <el-col v-if="play.value" :span="15" class="number">
+                <span :class="[playgroup.code, `${playgroup.code}_${num}`]" v-for="(num,index) in play.value" :key="index">{{num}}</span>
+              </el-col>
+              <el-col :span="play.value?4:7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
               </el-col>
-              <el-col :span="10" class="input">
+              <el-col :span="play.value?3:10" class="input">
                 <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" type="number" min="1" step="10"
                 />
                 <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
@@ -488,6 +489,9 @@ export default {
   font-weight: bold;
   line-height: $cell-height;
   border-right: $cell-border;
+}
+.number {
+  text-align: left;
 }
 .odds {
   background-color: #fff;

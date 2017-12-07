@@ -70,6 +70,7 @@ export default {
     online_payment: 'Online Payment',
     remit: 'Remit',
     remitpayee: 'Remit Payee',
+    remit_bank: 'Remit Bank',
     withdraw: 'Withdraw',
     betrecord: 'Bet Record',
     betdate: 'Bet Date',
@@ -138,7 +139,7 @@ export default {
     setting: 'Setting'
   },
   validate: {
-    username_validate: 'User name should be 4-10 digit or character',
+    username_validate: 'User name should be 8-15 digit or character',
     password_validate: 'Password must be 8-15 characters and must contain at least one capital letter and a digit',
     qq_validate: 'This QQ number is invalid',
     password_again: 'Please enter password again',
@@ -150,6 +151,7 @@ export default {
     not_set_bank_info: 'Bank Info has not yet been setted'
   },
   message: {
-    save_success: 'Save Success'
+    save_success: 'Save Success',
+    submit_success: 'Submit Success'
   }
 }

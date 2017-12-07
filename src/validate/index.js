@@ -1,5 +1,5 @@
 const pattern = {
-  username: /^[a-zA-Z0-9]{4,10}$/,
+  username: /^[a-zA-Z0-9]{8,15}$/,
   password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/,
   qq: /^[1-9]{4,8}$/
 }
