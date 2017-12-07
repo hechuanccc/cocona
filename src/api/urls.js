@@ -22,7 +22,6 @@ export default {
   agent_register: apiv1 + '/agentapplication/',
   game_result: apiv1 + '/result/',
   promotions: apiv1 + '/promotion/',
-  agent_captcha: apiv1 + '/verification_code/',
   banner: apiv1 + '/banners/',
   homePage: apiv1 + '/website/home-page/',
   announcements: apiv1 + '/announcements/',
@@ -37,6 +36,6 @@ export default {
   remitpayee: apiv1 + '/remitpayee/',
   remit: apiv1 + '/remit_transaction/',
   readMessage: apiv1 + '/message/read/',
-  messages: apiv1 + '/messages/'
-
+  messages: apiv1 + '/messages/',
+  gamehistory: apiv1 + /history/
 }

@@ -104,10 +104,6 @@ export function fetchBetHistory () {
   return axios.get(`${urls.betrecord}?opt_expand=play`).then(res => res.data.data)
 }
 
-export function fetchResults (gameId) {
-  return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)  // ?
-}
-
 export function getToken (oldToken) {
   if (!oldToken) {
     return
@@ -125,7 +121,7 @@ export function fetchBank () {
   return axios.get(urls.bank).then(res => res.data.data)
 }
 export function fetchGameResult (gameId) {
-  return axios.get(`${urls.game_result}?game=${gameId}&opt_expand=next`).then(res => res.data)
+  return axios.get(`${urls.game_result}?game=${gameId}&opt_expand=next`).then(res => res.data.data)
 }
 export function withdraw (info) {
   return axios.post(urls.withdraw, qs.stringify(info))
@@ -149,4 +145,8 @@ export function readMessage (ids) {
   return axios.post(urls.readMessage,
     { ids: ids },
     { 'Content-Type': 'application/json' })
+}
+
+export function fetchHistory (gameCode) {
+  return axios.get(`${urls.gamehistory}?game_code=${gameCode}`).then(res => res.data.data)
 }
