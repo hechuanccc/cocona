@@ -95,7 +95,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
 
 
 $hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode, '5elmnts';
-$hk6_plays: spcb, spca, posc, poscspcnump1, '5elmntsearth', '5elmntsfire', '5elmntswater', '5elmntswood', '5elmntsgold';
+$hk6_plays: spcb, spca, posc, poscspcnump1;
 
 %hklball{
   background: url("../assets/ball_hk6.png") no-repeat;
@@ -125,7 +125,7 @@ $hk6_plays: spcb, spca, posc, poscspcnump1, '5elmntsearth', '5elmntsfire', '5elm
             background-position: 0 (-27px * ($i - 1));
           }
         }
-        @if $playgroup == withcode{
+        @if $playgroup == withcode or $playgroup == '5elmnts'{
           .hkl_pg_#{$playgroup}_#{$i} {
             background-position: 0 (-27px * ($i - 1));
           }

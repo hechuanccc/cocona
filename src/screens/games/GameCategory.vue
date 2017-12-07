@@ -58,7 +58,7 @@
                 <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
               <el-col v-if="play.value" :span="15" class="number">
-                <span :class="[playgroup.code, `${play.code.replace(',', '')}_${num}`]" v-for="(num,index) in play.value" :key="index">{{num}}</span>
+                <span :class="[playgroup.code, `${playgroup.code}_${num}`]" v-for="(num,index) in play.value" :key="index">{{num}}</span>
               </el-col>
               <el-col :span="play.value?4:7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
