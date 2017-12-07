@@ -10,7 +10,8 @@
             name="radio"
             v-model="activePlayId"
             :label="play.id"
-            key="'radio' + index">
+            key="'radio' + index"
+            :disabled="gameClosed">
             {{play.display_name}}
           </el-radio>
         </td>
@@ -24,6 +25,7 @@
               :key= "sameIdPlay.code+'-pl-'+sameIdPlay.id"
               class="odds"
               @click="activePlayId = sameIdPlay.id"
+              :disabled="gameClosed"
               :style="{
                 'width':1 / plays.length * 99+'%',
                 'display':'inline-block'
@@ -66,8 +68,11 @@
     <table class="play-table">
       <tr>
         <td :colspan="customPlayGroup.cols" align="center">
-          <div v-if="combinations.length === 0">请选择</div>
-          <div v-else >
+          <div v-if="combinations.length === 0">
+            <span v-if="!gameClosed">请选择</span>
+            <span v-else>封盘</span>
+          </div>
+          <div v-else>
             已选择
             <el-popover
               ref="popover"

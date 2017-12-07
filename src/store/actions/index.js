@@ -18,7 +18,7 @@ import {
 export default {
   login: ({ commit, state }, { user }) => {
     return login(user).then(res => {
-      let data = res.data
+      let data = res.data.data
       let expires = new Date(data.expires_in)
       if (data.access_token && data.refresh_token) {
         Vue.cookie.set('access_token', data.access_token, {

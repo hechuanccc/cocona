@@ -55,7 +55,9 @@
               @click="toggleActive(plays[play.id], $event)"
               v-if="play.code">
               <el-col :span="7" class="name">
-                <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
+                <span :class="[playgroup.code, play.code.replace(',', '')]">
+                  {{play.display_name}}
+                </span>
               </el-col>
               <el-col :span="7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
@@ -173,6 +175,7 @@ import { zodiacs } from '../../utils/zodiacs'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
+const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
 
 export default {
   props: {
@@ -191,7 +194,8 @@ export default {
   components: {
     common,
     hklPgShxiaoSpczdc,
-    gd11x5Seq
+    gd11x5Seq,
+    hklPgNtinfvrNum
   },
   data () {
     return {
