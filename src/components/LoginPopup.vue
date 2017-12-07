@@ -9,7 +9,7 @@
           </el-button>
         </div>
         <div class="m-t">
-          <el-button>{{$t('navMenu.try_play')}}</el-button>
+          <el-button @click="tryplay">{{$t('navMenu.try_play')}}</el-button>
         </div>
       </div>
     </el-col>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import { register } from '../api'
+import { msgFormatter } from '../utils'
 export default {
   data () {
     return {
@@ -95,6 +97,19 @@ export default {
           })
         })
         this.errorMsg = messages.join(', ')
+      })
+    },
+    tryplay () {
+      register({ account_type: 0 }).then(user => {
+        return this.$store.dispatch('login', { user })
+      }).then(result => {
+        this.$router.push({ name: 'Game' })
+      }, errorRes => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorRes.response.data.error),
+          type: 'error'
+        })
       })
     }
   },
