@@ -42,7 +42,7 @@
 <script>
 import _ from 'lodash'
 import Combinatorics from 'js-combinatorics'
-import { zodiacMap, tailMap } from '../../utils/zodiacs'
+import { zodiacMap, tailMap } from '../../utils/hk6'
 export default {
   name: 'hklPgExl',
   props: {

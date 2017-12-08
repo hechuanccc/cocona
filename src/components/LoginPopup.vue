@@ -87,13 +87,16 @@ export default {
           password: this.user.password
         }
       }).then(result => {
+        if (result.code > 9000) {
+          this.errorMsg = result.msg
+          return
+        }
         this.$store.commit('CLOSE_LOGINDIALOG')
         const next = this.$route.query.next
         this.$router.push(next || 'game')
       }, errorRes => {
         const errors = errorRes.response.data.error
         let messages = []
-
         errors.forEach(error => {
           Object.keys(error).forEach(key => {
             messages.push(error[key])

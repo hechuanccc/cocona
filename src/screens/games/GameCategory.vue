@@ -58,7 +58,7 @@
                 <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
               <el-col v-if="play.value" :span="15" class="number">
-                <span :class="[playgroup.code, `${playgroup.code}_${num}`]" v-for="(num,index) in play.value" :key="index">{{num}}</span>
+                <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
               </el-col>
               <el-col :span="play.value?4:7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
@@ -173,7 +173,7 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import { zodiacs } from '../../utils/zodiacs'
+import { zodiacs, zodiacMap, colorWave } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
@@ -219,7 +219,9 @@ export default {
       hasZodiacs: false,
       showCombinationDetails: false,
       showCombinationsTips: false,
-      zodiacs
+      zodiacs,
+      zodiacMap,
+      colorWave
     }
   },
   computed: {
@@ -393,7 +395,14 @@ export default {
           item.plays.forEach(play => {
             plays[play.id] = play
             plays[play.id]['group'] = item['display_name']
-          })
+            if (item.code === 'hkl_pg_clrwvs_color') {
+              plays[play.id]['value'] = colorWave[play.code]
+            }
+            if (item.code === 'hkl_pg_txiao_spczdc' || item.code === 'hkl_pg_shawzdc' || item.code === 'hkl_pg_pxxmzdc') {
+              plays[play.id]['value'] = this.zodiacMap[play.display_name]
+            }
+          }
+          )
         })
         this.raw = res
         this.plays = plays
