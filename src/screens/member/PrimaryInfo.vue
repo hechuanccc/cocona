@@ -3,13 +3,13 @@
   <el-col :span="10" :offset="7">
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
       <el-form-item :label="$t('user.username')">
-        {{userInfo.username}}
+        {{$store.state.user.username}}
       </el-form-item>
       <el-form-item :label="$t('user.realname')">
-        {{userInfo.real_name}}
+        {{$store.state.user.real_name}}
       </el-form-item>
       <el-form-item :label="$t('user.phone')">
-        {{userInfo.phone}}
+        {{$store.state.user.phone}}
       </el-form-item>
       <el-form-item :label="$t('user.email')" prop="email">
         <el-input class="input-width" v-model="user.email"></el-input>
@@ -76,14 +76,11 @@ export default {
       }
     }
   },
-  computed: {
-    userInfo () {
-      let user = this.$store.state.user
-      Object.keys(this.user).forEach(key => {
-        this.user[key] = user[key]
-      })
-      return user
-    }
+  created () {
+    let user = this.$store.state.user
+    Object.keys(this.user).forEach(key => {
+      this.user[key] = user[key]
+    })
   },
   methods: {
     submitForm () {
@@ -92,6 +89,7 @@ export default {
           this.$store.dispatch('updateUser', this.user).then(
             (data) => {
               this.$refs['user'].clearValidate()
+              this.$store.dispatch('fetchUser')
               this.$message({
                 showClose: true,
                 message: this.$t('message.save_success'),
