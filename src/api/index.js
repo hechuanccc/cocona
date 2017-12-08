@@ -103,7 +103,7 @@ export function fetchBetHistory () {
 }
 
 export function fetchResults (gameId) {
-  return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)  // ?
+  return axios.get(`${urls.result}?game=${gameId}`).then(res => res.data)
 }
 
 export function getToken (oldToken) {
@@ -130,7 +130,7 @@ export function withdraw (info) {
 }
 
 export function fetchRemitpayee () {
-  return axios.get(urls.remitpayee).then(res => res.data)
+  return axios.get(urls.remitpayee).then(res => res.data.data)
 }
 
 export function remit (info) {
