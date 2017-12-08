@@ -82,7 +82,7 @@ export function fetchCaptcha () {
 }
 
 export function fetchPaymentType () {
-  return axios.get(urls.paymentType).then(res => res.data)
+  return axios.get(urls.paymentType).then(res => res.data.data)
 }
 
 export function placeBet (data) {

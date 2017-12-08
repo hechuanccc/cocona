@@ -44,19 +44,20 @@ const store = createStore()
 const token = Vue.cookie.get('access_token')
 if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-  store.dispatch('fetchUser')
 }
 
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
   if ((to || firstMatched).meta.requiresAuth) {
-    const token = Vue.cookie.get('access_token')
-    if (token) {
-      next()
-    } else {
-      store.commit('SHOW_LOGIN_DIALOG')
-    }
+    store.dispatch('fetchUser')
+      .then(res => {
+        next()
+      })
+      .catch(error => {
+        store.commit('SHOW_LOGIN_DIALOG')
+        return Promise.resolve(error)
+      })
   } else {
     next()
   }
