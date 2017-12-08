@@ -39,7 +39,7 @@
             <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
           </el-form-item>
           <el-form-item class="forgot-password">
-            <router-link to="./forget">{{$t('navMenu.forget_password')}}?</router-link>
+            <router-link to="./forget" @click.native="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</router-link>
           </el-form-item>
         </el-form>
       </div>
@@ -67,6 +67,9 @@ export default {
     }
   },
   methods: {
+    closeLoginDialog () {
+      this.$store.commit('CLOSE_LOGINDIALOG')
+    },
     toRegister () {
       this.$store.commit('CLOSE_LOGINDIALOG')
       this.$router.push('/register')

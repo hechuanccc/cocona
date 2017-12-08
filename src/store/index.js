@@ -53,6 +53,12 @@ export function createStore () {
           component: 'common',
           options: Array.from(Array(49).keys()).map(item => item + 1),
           cols: 7
+        },
+        {
+          code: 'hkl_pg_ntinfvr_num',
+          component: 'hklPgNtinfvrNum',
+          options: Array.from(Array(49).keys()).map(item => item + 1),
+          cols: 7
         }
       ]
     },

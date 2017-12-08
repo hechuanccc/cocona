@@ -176,6 +176,7 @@ import { zodiacs } from '../../utils/zodiacs'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
+const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
 
 export default {
   props: {
@@ -194,7 +195,8 @@ export default {
   components: {
     common,
     hklPgShxiaoSpczdc,
-    gd11x5Seq
+    gd11x5Seq,
+    hklPgNtinfvrNum
   },
   data () {
     return {
