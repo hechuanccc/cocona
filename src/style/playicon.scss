@@ -94,7 +94,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
 @include ssc-num;
 
 
-$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode, '5elmnts', exl;
+$hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode, ntinfvr_num ,'5elmnts', exl;
 $hk6_plays: spcb, spca, posc, poscspcnump1;
 
 %hklball{
@@ -125,7 +125,7 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
             background-position: 0 (-27px * ($i - 1));
           }
         }
-        @if $playgroup == withcode, '5elmnts', exl{
+        @if $playgroup == withcode, ntinfvr_num, '5elmnts', exl {
           .hkl_pg_#{$playgroup}_#{$i} {
             background-position: 0 (-27px * ($i - 1));
           }

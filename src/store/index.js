@@ -93,6 +93,12 @@ export function createStore () {
           code: 'hkl_pg_exltail5',
           component: 'hklPgExl',
           cols: 2
+        },
+        {
+          code: 'hkl_pg_ntinfvr_num',
+          component: 'hklPgNtinfvrNum',
+          options: Array.from(Array(49).keys()).map(item => item + 1),
+          cols: 7
         }
       ]
     },

@@ -211,4 +211,7 @@ export default {
   margin-right: 10px;
   font-size: 14px;
 }
+.el-tabs--top  /deep/.el-tabs__nav-scroll {
+  padding: 0;
+}
 </style>
