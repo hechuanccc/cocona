@@ -106,54 +106,22 @@ export default {
       if (!this.gameLatestResult) {
         return
       }
-
-      console.log('start timeout')
-
-      let drawFromNow = this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms')
-
-      console.log(drawFromNow, 'drawFromNow')
-
-      let startPollingTime = drawFromNow < (20 * 1000) ? 5000 : drawFromNow - (20 * 1000)
-
-      console.log(startPollingTime, 'startPollingTime')
-
-      let newIssue
-      let oldIssue = this.gameLatestResult.issue_number
-      console.log(oldIssue, newIssue)
-      console.log(newIssue !== oldIssue)
+      let drawFromNow = Math.abs(this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms'))
+      let startPollingTime = drawFromNow < (20 * 1000) ? 3000 : drawFromNow - (20 * 1000)
       this.timer = setTimeout(() => {
         clearInterval(this.interval)
         this.interval = setInterval(() => {
-          console.log('interval run')
-
-          console.log(oldIssue, 'oldIssue')
-          if (newIssue === oldIssue) {
-            console.log('clear')
-            clearInterval(this.timer)
-            clearInterval(this.interval)
-            this.pollResult(gameid)
-            return
-          }
-
+          let oldIssue = this.gameLatestResult.issue_number
           this.fetchResult(gameid).then(result => {
-            if (!result) {
+            if (!result[0] || !result) {
               clearInterval(this.interval)
             }
-
-            console.log(oldIssue, 'fetch')
-            console.log(result)
-            newIssue = result[0].issue_number
-
-            console.log(newIssue, 'newIssue')
-            console.log(newIssue !== oldIssue)
-
+            let newIssue = result[0].issue_number
             if (newIssue !== oldIssue) {
-              console.log('clear interval')
-
               clearInterval(this.interval)
             }
           })
-        }, (5 * 1000))
+        }, (2 * 1000))
         this.pollResult(gameid)
       }, startPollingTime)
     }
