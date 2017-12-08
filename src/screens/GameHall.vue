@@ -38,7 +38,7 @@
                   <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span>
                   <span class="odds">{{bet.odds}}</span>
                 </div>
-                <div v-if="bet.bet_options.options">
+                <div v-if="bet.bet_options.options" class="selected-numbers">
                   已选号码：{{bet.bet_options.options | betOptionFilter}}
                 </div>
               </li>
@@ -185,5 +185,9 @@ export default {
   line-height: 36px;
   float: right;
   font-size: 13px;
+}
+
+.selected-numbers {
+  word-break: break-all
 }
 </style>
