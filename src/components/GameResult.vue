@@ -10,7 +10,7 @@
         :key="gameLatestResult.issue_number + index"
         :class="getResultClass(num)">
         <b> {{num}} </b>
-        <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]| zodiacFilter}} </p>
+        <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]}} </p>
       </span>
       <div class="ball-sum" v-if="showSum">
         {{$t('navMenu.total')}}:
@@ -106,22 +106,54 @@ export default {
       if (!this.gameLatestResult) {
         return
       }
-      let drawFromNow = Math.abs(this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms'))
-      let startPollingTime = drawFromNow < (20 * 1000) ? 3000 : drawFromNow - (20 * 1000)
+
+      console.log('start timeout')
+
+      let drawFromNow = this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms')
+
+      console.log(drawFromNow, 'drawFromNow')
+
+      let startPollingTime = drawFromNow < (20 * 1000) ? 5000 : drawFromNow - (20 * 1000)
+
+      console.log(startPollingTime, 'startPollingTime')
+
+      let newIssue
+      let oldIssue = this.gameLatestResult.issue_number
+      console.log(oldIssue, newIssue)
+      console.log(newIssue !== oldIssue)
       this.timer = setTimeout(() => {
         clearInterval(this.interval)
         this.interval = setInterval(() => {
-          let oldIssue = this.gameLatestResult.issue_number
+          console.log('interval run')
+
+          console.log(oldIssue, 'oldIssue')
+          if (newIssue === oldIssue) {
+            console.log('clear')
+            clearInterval(this.timer)
+            clearInterval(this.interval)
+            this.pollResult(gameid)
+            return
+          }
+
           this.fetchResult(gameid).then(result => {
-            if (!result[0] || !result) {
+            if (!result) {
               clearInterval(this.interval)
             }
-            let newIssue = result[0].issue_number
+
+            console.log(oldIssue, 'fetch')
+            console.log(result)
+            newIssue = result[0].issue_number
+
+            console.log(newIssue, 'newIssue')
+            console.log(newIssue !== oldIssue)
+
             if (newIssue !== oldIssue) {
+              console.log('clear interval')
+
               clearInterval(this.interval)
             }
           })
-        }, (2 * 1000))
+        }, (5 * 1000))
         this.pollResult(gameid)
       }, startPollingTime)
     }
@@ -129,39 +161,6 @@ export default {
   beforeDestroy () {
     clearTimeout(this.timer)
     clearInterval(this.interval)
-  },
-  filters: {
-    zodiacFilter (val) {
-      if (!val) {
-        return ''
-      }
-      switch (val) {
-        case 'RAT':
-          return '鼠'
-        case 'OX':
-          return '牛'
-        case 'TIGER':
-          return '虎'
-        case 'RABBIT':
-          return '兔'
-        case 'DRAGON':
-          return '龙'
-        case 'SNAKE':
-          return '蛇'
-        case 'HORSE':
-          return '马'
-        case 'SHEEP':
-          return '羊'
-        case 'MONKEY':
-          return '猴'
-        case 'ROOSTER':
-          return '鸡'
-        case 'DOG':
-          return '狗'
-        case 'PIG':
-          return '猪'
-      }
-    }
   }
 }
 </script>

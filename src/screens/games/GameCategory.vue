@@ -58,7 +58,7 @@
                 <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
               <el-col v-if="play.value" :span="15" class="number">
-                <span :class="[playgroup.code, `${playgroup.code}_${num}`]" v-for="(num,index) in play.value" :key="index">{{num}}</span>
+                <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
               </el-col>
               <el-col :span="play.value?4:7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
@@ -172,12 +172,16 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import { zodiacs } from '../../utils/zodiacs'
+import { zodiacs, zodiacMap } from '../../utils/zodiacs'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
 const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
-
+const colorWave = {
+  'hkl_pl_clrwvsred': ['1', '2', '7', '8', '12', '13', '18', '19', '23', '24', '29', '30', '34', '35', '40', '45', '46'],
+  'hkl_pl_clrwvsblue': ['3', '4', '9', '10', '14', '15', '20', '25', '26', '31', '36', '37', '41', '42', '47', '48'],
+  'hkl_pl_clrwvsgreen': ['5', '6', '11', '16', '17', '21', '22', '27', '28', '32', '33', '38', '39', '43', '44', '49']
+}
 export default {
   props: {
     gameClosed: {
@@ -216,7 +220,9 @@ export default {
       hasZodiacs: false,
       showCombinationDetails: false,
       showCombinationsTips: false,
-      zodiacs
+      zodiacs,
+      zodiacMap,
+      colorWave
     }
   },
   computed: {
@@ -369,7 +375,14 @@ export default {
           item.plays.forEach(play => {
             plays[play.id] = play
             plays[play.id]['group'] = item['display_name']
-          })
+            if (item.code === 'hkl_pg_clrwvs_color') {
+              plays[play.id]['value'] = colorWave[play.code]
+            }
+            if (item.code === 'hkl_pg_txiao_spczdc' || item.code === 'hkl_pg_shawzdc' || item.code === 'hkl_pg_pxxmzdc') {
+              plays[play.id]['value'] = this.zodiacMap[play.display_name]
+            }
+          }
+          )
         })
         this.raw = res
         this.plays = plays

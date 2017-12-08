@@ -61,10 +61,17 @@ export const zodiacs = [
   }
 ]
 
-const zodiacTranslater = {}
-zodiacs.forEach(
-  zodiac => {
-    zodiacTranslater[zodiac.englishName] = zodiac.xiao
-  }
-)
-export const zodiacMap = zodiacTranslater
+export const zodiacMap = {
+  '鼠': [10, 22, 34, 46],
+  '牛': [9, 21, 33, 45],
+  '虎': [8, 20, 32, 44],
+  '兔': [7, 19, 31, 43],
+  '龙': [6, 18, 30, 42],
+  '蛇': [5, 17, 29, 41],
+  '马': [4, 16, 28, 40],
+  '羊': [3, 15, 27, 39],
+  '猴': [2, 14, 26, 38],
+  '鸡': [1, 13, 25, 37, 49],
+  '狗': [12, 24, 36, 48],
+  '猪': [11, 23, 35, 47]
+}
