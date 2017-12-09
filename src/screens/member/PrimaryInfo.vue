@@ -6,7 +6,7 @@
         {{userInfo.username}}
       </el-form-item>
       <el-form-item :label="$t('user.realname')">
-        {{$store.state.user.real_name}}
+        {{userInfo.real_name}}
       </el-form-item>
       <el-form-item :label="$t('user.phone')">
         {{userInfo.phone}}
