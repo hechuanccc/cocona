@@ -259,7 +259,7 @@ export default {
     calculateCombinations () {
       let numbers = this.selectedOptions.map(option => option.num)
       let rules = this.plays[this.activePlayId].rules
-      if (numbers.length > 1 && rules) {
+      if (rules && numbers.length >= rules.min_opts) {
         this.combinations = Combinatorics.combination(numbers, rules.min_opts).toArray()
         this.valid = true
       } else {

@@ -117,7 +117,8 @@ export default {
     alipay: 'Alipay',
     bankcard: 'Bank Card',
     odd: 'Odds',
-    profit: 'Profit'
+    profit: 'Profit',
+    visitor: 'Visitor'
   },
   history: {
     draw_period: 'Draw Period',

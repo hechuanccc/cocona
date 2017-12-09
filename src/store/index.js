@@ -55,6 +55,46 @@ export function createStore () {
           cols: 7
         },
         {
+          code: 'hkl_pg_exlzdc2',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exlzdc3',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exlzdc4',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exlzdc5',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exltail2',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exltail3',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exltail4',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
+          code: 'hkl_pg_exltail5',
+          component: 'hklPgExl',
+          cols: 2
+        },
+        {
           code: 'hkl_pg_ntinfvr_num',
           component: 'hklPgNtinfvrNum',
           options: Array.from(Array(49).keys()).map(item => item + 1),
