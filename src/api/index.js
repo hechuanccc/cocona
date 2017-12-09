@@ -35,7 +35,7 @@ export function getPromotions () {
 }
 
 export function register (user) {
-  return axios.post(urls.register, qs.stringify(user)).then(res => res.data.data)
+  return axios.post(urls.register, qs.stringify(user)).then(res => res.data)
 }
 
 export function checkUserName (username) {

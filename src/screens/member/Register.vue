@@ -51,7 +51,7 @@
 
 <script>
 import { fetchCaptcha, checkUserName, register } from '../../api'
-import { validateUserName, validatePassword } from '../../validate'
+import { validateUserName, validatePassword, validatePhone } from '../../validate'
 import { msgFormatter } from '../../utils'
 import api from '../../api/urls'
 export default {
@@ -105,6 +105,14 @@ export default {
         callback()
       }
     }
+
+    const phoneValidator = (rule, value, callback) => {
+      if (!validatePhone(value)) {
+        callback(new Error(this.$t('validate.phone_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       user: {
         username: '',
@@ -134,7 +142,8 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: phoneValidator, trigger: 'blur,change' }
         ],
         email: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
@@ -157,14 +166,26 @@ export default {
       this.$refs['user'].validate((valid) => {
         if (valid) {
           register(this.user).then(result => {
-            return this.$store.dispatch('login', {
-              user: {
-                username: this.user.username,
-                password: this.user.password
-              }
-            })
+            if (result.code === 2000) {
+              return this.$store.dispatch('login', {
+                user: {
+                  username: this.user.username,
+                  password: this.user.password
+                }
+              })
+            } else {
+              return Promise.resolve(result)
+            }
           }).then(result => {
-            this.$router.push({ name: 'Game' })
+            if (result.code === 2000) {
+              this.$router.push({ name: 'Game' })
+            } else {
+              this.$message({
+                showClose: true,
+                message: msgFormatter(result.msg),
+                type: 'error'
+              })
+            }
           }, errorRes => {
             this.$message({
               showClose: true,
