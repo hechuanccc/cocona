@@ -166,30 +166,18 @@ export default {
       this.$refs['user'].validate((valid) => {
         if (valid) {
           register(this.user).then(result => {
-            if (result.code === 2000) {
-              return this.$store.dispatch('login', {
-                user: {
-                  username: this.user.username,
-                  password: this.user.password
-                }
-              })
-            } else {
-              return Promise.resolve(result)
-            }
+            return this.$store.dispatch('login', {
+              user: {
+                username: this.user.username,
+                password: this.user.password
+              }
+            })
           }).then(result => {
-            if (result.code === 2000) {
-              this.$router.push({ name: 'Game' })
-            } else {
-              this.$message({
-                showClose: true,
-                message: msgFormatter(result.msg),
-                type: 'error'
-              })
-            }
-          }, errorRes => {
+            this.$router.push({ name: 'Game' })
+          }, errorMsg => {
             this.$message({
               showClose: true,
-              message: msgFormatter(errorRes.response.data.error),
+              message: msgFormatter(errorMsg),
               type: 'error'
             })
           })
