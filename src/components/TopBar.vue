@@ -16,7 +16,7 @@
     </ul>
     <ul v-else-if="user.logined" class="account-links" >
       <li>
-        欢迎, {{user.username}}
+        欢迎, {{user.account_type?user.username:$t('user.visitor')}}
       </li>
       <li>
         <router-link to="/account/online_payment" class="link">立即存款</router-link>

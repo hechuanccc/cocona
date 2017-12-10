@@ -76,6 +76,7 @@
           :is="$store.getters.customPlayGroupsById(playgroup.code)"
           :playReset="playReset"
           @updatePlayForSubmit="updateCustomPlays"
+          @updateMultiPlayForSubmit="updateMultiCustomPlays"
           :formatting="getCustomFormatting(playgroup.code)"
           :playgroup="playgroup"
           :plays="plays"
@@ -176,6 +177,7 @@ import { zodiacs, zodiacMap, colorWave } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
+const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'], resolve)
 const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
 
 export default {
@@ -196,6 +198,7 @@ export default {
     common,
     hklPgShxiaoSpczdc,
     gd11x5Seq,
+    hklPgExl,
     hklPgNtinfvrNum
   },
   data () {
@@ -305,6 +308,27 @@ export default {
           this.$set(play, 'combinations', playOptions.combinations)
           this.$set(play, 'selectedOptions', playOptions.selectedOptions)
           this.$set(this, 'showCombinationDetails', playOptions.showCombinationsPopover)
+        } else {
+          // if not, reset other plays
+          this.$set(play, 'active', false)
+          this.$set(play, 'isCustom', false)
+          this.$set(play, 'options', '')
+          this.$set(play, 'combinations', [])
+          this.$set(play, 'selectedOptions', [])
+        }
+      })
+    },
+    updateMultiCustomPlays (playOptions) {
+      _.each(this.plays, play => {
+        // if all of the options are valid, change the target play's status
+        if (playOptions.activePlayIds.includes('' + play.id) && playOptions.valid) {
+          this.$set(play, 'active', true)
+          this.$set(play, 'amount', this.amount)
+          this.$set(play, 'isCustom', true)
+          this.$set(play, 'options', playOptions.options)
+          this.$set(play, 'combinations', playOptions.combinations['' + play.id])
+          this.$set(play, 'selectedOptions', playOptions.selectedOptions)
+          this.$set(play, 'hideName', true)
         } else {
           // if not, reset other plays
           this.$set(play, 'active', false)
@@ -426,7 +450,7 @@ export default {
         }
         return {
           game_schedule: 10,
-          display_name: `${play.group} - ${play.display_name}`,
+          display_name: play.hideName ? play.group : `${play.group} - ${play.display_name}`,
           odds: play.odds,
           bet_amount: play.amount,
           id: play.id,

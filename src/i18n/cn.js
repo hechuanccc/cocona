@@ -117,7 +117,8 @@ export default {
     alipay: '支付宝',
     bankcard: '银行卡',
     odd: '赔率',
-    profit: '盈亏'
+    profit: '盈亏',
+    visitor: '游客'
   },
   history: {
     draw_period: '期数',
