@@ -66,7 +66,7 @@ export default {
   filters: {
     betOptionFilter (options) {
       if (options) {
-        return options.join(',')
+        return options.join(' ,')
       } else {
         return ''
       }
@@ -188,6 +188,6 @@ export default {
 }
 
 .selected-numbers {
-  word-break: break-all
+  word-break: break-all;
 }
 </style>
