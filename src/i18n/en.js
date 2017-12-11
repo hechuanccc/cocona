@@ -144,6 +144,7 @@ export default {
     password_validate: 'Password must be 8-15 characters and must contain at least one capital letter and a digit',
     qq_validate: 'This QQ number is invalid',
     phone_validate: 'This phone number is invalid',
+    account_validate: 'This Account number is invalid',
     password_again: 'Please enter password again',
     password_diff: 'twice password are different',
     username_exist: 'This usernam has existed',

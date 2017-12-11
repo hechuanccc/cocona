@@ -39,12 +39,20 @@
 </template>
 
 <script>
+import { validateBankAccount } from '../../validate'
 import { fetchBank, updateUser } from '../../api'
 import { msgFormatter } from '../../utils'
 import { mapGetters } from 'vuex'
 export default {
   name: 'BankInfo',
   data () {
+    const bankAccountValidator = (rule, value, callback) => {
+      if (!validateBankAccount(value)) {
+        callback(new Error(this.$t('validate.account_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       bankInfo: {
         bank: '',
@@ -65,7 +73,8 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ],
         account: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: bankAccountValidator, trigger: 'blur,change' }
         ]
       },
       bankOptions: []
