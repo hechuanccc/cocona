@@ -13,7 +13,7 @@ export default {
     login: 'Login',
     password: 'Password',
     user_register: 'Register',
-    personal_account: 'Personal Account',
+    personal_account: 'My Account',
     pop_title: 'Need to log in before enter Game Center',
     bussiness_hours: 'Bussiness Hours: 07:30 A.M. - 04:00 A.M. (24/7)',
     qa: 'Problem',
