@@ -100,7 +100,7 @@
     </el-row>
     <el-dialog title="确认注单"
       width="40%"
-      :before-close="beforeClose"
+      @close="beforeClose"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false">
