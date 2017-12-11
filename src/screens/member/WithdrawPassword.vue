@@ -1,22 +1,35 @@
 <template>
-  <el-row class="m-t-lg">
-    <el-col :offset="8" :span="16">
-      <el-form :model="withdraw_password" status-icon :rules="withdrawRule" ref="withdraw_password" label-width="120px">
-        <el-form-item :label="$t('user.prev_withdraw_password')" prop="current_password">
-          <el-input class="input-width" type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.new_withdraw_password')" prop="new_password">
-          <el-input class="input-width" type="password" v-model="withdraw_password.new_password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.confirm_withdraw_password')" prop="repeat_password">
-          <el-input class="input-width" type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-  </el-row>
+  <div>
+    <el-row class="m-t-lg">
+      <el-col :offset="8" :span="10">
+        <el-alert
+          v-if="updateStatus !== 0"
+          :title="message"
+          :type="updateStatus === 1 ? 'success' : 'error'"
+          :closable="false"
+          center>
+        </el-alert>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :offset="8" :span="16">
+        <el-form :model="withdraw_password" status-icon :rules="withdrawRule" ref="withdraw_password" label-width="120px">
+          <el-form-item :label="$t('user.prev_withdraw_password')" prop="current_password">
+            <el-input class="input-width" type="password" v-model="withdraw_password.current_password" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.new_withdraw_password')" prop="new_password">
+            <el-input class="input-width" type="password" v-model="withdraw_password.new_password" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.confirm_withdraw_password')" prop="repeat_password">
+            <el-input class="input-width" type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" :disabled="updateStatus===1" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 <script>
 import { updateWithdrawPassword } from '../../api'
@@ -64,7 +77,9 @@ export default {
         repeat_password: [
           { required: true, validator: repeatPasswordValidator('withdraw_password'), trigger: 'blur' }
         ]
-      }
+      },
+      updateStatus: 0,
+      message: ''
     }
   },
   methods: {
@@ -72,17 +87,14 @@ export default {
       this.$refs['withdraw_password'].validate((valid) => {
         if (valid) {
           updateWithdrawPassword(this.withdraw_password).then(data => {
-            this.$message({
-              showClose: true,
-              message: msgFormatter(data.message),
-              type: 'success'
-            })
-          }, errorRes => {
-            this.$message({
-              showClose: true,
-              message: msgFormatter(errorRes.response.data.error),
-              type: 'error'
-            })
+            this.updateStatus = 1
+            this.message = this.$t('message.save_success')
+            setTimeout(() => {
+              this.updateStatus = 0
+            }, 3000)
+          }, errorMsg => {
+            this.updateStatus = -1
+            this.message = msgFormatter(errorMsg)
           })
         }
       })

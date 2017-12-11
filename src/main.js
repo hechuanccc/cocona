@@ -49,15 +49,19 @@ if (token) {
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
-  if ((to || firstMatched).meta.requiresAuth) {
-    store.dispatch('fetchUser')
-      .then(res => {
-        next()
-      })
-      .catch(error => {
-        store.commit('SHOW_LOGIN_DIALOG')
-        return Promise.resolve(error)
-      })
+  if ((firstMatched || to).meta.requiresAuth) {
+    if (from && from.matched[0] && from.matched[0].path === to.matched[0].path) {
+      next()
+    } else {
+      store.dispatch('fetchUser')
+        .then(res => {
+          next()
+        })
+        .catch(error => {
+          store.commit('SHOW_LOGIN_DIALOG')
+          return Promise.resolve(error)
+        })
+    }
   } else {
     next()
   }
