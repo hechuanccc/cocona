@@ -235,19 +235,6 @@ export default {
   },
   watch: {
     'selectedOptions': function () {
-      if (this.selectedOptions.length < this.plays[this.activePlayId].rules.min_opts) {
-        this.combinations.length = 0
-        this.valid = false
-        this.$emit('updatePlayForSubmit', {
-          activePlayId: this.activePlayId,
-          options: this.selectedOptions.join(','),
-          combinations: this.combinations,
-          selectedOptions: this.selectedOptions,
-          valid: this.valid,
-          showCombinationsPopover: this.hasDifferentOddsInOnePlay
-        })
-        return
-      }
       this.calculateCombinations()
     },
     'activePlayId': function () {
@@ -272,6 +259,7 @@ export default {
         this.combinations = Combinatorics.combination(numbers, rules.min_opts).toArray()
         this.valid = true
       } else {
+        this.combinations.length = 0
         this.valid = false
       }
       this.$emit('updatePlayForSubmit', {
