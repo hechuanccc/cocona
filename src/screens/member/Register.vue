@@ -51,9 +51,8 @@
 
 <script>
 import { fetchCaptcha, checkUserName, register } from '../../api'
-import { validateUserName, validatePassword } from '../../validate'
+import { validateUserName, validatePassword, validatePhone } from '../../validate'
 import { msgFormatter } from '../../utils'
-import api from '../../api/urls'
 export default {
   name: 'register',
   data () {
@@ -105,6 +104,14 @@ export default {
         callback()
       }
     }
+
+    const phoneValidator = (rule, value, callback) => {
+      if (!validatePhone(value)) {
+        callback(new Error(this.$t('validate.phone_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       user: {
         username: '',
@@ -134,7 +141,8 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ],
         phone: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: phoneValidator, trigger: 'blur,change' }
         ],
         email: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
@@ -165,10 +173,10 @@ export default {
             })
           }).then(result => {
             this.$router.push({ name: 'Game' })
-          }, errorRes => {
+          }, errorMsg => {
             this.$message({
               showClose: true,
-              message: msgFormatter(errorRes.response.data.error),
+              message: msgFormatter(errorMsg),
               type: 'error'
             })
           })
@@ -183,8 +191,8 @@ export default {
     },
     fetchCaptcha () {
       fetchCaptcha().then(res => {
-        this.captcha_src = api.domain + res.data.captcha_src
-        this.user.verification_code_0 = res.data.captcha_val
+        this.captcha_src = res.captcha_src
+        this.user.verification_code_0 = res.captcha_val
       })
     }
   }

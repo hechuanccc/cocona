@@ -69,12 +69,12 @@ export default {
     }
     getBanner().then(
       response => {
-        this.banners = response.data
+        this.banners = response
       }
     )
     getAnnouncements().then(
       response => {
-        this.announcements = response.data
+        this.announcements = response
       }
     )
     fetchGames().then(

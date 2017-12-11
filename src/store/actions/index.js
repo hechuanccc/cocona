@@ -17,23 +17,22 @@ import {
 export default {
   login: ({ commit, state }, { user }) => {
     return login(user).then(res => {
-      let data = res.data.data
-      let expires = new Date(data.expires_in)
-      if (data.access_token && data.refresh_token) {
-        Vue.cookie.set('access_token', data.access_token, {
+      let expires = new Date(res.expires_in)
+      if (res.access_token && res.refresh_token) {
+        Vue.cookie.set('access_token', res.access_token, {
           expires: expires
         })
-        Vue.cookie.set('refresh_token', data.refresh_token, {
+        Vue.cookie.set('refresh_token', res.refresh_token, {
           expires: expires
         })
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.access_token
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
       }
       commit(types.SET_USER, {
         user: {
           logined: true
         }
       })
-      return Promise.resolve(res.data)
+      return Promise.resolve(res)
     }, error => Promise.reject(error))
   },
   logout: ({ commit, state }) => {

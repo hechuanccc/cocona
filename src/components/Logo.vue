@@ -17,7 +17,7 @@ export default {
   created () {
     gethomePage().then(
       response => {
-        this.icon = response.data.icon
+        this.icon = response.icon
       }
     )
   }

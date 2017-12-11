@@ -16,7 +16,7 @@
     </ul>
     <ul v-else-if="user.logined" class="account-links" >
       <li>
-        欢迎, {{user.username}}
+        欢迎, {{user.account_type?user.username:$t('user.visitor')}}
       </li>
       <li>
         <router-link to="/account/online_payment" class="link">立即存款</router-link>
@@ -86,10 +86,10 @@ export default {
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
-      }, errorRes => {
+      }, errorMsg => {
         this.$message({
           showClose: true,
-          message: msgFormatter(errorRes.response.data.error),
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
       })
@@ -104,7 +104,7 @@ export default {
     }
     gethomePage().then(
       response => {
-        this.homepage = response.data
+        this.homepage = response
       }
     )
 

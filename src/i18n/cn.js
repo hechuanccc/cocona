@@ -117,7 +117,8 @@ export default {
     alipay: '支付宝',
     bankcard: '银行卡',
     odd: '赔率',
-    profit: '盈亏'
+    profit: '盈亏',
+    visitor: '游客'
   },
   history: {
     draw_period: '期数',
@@ -142,6 +143,8 @@ export default {
     username_validate: '请输入8~15位英数字',
     password_validate: '请输入8~15字元，其中至少包含一大写字母及一数字',
     qq_validate: 'qq号码格式无效',
+    phone_validate: '手机号码格式无效',
+    account_validate: '该帐号格式无效',
     password_again: '请再次输入密码',
     password_diff: '两次输入密码不一致',
     username_exist: '该帐号已存在',

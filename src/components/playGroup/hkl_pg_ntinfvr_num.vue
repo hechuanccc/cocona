@@ -3,7 +3,7 @@
     <table class="play-table" align="center" >
       <tr class="group-name">
         <td>种类</td>
-        <td>合肖</td>
+        <td>自选不中</td>
       </tr>
       <tbody class="tbody">
         <tr>
@@ -22,30 +22,27 @@
           <div v-else>封盘</div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup" :key="row+'optionGroup'">
+      <tr
+        v-for="(row,index) in optionGroup"
+        :key="'row'+index">
         <td
-          @click="selectOption(option, $event)"
+          @click.prevent="selectOption(option, $event)"
           @mouseover="option.hover = true"
           @mouseleave="option.hover = false"
           v-for="option in row"
-          :key="option+'in_row'"
+          :key="option.num + 'option'"
           :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
             {
               hover: option.hover,
               active: option.selected && !gameClosed
             }
           ]">
-          <el-col :span="3" class="name">
-            <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacs[option.num - 1].xiao}}</span>
-          </el-col>
-          <el-col :span="17" class="number" align="left">
-            <span v-for="(zodiacNum, index) in formattedZodiacNums[option.num - 1]"
-              :class="['m-r-sm',playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
-              :key="index">
-                {{zodiacNum}}
+          <el-col :span="12" class="name">
+            <span :class="[playgroup.code, playgroup.code + '_' + option.num]">
+              {{option.num}}
             </span>
           </el-col>
-          <el-col :span="4" class="checkbox input">
+          <el-col :span="12" class="checkbox input">
             <el-checkbox v-model="option.selected" v-if="!gameClosed"></el-checkbox>
             <el-checkbox disabled v-else></el-checkbox>
           </el-col>
@@ -57,7 +54,6 @@
 
 <script>
 import _ from 'lodash'
-
 export default {
   props: {
     playgroup: {
@@ -71,12 +67,9 @@ export default {
     },
     playReset: {
       type: Boolean
-    },
-    zodiacs: {
-      typr: Array
     }
   },
-  name: 'hklPgShxiaoSpczdc',
+  name: 'hklPgNtinfvrNum',
   data () {
     const customPlayGroup = _.find(this.$store.state.customPlayGroups, item => {
       return item.code === this.playgroup.code
@@ -86,33 +79,48 @@ export default {
     }
     const options = customPlayGroup.options
     const rows = Math.ceil(options.length / customPlayGroup.cols)
-    const optionGroup = _.flatMap(options.slice(0, rows), n => {
-      let index = 0
-      let result = []
-      while (index < customPlayGroup.cols) {
-        let num = n + (rows) * index
-        result.push({
-          num: num,
-          selected: false,
-          hover: false,
-          xiao: this.zodiacs[num - 1].xiao,
-          englishName: this.zodiacs[num - 1].englishName
-        })
-        index++
-      }
-      return [result]
-    })
 
+    let optionGroup
+    if (customPlayGroup.transpose) {
+      const cols = customPlayGroup.cols
+      optionGroup = _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < cols) {
+          let num = n * cols + index + 1
+          if (num > options.length) {
+            break
+          }
+          result.push({
+            num: num,
+            selected: false,
+            hover: false
+          })
+          index++
+        }
+        return [result]
+      })
+    } else {
+      optionGroup = _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < customPlayGroup.cols) {
+          result.push({
+            num: n + (rows) * index,
+            selected: false,
+            hover: false
+          })
+          index++
+        }
+        return [result]
+      })
+    }
     return {
+      activePlay: {},
       optionGroup,
       customPlayGroup,
       combinations: [],
-      valid: false,
-      activePlay: {
-        id: '',
-        display_name: '',
-        odds: ''
-      }
+      valid: false
     }
   },
   computed: {
@@ -122,24 +130,20 @@ export default {
       })
     },
     activePlayOdds () {
-      if (this.selectedOptions.length < 2) {
+      if (this.selectedOptions.length < 5) {
         return '--'
       }
       return this.activePlay.odds
-    },
-    formattedZodiacNums () {
-      return _.map(this.zodiacs, zodiac => zodiac.nums.split(','))
     }
   },
   watch: {
     'selectedOptions': function () {
-      if (this.selectedOptions.length < 2) {
+      if (this.selectedOptions.length < 5) {
         this.updateForSubmit()
         return
       }
-      this.selectedOptions.sort((a, b) => { return a.num - b.num })
       _.forEach(this.plays, (play) => {
-        if (play.display_name.slice(-3, -1) === '' + (this.selectedOptions.length)) {
+        if (play.display_name.slice(-4, -2) === '' + (this.selectedOptions.length)) {
           this.activePlay.odds = play.odds
           this.activePlay.id = play.id
           this.activePlay.display_name = play.display_name
@@ -152,30 +156,29 @@ export default {
       _.flatten(this.optionGroup).forEach(option => {
         option.selected = false
       })
+      this.combinations.length = 0
     }
   },
   methods: {
     updateForSubmit () {
-      this.valid = this.selectedOptions.length > 1
+      this.valid = this.selectedOptions.length > 4
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.activePlay.id,
         selectedOptions: this.selectedOptions.map(option => {
           return {
-            num: option.xiao
+            num: option.num
           }
         }),
-        combinations: ['1'], // rules for ho_xiao is always 1 combination
-        valid: this.valid,
-        hasZodiacs: true
+        combinations: ['1'], // rule is always 1 combination
+        valid: this.valid
       })
     },
     selectOption (option, event) {
       if (this.gameClosed) {
         return false
       }
-      event.preventDefault()
       if (!option.selected) {
-        if (this.selectedOptions.length < 11) {
+        if (this.selectedOptions.length < 12) {
           option.selected = true
         }
       } else {
@@ -190,6 +193,9 @@ export default {
 @import "../../style/vars.scss";
 @import "../../style/gameplay.scss";
 
+.group-name {
+  cursor: pointer;
+}
 .odds {
   line-height: $cell-height;
   color: $red;

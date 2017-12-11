@@ -4,7 +4,7 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model.number="amount" type="number"/>
+        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
@@ -58,7 +58,7 @@
                 <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
               </el-col>
               <el-col v-if="play.value" :span="15" class="number">
-                <span :class="[playgroup.code, `${playgroup.code}_${num}`]" v-for="(num,index) in play.value" :key="index">{{num}}</span>
+                <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
               </el-col>
               <el-col :span="play.value?4:7" class="odds">
                 {{ !gameClosed ? play.odds : '-'}}
@@ -76,6 +76,7 @@
           :is="$store.getters.customPlayGroupsById(playgroup.code)"
           :playReset="playReset"
           @updatePlayForSubmit="updateCustomPlays"
+          @updateMultiPlayForSubmit="updateMultiCustomPlays"
           :formatting="getCustomFormatting(playgroup.code)"
           :playgroup="playgroup"
           :plays="plays"
@@ -87,7 +88,7 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model.number="amount" type="number"/>
+        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary"
@@ -99,7 +100,7 @@
     </el-row>
     <el-dialog title="确认注单"
       width="40%"
-      :before-close="beforeClose"
+      @close="beforeClose"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
       :close-on-press-escape="false">
@@ -172,10 +173,12 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { formatPlayGroup } from '../../utils'
-import { zodiacs } from '../../utils/zodiacs'
+import { zodiacs, zodiacMap, colorWave } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
+const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'], resolve)
+const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
 
 export default {
   props: {
@@ -194,7 +197,9 @@ export default {
   components: {
     common,
     hklPgShxiaoSpczdc,
-    gd11x5Seq
+    gd11x5Seq,
+    hklPgExl,
+    hklPgNtinfvrNum
   },
   data () {
     return {
@@ -214,7 +219,9 @@ export default {
       hasZodiacs: false,
       showCombinationDetails: false,
       showCombinationsTips: false,
-      zodiacs
+      zodiacs,
+      zodiacMap,
+      colorWave
     }
   },
   computed: {
@@ -311,6 +318,27 @@ export default {
         }
       })
     },
+    updateMultiCustomPlays (playOptions) {
+      _.each(this.plays, play => {
+        // if all of the options are valid, change the target play's status
+        if (playOptions.activePlayIds.includes('' + play.id) && playOptions.valid) {
+          this.$set(play, 'active', true)
+          this.$set(play, 'amount', this.amount)
+          this.$set(play, 'isCustom', true)
+          this.$set(play, 'options', playOptions.options)
+          this.$set(play, 'combinations', playOptions.combinations['' + play.id])
+          this.$set(play, 'selectedOptions', playOptions.selectedOptions)
+          this.$set(play, 'hideName', true)
+        } else {
+          // if not, reset other plays
+          this.$set(play, 'active', false)
+          this.$set(play, 'isCustom', false)
+          this.$set(play, 'options', '')
+          this.$set(play, 'combinations', [])
+          this.$set(play, 'selectedOptions', [])
+        }
+      })
+    },
     getCustomFormatting (groupCode) {
       return _.find(this.$store.state.customPlayGroups, item => {
         return item.code === groupCode
@@ -342,7 +370,8 @@ export default {
         .then(res => {
           this.submitting = false
           // TODO: update conditions
-          if (res.data && res.data[0].member) {
+          this.$store.dispatch('fetchUser')
+          if (res && res[0].member) {
             this.submitted = true
             setTimeout(() => {
               this.submitted = false
@@ -367,7 +396,14 @@ export default {
           item.plays.forEach(play => {
             plays[play.id] = play
             plays[play.id]['group'] = item['display_name']
-          })
+            if (item.code === 'hkl_pg_clrwvs_color') {
+              plays[play.id]['value'] = colorWave[play.code]
+            }
+            if (item.code === 'hkl_pg_txiao_spczdc' || item.code === 'hkl_pg_shawzdc' || item.code === 'hkl_pg_pxxmzdc') {
+              plays[play.id]['value'] = this.zodiacMap[play.display_name]
+            }
+          }
+          )
         })
         this.raw = res
         this.plays = plays
@@ -415,7 +451,7 @@ export default {
         }
         return {
           game_schedule: 10,
-          display_name: `${play.group} - ${play.display_name}`,
+          display_name: play.hideName ? play.group : `${play.group} - ${play.display_name}`,
           odds: play.odds,
           bet_amount: play.amount,
           id: play.id,
@@ -458,6 +494,11 @@ export default {
       })
 
       Vue.set(this, 'playReset', !this.playReset)
+    },
+    validateAmount (value) {
+      if (value < 1) {
+        this.amount = 1
+      }
     }
   }
 }

@@ -14,7 +14,7 @@
             </li>
             <li>
               <span>未结余额</span>
-              <span>{{user.unsettled | currency('￥')}}</span>
+              <span>{{user.unsettled||0 | currency('￥')}}</span>
             </li>
             <li class="center">
               <el-button type="primary" plain @click="linkTo('/my/primary_info')">我的账号</el-button>
@@ -38,7 +38,7 @@
                   <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span>
                   <span class="odds">{{bet.odds}}</span>
                 </div>
-                <div v-if="bet.bet_options.options">
+                <div v-if="bet.bet_options.options" class="selected-numbers">
                   已选号码：{{bet.bet_options.options | betOptionFilter}}
                 </div>
               </li>
@@ -66,7 +66,7 @@ export default {
   filters: {
     betOptionFilter (options) {
       if (options) {
-        return options.join(',')
+        return options.join(', ')
       } else {
         return ''
       }
@@ -81,6 +81,17 @@ export default {
     ...mapGetters([
       'user'
     ])
+  },
+  watch: {
+    '$route': function (to, from) {
+      if (to.path === '/game') {
+        this.$store.dispatch('fetchGames').catch(error => {
+          if (error.response.status > 400) {
+            this.performLogin()
+          }
+        })
+      }
+    }
   },
   components: {
     GameMenu
@@ -185,5 +196,9 @@ export default {
   line-height: 36px;
   float: right;
   font-size: 13px;
+}
+
+.selected-numbers {
+  word-break: break-all;
 }
 </style>

@@ -9,7 +9,7 @@
           </el-button>
         </div>
         <div class="m-t">
-          <el-button>{{$t('navMenu.try_play')}}</el-button>
+          <el-button @click="tryplay">{{$t('navMenu.try_play')}}</el-button>
         </div>
       </div>
     </el-col>
@@ -39,7 +39,7 @@
             <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
           </el-form-item>
           <el-form-item class="forgot-password">
-            <router-link to="./forget">{{$t('navMenu.forget_password')}}?</router-link>
+            <router-link to="./forget" @click.native="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</router-link>
           </el-form-item>
         </el-form>
       </div>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import { register } from '../api'
+import { msgFormatter } from '../utils'
 export default {
   data () {
     return {
@@ -67,6 +69,9 @@ export default {
     }
   },
   methods: {
+    closeLoginDialog () {
+      this.$store.commit('CLOSE_LOGINDIALOG')
+    },
     toRegister () {
       this.$store.commit('CLOSE_LOGINDIALOG')
       this.$router.push('/register')
@@ -85,16 +90,17 @@ export default {
         this.$store.commit('CLOSE_LOGINDIALOG')
         const next = this.$route.query.next
         this.$router.push(next || 'game')
-      }, errorRes => {
-        const errors = errorRes.response.data.error
-        let messages = []
-
-        errors.forEach(error => {
-          Object.keys(error).forEach(key => {
-            messages.push(error[key])
-          })
-        })
-        this.errorMsg = messages.join(', ')
+      }, errorMsg => {
+        this.errorMsg = msgFormatter(errorMsg)
+      })
+    },
+    tryplay () {
+      register({ account_type: 0 }).then(user => {
+        return this.$store.dispatch('login', { user })
+      }).then(result => {
+        this.$router.push({ name: 'Game' })
+      }, errorMsg => {
+        this.errorMsg = msgFormatter(errorMsg)
       })
     }
   },
@@ -121,7 +127,7 @@ export default {
   text-align: center;
   margin: auto;
   &:after {
-    content: ' ';
+    content: " ";
     display: inline-block;
     position: absolute;
     height: 200px;
@@ -141,13 +147,13 @@ export default {
     width: 100%;
   }
 }
-.el-input /deep/ .el-input__suffix{
+.el-input /deep/ .el-input__suffix {
   right: 0;
 }
 .forgot-password {
   position: relative;
   bottom: 20px;
-  a{
+  a {
     color: $primary;
     text-decoration: none;
   }

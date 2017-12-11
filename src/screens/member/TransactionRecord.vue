@@ -94,10 +94,10 @@ export default {
       fetchTransactionRecord(this.transactionType).then(datas => {
         this.paymentRecords = datas
         this.loading = false
-      }, errorRes => {
+      }, errorMsg => {
         this.$message({
           showClose: true,
-          message: msgFormatter(errorRes.response.data.error),
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
         this.loading = false

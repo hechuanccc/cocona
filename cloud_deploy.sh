@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e  # to stop script when error occurs
+
 # NPM commands and Azure cli scripts to deploy our static VueJS in a CDN
 
 export root_container=\$root  # is '\' is to escape the special character
