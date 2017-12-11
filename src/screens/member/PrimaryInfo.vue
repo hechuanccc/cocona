@@ -74,8 +74,6 @@ export default {
         birthday: ''
       },
       originUser: {},
-      updateStatus: 0,
-      message: '',
       rules: {
         email: [
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
@@ -83,7 +81,9 @@ export default {
         qq: [
           { validator: qqValidator, trigger: 'change' }
         ]
-      }
+      },
+      updateStatus: 0,
+      message: ''
     }
   },
   created () {

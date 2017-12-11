@@ -169,10 +169,10 @@ export default {
               type: 'success'
             })
             this.$refs[form].resetFields()
-          }, errorRes => {
+          }, errorMsg => {
             this.$message({
               showClose: true,
-              message: msgFormatter(errorRes.response.data.error),
+              message: msgFormatter(errorMsg),
               type: 'error'
             })
           })

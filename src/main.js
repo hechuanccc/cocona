@@ -45,19 +45,33 @@ const token = Vue.cookie.get('access_token')
 if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
+axios.interceptors.response.use(res => {
+  let responseData = res.data
+  if (responseData.code === 2000) {
+    return responseData.data
+  } else {
+    return Promise.reject(responseData.msg)
+  }
+}, error => {
+  return Promise.reject(error)
+})
 
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
-  if ((to || firstMatched).meta.requiresAuth) {
-    store.dispatch('fetchUser')
-      .then(res => {
-        next()
-      })
-      .catch(error => {
-        store.commit('SHOW_LOGIN_DIALOG')
-        return Promise.resolve(error)
-      })
+  if ((firstMatched || to).meta.requiresAuth) {
+    if (from && from.matched[0] && from.matched[0].path === to.matched[0].path) {
+      next()
+    } else {
+      store.dispatch('fetchUser')
+        .then(res => {
+          next()
+        })
+        .catch(error => {
+          store.commit('SHOW_LOGIN_DIALOG')
+          return Promise.resolve(error)
+        })
+    }
   } else {
     next()
   }

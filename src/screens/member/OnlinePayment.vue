@@ -105,10 +105,10 @@ export default {
           this.select(data.name)
         }
       })
-    }, errorRes => {
+    }, errorMsg => {
       this.$message({
         showClose: true,
-        message: msgFormatter(errorRes.response.data.error),
+        message: msgFormatter(errorMsg),
         type: 'error'
       })
     })

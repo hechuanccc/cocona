@@ -82,6 +82,17 @@ export default {
       'user'
     ])
   },
+  watch: {
+    '$route': function (to, from) {
+      if (to.path === '/game') {
+        this.$store.dispatch('fetchGames').catch(error => {
+          if (error.response.status > 400) {
+            this.performLogin()
+          }
+        })
+      }
+    }
+  },
   components: {
     GameMenu
   },
