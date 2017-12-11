@@ -104,7 +104,7 @@ export function placeBet (data) {
 }
 
 export function fetchTransactionRecord (type) {
-  return axios.get(`${urls.transaction_record}?transaction_type=${type}`).then(res => res.data)
+  return axios.get(`${urls.transaction_record}?transaction_type=${type}`).then(res => res.data.data)
 }
 
 export function fetchBet (gameData) {
@@ -148,7 +148,7 @@ export function remit (info) {
 }
 
 export function fetchMessages () {
-  return axios.get(urls.messages).then(res => res.data)
+  return axios.get(urls.messages).then(res => res.data.data)
 }
 
 export function readMessage (ids) {
