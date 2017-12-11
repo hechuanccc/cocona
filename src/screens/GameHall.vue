@@ -66,7 +66,7 @@ export default {
   filters: {
     betOptionFilter (options) {
       if (options) {
-        return options.join(' ,')
+        return options.join(', ')
       } else {
         return ''
       }
@@ -89,6 +89,7 @@ export default {
     fetchOngoingBet (gameData) {
       fetchBet(gameData)
         .then(res => {
+          debugger
           this.betrecords = res
         })
     },
