@@ -31,11 +31,17 @@ export function gethomePage () {
   return axios.get(urls.homePage).then(res => res.data)
 }
 export function getPromotions () {
-  return axios.get(urls.promotions).then(res => res.data)
+  return axios.get(urls.promotions).then(res => res.data.data)
 }
 
 export function register (user) {
-  return axios.post(urls.register, qs.stringify(user)).then(res => res.data.data)
+  return axios.post(urls.register, qs.stringify(user)).then(res => {
+    if (res.data.code === 2000) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.msg)
+    }
+  })
 }
 
 export function checkUserName (username) {
@@ -50,7 +56,13 @@ export function fetchUser () {
   return axios.get(urls.user).then(res => res.data.data)
 }
 export function updateUser (user) {
-  return axios.put(`${urls.user}${user.id}/`, user).then(res => res.data)
+  return axios.put(`${urls.user}${user.id}/`, user).then(res => {
+    if (res.data.code === 2000) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.msg)
+    }
+  })
 }
 
 export function updatePassword (password) {

@@ -4,7 +4,7 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model.number="amount" type="number"/>
+        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
@@ -88,7 +88,7 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model.number="amount" type="number"/>
+        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
       </el-col>
       <el-col :span="4">
         <el-button type="primary"
@@ -370,6 +370,7 @@ export default {
         .then(res => {
           this.submitting = false
           // TODO: update conditions
+          this.$store.dispatch('fetchUser')
           if (res.data && res.data[0].member) {
             this.submitted = true
             setTimeout(() => {
@@ -493,6 +494,11 @@ export default {
       })
 
       Vue.set(this, 'playReset', !this.playReset)
+    },
+    validateAmount (value) {
+      if (value < 1) {
+        this.amount = 1
+      }
     }
   }
 }
