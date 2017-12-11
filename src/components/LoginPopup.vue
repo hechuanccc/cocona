@@ -87,22 +87,11 @@ export default {
           password: this.user.password
         }
       }).then(result => {
-        if (result.code > 9000) {
-          this.errorMsg = result.msg
-          return
-        }
         this.$store.commit('CLOSE_LOGINDIALOG')
         const next = this.$route.query.next
         this.$router.push(next || 'game')
-      }, errorRes => {
-        const errors = errorRes.response.data.error
-        let messages = []
-        errors.forEach(error => {
-          Object.keys(error).forEach(key => {
-            messages.push(error[key])
-          })
-        })
-        this.errorMsg = messages.join(', ')
+      }, errorMsg => {
+        this.errorMsg = msgFormatter(errorMsg)
       })
     },
     tryplay () {
@@ -110,12 +99,8 @@ export default {
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
-      }, errorRes => {
-        this.$message({
-          showClose: true,
-          message: msgFormatter(errorRes.response.data.error),
-          type: 'error'
-        })
+      }, errorMsg => {
+        this.errorMsg = msgFormatter(errorMsg)
       })
     }
   },
@@ -142,7 +127,7 @@ export default {
   text-align: center;
   margin: auto;
   &:after {
-    content: ' ';
+    content: " ";
     display: inline-block;
     position: absolute;
     height: 200px;
@@ -162,13 +147,13 @@ export default {
     width: 100%;
   }
 }
-.el-input /deep/ .el-input__suffix{
+.el-input /deep/ .el-input__suffix {
   right: 0;
 }
 .forgot-password {
   position: relative;
   bottom: 20px;
-  a{
+  a {
     color: $primary;
     text-decoration: none;
   }

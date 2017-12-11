@@ -109,10 +109,10 @@ export default {
           record.created_at = this.$moment(record.created_at).format('YYYY-MM-DD')
         })
         this.loading = false
-      }, errorRes => {
+      }, errorMsg => {
         this.$message({
           showClose: true,
-          message: msgFormatter(errorRes.response.data.error),
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
         this.loading = false

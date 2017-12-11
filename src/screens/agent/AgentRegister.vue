@@ -132,19 +132,10 @@
             agentRegister(inputData).then(
               response => {
                 this.$router.push({name: 'Home'})
-              }, errorRes => {
-              const errors = errorRes.response.data.error
-              let messages = []
-
-              errors.forEach(error => {
-                Object.keys(error).forEach(key => {
-                  messages.push(error[key])
-                })
-              })
-
+              }, errorMsg => {
               this.$message({
                 showClose: true,
-                message: messages.join(', '),
+                message: errorMsg,
                 type: 'error'
               })
             })
@@ -156,22 +147,13 @@
       grabCaptcha () {
         getCaptcha().then(response => {
           this.captcha.show = true
-          this.ruleForm.captcha_0 = response.data.captcha_val
-          this.captcha.img = api.domain + response.data.captcha_src
+          this.ruleForm.captcha_0 = response.captcha_val
+          this.captcha.img = api.domain + response.captcha_src
         },
-        errorRes => {
-          const errors = errorRes.response.data.error
-          let messages = []
-
-          errors.forEach(error => {
-            Object.keys(error).forEach(key => {
-              messages.push(error[key])
-            })
-          })
-
+        errorMsg => {
           this.$message({
             showClose: true,
-            message: messages.join(', '),
+            message: errorMsg,
             type: 'error'
           })
         }

@@ -371,7 +371,7 @@ export default {
           this.submitting = false
           // TODO: update conditions
           this.$store.dispatch('fetchUser')
-          if (res.data && res.data[0].member) {
+          if (res && res[0].member) {
             this.submitted = true
             setTimeout(() => {
               this.submitted = false
