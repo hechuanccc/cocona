@@ -134,7 +134,13 @@ export function fetchGameResult (gameId) {
   return axios.get(`${urls.game_result}?game=${gameId}&opt_expand=next`).then(res => res.data.data)
 }
 export function withdraw (info) {
-  return axios.post(urls.withdraw, qs.stringify(info))
+  return axios.post(urls.withdraw, qs.stringify(info)).then(res => {
+    if (res.data.code === 2000) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.msg)
+    }
+  })
 }
 
 export function fetchRemitpayee () {

@@ -64,9 +64,7 @@ export default {
         wechat: '',
         birthday: ''
       },
-      originUser: {
-
-      },
+      originUser: {},
       rules: {
         email: [
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
