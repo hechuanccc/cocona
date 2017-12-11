@@ -61,10 +61,12 @@ export default {
       this.activeName = this.$route.params.categoryId
     },
     'schedule.id': function (newId, oldId) {
-      this.$root.bus.$emit('new-betrecords', {
-        gameId: this.gameId,
-        scheduleId: newId
-      })
+      if (newId) {
+        this.$root.bus.$emit('new-betrecords', {
+          gameId: this.gameId,
+          scheduleId: newId
+        })
+      }
     }
   },
   computed: {
@@ -89,9 +91,13 @@ export default {
     if (!this.categories.length) {
       this.$store.dispatch('fetchCategories', this.gameId)
         .then((res) => {
-          this.categories = res
-          if (!categoryId) {
-            this.forward(res[0])
+          if (res) {
+            this.categories = res
+            if (!categoryId) {
+              this.forward(res[0])
+            }
+          } else {
+            this.performLogin()
           }
         })
     } else if (!categoryId) {
