@@ -1,6 +1,13 @@
 <template>
 <el-row >
   <el-col :span="10" :offset="7">
+    <el-alert
+      v-if="updateStatus !== 0"
+      :title="message"
+      :type="updateStatus === 1 ? 'success' : 'error'"
+      :closable="false"
+      center>
+    </el-alert>
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
       <el-form-item :label="$t('user.username')">
         {{userInfo.username}}
@@ -30,7 +37,7 @@
         <el-input class="input-width" v-model="user.wechat"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">{{$t('action.save')}}</el-button>
+        <el-button type="primary" :disabled="updateStatus===1" @click="submitForm">{{$t('action.save')}}</el-button>
       </el-form-item>
     </el-form>
   </el-col>
@@ -49,7 +56,7 @@ export default {
   },
   data () {
     const qqValidator = (rule, value, callback) => {
-      if (!value) {
+      if (this.originUser.qq === '' && !value) {
         this.$refs.qq.clearValidate()
       } else if (!validateQQ(value)) {
         callback(new Error(this.$t('validate.qq_validate')))
@@ -66,6 +73,9 @@ export default {
         wechat: '',
         birthday: ''
       },
+      originUser: {},
+      updateStatus: 0,
+      message: '',
       rules: {
         email: [
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
@@ -76,38 +86,50 @@ export default {
       }
     }
   },
+  created () {
+    const user = this.$store.state.user
+    this.originUser = { ...user }
+    Object.keys(this.user).forEach(key => {
+      this.user[key] = user[key]
+    })
+  },
   computed: {
     userInfo () {
-      let user = this.$store.state.user
-      Object.keys(this.user).forEach(key => {
-        this.user[key] = user[key]
+      return this.$store.state.user
+    },
+    updatedField () {
+      return ['email', 'qq'].filter(key => {
+        return this.user[key] !== this.originUser[key]
       })
-      return user
     }
   },
   methods: {
     submitForm () {
-      this.$refs['user'].validate((valid) => {
-        if (valid) {
-          this.$store.dispatch('updateUser', this.user).then(
-            (data) => {
-              this.$refs['user'].clearValidate()
-              this.$message({
-                showClose: true,
-                message: this.$t('message.save_success'),
-                type: 'success'
-              })
-            },
-            errorRes => {
-              this.$message({
-                showClose: true,
-                message: msgFormatter(errorRes.response.data.error),
-                type: 'error'
-              })
-            }
-          )
-        }
+      let isValid = true
+      this.updatedField.forEach(field => {
+        this.$refs['user'].validateField(field, (errorMsg) => {
+          if (errorMsg) {
+            isValid = false
+          }
+        })
       })
+      if (isValid) {
+        this.originUser = { ...this.user }
+        this.$store.dispatch('updateUser', this.user).then(
+          (data) => {
+            this.$refs['user'].clearValidate()
+            this.updateStatus = 1
+            this.message = this.$t('message.save_success')
+            setTimeout(() => {
+              this.updateStatus = 0
+            }, 3000)
+          },
+          errorMsg => {
+            this.updateStatus = -1
+            this.message = msgFormatter(errorMsg)
+          }
+        )
+      }
     }
   }
 }
