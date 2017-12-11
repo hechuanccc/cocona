@@ -49,9 +49,7 @@ export default {
   },
   data () {
     const qqValidator = (rule, value, callback) => {
-      if (!value) {
-        this.$refs.qq.clearValidate()
-      } else if (!validateQQ(value)) {
+      if (!validateQQ(value)) {
         callback(new Error(this.$t('validate.qq_validate')))
       } else {
         callback()
@@ -66,6 +64,9 @@ export default {
         wechat: '',
         birthday: ''
       },
+      originUser: {
+
+      },
       rules: {
         email: [
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'change' }
@@ -76,38 +77,55 @@ export default {
       }
     }
   },
+  created () {
+    const user = this.$store.state.user
+    this.originUser = { ...user }
+    Object.keys(this.user).forEach(key => {
+      this.user[key] = user[key]
+    })
+  },
   computed: {
     userInfo () {
-      let user = this.$store.state.user
-      Object.keys(this.user).forEach(key => {
-        this.user[key] = user[key]
+      return this.$store.state.user
+    },
+    updatedField () {
+      return ['email', 'qq'].filter(key => {
+        return this.user[key] !== this.originUser[key]
       })
-      return user
     }
   },
   methods: {
     submitForm () {
-      this.$refs['user'].validate((valid) => {
-        if (valid) {
-          this.$store.dispatch('updateUser', this.user).then(
-            (data) => {
-              this.$refs['user'].clearValidate()
-              this.$message({
-                showClose: true,
-                message: this.$t('message.save_success'),
-                type: 'success'
-              })
-            },
-            errorRes => {
-              this.$message({
-                showClose: true,
-                message: msgFormatter(errorRes.response.data.error),
-                type: 'error'
-              })
+      let isValid = true
+      this.updatedField.forEach(field => {
+        if (this.user[field]) {
+          this.$refs['user'].validateField(field, (errorMsg) => {
+            if (errorMsg) {
+              isValid = false
             }
-          )
+          })
         }
       })
+      if (isValid) {
+        this.originUser = { ...this.user }
+        this.$store.dispatch('updateUser', this.user).then(
+          (data) => {
+            this.$refs['user'].clearValidate()
+            this.$message({
+              showClose: true,
+              message: this.$t('message.save_success'),
+              type: 'success'
+            })
+          },
+          errorMsg => {
+            this.$message({
+              showClose: true,
+              message: msgFormatter(errorMsg),
+              type: 'error'
+            })
+          }
+        )
+      }
     }
   }
 }

@@ -56,7 +56,13 @@ export function fetchUser () {
   return axios.get(urls.user).then(res => res.data.data)
 }
 export function updateUser (user) {
-  return axios.put(`${urls.user}${user.id}/`, user).then(res => res.data)
+  return axios.put(`${urls.user}${user.id}/`, user).then(res => {
+    if (res.data.code === 2000) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.msg)
+    }
+  })
 }
 
 export function updatePassword (password) {

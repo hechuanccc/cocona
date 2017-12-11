@@ -111,9 +111,9 @@ export default {
             setTimeout(() => {
               this.updateStatus = 0
             }, 3000)
-          }, errorRes => {
+          }, errorMsg => {
             this.updateStatus = -1
-            this.message = msgFormatter(errorRes.response.data.error)
+            this.message = msgFormatter(errorMsg)
           })
         }
       })
