@@ -53,7 +53,6 @@
 import { fetchCaptcha, checkUserName, register } from '../../api'
 import { validateUserName, validatePassword, validatePhone } from '../../validate'
 import { msgFormatter } from '../../utils'
-import api from '../../api/urls'
 export default {
   name: 'register',
   data () {
@@ -192,8 +191,8 @@ export default {
     },
     fetchCaptcha () {
       fetchCaptcha().then(res => {
-        this.captcha_src = api.domain + res.data.captcha_src
-        this.user.verification_code_0 = res.data.captcha_val
+        this.captcha_src = res.captcha_src
+        this.user.verification_code_0 = res.captcha_val
       })
     }
   }

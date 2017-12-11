@@ -45,6 +45,16 @@ const token = Vue.cookie.get('access_token')
 if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
+axios.interceptors.response.use(res => {
+  let responseData = res.data
+  if (responseData.code === 2000) {
+    return responseData.data
+  } else {
+    return Promise.reject(responseData.msg)
+  }
+}, error => {
+  return Promise.reject(error)
+})
 
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
