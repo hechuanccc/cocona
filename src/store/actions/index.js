@@ -70,7 +70,7 @@ export default {
   updateUser: ({ commit, state }, updateData) => {
     return updateUser(updateData).then(data => {
       commit(types.SET_USER, {
-        user: data
+        user: data.data
       })
     })
   },
