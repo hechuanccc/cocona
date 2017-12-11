@@ -66,11 +66,23 @@ export function updateUser (user) {
 }
 
 export function updatePassword (password) {
-  return axios.post(urls.password, qs.stringify(password)).then(res => res.data)
+  return axios.post(urls.password, qs.stringify(password)).then(res => {
+    if (res.data.code === 2000) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.msg)
+    }
+  })
 }
 
 export function updateWithdrawPassword (withdrawPassword) {
-  return axios.post(urls.withdraw_password, qs.stringify(withdrawPassword)).then(res => res.data)
+  return axios.post(urls.withdraw_password, qs.stringify(withdrawPassword)).then(res => {
+    if (res.data.code === 2000) {
+      return res.data.data
+    } else {
+      return Promise.reject(res.data.msg)
+    }
+  })
 }
 
 export function fetchCategories (gameId) {

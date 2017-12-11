@@ -1,6 +1,13 @@
 <template>
-<el-row >
-  <el-col :span="10" :offset="7">
+<el-row class="m-t-lg">
+  <el-col :offset="7" :span="10">
+    <el-alert
+      v-if="updateStatus !== 0"
+      :title="message"
+      :type="updateStatus === 1 ? 'success' : 'error'"
+      :closable="false"
+      center>
+    </el-alert>
     <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
       <el-form-item :label="$t('user.username')">
         {{userInfo.username}}
@@ -30,7 +37,7 @@
         <el-input class="input-width" v-model="user.wechat"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm">{{$t('action.save')}}</el-button>
+        <el-button type="primary" :disabled="updateStatus===1" @click="submitForm">{{$t('action.save')}}</el-button>
       </el-form-item>
     </el-form>
   </el-col>
@@ -72,7 +79,9 @@ export default {
         qq: [
           { validator: qqValidator, trigger: 'change' }
         ]
-      }
+      },
+      updateStatus: 0,
+      message: ''
     }
   },
   created () {
@@ -109,18 +118,15 @@ export default {
         this.$store.dispatch('updateUser', this.user).then(
           (data) => {
             this.$refs['user'].clearValidate()
-            this.$message({
-              showClose: true,
-              message: this.$t('message.save_success'),
-              type: 'success'
-            })
+            this.updateStatus = 1
+            this.message = this.$t('message.save_success')
+            setTimeout(() => {
+              this.updateStatus = 0
+            }, 3000)
           },
           errorMsg => {
-            this.$message({
-              showClose: true,
-              message: msgFormatter(errorMsg),
-              type: 'error'
-            })
+            this.updateStatus = -1
+            this.message = msgFormatter(errorMsg)
           }
         )
       }
