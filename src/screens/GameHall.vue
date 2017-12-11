@@ -14,7 +14,7 @@
             </li>
             <li>
               <span>未结余额</span>
-              <span>{{user.unsettled | currency('￥')}}</span>
+              <span>{{user.unsettled||0 | currency('￥')}}</span>
             </li>
             <li class="center">
               <el-button type="primary" plain @click="linkTo('/my/primary_info')">我的账号</el-button>

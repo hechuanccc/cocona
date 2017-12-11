@@ -113,7 +113,7 @@ export default {
       this.$refs['withdrawInfo'].validate((valid) => {
         if (valid) {
           withdraw(this.withdrawInfo).then(data => {
-            this.updated = 1
+            this.updateStatus = 1
             this.message = '取款信息已提交'
             this.withdrawInfo.withdraw_password = ''
             setTimeout(() => {

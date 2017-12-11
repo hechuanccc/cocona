@@ -7,7 +7,7 @@
     </el-alert>
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
-      <el-form-item required :label="$t('user.amount')" prop="amount">
+      <el-form-item :label="$t('user.amount')" prop="amount">
         <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount"></el-input>
         <input name="payee" type="hidden" :value="payment.payee_id" />
         <input name="payment_type" type="hidden" :value="payment.payway" />
@@ -67,7 +67,7 @@ export default {
       },
       rule: {
         amount: [
-          { type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
+          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
           { validator: limitPass, trigger: 'blur' }
         ]
       },
