@@ -14,7 +14,9 @@ body {
   display: table;
   clear: both;
 }
-
+.blue {
+  color: $primary;
+}
 .red {
   color: $red;
 }

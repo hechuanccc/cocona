@@ -1,18 +1,55 @@
 <template>
   <div :class="['result-num', game]">
     <span :class="getResultClass"
-      v-text="numberResults+' '">
+      v-text="result.num +' '">
     </span>
-    <b v-if="number && result.zodiac" class="zodiac">{{result.zodiac}}</b>
+    <b v-if="displayType === 'number' && result.zodiac" class="zodiac">{{result.zodiac}}</b>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    displayType: {
+      type: String,
+      default: 'number'
+    },
+    result: {
+      type: Object
+    },
+    game: {
+      type: String
+    }
+  },
+  computed: {
+    getResultClass () {
+      switch (this.displayType) {
+        case 'number':
+          return [`${this.game}-${this.result.num}`]
+        case 'oddEven':
+          return this.result.oddEven
+        case 'thanSize':
+          return this.result.thanSize
+        case 'tailThanSize':
+          return this.result.tailThanSize
+        case 'ballOfSumOddEven':
+          return this.result.ballOfSumOddEven
+        case 'ballOfSumThanSize':
+          return this.result.ballOfSumThanSize
+      }
+    }
+  }
+}
+</script>
+
 <style lang="scss" scoped>
-@mixin number($w: 36px,$h: 36px) {
+@mixin number($w: 37px,$h: 37px) {
+  background: url('../../assets/bjpknum2.png') no-repeat;
   display: inline-block;
   width: $w;
   height: $h;
   text-indent: -9999px;
-  margin: 0 5px;
+  margin: 2px 5px;
 }
 .result-num {
   display: inline-block;
@@ -22,24 +59,24 @@
   display: block;
 }
 .odd {
-  background: url('../../assets/bjpknum2.png') no-repeat -138px -327px;
   @include number
+  background-position: -150px -5px;
 }
 .even {
-  background: url('../../assets/bjpknum2.png') no-repeat -90px -327px;
   @include number
+  background-position: -102px -5px;
 }
 .equal {
-  background: url('../../assets/bjpknum2.png') no-repeat -318px -326px;
   @include number
+  background-position: -198px -5px;
 }
 .bigger {
-  background: url('../../assets/bjpknum2.png') no-repeat -46px -327px;
   @include number
+  background-position: -12px -5px;
 }
 .smaller {
-  background: url('../../assets/bjpknum2.png') no-repeat 0px -327px;
   @include number
+  background-position: -58px -5px;
 }
 
 %hklball{
@@ -247,77 +284,3 @@ $transformergames: mlaft, bcr, jspk10;
 @include gd11x5-num;
 
 </style>
-<script>
-export default {
-  props: {
-    display: {
-      type: String,
-      default: 'number'
-    },
-    number: {
-      type: Boolean
-    },
-    thanSize: {
-      type: Boolean
-    },
-    tailThanSize: {
-      type: Boolean
-    },
-    oddEven: {
-      type: Boolean
-    },
-    ballOfSumOddEven: {
-      type: Boolean
-    },
-    ballOfSumThanSize: {
-      type: Boolean
-    },
-    result: {
-      type: Object
-    },
-    game: {
-      type: String
-    }
-  },
-  computed: {
-    numberResults () {
-      return this.result.num
-    },
-    thanSizeResults () {
-      return this.result.thanSize
-    },
-    oddEvenResults () {
-      return this.result.oddEven
-    },
-    tailThanSizeResults () {
-      return this.result.tailThanSize
-    },
-    ballOfSumOddEvenResults () {
-      return this.result.ballOfSumOddEven
-    },
-    ballOfSumThanSizeResults () {
-      return this.result.ballOfSumThanSize
-    },
-    getResultClass () {
-      if (this.number) {
-        return [`${this.game}-${this.numberResults}`]
-      }
-      if (this.oddEven) {
-        return this.oddEvenResults
-      }
-      if (this.thanSize) {
-        return this.thanSizeResults
-      }
-      if (this.tailThanSize) {
-        return this.tailThanSizeResults
-      }
-      if (this.ballOfSumOddEven) {
-        return this.ballOfSumOddEvenResults
-      }
-      if (this.ballOfSumThanSize) {
-        return this.ballOfSumThanSizeResults
-      }
-    }
-  }
-}
-</script>

@@ -30,15 +30,15 @@
                 <el-input
                   type="number"
                   v-model.number="inputPeriod"
-                  placeholder="輸入期數"
+                  placeholder="输入期数"
                 >
                 </el-input>
               </el-col>
               <el-col :span="4" :offset="10">
-                <el-button type="primary" @click="getHistory(currentGame, nowDate)">刷新數據</el-button>
+                <el-button type="primary" @click="getHistory(currentGame, nowDate)">刷新数据</el-button>
               </el-col>
             </el-row>
-            <div v-if="!showSchedules.length">暫無資料...</div>
+            <div v-if="!showSchedules.length">暂无资料</div>
             <table v-else
               class="history-table"
               :key="'table' + gameTable.code">
@@ -92,16 +92,10 @@
                     'margin': '0 auto'
                     }">
                     <ResultNums
-                      v-for= "result in classifiyResults (schedule)"
+                      v-for="result in classifiyResults (schedule)"
                       :key="result.num"
                       :result="result"
-                      :number = "nowDisplay === 'number'"
-                      :thanSize = "nowDisplay === 'thanSize'"
-                      :tailThanSize = "nowDisplay === 'tailThanSize'"
-                      :oddEven = "nowDisplay === 'oddEven'"
-                      :ballOfSumOddEven = "nowDisplay === 'ballOfSumOddEven'"
-                      :ballOfSumThanSize = "nowDisplay === 'ballOfSumThanSize'"
-                      :display= "nowDisplay"
+                      :displayType="nowDisplay"
                       :game="currentGame">
                     </ResultNums>
                   </div>
@@ -122,44 +116,6 @@
   </el-row>
 </template>
 
-<style lang="scss" scoped>
-@import "../../style/vars.scss";
-.blue {
-  color: $primary;
-}
-.bigger, .even, .dragon {
-  color: $red
-}
-.game-nav {
-  text-decoration: none;
-}
-.history-container {
-  background-color: white;
-  height: 100%;
-  min-height: 100vh;
-}
-.schedule-container {
-  text-align: center
-}
-
-.history-table {
-  width: 100%;
-  background: white;
-  margin-bottom: 10px;
-  td,
-  th {
-    border: $cell-border;
-    height: $cell-height;
-    line-height: $cell-height;
-    vertical-align: middle;
-  }
-  .group-name {
-    line-height: $cell-height;
-    text-align: center;
-    font-weight: bold;
-  }
-}
-</style>
 <script>
 import { fetchGames, fetchHistory } from '../../api'
 import ResultNums from './ResultNums'
@@ -172,26 +128,26 @@ export default {
     const TransformerTable =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '其數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
           displayName: '',
           buttons: [
-          { displayName: '顯示號碼', show: 'number' },
-          { displayName: '顯示大小', show: 'thanSize' },
-          { displayName: '顯示單雙', show: 'oddEven' }
+          { displayName: '显示号码', show: 'number' },
+          { displayName: '显示大小', show: 'thanSize' },
+          { displayName: '显示单双', show: 'oddEven' }
           ]
         },
         {
-          displayName: '冠亞和',
+          displayName: '冠亚和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_1st_2st'
             },
             {
@@ -199,13 +155,13 @@ export default {
               key: 'sum_of_1st_2st_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_1st_2st_odd_even'
             }
           ]
         },
         {
-          displayName: '1-5龍虎',
+          displayName: '1-5龙虎',
           subHeads: [
             {
               displayName: '',
@@ -230,35 +186,35 @@ export default {
     const sscTable =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
           displayName: '',
           buttons: [
             {
-              displayName: '顯示號碼',
+              displayName: '显示号码',
               show: 'number'
             },
             {
-              displayName: '顯示大小',
+              displayName: '显示大小',
               show: 'thanSize'
             },
             {
-              displayName: '顯示單雙',
+              displayName: '显示单双',
               show: 'oddEven'
             }
           ]
         },
         {
-          displayName: '總和',
+          displayName: '总和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
@@ -266,13 +222,13 @@ export default {
               key: 'sum_of_ball_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             }
           ]
         },
         {
-          displayName: '龍虎',
+          displayName: '龙虎',
           key: 'dragon_tiger_1_5'
         },
         {
@@ -284,7 +240,7 @@ export default {
           key: 'weird_chinese_dice_rules_2_4'
         },
         {
-          displayName: '後三',
+          displayName: '后三',
           key: 'weird_chinese_dice_rules_3_5'
         }
       ]
@@ -292,18 +248,18 @@ export default {
     const cqlfTable =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
           displayName: '',
           buttons: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               show: 'number'
             },
             {
@@ -311,7 +267,7 @@ export default {
               show: 'thanSize'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               show: 'oddEven'
             },
             {
@@ -319,16 +275,16 @@ export default {
               show: 'tailThanSize'
             },
             {
-              displayName: '合單雙',
+              displayName: '合单双',
               show: 'ballOfSumOddEven'
             }
           ]
         },
         {
-          displayName: '總和',
+          displayName: '总和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
@@ -336,7 +292,7 @@ export default {
               key: 'sum_of_ball_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             },
             {
@@ -346,7 +302,7 @@ export default {
           ]
         },
         {
-          displayName: '龍虎',
+          displayName: '龙虎',
           subHeads: [
             {
               displayName: '',
@@ -371,21 +327,21 @@ export default {
     const pcddTable =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
-          displayName: '開獎號碼',
+          displayName: '开奖号码',
           key: 'result_str'},
         {
-          displayName: '總和',
+          displayName: '总和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
@@ -393,7 +349,7 @@ export default {
               key: 'sum_of_ball_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             },
             {
@@ -401,7 +357,7 @@ export default {
               key: 'sum_of_ball_color_wavelength'
             },
             {
-              displayName: '極值',
+              displayName: '极值',
               key: 'sum_of_ball_great_tiny'
             }
           ]
@@ -411,21 +367,21 @@ export default {
     const jsk3Table =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
-          displayName: '開獎號碼',
+          displayName: '开奖号码',
           key: 'result_str'},
         {
-          displayName: '總和',
+          displayName: '总和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
@@ -433,7 +389,7 @@ export default {
               key: 'sum_of_ball_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             }
           ]
@@ -443,18 +399,18 @@ export default {
     const gd11x5Table =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
           displayName: '',
           buttons: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               show: 'number'
             },
             {
@@ -462,16 +418,16 @@ export default {
               show: 'thanSize'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               show: 'oddEven'
             }
           ]
         },
         {
-          displayName: '總和',
+          displayName: '总和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
@@ -479,7 +435,7 @@ export default {
               key: 'sum_of_ball_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             },
             {
@@ -489,7 +445,7 @@ export default {
           ]
         },
         {
-          displayName: '龍虎',
+          displayName: '龙虎',
           KEY: 'dragon_tiger_1_5'
         }
       ]
@@ -497,21 +453,21 @@ export default {
     const bjkl8Table =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
-          displayName: '開獎號碼',
+          displayName: '开奖号码',
           key: 'result_str'},
         {
-          displayName: '總和',
+          displayName: '开奖',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
@@ -519,7 +475,7 @@ export default {
               key: 'sum_of_ball_than_size'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             },
             {
@@ -529,14 +485,14 @@ export default {
           ]
         },
         {
-          displayName: '比數量',
+          displayName: '比数量',
           subHeads: [
             {
-              displayName: '單雙比',
+              displayName: '单双比',
               key: 'balls_odd_even_cp'
             },
             {
-              displayName: '前後比',
+              displayName: '前后比',
               key: 'balls_front_rear_count_cp'
             }
           ]
@@ -546,18 +502,18 @@ export default {
     const hklTable =
       [
         {
-          displayName: '時間',
+          displayName: '时间',
           key: 'schedule_result'
         },
         {
-          displayName: '期數',
+          displayName: '期数',
           key: 'issue_number'
         },
         {
           displayName: '',
           buttons: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               show: 'number'
             },
             {
@@ -565,7 +521,7 @@ export default {
               show: 'thanSize'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               show: 'oddEven'
             },
             {
@@ -573,7 +529,7 @@ export default {
               show: 'ballOfSumThanSize'
             },
             {
-              displayName: '合單雙',
+              displayName: '合单双',
               show: 'ballOfSumOddEven'
             },
             {
@@ -583,14 +539,14 @@ export default {
           ]
         },
         {
-          displayName: '總和',
+          displayName: '总和',
           subHeads: [
             {
-              displayName: '號碼',
+              displayName: '号码',
               key: 'sum_of_ball'
             },
             {
-              displayName: '單雙',
+              displayName: '单双',
               key: 'sum_of_ball_odd_even'
             },
             {
@@ -686,7 +642,7 @@ export default {
     resultFilter: function (val) {
       switch (val) {
         case 'dragon':
-          return '龍'
+          return '龙'
         case 'tiger':
           return '虎'
         case 'bigger':
@@ -694,31 +650,31 @@ export default {
         case 'smaller':
           return '小'
         case 'great':
-          return '極大'
+          return '极大'
         case 'tiny':
-          return '極小'
+          return '极小'
         case 'outOfDefinition':
-          return '無極值'
+          return '无极值'
         case 'odd':
-          return '單'
+          return '单'
         case 'even':
-          return '雙'
+          return '双'
         case 'straight':
-          return '順子'
+          return '顺子'
         case 'half_straight':
-          return '半順'
+          return '半顺'
         case 'misc_six':
-          return '雜六'
+          return '杂六'
         case 'pair':
-          return '對子'
+          return '对子'
         case 'leopard':
           return '豹子'
         case 'blue':
-          return '藍波'
+          return '蓝波'
         case 'red':
-          return '紅波'
+          return '红波'
         case 'green':
-          return '綠波'
+          return '绿波'
         case 'equal':
           return '和'
         case 'gold':
@@ -734,11 +690,11 @@ export default {
         case 'front_part_more':
           return '前多'
         case 'rear_part_more':
-          return '後多'
+          return '后多'
         case 'odd_more':
-          return '單多'
+          return '单多'
         case 'even_more':
-          return '雙多'
+          return '双多'
         default:
           return val
       }
@@ -831,3 +787,40 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import "../../style/vars.scss";
+
+.bigger, .even, .dragon {
+  color: $red
+}
+.game-nav {
+  text-decoration: none;
+}
+.history-container {
+  background-color: white;
+  height: 100%;
+  min-height: 100vh;
+}
+.schedule-container {
+  text-align: center
+}
+
+.history-table {
+  width: 100%;
+  background: white;
+  margin-bottom: 10px;
+  td,
+  th {
+    border: $cell-border;
+    height: $cell-height;
+    line-height: $cell-height;
+    vertical-align: middle;
+  }
+  .group-name {
+    line-height: $cell-height;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+</style>
