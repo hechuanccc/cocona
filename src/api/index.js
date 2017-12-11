@@ -144,3 +144,7 @@ export function readMessage (ids) {
     { ids: ids },
     { 'Content-Type': 'application/json' })
 }
+
+export function fetchHistory (gameCode, date) {
+  return axios.get(`${urls.gamehistory}?game_code=${gameCode}&date=${date}`).then(res => res.data.data)
+}

@@ -89,7 +89,6 @@ export default {
     fetchOngoingBet (gameData) {
       fetchBet(gameData)
         .then(res => {
-          debugger
           this.betrecords = res
         })
     },
