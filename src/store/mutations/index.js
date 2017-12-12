@@ -13,6 +13,8 @@ export default {
     state.user = {
       logined: false
     }
+    Vue.cookie.delete('access_token')
+    Vue.cookie.delete('refresh_token')
   },
   [types.SHOW_LOGIN_DIALOG]: (state) => {
     state.loginDialogVisible = true
