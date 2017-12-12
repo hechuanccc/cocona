@@ -56,7 +56,7 @@ export default {
           }
         })
       }
-      return Promise.resolve(res)
+      return Promise.resolve(res[0])
     }, error => {
       commit(types.SET_USER, {
         user: {
@@ -97,5 +97,11 @@ export default {
   },
   clearTokenPromise: ({ commit }) => {
     commit(types.CLEAR_TOKEN_PROMISE)
+  },
+  openBetRecordDialog: ({ commit, state }) => {
+    commit(types.OPEN_BETRECORD_DIALOG)
+  },
+  closeBetRecordDialog: ({ commit, state }) => {
+    commit(types.CLOSE_BETRECORD_DIALOG)
   }
 }

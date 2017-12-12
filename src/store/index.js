@@ -13,6 +13,7 @@ export function createStore () {
         logined: ''
       },
       loginDialogVisible: false,
+      betRecordDialogVisible: false,
       games: [],
       categories: [],
       tokenPromise: '',
