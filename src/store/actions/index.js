@@ -64,7 +64,6 @@ export default {
         })
         return Promise.reject(res)
       }
-      return Promise.resolve(res[0])
     }, error => {
       commit(types.SET_USER, {
         user: {
