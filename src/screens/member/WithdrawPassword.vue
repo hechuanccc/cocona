@@ -89,11 +89,13 @@ export default {
           updateWithdrawPassword(this.withdraw_password).then(data => {
             this.updateStatus = 1
             this.message = this.$t('message.save_success')
+            this.$refs.withdraw_password.resetFields()
             setTimeout(() => {
               this.updateStatus = 0
             }, 3000)
           }, errorMsg => {
             this.updateStatus = -1
+            this.$refs.withdraw_password.resetFields()
             this.message = msgFormatter(errorMsg)
           })
         }

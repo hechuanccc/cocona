@@ -8,7 +8,7 @@
       center>
     </el-alert>
     <el-col :offset="8" :span="16">
-      <el-form :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
+      <el-form  :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
         <el-form-item :label="$t('user.bank')" prop="bank">
           <el-select :disabled="!!user.bank" class="input-width" v-model="bankInfo.bank" placeholder="请选择">
             <el-option
@@ -101,6 +101,7 @@ export default {
     if (bankInfo) {
       this.setBankInfo(bankInfo)
     }
+    console.log()
   },
   methods: {
     submitBankInfo () {
@@ -116,6 +117,7 @@ export default {
               user: data
             })
             this.updated = 1
+            this.$refs.bankInfo.clearValidate()
             this.message = '银行信息已更新'
             setTimeout(() => {
               this.updateStatus = 0
