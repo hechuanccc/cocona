@@ -50,6 +50,10 @@ axios.interceptors.response.use(res => {
   if (responseData.code === 2000) {
     return responseData.data
   } else {
+    if (responseData.code === 9007) {
+      router.push('/')
+      store.commit('SHOW_LOGIN_DIALOG')
+    }
     return Promise.reject(responseData.msg)
   }
 }, error => {
