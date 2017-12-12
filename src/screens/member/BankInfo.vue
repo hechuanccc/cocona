@@ -8,7 +8,7 @@
       center>
     </el-alert>
     <el-col :offset="8" :span="16">
-      <el-form  :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
+      <el-form :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
         <el-form-item :label="$t('user.bank')" prop="bank">
           <el-select :disabled="!!user.bank" class="input-width" v-model="bankInfo.bank" placeholder="请选择">
             <el-option
