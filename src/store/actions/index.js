@@ -55,8 +55,10 @@ export default {
             logined: true
           }
         })
+        return Promise.resolve(res[0])
+      } else {
+        return Promise.reject(res[0])
       }
-      return Promise.resolve(res[0])
     }, error => {
       commit(types.SET_USER, {
         user: {
