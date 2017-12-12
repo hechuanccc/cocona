@@ -27,7 +27,7 @@ import Message from '@/screens/member/Message'
 import Promotions from '@/screens/promotion/Promotions'
 import Faq from '@/screens/faq/FaqsHome'
 import Gameintro from '@/screens/gameintro/Gameintros'
-import GameHistory from '@/screens/gameintro/GameHistory'
+import GameHistory from '@/screens/gamehistory/GameHistory'
 
 Vue.use(Router)
 
