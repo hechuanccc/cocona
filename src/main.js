@@ -56,6 +56,18 @@ axios.interceptors.response.use(res => {
   return Promise.reject(error)
 })
 
+const toHomeAndLogin = function (router) {
+  router.push({
+    path: '/',
+    query: {
+      login: 1,
+      next: router.path
+    }
+  })
+
+  store.commit('SHOW_LOGIN_DIALOG')
+}
+
 router.beforeEach((to, from, next) => {
   // fisrMacthed might be the top-level parent route of others
   const firstMatched = to.matched.length ? to.matched[0] : null
@@ -65,14 +77,16 @@ router.beforeEach((to, from, next) => {
     } else {
       store.dispatch('fetchUser')
         .then(res => {
+          // got user info
           if (res.account_type === 0 && to.matched[0].path === '/account') {
-            store.commit('SHOW_LOGIN_DIALOG')
+            toHomeAndLogin(router)
           } else {
             next()
           }
         })
         .catch(error => {
-          store.commit('SHOW_LOGIN_DIALOG')
+          // can't get user info
+          toHomeAndLogin(router)
           return Promise.resolve(error)
         })
     }
@@ -86,13 +100,7 @@ sync(store, router)
 Vue.mixin({
   methods: {
     performLogin () {
-      this.$router.push({
-        path: '/',
-        query: {
-          login: 1,
-          next: this.$route.path
-        }
-      })
+      toHomeAndLogin(this.$router)
     }
   }
 })
