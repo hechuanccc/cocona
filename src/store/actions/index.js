@@ -48,23 +48,17 @@ export default {
   },
   fetchUser: ({ commit, state }) => {
     return fetchUser().then(res => {
-      if (res) {
+      if (res.length > 0) {
         commit(types.SET_USER, {
           user: {
             ...res[0],
             logined: true
           }
         })
-        return Promise.resolve(res)
+        return Promise.resolve(res[0])
       } else {
-        commit(types.SET_USER, {
-          user: {
-            logined: false
-          }
-        })
-        return Promise.reject(res)
+        return Promise.reject(res[0])
       }
-      return Promise.resolve(res[0])
     }, error => {
       commit(types.SET_USER, {
         user: {
