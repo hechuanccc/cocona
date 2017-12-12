@@ -96,7 +96,7 @@ export default {
           { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur,change' }
         ],
         withdraw_password: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          { required: true, message: this.$t('validate.required'), trigger: 'blur,change' }
         ]
       },
       displayMode: true,
@@ -116,6 +116,7 @@ export default {
             this.updateStatus = 1
             this.message = '取款信息已提交'
             this.withdrawInfo.withdraw_password = ''
+            this.$refs.withdrawInfo.resetFields()
             setTimeout(() => {
               this.updateStatus = 0
             }, 3000)
