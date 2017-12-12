@@ -98,6 +98,7 @@ export default {
       register({ account_type: 0 }).then(user => {
         return this.$store.dispatch('login', { user })
       }).then(result => {
+        this.$store.commit('CLOSE_LOGINDIALOG')
         this.$router.push({ name: 'Game' })
       }, errorMsg => {
         this.errorMsg = msgFormatter(errorMsg)

@@ -6,7 +6,7 @@
     <div class="header-nav container">
       <Logo/>
       <GameResult v-if="$route.params.gameId && isGamePage" :gameid="$route.params.gameId"/>
-      <NavMenu :menus="isUserPage ? userMenus : menus" />
+      <NavMenu :menus="isUserPage ? showUserMenus : menus" />
     </div>
   </div>
 </template>
@@ -66,6 +66,14 @@ export default {
       let path = this.$route.path.split('/')
       if (path[1] === 'game') {
         return true
+      }
+    },
+    showUserMenus () {
+      let accountType = this.$store.state.user.account_type
+      if (accountType === 0) {
+        return this.userMenus.filter(page => page.path !== '/account')
+      } else {
+        return this.userMenus
       }
     }
   }
