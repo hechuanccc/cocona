@@ -82,6 +82,11 @@ import { fetchBetHistory } from '../../api'
 import { msgFormatter } from '../../utils'
 export default {
   name: 'BetRecord',
+  props: {
+    lazyFetch: {
+      type: Boolean
+    }
+  },
   data () {
     return {
       betRecords: [],
@@ -95,28 +100,9 @@ export default {
     }
   },
   created () {
-    this.loading = true
-    fetchBetHistory()
-      .then(records => {
-        this.betRecords = records
-        const gameNamesSet = new Set()
-        this.betRecords.forEach(record => {
-          const gameName = record.game.display_name
-          if (!gameNamesSet.has(gameName)) {
-            gameNamesSet.add(gameName)
-            this.gameNames.push(gameName)
-          }
-          record.created_at = this.$moment(record.created_at).format('YYYY-MM-DD')
-        })
-        this.loading = false
-      }, errorMsg => {
-        this.$message({
-          showClose: true,
-          message: msgFormatter(errorMsg),
-          type: 'error'
-        })
-        this.loading = false
-      })
+    if (!this.lazyFetch) {
+      this.fetchBetHistory()
+    }
   },
   computed: {
     filtRecords () {
@@ -137,6 +123,13 @@ export default {
       return this.filtRecords.slice(groupIdx, groupIdx + this.pageSize)
     }
   },
+  watch: {
+    'lazyFetch': function (lazyFetch) {
+      if (!lazyFetch) {
+        this.fetchBetHistory()
+      }
+    }
+  },
   methods: {
     profitColor (amount) {
       if (amount > 0) {
@@ -146,6 +139,30 @@ export default {
       } else {
         return 'unsettle'
       }
+    },
+    fetchBetHistory () {
+      this.loading = true
+      fetchBetHistory()
+        .then(records => {
+          this.betRecords = records
+          const gameNamesSet = new Set()
+          this.betRecords.forEach(record => {
+            const gameName = record.game.display_name
+            if (!gameNamesSet.has(gameName)) {
+              gameNamesSet.add(gameName)
+              this.gameNames.push(gameName)
+            }
+            record.created_at = this.$moment(record.created_at).format('YYYY-MM-DD')
+          })
+          this.loading = false
+        }, errorMsg => {
+          this.$message({
+            showClose: true,
+            message: msgFormatter(errorMsg),
+            type: 'error'
+          })
+          this.loading = false
+        })
     }
   }
 }

@@ -56,7 +56,7 @@ export default {
           }
         })
       }
-      return Promise.resolve(res)
+      return Promise.resolve(res[0])
     }, error => {
       commit(types.SET_USER, {
         user: {

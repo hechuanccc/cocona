@@ -17,7 +17,7 @@
       width="1080px"
       @close="closeBetRecordDialog()"
       center>
-      <BetRecord/>
+      <BetRecord v-if="showBetRecordDialog" :lazyFetch="!showBetRecordDialog"/>
     </el-dialog>
   </div>
 </template>

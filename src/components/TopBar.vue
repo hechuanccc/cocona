@@ -25,7 +25,7 @@
         <a class="link" @click="openBetRecordDialog">我的注单</a>
       </li>
     </ul>
-    <ul v-else class="account-links" >
+    <ul v-else-if="user.account_type === 1" class="account-links" >
       <li>
         欢迎, {{user.username}}
       </li>
