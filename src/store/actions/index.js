@@ -97,5 +97,10 @@ export default {
   },
   clearTokenPromise: ({ commit }) => {
     commit(types.CLEAR_TOKEN_PROMISE)
+  },
+  clearCookie: ({ commit, state }) => {
+    Vue.cookie.delete('access_token')
+    Vue.cookie.delete('refresh_token')
+    commit(types.RESET_USER)
   }
 }
