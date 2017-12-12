@@ -101,7 +101,6 @@ export default {
     if (bankInfo) {
       this.setBankInfo(bankInfo)
     }
-    console.log()
   },
   methods: {
     submitBankInfo () {
