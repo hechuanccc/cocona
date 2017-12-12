@@ -355,13 +355,12 @@ export default {
         scheduleId: this.scheduleId
       })
     },
-    beforeClose (done) {
+    beforeClose () {
       if (this.submitting) {
         return
       }
       this.errors = ''
       this.submitted = false
-      return done()
     },
     placeOrder () {
       this.submitting = true

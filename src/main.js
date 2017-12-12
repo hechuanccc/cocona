@@ -65,7 +65,11 @@ router.beforeEach((to, from, next) => {
     } else {
       store.dispatch('fetchUser')
         .then(res => {
-          next()
+          if (res.account_type === 0 && to.matched[0].path === '/account') {
+            store.commit('SHOW_LOGIN_DIALOG')
+          } else {
+            next()
+          }
         })
         .catch(error => {
           store.commit('SHOW_LOGIN_DIALOG')
