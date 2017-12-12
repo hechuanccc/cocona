@@ -11,6 +11,14 @@
       center>
       <LoginPopup/>
     </el-dialog>
+    <el-dialog
+      :title="$t('user.betrecord')"
+      :visible="showBetRecordDialog"
+      width="1080px"
+      @close="closeBetRecordDialog()"
+      center>
+      <BetRecord/>
+    </el-dialog>
   </div>
 </template>
 
@@ -22,6 +30,7 @@ import './style/theme.scss'
 import Top from './components/Header'
 import Bottom from './components/Footer'
 import LoginPopup from './components/LoginPopup'
+import BetRecord from './screens/member/BetRecord'
 import { getToken } from './api'
 import axios from 'axios'
 import { setIndicator } from './utils'
@@ -36,11 +45,15 @@ export default {
   components: {
     Top,
     Bottom,
-    LoginPopup
+    LoginPopup,
+    BetRecord
   },
   methods: {
     closeLoginDialog () {
       this.$store.commit('CLOSE_LOGINDIALOG')
+    },
+    closeBetRecordDialog () {
+      this.$store.dispatch('closeBetRecordDialog')
     },
     replaceToken () {
       let refreshToken = this.$cookie.get('refresh_token')
@@ -62,6 +75,9 @@ export default {
   computed: {
     showLoginDialog () {
       return this.$store.state.loginDialogVisible
+    },
+    showBetRecordDialog () {
+      return this.$store.state.betRecordDialogVisible
     }
   },
   created () {

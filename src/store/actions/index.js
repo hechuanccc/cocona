@@ -97,5 +97,11 @@ export default {
   },
   clearTokenPromise: ({ commit }) => {
     commit(types.CLEAR_TOKEN_PROMISE)
+  },
+  openBetRecordDialog: ({ commit, state }) => {
+    commit(types.OPEN_BETRECORD_DIALOG)
+  },
+  closeBetRecordDialog: ({ commit, state }) => {
+    commit(types.CLOSE_BETRECORD_DIALOG)
   }
 }

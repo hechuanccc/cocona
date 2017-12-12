@@ -14,9 +14,20 @@
         <a class="red link" @click="tryplay">{{$t('navMenu.try_play')}}</a>
       </li>
     </ul>
-    <ul v-else-if="user.logined" class="account-links" >
+    <ul v-else-if="user.account_type === 0" class="account-links" >
       <li>
-        欢迎, {{user.account_type?user.username:$t('user.visitor')}}
+        欢迎, {{$t('user.visitor')}}
+      </li>
+      <li>
+        <a class="link" @click="logout()">退出试玩</a>
+      </li>
+      <li>
+        <a class="link" @click="openBetRecordDialog">我的注单</a>
+      </li>
+    </ul>
+    <ul v-else class="account-links" >
+      <li>
+        欢迎, {{user.username}}
       </li>
       <li>
         <router-link to="/account/online_payment" class="link">立即存款</router-link>
@@ -93,6 +104,9 @@ export default {
           type: 'error'
         })
       })
+    },
+    openBetRecordDialog () {
+      this.$store.dispatch('openBetRecordDialog')
     }
   },
   created () {
