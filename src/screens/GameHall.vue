@@ -7,7 +7,7 @@
       <!-- user key props to force Vue to re-render router-view whenever route change -->
       <el-container>
         <el-aside width="220px">
-          <ul class="side-menu">
+          <ul v-if="user.account_type===0" class="side-menu">
             <li>
               <span>账户余额</span>
               <span class="balance">{{user.balance | currency('￥')}}</span>
@@ -17,11 +17,28 @@
               <span>{{user.unsettled||0 | currency('￥')}}</span>
             </li>
             <li class="center">
-              <el-button type="primary" plain @click="linkTo('/my/primary_info')">我的账号</el-button>
-              <el-button type="primary" plain @click="linkTo('/online_payment')">立即充值</el-button>
+              <el-button type="primary" plain @click="openBetRecordDialog">我的注单</el-button>
+              <el-button type="primary" plain>在线客服</el-button>
             </li>
             <li class="center">
-              <el-button type="primary" plain @click="linkTo('/finance/betrecord')">我的注单</el-button>
+              <el-button type="primary" class="register" @click="linkTo('/register')">立即注册</el-button>
+            </li>
+          </ul>
+          <ul v-else class="side-menu">
+            <li>
+              <span>账户余额</span>
+              <span class="balance">{{user.balance | currency('￥')}}</span>
+            </li>
+            <li>
+              <span>未结余额</span>
+              <span>{{user.unsettled||0 | currency('￥')}}</span>
+            </li>
+            <li class="center">
+              <el-button type="primary" plain @click="linkTo('/account/my/primary_info')">我的账号</el-button>
+              <el-button type="primary" plain @click="linkTo('/account/online_payment')">立即充值</el-button>
+            </li>
+            <li class="center">
+              <el-button type="primary" plain @click="linkTo('/account/finance/betrecord')">我的注单</el-button>
               <el-button type="primary" plain>在线客服</el-button>
             </li>
           </ul>
@@ -104,7 +121,10 @@ export default {
         })
     },
     linkTo (path) {
-      this.$router.push({ path: '/account' + path })
+      this.$router.push({ path: path })
+    },
+    openBetRecordDialog () {
+      this.$store.dispatch('openBetRecordDialog')
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -152,6 +172,9 @@ export default {
     &.center {
       margin-top: 10px;
       text-align: center;
+    }
+    .register {
+      width: 100%;
     }
   }
 }

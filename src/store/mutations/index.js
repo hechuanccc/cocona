@@ -20,6 +20,12 @@ export default {
   [types.CLOSE_LOGINDIALOG]: (state) => {
     state.loginDialogVisible = false
   },
+  [types.OPEN_BETRECORD_DIALOG]: (state) => {
+    state.betRecordDialogVisible = true
+  },
+  [types.CLOSE_BETRECORD_DIALOG]: (state) => {
+    state.betRecordDialogVisible = false
+  },
   [types.SET_GAMES]: (state, { games }) => {
     state.games = games
   },
