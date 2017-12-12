@@ -103,6 +103,9 @@ export default {
             this.message = this.$t('message.save_success')
             setTimeout(() => {
               this.updateStatus = 0
+              this.$store.commit('RESET_USER')
+              this.$router.push({name: 'Home'})
+              this.$store.commit('SHOW_LOGIN_DIALOG')
             }, 3000)
           }, errorMsg => {
             this.updateStatus = -1
