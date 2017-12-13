@@ -50,9 +50,18 @@ axios.interceptors.response.use(res => {
   if (responseData.code === 2000) {
     return responseData.data
   } else {
+    if (responseData.code === 9007) {
+      toHomeAndLogin(router)
+    }
     return Promise.reject(responseData.msg)
   }
-}, error => {
+}, (error) => {
+  Vue.prototype.$message({
+    showClose: true,
+    message: Vue.t('message.error'),
+    type: 'error'
+  })
+  toHomeAndLogin(router)
   return Promise.reject(error)
 })
 

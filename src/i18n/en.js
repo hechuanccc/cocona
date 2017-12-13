@@ -159,6 +159,7 @@ export default {
   },
   message: {
     save_success: 'Save Success',
-    submit_success: 'Submit Success'
+    submit_success: 'Submit Success',
+    error: 'An error occurred. Please contact support'
   }
 }
