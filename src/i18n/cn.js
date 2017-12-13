@@ -118,7 +118,9 @@ export default {
     bankcard: '银行卡',
     odd: '赔率',
     profit: '盈亏',
-    visitor: '游客'
+    visitor: '游客',
+    min_amount: '最小金额',
+    max_amount: '最大金额'
   },
   history: {
     draw_period: '期数',
@@ -151,7 +153,9 @@ export default {
     required: '该栏位必须输入',
     required_num: '该栏位必须输入数字',
     email_validate: 'email格式无效',
-    not_set_bank_info: '尚未设定银行信息'
+    not_set_bank_info: '尚未设定银行信息',
+    max_amount_validate: '必须小于最大充值金额',
+    min_amount_validate: '必须大于最小充值金额'
   },
   message: {
     save_success: '保存成功',

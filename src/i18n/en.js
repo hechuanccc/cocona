@@ -118,7 +118,9 @@ export default {
     bankcard: 'Bank Card',
     odd: 'Odds',
     profit: 'Profit',
-    visitor: 'Visitor'
+    visitor: 'Visitor',
+    min_amount: 'Min Amount',
+    max_amount: 'Max Amount'
   },
   history: {
     draw_period: 'Draw Period',
@@ -151,7 +153,9 @@ export default {
     required: 'This field is required',
     required_num: 'Number is required',
     email_validate: 'This email is invalid',
-    not_set_bank_info: 'Bank Info has not yet been setted'
+    not_set_bank_info: 'Bank Info has not yet been setted',
+    max_amount_validate: 'must lower than max amount',
+    min_amount_validate: 'must higher than min amount'
   },
   message: {
     save_success: 'Save Success',

@@ -34,10 +34,10 @@ export default {
   [types.SET_CATEGORIES]: (state, { categories }) => {
     state.categories = _.xorBy(state.categories, categories, 'id').filter(item => !!item)
   },
-  [types.SET_TOKEN_PROMISE]: (state, tokenPromise) => {
-    state.tokenPromise = tokenPromise
+  [types.START_LOADING]: (state, loading) => {
+    state.loading = true
   },
-  [types.CLEAR_TOKEN_PROMISE]: (state, tokenPromise) => {
-    state.tokenPromise = ''
+  [types.END_LOADING]: (state) => {
+    state.loading = false
   }
 }
