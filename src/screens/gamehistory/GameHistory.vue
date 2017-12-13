@@ -7,10 +7,10 @@
       </el-breadcrumb>
       <el-row class="history-container" v-loading="loading">
         <el-col :span="3">
-          <el-menu :default-active="0">
+          <el-menu default-active="0">
             <el-menu-item v-for="(game, index) in games"
               :key="game.id"
-              :index="index"
+              :index="index+''"
               @click="currentGame = game.code">
             <span slot="title">{{game.display_name}}</span>
             </el-menu-item>
