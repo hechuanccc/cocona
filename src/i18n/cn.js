@@ -155,6 +155,7 @@ export default {
   },
   message: {
     save_success: '保存成功',
-    submit_success: '提交成功'
+    submit_success: '提交成功',
+    error: '系统发生了错误, 请联系客服'
   }
 }
