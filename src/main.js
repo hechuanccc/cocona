@@ -51,8 +51,7 @@ axios.interceptors.response.use(res => {
     return responseData.data
   } else {
     if (responseData.code === 9007) {
-      router.push('/')
-      store.commit('SHOW_LOGIN_DIALOG')
+      toHomeAndLogin(router)
     }
     return Promise.reject(responseData.msg)
   }
