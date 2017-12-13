@@ -55,13 +55,14 @@ axios.interceptors.response.use(res => {
     }
     return Promise.reject(responseData.msg)
   }
-}, () => {
+}, (error) => {
   Vue.prototype.$message({
     showClose: true,
     message: 'An error occurred. Please contact support',
     type: 'error'
   })
   toHomeAndLogin(router)
+  return Promise.reject(error)
 })
 
 const toHomeAndLogin = function (router) {
