@@ -502,8 +502,6 @@ export default {
       if (value < 1) {
         this.amount = 1
       }
-      value = value.replace(/\D+/, '')
-      this.amount = value
     }
   }
 }

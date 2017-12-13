@@ -93,6 +93,10 @@ export function msgFormatter (msgs) {
     })
     formatMsg = arr.join(', ')
   } else {
+    if (msgs.message) {
+      formatMsg = msgs.message
+      return formatMsg
+    }
     formatMsg = msgs
   }
   return formatMsg
