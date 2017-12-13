@@ -146,3 +146,7 @@ export function readMessage (ids) {
 export function fetchHistory (gameCode, date) {
   return axios.get(`${urls.gamehistory}?game_code=${gameCode}&date=${date}`)
 }
+
+export function fetchWinNotifications (gameCode) {
+  return axios.get(`${urls.games}/${gameCode}/win-notifications/latest`)
+}
