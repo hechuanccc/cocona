@@ -385,6 +385,10 @@ export default {
             })
             this.errors = messages.join(', ')
           }
+        },
+        errRes => {
+          this.submitting = false
+          this.errors = errRes.join()
         })
     },
     initPlaygroups () {
@@ -498,6 +502,8 @@ export default {
       if (value < 1) {
         this.amount = 1
       }
+      value = value.replace(/\D+/, '')
+      this.amount = value
     }
   }
 }

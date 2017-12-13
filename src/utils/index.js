@@ -95,6 +95,7 @@ export function msgFormatter (msgs) {
   } else {
     if (msgs.message) {
       formatMsg = msgs.message
+      return formatMsg
     }
     formatMsg = msgs
   }
