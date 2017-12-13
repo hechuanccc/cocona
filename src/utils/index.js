@@ -153,7 +153,7 @@ export function setIndicator (onActivate, onInactivate) {
 }
 
 export function filtAmount (evt) {
-    // prevent key in: + - . e
+  // prevent key in: + - . e
   if (evt.keyCode === 43 || evt.keyCode === 45 || evt.keyCode === 46 || evt.keyCode === 101) {
     evt.preventDefault()
   }

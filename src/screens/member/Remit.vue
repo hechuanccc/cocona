@@ -1,11 +1,15 @@
 <template>
-<div>
   <el-row>
     <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
       <el-tab-pane :label="$t('user.bank')" name="bank">
-        <el-row class="account-content">
+        <el-alert
+          :title="limitAlert"
+          type="info"
+          :closable="false">
+        </el-alert>
+        <el-row>
           <el-col :offset="8" :span="16">
-            <el-form :model="remitData" status-icon ref="bankForm" :rules="remitDataRules" label-width="128px">
+            <el-form class="m-t-lg" :model="remitData" status-icon ref="bankForm" :rules="remitDataRules" label-width="128px">
               <el-form-item :label="$t('user.remit_bank')" ref="bankPayee" prop="remit_info.remit_payee">
                 <el-select
                   v-model="remitData.remit_info.remit_payee"
@@ -39,7 +43,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                <el-input class="input-width" v-model.number="remitData.amount"></el-input>
+                <el-input class="input-width" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
               </el-form-item>
               <el-form-item :label="$t('common.memo')" prop="memo">
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
@@ -52,9 +56,14 @@
         </el-row>
       </el-tab-pane>
       <el-tab-pane :label="'QR Code'" name="qrcode">
-        <el-row class="account-content">
+        <el-alert
+          :title="limitAlert"
+          type="info"
+          :closable="false">
+        </el-alert>
+        <el-row>
           <el-col :offset="8" :span="16">
-            <el-form :model="remitData" status-icon ref="qrcodeForm" :rules="remitDataRules" label-width="128px">
+            <el-form class="m-t-lg" :model="remitData" status-icon ref="qrcodeForm" :rules="remitDataRules" label-width="128px">
               <el-form-item :label="$t('user.payway')" ref="qrcodePayee" prop="remit_info.remit_payee">
                 <el-select
                   v-model="remitData.remit_info.remit_payee"
@@ -85,7 +94,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                <el-input class="input-width" v-model.number="remitData.amount"></el-input>
+                <el-input class="input-width" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
               </el-form-item>
               <el-form-item :label="$t('common.memo')" prop="memo">
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
@@ -99,16 +108,24 @@
       </el-tab-pane>
     </el-tabs>
   </el-row>
-
-</div>
-
 </template>
 <script>
 import { fetchRemitpayee, remit } from '../../api'
-import { msgFormatter } from '../../utils'
+import { msgFormatter, filtAmount } from '../../utils'
 export default {
   name: 'Remit',
   data () {
+    let limitPass = (rule, value, callback) => {
+      const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
+      const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
+      if (lower && value < lower) {
+        callback(new Error(this.$t('validate.min_amount_validate')))
+      } else if (upper && value > upper) {
+        callback(new Error(this.$t('validate.max_amount_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       activeName: 'bank',
       remitPayees: [],
@@ -132,12 +149,29 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'change' }
         ],
         amount: [
-          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur,change' }
+          { required: true, type: 'integer', message: this.$t('validate.required_num'), trigger: 'blur' },
+          { validator: limitPass, trigger: 'blur,change' }
         ]
       }
     }
   },
   computed: {
+    limit () {
+      const level = this.$store.state.user.level
+      return level ? level.remit_limit : {}
+    },
+    limitAlert () {
+      let alerts = []
+      const lowerAlert = this.limit.lower ? `${this.$t('user.min_amount')}: ￥${this.limit.lower}` : null
+      const upperAlert = this.limit.upper ? `${this.$t('user.max_amount')}: ￥${this.limit.upper}` : null
+      if (lowerAlert) {
+        alerts.push(lowerAlert)
+      }
+      if (upperAlert) {
+        alerts.push(upperAlert)
+      }
+      return alerts.join(', ')
+    },
     selectedPayee () {
       let payees = this.remitPayees.filter(payee => payee.id === this.remitData.remit_info.remit_payee)
       if (payees.length > 0) {
@@ -179,6 +213,7 @@ export default {
         }
       })
     },
+    filtAmount,
     chooseRemitWay () {
       this.remitData.remit_info.remit_payee = ''
       this.$refs['bankForm'].clearValidate()

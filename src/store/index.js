@@ -16,7 +16,7 @@ export function createStore () {
       betRecordDialogVisible: false,
       games: [],
       categories: [],
-      tokenPromise: '',
+      loading: false,
       customPlayGroups: [
         {
           code: 'cqlf_pg_wc_wc',

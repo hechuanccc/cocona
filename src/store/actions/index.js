@@ -16,6 +16,7 @@ import {
 
 export default {
   login: ({ commit, state }, { user }) => {
+    commit('START_LOADING')
     return login(user).then(res => {
       let expires = new Date(res.expires_in)
       if (res.access_token && res.refresh_token) {
@@ -32,8 +33,12 @@ export default {
           logined: true
         }
       })
+      commit('END_LOADING')
       return Promise.resolve(res)
-    }, error => Promise.reject(error))
+    }, error => {
+      commit('END_LOADING')
+      Promise.reject(error)
+    })
   },
   logout: ({ commit, state }) => {
     return logout().then(
@@ -94,16 +99,16 @@ export default {
       return categories
     })
   },
-  setTokenPromise: ({ commit, state }, tokenPromise) => {
-    commit(types.SET_TOKEN_PROMISE, tokenPromise)
-  },
-  clearTokenPromise: ({ commit }) => {
-    commit(types.CLEAR_TOKEN_PROMISE)
-  },
   openBetRecordDialog: ({ commit, state }) => {
     commit(types.OPEN_BETRECORD_DIALOG)
   },
   closeBetRecordDialog: ({ commit, state }) => {
     commit(types.CLOSE_BETRECORD_DIALOG)
+  },
+  startLoading: ({ commit }) => {
+    commit(types.START_LOADING)
+  },
+  endLoading: ({ commit }) => {
+    commit(types.END_LOADING)
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen="$store.state.loading" element-loading-text="加载中...">
     <Top />
     <router-view/>
     <Bottom v-if="!$route.params.gameId && $route.path.indexOf('/account') < 0"/>
@@ -57,7 +57,7 @@ export default {
     },
     replaceToken () {
       let refreshToken = this.$cookie.get('refresh_token')
-      if (!refreshToken) {
+      if (!refreshToken || this.$store.state.user.account_type === 0) {
         return
       }
       getToken(refreshToken).then(res => {

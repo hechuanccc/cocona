@@ -1,5 +1,5 @@
 <template>
-<el-row class="account-content">
+<el-row>
   <el-alert
     :title="limitAlert"
     type="info"
@@ -8,7 +8,7 @@
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <el-form-item :label="$t('user.amount')" prop="amount">
-        <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount"></el-input>
+        <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
         <input name="payee" type="hidden" :value="payment.payee_id" />
         <input name="payment_type" type="hidden" :value="payment.payway" />
         <input name="payment_gateway" type="hidden" :value="payment.gateway_id" />
@@ -41,7 +41,7 @@
 
 <script>
 import { fetchPaymentType } from '../../api'
-import { msgFormatter } from '../../utils'
+import { msgFormatter, filtAmount } from '../../utils'
 import urls from '../../api/urls'
 import Vue from 'vue'
 export default {
@@ -51,9 +51,9 @@ export default {
       const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
       const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
       if (lower && value < lower) {
-        callback(new Error('必须大于最小充值金额'))
+        callback(new Error(this.$t('validate.min_amount_validate')))
       } else if (upper && value > upper) {
-        callback(new Error('必须小于于最大充值金额'))
+        callback(new Error(this.$t('validate.max_amount_validate')))
       } else {
         callback()
       }
@@ -68,7 +68,7 @@ export default {
       rule: {
         amount: [
           { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
-          { validator: limitPass, trigger: 'blur' }
+          { validator: limitPass, trigger: 'blur,change' }
         ]
       },
       activeType: '',
@@ -85,8 +85,8 @@ export default {
     },
     limitAlert () {
       let alerts = []
-      const lowerAlert = this.limit.lower ? `最小金额: ￥${this.limit.lower}` : null
-      const upperAlert = this.limit.upper ? `最大金额: ￥${this.limit.upper}` : null
+      const lowerAlert = this.limit.lower ? `${this.$t('user.min_amount')}: ￥${this.limit.lower}` : null
+      const upperAlert = this.limit.upper ? `${this.$t('user.max_amount')}: ￥${this.limit.upper}` : null
       if (lowerAlert) {
         alerts.push(lowerAlert)
       }
@@ -129,7 +129,8 @@ export default {
         this.payment.payee_id = paymentType.payee_id
         this.payment.gateway_id = paymentType.gateway_id
       }
-    }
+    },
+    filtAmount
   }
 }
 </script>
