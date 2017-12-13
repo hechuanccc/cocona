@@ -4,7 +4,7 @@
     <el-row type="flex" class="actions" justify="center" :gutter="10">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
+        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"  @keypress.native="filtAmount" />
       </el-col>
       <el-col :span="4">
         <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
@@ -137,7 +137,7 @@
         </el-table-column>
         <el-table-column property="bet_amount" label="金额">
           <template slot-scope="scope">
-            <el-input size="mini" v-model.number="scope.row.bet_amount" type="number"></el-input>
+            <el-input size="mini" v-model.number="scope.row.bet_amount" type="number" @keypress.native="filtAmount"></el-input>
           </template>
         </el-table-column>
         <el-table-column property="active" label="确认">
@@ -172,7 +172,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
-import { formatPlayGroup } from '../../utils'
+import { formatPlayGroup, filtAmount } from '../../utils'
 import { zodiacs, zodiacMap, colorWave } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
@@ -280,6 +280,7 @@ export default {
     this.initPlaygroups()
   },
   methods: {
+    filtAmount,
     selectAlias (playSection, tabIndex) {
       let activePlaygroup = _.find(playSection.playgroups, playgroup => playgroup.active)
       // reset 'active' for plays in inactive playgroups
