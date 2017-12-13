@@ -55,8 +55,7 @@ axios.interceptors.response.use(res => {
     }
     return Promise.reject(responseData.msg)
   }
-}, error => {
-  console.log(error)
+}, () => {
   return Promise.reject(new Error('An error occurred. Please contact support'))
 })
 
