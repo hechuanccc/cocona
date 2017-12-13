@@ -116,6 +116,7 @@ export default {
               user: data
             })
             this.updated = 1
+            this.$refs.bankInfo.clearValidate()
             this.message = '银行信息已更新'
             setTimeout(() => {
               this.updateStatus = 0

@@ -777,6 +777,7 @@ export default {
         return item.code === this.currentGame
       })
       clearInterval(this.interval)
+      this.currentPage = 1
       this.schedules = ''
       this.nowDisplay = 'number'
       this.getHistory(this.currentGame, this.nowDate)
