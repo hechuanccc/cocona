@@ -7,10 +7,10 @@
       </el-breadcrumb>
       <el-row class="history-container" v-loading="loading">
         <el-col :span="3">
-          <el-menu default-active="1">
+          <el-menu default-active="0">
             <el-menu-item v-for="(game, index) in games"
               :key="game.id"
-              :index="index + 1 + ''"
+              :index="index+''"
               @click="currentGame = game.code">
             <span slot="title">{{game.display_name}}</span>
             </el-menu-item>
@@ -122,8 +122,6 @@ import _ from 'lodash'
 
 export default {
   data () {
-    let currentGame = 'jspk10' // init
-
     const TransformerTable =
       [
         {
@@ -618,19 +616,16 @@ export default {
         table: hklTable
       }
     ]
-    const nowGameTable = _.find(gameTable, item => {
-      return item.code === currentGame
-    })
 
     return {
       games: '',
-      currentGame,
+      currentGame: '',
       schedules: '',
       nowDate: this.$moment().format('YYYY-MM-DD'),
       loading: false,
       nowDisplay: 'number',
       gameTable,
-      nowGameTable,
+      nowGameTable: '',
       inputPeriod: '',
       selectedDate: this.$moment().format('YYYY-MM-DD'),
       currentPage: 1,
@@ -761,6 +756,10 @@ export default {
           return
         }
         this.games = games
+        this.currentGame = games[0].code
+        this.nowGameTable = _.find(this.gameTable, item => {
+          return item.code === this.currentGame
+        })
         return games
       }
     ).then(games => {

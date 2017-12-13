@@ -37,5 +37,5 @@ export default {
   remit: apiv1 + '/remit_transaction/',
   readMessage: apiv1 + '/message/read/',
   messages: apiv1 + '/messages/',
-  gamehistory: apiv1 + /history/
+  gamehistory: apiv1 + '/history/'
 }
