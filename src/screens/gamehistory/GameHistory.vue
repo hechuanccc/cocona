@@ -726,9 +726,6 @@ export default {
         }
         this.loading = false
       })
-    },
-    getNavIndex (index) {
-      console.log(index)
     }
   },
   computed: {
