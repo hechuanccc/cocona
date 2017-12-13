@@ -93,6 +93,10 @@ export function msgFormatter (msgs) {
     })
     formatMsg = arr.join(', ')
   } else {
+    if (msgs.message) {
+      formatMsg = msgs.message
+      return formatMsg
+    }
     formatMsg = msgs
   }
   return formatMsg
@@ -145,5 +149,12 @@ export function setIndicator (onActivate, onInactivate) {
   // set the initial state (but only if browser supports the Page Visibility API)
   if (document[hidden] !== undefined) {
     onchange({ type: document[hidden] ? 'blur' : 'focus' })
+  }
+}
+
+export function filtAmount (evt) {
+    // prevent key in: + - . e
+  if (evt.keyCode === 43 || evt.keyCode === 45 || evt.keyCode === 46 || evt.keyCode === 101) {
+    evt.preventDefault()
   }
 }

@@ -5,7 +5,7 @@
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.draw_history')}}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-row class="history-container">
+      <el-row class="history-container" v-loading="loading">
         <el-col :span="3">
           <el-menu default-active="1">
             <el-menu-item v-for="(game, index) in games"
@@ -17,8 +17,7 @@
           </el-menu>
         </el-col>
         <el-col :span="21" class="schedule-container">
-          <div v-if="loading">Loading...</div>
-          <div v-else>
+          <div>
             <el-row class="m-t m-b">
               <el-col :span="3" :offset="1">
                 <el-date-picker type="date"
@@ -736,11 +735,17 @@ export default {
   },
   computed: {
     filteredSchedules () {
+      if (!this.schedules) {
+        return []
+      }
       return this.schedules.filter(schedule => {
         return schedule['issue_number'].indexOf(this.inputPeriod) !== -1
       })
     },
     showSchedules () {
+      if (!this.schedules) {
+        return []
+      }
       let groupIdx = (this.currentPage - 1) * this.pageSize
       return this.filteredSchedules.slice(groupIdx, groupIdx + this.pageSize)
     }
