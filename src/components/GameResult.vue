@@ -106,22 +106,27 @@ export default {
       if (!this.gameLatestResult) {
         return
       }
-      let drawFromNow = Math.abs(this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms'))
-      let startPollingTime = drawFromNow < (20 * 1000) ? 3000 : drawFromNow - (20 * 1000)
+
+      let drawFromNow = this.$moment(this.gameLatestResult.next_draw).diff(this.$moment(), 'ms')
+      let startPollingTime = drawFromNow < 8000 ? 8000 : drawFromNow
+
+      let oldIssue = this.gameLatestResult.issue_number
       this.timer = setTimeout(() => {
         clearInterval(this.interval)
         this.interval = setInterval(() => {
-          let oldIssue = this.gameLatestResult.issue_number
           this.fetchResult(gameid).then(result => {
-            if (!result[0] || !result) {
+            if (!result || !result[0]) {
               clearInterval(this.interval)
             }
+
             let newIssue = result[0].issue_number
             if (newIssue !== oldIssue) {
               clearInterval(this.interval)
+              clearInterval(this.timer)
+              this.pollResult(gameid)
             }
           })
-        }, (2 * 1000))
+        }, 5000)
         this.pollResult(gameid)
       }, startPollingTime)
     }
