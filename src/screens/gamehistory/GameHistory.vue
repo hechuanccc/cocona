@@ -17,7 +17,7 @@
           </el-menu>
         </el-col>
         <el-col :span="21" class="schedule-container">
-          <div class="m-r m-l">
+          <div class="m-r">
             <div class="m-t user-actions">
               <div class="filters">
                 <div class="input">
