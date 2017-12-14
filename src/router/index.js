@@ -23,6 +23,7 @@ import TransactionRecord from '@/screens/member/TransactionRecord'
 import BetRecord from '@/screens/member/BetRecord'
 
 import Message from '@/screens/member/Message'
+import Announcement from '@/screens/member/Announcement'
 
 import Promotions from '@/screens/promotion/Promotions'
 import Faq from '@/screens/faq/FaqsHome'
@@ -129,6 +130,11 @@ export default new Router({
           path: 'message',
           name: 'Message',
           component: Message
+        },
+        {
+          path: 'announcement',
+          name: 'Announcement',
+          component: Announcement
         }
       ]
     }, {

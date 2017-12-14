@@ -43,6 +43,10 @@ export default {
     lottery: '彩票类',
     others: '其他'
   },
+  announcement: {
+    title: '公告标题',
+    content: '公告内容'
+  },
   user: {
     username: '帐号',
     password: '密码',
