@@ -37,7 +37,7 @@ export default {
       return Promise.resolve(res)
     }, error => {
       commit('END_LOADING')
-      Promise.reject(error)
+      return Promise.reject(error)
     })
   },
   logout: ({ commit, state }) => {

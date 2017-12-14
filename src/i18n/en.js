@@ -43,6 +43,10 @@ export default {
     lottery: 'Lottery',
     others: 'Others'
   },
+  announcement: {
+    title: 'Title',
+    content: 'Content'
+  },
   user: {
     username: 'User Name',
     password: 'Password',
