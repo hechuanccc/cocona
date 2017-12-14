@@ -8,7 +8,7 @@
       </el-table-column>
       <el-table-column prop="amount" :label="$t('user.transaction_amount')">
         <template slot-scope="scope">
-          <span>{{ `$${scope.row.amount}`}}</span>
+          <span>{{ scope.row.amount | currency('￥')}}</span>
         </template>
       </el-table-column>
       <el-table-column prop="transaction_type.display_name" :label="$t('user.transaction_way')">
