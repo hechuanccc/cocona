@@ -40,7 +40,7 @@
       </li>
       <li>
         <span :class="['account-trigger', 'link', {
-            active: showDropdown
+            'active': showDropdown
           }]"
           @mouseenter="showDropdown=true"
           @mouseleave="showDropdown=false">
