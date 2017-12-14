@@ -122,6 +122,13 @@ export default {
     min_amount: 'Min Amount',
     max_amount: 'Max Amount'
   },
+  gameIntro: {
+    min_per_bet: 'Lowest Amount Per Bet',
+    max_per_bet: 'highest Amount Per Bet',
+    max_per_draw: 'highest Amount Currently',
+    return_rate: 'Return Rate',
+    odds: 'Odds'
+  },
   history: {
     draw_period: 'Draw Period',
     draw_time: 'Draw Time',

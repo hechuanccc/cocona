@@ -19,6 +19,7 @@ export default {
   category: apiv1 + '/game/category/',
   playgroup: apiv1 + '/game/playgroup/',
   schedule: apiv1 + '/game/schedule/',
+  playSetting: apiv1 + '/game/playset/',
   agent_register: apiv1 + '/agentapplication/',
   game_result: apiv1 + '/result/',
   promotions: apiv1 + '/promotion/',
@@ -37,5 +38,5 @@ export default {
   remit: apiv1 + '/remit_transaction/',
   readMessage: apiv1 + '/message/read/',
   messages: apiv1 + '/messages/',
-  gamehistory: apiv1 + /history/
+  gamehistory: apiv1 + '/history/'
 }

@@ -122,6 +122,13 @@ export default {
     min_amount: '最小金额',
     max_amount: '最大金额'
   },
+  gameIntro: {
+    min_per_bet: '单注最低金额',
+    max_per_bet: '单注最高金额',
+    max_per_draw: '当期最高金额',
+    return_rate: '反水',
+    odds: '赔率'
+  },
   history: {
     draw_period: '期数',
     draw_time: '开奖时间',
