@@ -86,6 +86,7 @@ export default {
     city: 'City',
     province: 'Province',
     amount: 'Amount',
+    withdraw_amount: '取款金额',
     gender: 'Gender',
     male: 'male',
     female: 'female',
@@ -126,6 +127,15 @@ export default {
     min_amount: 'Min Amount',
     max_amount: 'Max Amount'
   },
+  gameIntro: {
+    gameinfo: 'Game Info:',
+    rule: 'Rules:',
+    min_per_bet: 'Lowest Amount Per Bet',
+    max_per_bet: 'highest Amount Per Bet',
+    max_per_draw: 'highest Amount Currently',
+    return_rate: 'Return Rate',
+    odds: 'Odds'
+  },
   history: {
     draw_period: 'Draw Period',
     draw_time: 'Draw Time',
@@ -158,8 +168,10 @@ export default {
     required_num: 'Number is required',
     email_validate: 'This email is invalid',
     not_set_bank_info: 'Bank Info has not yet been setted',
-    max_amount_validate: 'must lower than max amount',
-    min_amount_validate: 'must higher than min amount'
+    max_amount_validate: 'must lower than max deposit amount',
+    min_amount_validate: 'must higher than min deposit amount',
+    max_withdraw_amount_validate: 'must lower than max withdraw amount',
+    min_withdraw_amount_validate: 'must higher than min withdraw amount'
   },
   message: {
     save_success: 'Save Success',

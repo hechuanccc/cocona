@@ -1,6 +1,5 @@
 <template>
   <section class="rule-details">
-    <h1>广东11选5规则说明</h1>
     <ul>
       <li>「广东11选5」是由国家体育总局发行，体育彩票管理中心承销。
       </li>
@@ -8,10 +7,9 @@
       </li>
       <li>开奖时间：早上 9 点至晚上 11 点。如开奖时间异动以国家体育总局体育彩票管理中心公告为准。
       </li>
-      <li>官方网站：http://www.gdlottery.cn/
+      <li>官方网站：<a href="http://www.gdlottery.cn/">http://www.gdlottery.cn//</a>
       </li>
     </ul>
-    <h2>具體規則</h2>
     <h3>
       <span class="warn">单码</span> - 指第一球、第二球、第三球、第四球、第五球出现的顺序与号码为派彩依据。
     </h3>

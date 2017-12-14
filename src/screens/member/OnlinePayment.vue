@@ -4,7 +4,7 @@
     :title="limitAlert"
     type="info"
     :closable="false">
-    </el-alert>
+  </el-alert>
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <el-form-item :label="$t('user.amount')" prop="amount">

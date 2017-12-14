@@ -85,6 +85,7 @@ export default {
     city: '县市',
     province: '省份',
     amount: '入款金额',
+    withdraw_amount: '取款金额',
     gender: '性别',
     male: '男',
     female: '女',
@@ -126,6 +127,15 @@ export default {
     min_amount: '最小金额',
     max_amount: '最大金额'
   },
+  gameIntro: {
+    gameinfo: '游戏资讯：',
+    rule: '具体规则：',
+    min_per_bet: '单注最低金额',
+    max_per_bet: '单注最高金额',
+    max_per_draw: '当期最高金额',
+    return_rate: '反水',
+    odds: '赔率'
+  },
   history: {
     draw_period: '期数',
     draw_time: '开奖时间',
@@ -159,7 +169,9 @@ export default {
     email_validate: 'email格式无效',
     not_set_bank_info: '尚未设定银行信息',
     max_amount_validate: '必须小于最大充值金额',
-    min_amount_validate: '必须大于最小充值金额'
+    min_amount_validate: '必须大于最充值金额',
+    max_withdraw_amount_validate: '必须小于最大取款金额',
+    min_withdraw_amount_validate: '必须大于最小取款金额'
   },
   message: {
     save_success: '保存成功',
