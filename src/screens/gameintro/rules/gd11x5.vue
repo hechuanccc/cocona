@@ -1,6 +1,5 @@
 <template>
   <section class="rule-details">
-    <h1>广东11选5规则说明</h1>
     <ul>
       <li>「广东11选5」是由国家体育总局发行，体育彩票管理中心承销。
       </li>
@@ -11,7 +10,6 @@
       <li>官方网站：http://www.gdlottery.cn/
       </li>
     </ul>
-    <h2>具體規則</h2>
     <h3>
       <span class="warn">单码</span> - 指第一球、第二球、第三球、第四球、第五球出现的顺序与号码为派彩依据。
     </h3>

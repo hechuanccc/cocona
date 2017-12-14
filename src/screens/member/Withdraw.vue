@@ -4,23 +4,23 @@
       <el-col :span="8" >
         <div class="bank-info clearfix">
           <el-row>
-            <div v-if="user.level.withdraw_limit.lower">
+            <div>
               <el-col :span="8">
                 <label>当前账户余额</label>
               </el-col>
-              <el-col :span="16">{{user.balance}}</el-col>
+              <el-col :span="16">{{user.balance||0 | currency('￥')}}</el-col>
             </div>
-            <div v-if="user.level.withdraw_limit.lower">
+            <div v-if="limit.lower">
               <el-col :span="8">
                 <label>最小取款金额</label>
               </el-col>
-              <el-col :span="16">{{user.level.withdraw_limit.lower}}</el-col>
+              <el-col :span="16">{{limit.lower | currency('￥')}}</el-col>
             </div>
-            <div v-if="user.level.withdraw_limit.upper">
+            <div v-if="limit.upper">
               <el-col :span="8">
                 <label>最大取款金额</label>
               </el-col>
-              <el-col :span="16">{{user.level.withdraw_limit.upper}}</el-col>
+              <el-col :span="16">{{limit.upper | currency('￥')}}</el-col>
             </div>
           </el-row>
           <h3 class="m-t">你的取款银行信息如下，如需修改请联系客服</h3>
@@ -53,8 +53,8 @@
           center>
         </el-alert>
         <el-form :model="withdrawInfo" class="m-t" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="120px">
-          <el-form-item :label="$t('user.amount')" prop="amount">
-            <el-input class="input-width" type="number" v-model.number="withdrawInfo.amount"></el-input>
+          <el-form-item :label="$t('user.withdraw_amount')" prop="amount">
+            <el-input class="input-width" type="number" v-model.number="withdrawInfo.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
             <el-input class="input-width" name="withdraw_password" type="password" v-model="withdrawInfo.withdraw_password"></el-input>
@@ -80,10 +80,21 @@
 <script>
 import { mapGetters } from 'vuex'
 import { withdraw } from '../../api'
-import { msgFormatter } from '../../utils'
+import { msgFormatter, filtAmount } from '../../utils'
 export default {
   name: 'Withdraw',
   data () {
+    let limitPass = (rule, value, callback) => {
+      const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
+      const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
+      if (lower && value < lower) {
+        callback(new Error(this.$t('validate.min_withdraw_amount_validate')))
+      } else if (upper && value > upper) {
+        callback(new Error(this.$t('validate.max_withdraw_amount_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       withdrawInfo: {
         amount: '',
@@ -93,7 +104,8 @@ export default {
       message: '',
       withdrawRules: {
         amount: [
-          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur,change' }
+          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
+          { validator: limitPass, trigger: 'blur,change' }
         ],
         withdraw_password: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur,change' }
@@ -106,7 +118,11 @@ export default {
   computed: {
     ...mapGetters([
       'user'
-    ])
+    ]),
+    limit () {
+      const level = this.$store.state.user.level
+      return level ? level.withdraw_limit : {}
+    }
   },
   methods: {
     submitWithdraw () {
@@ -127,7 +143,8 @@ export default {
           })
         }
       })
-    }
+    },
+    filtAmount
   }
 
 }

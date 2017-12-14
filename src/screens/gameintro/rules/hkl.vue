@@ -1,7 +1,5 @@
 <template>
   <section class="rule-details">
-    <h1>香港六合彩</h1>
-    <h2>具體規則</h2>
     <h3>
       <span class="warn">1.特码</span>
     </h3>

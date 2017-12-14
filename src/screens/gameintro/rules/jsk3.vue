@@ -1,6 +1,5 @@
 <template>
   <section class="rule-details">
-    <h1>江苏骰宝(快3)规则说明</h1>
     <ul>
       <li>「江苏快3」由中国福利彩票发行管理中心组织销售、江苏省福利彩票发行中心承销。
       </li>
@@ -14,7 +13,6 @@
     <p>即时开奖：
       <a href="http://www.shishicai.cn/jsk3/touzhu/">http://www.shishicai.cn/jsk3/touzhu/</a>
     </p>
-    <h2>玩法</h2>
     <h3>
       <span class="warn">和值</span>
     </h3>

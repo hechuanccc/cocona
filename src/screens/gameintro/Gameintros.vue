@@ -17,7 +17,8 @@
           </el-menu>
         </el-col>
         <el-col :span="21" class="p-l-lg p-t">
-          <h1 class="game-title">{{currentGame.display_name}}</h1>
+          <h1 class="main-title m-b-lg">{{currentGame.display_name}}</h1>
+          <h2 class="sub-title">{{$t('gameIntro.gameinfo')}}</h2>
           <el-table class="m-b-lg" v-loading="loading" :data="currentPlaySettings" stripe>
             <el-table-column :label="''"
               prop="display_name">
@@ -28,16 +29,23 @@
             <el-table-column :label="$t('gameIntro.return_rate')"
               prop="return_rate">
             </el-table-column>
-            <el-table-column :label="$t('gameIntro.min_per_bet')"
-              prop="min_per_bet">
+            <el-table-column :label="$t('gameIntro.min_per_bet')">
+              <template slot-scope="scope">
+                <span>{{ scope.row.min_per_bet | currency('￥')}}</span>
+              </template>
             </el-table-column>
-            <el-table-column :label="$t('gameIntro.max_per_bet')"
-              prop="max_per_bet">
+            <el-table-column :label="$t('gameIntro.max_per_bet')">
+              <template slot-scope="scope">
+                <span>{{ scope.row.max_per_bet | currency('￥')}}</span>
+              </template>
             </el-table-column>
-            <el-table-column :label="$t('gameIntro.max_per_draw')"
-              prop="max_per_draw">
+            <el-table-column :label="$t('gameIntro.max_per_draw')">
+              <template slot-scope="scope">
+                <span>{{ scope.row.max_per_draw | currency('￥')}}</span>
+              </template>
             </el-table-column>
           </el-table>
+          <h2 class="sub-title">{{$t('gameIntro.rule')}}</h2>
           <component :is="currentGame.code"></component>
         </el-col>
       </el-row>
@@ -50,8 +58,12 @@
 $common-pixel: 10px !default;
 $title-size: 18px !default;
 $title-color: black !default;
-.game-title {
+.main-title {
   font-size: $title-size;
+  color: $title-color;
+}
+.sub-title {
+  font-size: 14px;
   margin-bottom: $common-pixel;
   color: $title-color;
 }
