@@ -136,6 +136,9 @@ export function remit (info) {
 export function fetchMessages () {
   return axios.get(urls.messages)
 }
+export function fetchMessageCount () {
+  return axios.get(urls.messageCount)
+}
 
 export function readMessage (ids) {
   return axios.post(urls.readMessage,
