@@ -102,7 +102,8 @@ export function createStore () {
           options: Array.from(Array(49).keys()).map(item => item + 1),
           cols: 7
         }
-      ]
+      ],
+      customerServiceUrl: ''
     },
     actions,
     mutations,
