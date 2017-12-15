@@ -7,36 +7,40 @@
       </el-breadcrumb>
       <el-row class="history-container" v-loading="loading">
         <el-col :span="3">
-          <el-menu default-active="0">
+          <el-menu default-active="1">
             <el-menu-item v-for="(game, index) in games"
               :key="game.id"
-              :index="index+''"
+              :index="index + 1 + ''"
               @click="currentGame = game.code">
             <span slot="title">{{game.display_name}}</span>
             </el-menu-item>
           </el-menu>
         </el-col>
         <el-col :span="21" class="schedule-container">
-          <div>
-            <el-row class="m-t m-b">
-              <el-col :span="3" :offset="1">
-                <el-date-picker type="date"
-                v-model = "selectedDate"
-                placeholder="选择日期"
-                @change="getHistory(currentGame,selectedDate)"></el-date-picker>
-              </el-col>
-              <el-col :span="4" :offset="2">
-                <el-input
-                  type="number"
-                  v-model.number="inputPeriod"
-                  placeholder="输入期数"
-                >
-                </el-input>
-              </el-col>
-              <el-col :span="4" :offset="10">
+          <div class="m-r">
+            <div class="m-t user-actions">
+              <div class="filters">
+                <div class="input">
+                  <el-date-picker
+                  type="date"
+                  v-model = "selectedDate"
+                  placeholder="选择日期"
+                  @change="getHistory(currentGame,selectedDate)">
+                  </el-date-picker>
+                </div>
+                <div class="input">
+                  <el-input
+                    type="number"
+                    v-model.number="inputPeriod"
+                    placeholder="输入期数"
+                  >
+                  </el-input>
+                </div>
+              </div>
+              <div class="refresh">
                 <el-button type="primary" @click="getHistory(currentGame, nowDate)">刷新数据</el-button>
-              </el-col>
-            </el-row>
+              </div>
+            </div>
             <div v-if="!showSchedules.length">暂无资料</div>
             <table v-else
               class="history-table"
@@ -384,10 +388,6 @@ export default {
             {
               displayName: '大小',
               key: 'sum_of_ball_than_size'
-            },
-            {
-              displayName: '单双',
-              key: 'sum_of_ball_odd_even'
             }
           ]
         }
@@ -443,7 +443,7 @@ export default {
         },
         {
           displayName: '龙虎',
-          KEY: 'dragon_tiger_1_5'
+          key: 'dragon_tiger_1_5'
         }
       ]
 
@@ -826,6 +826,23 @@ export default {
     line-height: $cell-height;
     text-align: center;
     font-weight: bold;
+  }
+}
+.el-menu {
+  border: none;
+}
+.user-actions {
+  text-align: justify;
+  .filters, .refresh {
+    display: inline-block;
+    .input {
+      display: inline-block;
+    }
+  }
+  &:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
   }
 }
 </style>

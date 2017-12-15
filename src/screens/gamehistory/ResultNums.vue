@@ -98,10 +98,16 @@ export default {
     }
   }
   @for $i from 1 through 49 {
+    @if $i < 10 {
+      .hkl-0#{$i}{
+        @extend %hklball;
+        background-position: 0 (-27px * ($i - 1));
+      }
+    }
     .hkl-#{$i}{
       @extend %hklball;
       background-position: 0 (-27px * ($i - 1));
-  }
+    }
 }
 }
 @include hkl-num;
