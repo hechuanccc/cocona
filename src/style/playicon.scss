@@ -268,6 +268,10 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
         background-position: 0 (-27px * ($j - 1));
         @extend %gdklsfball;
       }
+      .gdklsf_pl_pc_pc_#{$j} {
+        background-position: 0 (-27px * ($j - 1));
+        @extend %gdklsfball;
+      }
     }
   }
 }
