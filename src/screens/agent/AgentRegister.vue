@@ -13,8 +13,8 @@
         <el-form-item :label="$t('user.password')" prop="password">
           <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
-          <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
+        <el-form-item :label="$t('user.confirm_password')" prop="confirm_password">
+          <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirm_password" auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.realname')" prop="real_name">
           <el-input class="input-width" v-model="user.real_name"></el-input>
@@ -27,8 +27,8 @@
         </el-form-item>
         <el-form-item :label="$t('user.captcha')" required>
           <el-col :span="7">
-            <el-form-item  prop="verification_code_1">
-              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
+            <el-form-item  prop="captcha_1">
+              <el-input class="input-width" :maxlength="4" v-model="user.captcha_1" auto-complete="off">
                 <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
               </el-input>
             </el-form-item>
@@ -71,8 +71,8 @@
         if (value === '') {
           callback(new Error(this.$t('validate.required')))
         } else {
-          if (this.user.confirmation_password !== '') {
-            this.$refs.user.validateField('confirmation_password')
+          if (this.user.confirm_password !== '') {
+            this.$refs.user.validateField('confirm_password')
           }
           callback()
         }
@@ -114,13 +114,13 @@
         user: {
           username: '',
           password: '',
-          confirmation_password: '',
+          confirm_password: '',
           real_name: '',
           phone: '',
           email: '',
           withdraw_password: '',
-          verification_code_0: '',
-          verification_code_1: ''
+          captcha_0: '',
+          captcha_1: ''
         },
         captcha_src: '',
         rules: {
@@ -132,7 +132,7 @@
           { required: true, validator: passwordValidator, trigger: 'blur' },
           { validator: passwordFormatValidator, trigger: 'blur,change' }
           ],
-          confirmation_password: [
+          confirm_password: [
           { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
           ],
           real_name: [
@@ -149,7 +149,7 @@
           withdraw_password: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
           ],
-          verification_code_1: [
+          captcha_1: [
           { required: true, validator: captchaValidator, trigger: 'blur' }
           ]
         }
@@ -160,6 +160,11 @@
         this.$refs['user'].validate((valid) => {
           if (valid) {
             agentRegister(this.user).then(result => {
+              this.$message({
+                showClose: true,
+                message: this.$t('message.submit_success'),
+                type: 'success'
+              })
               this.$router.push({name: 'Home'})
             }, errorMsg => {
               this.$message({
@@ -176,7 +181,7 @@
       fetchCaptcha () {
         fetchCaptcha().then(res => {
           this.captcha_src = res.captcha_src
-          this.user.verification_code_0 = res.captcha_val
+          this.user.captcha_0 = res.captcha_val
         })
       }
     },
