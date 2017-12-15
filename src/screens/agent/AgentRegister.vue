@@ -38,6 +38,7 @@
           </el-col>
         </el-form-item>
         <el-form-item>
+          <div class="success" v-if="successMsg">{{successMsg}}</div>
           <el-button type="primary" size="medium" class="input-width" @click="submitForm">{{$t('action.submit')}}</el-button>
         </el-form-item>
       </el-form>
@@ -152,7 +153,8 @@
           captcha_1: [
           { required: true, validator: captchaValidator, trigger: 'blur' }
           ]
-        }
+        },
+        successMsg: ''
       }
     },
     methods: {
@@ -160,12 +162,7 @@
         this.$refs['user'].validate((valid) => {
           if (valid) {
             agentRegister(this.user).then(result => {
-              this.$message({
-                showClose: true,
-                message: this.$t('message.submit_success'),
-                type: 'success'
-              })
-              this.$router.push({name: 'Home'})
+              this.successMsg = this.$t('message.submit_success')
             }, errorMsg => {
               this.$message({
                 showClose: true,
@@ -191,10 +188,15 @@
   }
 </script>
 
-<style lang="sass" scoped="">
+<style lang="sass" scoped>
+@import '../../style/vars.scss'
 .el-input /deep/ .el-input__suffix
   right: 0
 .el-button.el-button--info.el-button--small.captcha
   position: absolute
   right: 0
+.success
+  position: absolute
+  bottom: 35px
+  color: $green
 </style>
