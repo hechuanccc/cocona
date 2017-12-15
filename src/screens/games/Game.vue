@@ -151,13 +151,16 @@ export default {
     },
     diffTime (target, flag) {
       const duration = this.$moment.duration(target.diff())
-      const days = duration.days()
-      const hours = duration.hours()
-      const minutes = duration.minutes()
+      let days = duration.days()
+      let hours = duration.hours()
+      let minutes = duration.minutes()
       let seconds = duration.seconds()
       if (flag && (days + hours + minutes + seconds === 0)) {
         this.updateSchedule()
       }
+      days = days < 0 ? 0 : days
+      hours = hours < 0 ? 0 : hours
+      minutes = minutes < 0 ? 0 : minutes
       seconds = seconds < 0 ? 0 : seconds
       return {
         days,
