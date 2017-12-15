@@ -1,141 +1,170 @@
 <template>
-  <el-row>
+<el-row>
+  <div class="container">
     <el-col :span="16" :offset="8">
-      <el-form :model="ruleForm"
-                status-icon
-                :rules="formRules"
-                ref="ruleForm"
-                label-width="150px">
-
-          <el-form-item :label="$t('agent.username')" prop="username">
-            <el-input class="input-width" :maxlength="10" v-model.number="ruleForm.username"></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('agent.password')" prop="password">
-            <el-input class="input-width" :maxlength="15" type="password" v-model="ruleForm.password" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('agent.confirm_password')" prop="confirm_password">
-            <el-input class="input-width" :maxlength="15" type="password" v-model="ruleForm.confirm_password" auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('agent.real_name')" prop="real_name">
-            <el-input class="input-width" v-model="ruleForm.real_name"> </el-input>
-          </el-form-item>
-          <el-form-item :label="$t('agent.phone')" prop="phone">
-            <el-input class="input-width" v-model="ruleForm.phone" number></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('agent.email')" prop="email">
-            <el-input class="input-width" v-model="ruleForm.email"></el-input>
-          </el-form-item>
-          <el-form-item :label="$t('agent.captcha')" required>
+      <el-form :model="user"
+        status-icon
+        :rules="rules"
+        ref="user"
+        label-width="150px">
+        <el-form-item :label="$t('user.username')" prop="username">
+          <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.password')" prop="password">
+          <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
+          <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.realname')" prop="real_name">
+          <el-input class="input-width" v-model="user.real_name"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.phone')" prop="phone">
+          <el-input class="input-width" v-model="user.phone"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.email')" prop="email">
+          <el-input class="input-width" v-model="user.email"></el-input>
+        </el-form-item>
+        <el-form-item :label="$t('user.captcha')" required>
           <el-col :span="7">
-            <el-form-item  prop="captcha_1">
-              <el-input class="input-width" :maxlength="4" v-model="ruleForm.captcha_1" auto-complete="off">
-                <el-button slot="suffix" type="info"  icon="el-icon-refresh" @click="grabCaptcha"></el-button>
+            <el-form-item  prop="verification_code_1">
+              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
+                <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4" :offset="1">
-            <img :src="captcha.img" alt="" height="30">
+            <img :src="captcha_src" alt="" height="30">
           </el-col>
         </el-form-item>
-          <el-form-item>
-            <el-button type="primary" class="input-width" @click="submitForm('ruleForm')" size="medium">{{$t('action.submit')}}</el-button>
-          </el-form-item>
+        <el-form-item>
+          <el-button type="primary" size="medium" class="input-width" @click="submitForm">{{$t('action.submit')}}</el-button>
+        </el-form-item>
       </el-form>
     </el-col>
-  </el-row>
+  </div>
+</el-row>
 </template>
 
 <script>
-  import TopBar from '../../components/TopBar'
-  import {agentRegister, getCaptcha} from '../../api'
-  import api from '../../api/urls'
+  import {agentRegister, fetchCaptcha, checkAgentName} from '../../api'
+  import { validateUserName, validatePassword, validatePhone } from '../../validate'
+  import { msgFormatter } from '../../utils'
 
   export default {
+    name: 'agentRegister',
     data () {
-      var validatePass = (rule, value, callback) => {
+      const userNameValidator = (rule, value, callback) => {
+        if (!validateUserName(value)) {
+          callback(new Error(this.$t('validate.username_validate')))
+        } else {
+          checkAgentName(value).then(data => {
+            if (!data.existed) {
+              callback()
+            } else {
+              callback(new Error(this.$t('validate.username_exist')))
+            }
+          })
+        }
+      }
+      const passwordValidator = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('validate.required')))
+        } else {
+          if (this.user.confirmation_password !== '') {
+            this.$refs.user.validateField('confirmation_password')
+          }
+          callback()
+        }
+      }
+
+      const passwordFormatValidator = (rule, value, callback) => {
+        if (!validatePassword(value)) {
+          callback(new Error(this.$t('validate.password_validate')))
+        } else {
+          callback()
+        }
+      }
+
+      const confirmPasswordValidator = (rule, value, callback) => {
         if (value === '') {
           callback(new Error(this.$t('validate.password_again')))
-        } else if (value !== this.ruleForm.password) {
+        } else if (value !== this.user.password) {
           callback(new Error(this.$t('validate.password_diff')))
         } else {
           callback()
         }
       }
+      const captchaValidator = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error(this.$t('validate.required')))
+        } else {
+          callback()
+        }
+      }
+
+      const phoneValidator = (rule, value, callback) => {
+        if (!validatePhone(value)) {
+          callback(new Error(this.$t('validate.phone_validate')))
+        } else {
+          callback()
+        }
+      }
       return {
-        ruleForm: {
+        user: {
           username: '',
           password: '',
-          confirm_password: '',
+          confirmation_password: '',
           real_name: '',
           phone: '',
           email: '',
-          captcha_0: '',
-          captcha_1: ''
+          withdraw_password: '',
+          verification_code_0: '',
+          verification_code_1: ''
         },
-        captcha: {
-          img: '',
-          show: false
-        },
-        captcha1: {
-          img: '',
-          show: false
-        },
-        formRules: {
-          username: [{
-            required: true,
-            pattern: /^[a-zA-Z0-9]{4,10}$/,
-            message: this.$t('validate.username_validate'),
-            trigger: 'blur'
-          }],
-          password: [{
-            required: true,
-            pattern: /^[a-zA-Z]{2}[a-zA-Z0-9]{4,13}$/,
-            message: this.$t('validate.password_validate'),
-            trigger: 'blur'
-          }],
-          confirm_password: [{
-            required: true,
-            validator: validatePass,
-            trigger: 'blur'
-          }],
-          real_name: [{
-            required: true,
-            pattern: /^\D*$/,
-            message: this.$t('validate.required'),
-            trigger: 'blur'
-          }],
-          phone: [{
-            required: true,
-            message: this.$t('validate.required'),
-            trigger: 'blur'
-          }],
-          email: [{
-            required: true,
-            pattern: /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/,
-            message: this.$t('validate.email_validate'),
-            trigger: 'blur'
-          }],
-          captcha_1: [{
-            required: true,
-            message: this.$t('validate.required'),
-            trigger: 'blur'
-          }]
-        },
-        labelPosition: 'left'
+        captcha_src: '',
+        rules: {
+          username: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: userNameValidator, trigger: 'blur,change' }
+          ],
+          password: [
+          { required: true, validator: passwordValidator, trigger: 'blur' },
+          { validator: passwordFormatValidator, trigger: 'blur,change' }
+          ],
+          confirmation_password: [
+          { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
+          ],
+          real_name: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          ],
+          phone: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: phoneValidator, trigger: 'blur,change' }
+          ],
+          email: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { type: 'email', message: this.$t('validate.email_validate'), trigger: 'blur,change' }
+          ],
+          withdraw_password: [
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          ],
+          verification_code_1: [
+          { required: true, validator: captchaValidator, trigger: 'blur' }
+          ]
+        }
       }
     },
     methods: {
-      submitForm (formName) {
-        this.$refs[formName].validate((valid) => {
+      submitForm () {
+        this.$refs['user'].validate((valid) => {
           if (valid) {
-            let inputData = this.ruleForm
-            agentRegister(inputData).then(
-              response => {
-                this.$router.push({name: 'Home'})
-              }, errorMsg => {
+            agentRegister(this.user).then(result => {
+              this.$router.push({name: 'Home'})
+            }, errorMsg => {
               this.$message({
                 showClose: true,
-                message: errorMsg,
+                message: msgFormatter(errorMsg),
                 type: 'error'
               })
             })
@@ -144,32 +173,23 @@
           }
         })
       },
-      grabCaptcha () {
-        getCaptcha().then(response => {
-          this.captcha.show = true
-          this.ruleForm.captcha_0 = response.captcha_val
-          this.captcha.img = api.domain + response.captcha_src
-        },
-        errorMsg => {
-          this.$message({
-            showClose: true,
-            message: errorMsg,
-            type: 'error'
-          })
-        }
-      )
+      fetchCaptcha () {
+        fetchCaptcha().then(res => {
+          this.captcha_src = res.captcha_src
+          this.user.verification_code_0 = res.captcha_val
+        })
       }
     },
     created () {
-      this.grabCaptcha()
-    },
-    components: {
-      TopBar
+      this.fetchCaptcha()
     }
   }
 </script>
 
 <style lang="sass" scoped="">
 .el-input /deep/ .el-input__suffix
+  right: 0
+.el-button.el-button--info.el-button--small.captcha
+  position: absolute
   right: 0
 </style>
