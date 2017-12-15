@@ -57,7 +57,17 @@
     .mlaft_pl_gr_7p_#{$i},
     .mlaft_pl_gr_8p_#{$i},
     .mlaft_pl_gr_9p_#{$i},
-    .mlaft_pl_gr_10p_#{$i}{
+    .mlaft_pl_gr_10p_#{$i},
+    .er75ft_pl_gr_1p_#{$i},
+    .er75ft_pl_gr_2p_#{$i},
+    .er75ft_pl_gr_3p_#{$i},
+    .er75ft_pl_gr_4p_#{$i},
+    .er75ft_pl_gr_5p_#{$i},
+    .er75ft_pl_gr_6p_#{$i},
+    .er75ft_pl_gr_7p_#{$i},
+    .er75ft_pl_gr_8p_#{$i},
+    .er75ft_pl_gr_9p_#{$i},
+    .er75ft_pl_gr_10p_#{$i} {
       display: inline-block;
       background: url(../assets/#{$i}.png) no-repeat center center;
       width: 26px;
