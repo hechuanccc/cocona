@@ -113,5 +113,8 @@ export default {
   },
   setMessageCount: ({ commit }, count) => {
     commit(types.SET_MESSAGE_COUNT, count)
+  },
+  setServiceUrl: ({ commit }, url) => {
+    commit(types.SET_CUSTOMER_SERVICE_URL, url)
   }
 }
