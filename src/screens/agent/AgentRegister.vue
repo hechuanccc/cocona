@@ -29,7 +29,7 @@
           <el-col :span="7">
             <el-form-item  prop="verification_code_1">
               <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
-                <el-button slot="suffix" type="info" icon="el-icon-refresh" @click="fetchCaptcha"></el-button>
+                <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -188,5 +188,8 @@
 
 <style lang="sass" scoped="">
 .el-input /deep/ .el-input__suffix
+  right: 0
+.el-button.el-button--info.el-button--small.captcha
+  position: absolute
   right: 0
 </style>
