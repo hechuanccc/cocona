@@ -27,6 +27,7 @@ export default {
   homePage: apiv1 + '/website/home-page/',
   announcements: apiv1 + '/announcements/',
   check_username: host + '/v1/checkmember/',
+  check_agentname: host + '/v1/checkagent/',
   payment: apiv1 + '/payment/',
   paymentType: apiv1 + '/paymenttype/?opt_expand=1&platform=0',
   betrecord: apiv1 + '/betrecord/',

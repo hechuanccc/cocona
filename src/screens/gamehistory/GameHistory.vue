@@ -162,8 +162,12 @@ export default {
           ]
         },
         {
-          displayName: '1-5龙虎',
+          displayName: ' 1 - 5 龙 虎 ',
           subHeads: [
+            {
+              displayName: '',
+              key: 'dragon_tiger_1_10'
+            },
             {
               displayName: '',
               key: 'dragon_tiger_2_9'
