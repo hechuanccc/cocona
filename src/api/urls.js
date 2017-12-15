@@ -26,7 +26,7 @@ export default {
   banner: apiv1 + '/banners/',
   homePage: apiv1 + '/website/home-page/',
   announcements: apiv1 + '/announcements/',
-  check_username: host + '/v1/checkmember/',
+  check_username: apiv1 + '/username/',
   check_agentname: host + '/v1/checkagent/',
   payment: apiv1 + '/payment/',
   paymentType: apiv1 + '/paymenttype/?opt_expand=1&platform=0',
@@ -39,5 +39,6 @@ export default {
   remit: apiv1 + '/remit_transaction/',
   readMessage: apiv1 + '/message/read/',
   messages: apiv1 + '/messages/',
+  messageCount: apiv1 + '/message/count/',
   gamehistory: apiv1 + '/history/'
 }

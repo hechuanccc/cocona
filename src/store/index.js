@@ -17,6 +17,7 @@ export function createStore () {
       games: [],
       categories: [],
       loading: false,
+      messageCount: 0,
       customPlayGroups: [
         {
           code: 'cqlf_pg_wc_wc',

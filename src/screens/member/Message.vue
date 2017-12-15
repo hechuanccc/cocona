@@ -45,6 +45,7 @@ export default {
   created () {
     fetchMessages().then(messages => {
       this.messages = messages
+      this.$store.dispatch('setMessageCount', messages.filter(msg => !msg.status).length)
     })
   },
   methods: {
@@ -52,6 +53,7 @@ export default {
       if (!row.status) {
         readMessage([row.id])
         this.messages[row.index].status = 1
+        this.$store.dispatch('setMessageCount', this.$store.state.messageCount - 1)
       }
       this.$alert(row.content, row.title, {
         showConfirmButton: false,
@@ -68,10 +70,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .read {
-  color: #999
+  color: #999;
 }
 .unread {
-  color: #666
+  color: #666;
 }
 </style>
 

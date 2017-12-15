@@ -39,5 +39,8 @@ export default {
   },
   [types.END_LOADING]: (state) => {
     state.loading = false
+  },
+  [types.SET_MESSAGE_COUNT]: (state, count) => {
+    state.messageCount = count
   }
 }
