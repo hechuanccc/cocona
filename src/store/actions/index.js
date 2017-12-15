@@ -110,5 +110,8 @@ export default {
   },
   endLoading: ({ commit }) => {
     commit(types.END_LOADING)
+  },
+  setMessageCount: ({ commit }, count) => {
+    commit(types.SET_MESSAGE_COUNT, count)
   }
 }
