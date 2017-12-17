@@ -25,7 +25,7 @@
                   type="date"
                   v-model = "selectedDate"
                   placeholder="选择日期"
-                  @change="getHistory(currentGame,selectedDate)">
+                  @change="getHistory(currentGame, selectedDate, pageSize, (currentPage - 1) * pageSize)">
                   </el-date-picker>
                 </div>
                 <div class="input">
@@ -41,7 +41,7 @@
                 <el-button type="primary" @click="getHistory(currentGame, nowDate)">刷新数据</el-button>
               </div>
             </div>
-            <div v-if="!showSchedules.length">暂无资料</div>
+            <div v-if="!filteredSchedules.length">暂无资料</div>
             <table v-else
               class="history-table"
               :key="'table' + gameTable.code">
@@ -69,7 +69,7 @@
                   </div>
                 </th>
               </tr>
-              <tr v-for="schedule in showSchedules"
+              <tr v-for="schedule in filteredSchedules"
                 :key="'issue-' + schedule.issue_number">
                 <td v-for="(fieldsObject, fieldsIndex) in nowGameTable.table"
                   :key="'field-'+fieldsIndex"
@@ -106,11 +106,12 @@
               </tr>
             </table>
             <el-pagination
-              v-if="filteredSchedules.length > pageSize"
+              v-if="paginationData.count > pageSize"
               :current-page.sync="currentPage"
+              @current-change="handlePageChange()"
               :page-size="pageSize"
               layout="total, prev, pager, next"
-              :total="filteredSchedules.length">
+              :total="paginationData.count">
             </el-pagination>
           </div>
         </el-col>
@@ -633,7 +634,8 @@ export default {
       inputPeriod: '',
       selectedDate: this.$moment().format('YYYY-MM-DD'),
       currentPage: 1,
-      pageSize: 30
+      pageSize: 30,
+      paginationData: ''
     }
   },
   filters: {
@@ -711,25 +713,34 @@ export default {
       }))
       return classfied
     },
-    getHistory (game, date) {
+    getHistory (game, date, limit, offset) {
       date = this.$moment(date).format('YYYY-MM-DD')
-      fetchHistory(game, date).then((result) => {
+      fetchHistory(game, date, limit, offset).then((result) => {
         this.selectedDate = date
-        if (result) {
+        if (result.results) {
           if (game === 'bjkl8') {
-            _.each(result, (schedule) => {
+            _.each(result.results, (schedule) => {
               let resultArr = schedule.result_str.split(',')
               resultArr.pop() // for bjkl8 useless 21th num
               schedule.result_str = resultArr.join()
             })
           }
-          _.each(result, (schedule) => {
+          _.each(result.results, (schedule) => {
             schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD hh:mm:ss')
           })
-          this.schedules = result
+          this.paginationData = {
+            count: result.count,
+            next: result.next,
+            previous: result.previous
+          }
+          this.schedules = result.results
         }
         this.loading = false
       })
+    },
+    handlePageChange () {
+      this.loading = true
+      this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
     }
   },
   computed: {
@@ -740,13 +751,6 @@ export default {
       return this.schedules.filter(schedule => {
         return schedule['issue_number'].indexOf(this.inputPeriod) !== -1
       })
-    },
-    showSchedules () {
-      if (!this.schedules) {
-        return []
-      }
-      let groupIdx = (this.currentPage - 1) * this.pageSize
-      return this.filteredSchedules.slice(groupIdx, groupIdx + this.pageSize)
     }
   },
   components: {
@@ -768,9 +772,9 @@ export default {
       }
     ).then(games => {
       if (this.currentGame) {
-        this.getHistory(this.currentGame, this.nowDate)
+        this.getHistory(this.currentGame, this.nowDate, this.pageSize, 0)
         this.interval = setInterval(() => {
-          this.getHistory(this.currentGame, this.selectedDate)
+          this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
         }, (1 * 60 * 1000))
       }
     })
@@ -788,9 +792,9 @@ export default {
       this.currentPage = 1
       this.schedules = ''
       this.nowDisplay = 'number'
-      this.getHistory(this.currentGame, this.nowDate)
+      this.getHistory(this.currentGame, this.nowDate, this.pageSize, 0)
       this.interval = setInterval(() => {
-        this.getHistory(this.currentGame, this.selectedDate)
+        this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
       }, (5 * 60 * 1000))
     }
   }
