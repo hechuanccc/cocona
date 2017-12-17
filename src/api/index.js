@@ -139,6 +139,7 @@ export function remit (info) {
 export function fetchMessages () {
   return axios.get(urls.messages)
 }
+
 export function fetchMessageCount () {
   return axios.get(urls.messageCount)
 }
@@ -149,8 +150,8 @@ export function readMessage (ids) {
     { 'Content-Type': 'application/json' })
 }
 
-export function fetchHistory (gameCode, date) {
-  return axios.get(`${urls.gamehistory}?game_code=${gameCode}&date=${date}`)
+export function fetchHistory (gameCode, date, limit, offset) {
+  return axios.get(`${urls.gamehistory}?game_code=${gameCode}&date=${date}&limit=${limit}&offset=${offset}`)
 }
 
 export function fetchPlaySetting (id) {

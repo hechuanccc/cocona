@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="refresh">
-                <el-button type="primary" @click="getHistory(currentGame, nowDate)">刷新数据</el-button>
+                <el-button type="primary" @click="getHistory(currentGame, nowDate, pageSize, (currentPage - 1) * pageSize)">刷新数据</el-button>
               </div>
             </div>
             <div v-if="!filteredSchedules.length">暂无资料</div>
@@ -106,12 +106,12 @@
               </tr>
             </table>
             <el-pagination
-              v-if="paginationData.count > pageSize"
+              v-if="total > pageSize"
               :current-page.sync="currentPage"
               @current-change="handlePageChange()"
               :page-size="pageSize"
               layout="total, prev, pager, next"
-              :total="paginationData.count">
+              :total="total">
             </el-pagination>
           </div>
         </el-col>
@@ -577,6 +577,10 @@ export default {
         table: TransformerTable
       },
       {
+        code: 'er75ft',
+        table: TransformerTable
+      },
+      {
         code: 'cqssc',
         table: sscTable
       },
@@ -635,7 +639,7 @@ export default {
       selectedDate: this.$moment().format('YYYY-MM-DD'),
       currentPage: 1,
       pageSize: 30,
-      paginationData: ''
+      total: 0
     }
   },
   filters: {
@@ -728,11 +732,7 @@ export default {
           _.each(result.results, (schedule) => {
             schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD hh:mm:ss')
           })
-          this.paginationData = {
-            count: result.count,
-            next: result.next,
-            previous: result.previous
-          }
+          this.total = result.count
           this.schedules = result.results
         }
         this.loading = false
@@ -805,7 +805,8 @@ export default {
 @import "../../style/vars.scss";
 
 .bigger, .even, .dragon {
-  color: $red
+  color: $red;
+  padding: 0 5px;
 }
 .game-nav {
   text-decoration: none;
