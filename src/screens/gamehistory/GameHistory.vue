@@ -25,7 +25,7 @@
                   type="date"
                   v-model = "selectedDate"
                   placeholder="选择日期"
-                  @change="getHistory(currentGame, selectedDate, pageSize, (currentPage - 1) * pageSize)">
+                  @change="handleDateChange()">
                   </el-date-picker>
                 </div>
                 <div class="input">
@@ -38,7 +38,7 @@
                 </div>
               </div>
               <div class="refresh">
-                <el-button type="primary" @click="getHistory(currentGame, nowDate, pageSize, (currentPage - 1) * pageSize)">刷新数据</el-button>
+                <el-button type="primary" @click="getLatest()">刷新数据</el-button>
               </div>
             </div>
             <div v-if="!filteredSchedules.length">暂无资料</div>
@@ -741,6 +741,14 @@ export default {
     handlePageChange () {
       this.loading = true
       this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
+    },
+    handleDateChange () {
+      this.loading = true
+      this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
+    },
+    getLatest () {
+      this.loading = true
+      this.getHistory(this.currentGame, this.nowDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
     }
   },
   computed: {
