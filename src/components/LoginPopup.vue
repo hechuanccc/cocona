@@ -38,9 +38,9 @@
           <el-form-item>
             <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
           </el-form-item>
-          <el-form-item class="forgot-password">
-            <router-link to="./forget" @click.native="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</router-link>
-          </el-form-item>
+          <div class="forgot-password">
+            <a :href="$store.state.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
+          </div>
         </el-form>
       </div>
     </el-col>

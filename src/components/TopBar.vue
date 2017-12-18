@@ -117,6 +117,7 @@ export default {
     gethomePage().then(
       response => {
         this.homepage = response
+        this.$store.dispatch('setServiceUrl', response.global_preferences.customer_service_url)
       }
     )
 
