@@ -121,6 +121,7 @@ import hkl from './rules/hkl'
 import xjssc from './rules/xjssc'
 import tjssc from './rules/tjssc'
 import bjkl8 from './rules/bjkl8'
+import er75ft from './rules/er75ft'
 
 export default {
   name: 'gameIntros',
@@ -138,7 +139,8 @@ export default {
     hkl,
     xjssc,
     tjssc,
-    bjkl8
+    bjkl8,
+    er75ft
   },
   data () {
     return {
