@@ -59,23 +59,23 @@ export default {
   display: block;
 }
 .odd {
-  @include number
+  @include number;
   background-position: -150px -5px;
 }
 .even {
-  @include number
+  @include number;
   background-position: -102px -5px;
 }
 .equal {
-  @include number
+  @include number;
   background-position: -198px -5px;
 }
 .bigger {
-  @include number
+  @include number;
   background-position: -12px -5px;
 }
 .smaller {
-  @include number
+  @include number;
   background-position: -58px -5px;
 }
 
@@ -141,7 +141,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, pcdd;
 }
 @include ssc-num;
 
-$transformergames: mlaft, bcr, jspk10;
+$transformergames: mlaft, bcr, jspk10, er75ft;
 
 %transformerball{
   display: inline-block;
@@ -229,7 +229,7 @@ $transformergames: mlaft, bcr, jspk10;
   text-indent: -9999px;
   height: 27px;
   line-height: 27px;
-  margin-left: 5px;
+  margin-left: 15px;
 }
 @mixin jsk3-num {
   @for $j from 1 through 20 {

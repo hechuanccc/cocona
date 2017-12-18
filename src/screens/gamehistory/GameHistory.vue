@@ -25,7 +25,7 @@
                   type="date"
                   v-model = "selectedDate"
                   placeholder="选择日期"
-                  @change="getHistory(currentGame,selectedDate)">
+                  @change="handleDateChange()">
                   </el-date-picker>
                 </div>
                 <div class="input">
@@ -38,10 +38,10 @@
                 </div>
               </div>
               <div class="refresh">
-                <el-button type="primary" @click="getHistory(currentGame, nowDate)">刷新数据</el-button>
+                <el-button type="primary" @click="getLatest()">刷新数据</el-button>
               </div>
             </div>
-            <div v-if="!showSchedules.length">暂无资料</div>
+            <div v-if="!filteredSchedules.length">暂无资料</div>
             <table v-else
               class="history-table"
               :key="'table' + gameTable.code">
@@ -69,7 +69,7 @@
                   </div>
                 </th>
               </tr>
-              <tr v-for="schedule in showSchedules"
+              <tr v-for="schedule in filteredSchedules"
                 :key="'issue-' + schedule.issue_number">
                 <td v-for="(fieldsObject, fieldsIndex) in nowGameTable.table"
                   :key="'field-'+fieldsIndex"
@@ -106,11 +106,12 @@
               </tr>
             </table>
             <el-pagination
-              v-if="filteredSchedules.length > pageSize"
+              v-if="total > pageSize"
               :current-page.sync="currentPage"
+              @current-change="handlePageChange()"
               :page-size="pageSize"
               layout="total, prev, pager, next"
-              :total="filteredSchedules.length">
+              :total="total">
             </el-pagination>
           </div>
         </el-col>
@@ -576,6 +577,10 @@ export default {
         table: TransformerTable
       },
       {
+        code: 'er75ft',
+        table: TransformerTable
+      },
+      {
         code: 'cqssc',
         table: sscTable
       },
@@ -633,7 +638,8 @@ export default {
       inputPeriod: '',
       selectedDate: this.$moment().format('YYYY-MM-DD'),
       currentPage: 1,
-      pageSize: 30
+      pageSize: 30,
+      total: 0
     }
   },
   filters: {
@@ -711,25 +717,38 @@ export default {
       }))
       return classfied
     },
-    getHistory (game, date) {
+    getHistory (game, date, limit, offset) {
       date = this.$moment(date).format('YYYY-MM-DD')
-      fetchHistory(game, date).then((result) => {
+      fetchHistory(game, date, limit, offset).then((result) => {
         this.selectedDate = date
-        if (result) {
+        if (result.results) {
           if (game === 'bjkl8') {
-            _.each(result, (schedule) => {
+            _.each(result.results, (schedule) => {
               let resultArr = schedule.result_str.split(',')
               resultArr.pop() // for bjkl8 useless 21th num
               schedule.result_str = resultArr.join()
             })
           }
-          _.each(result, (schedule) => {
+          _.each(result.results, (schedule) => {
             schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD hh:mm:ss')
           })
-          this.schedules = result
+          this.total = result.count
+          this.schedules = result.results
         }
         this.loading = false
       })
+    },
+    handlePageChange () {
+      this.loading = true
+      this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
+    },
+    handleDateChange () {
+      this.loading = true
+      this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
+    },
+    getLatest () {
+      this.loading = true
+      this.getHistory(this.currentGame, this.nowDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
     }
   },
   computed: {
@@ -740,13 +759,6 @@ export default {
       return this.schedules.filter(schedule => {
         return schedule['issue_number'].indexOf(this.inputPeriod) !== -1
       })
-    },
-    showSchedules () {
-      if (!this.schedules) {
-        return []
-      }
-      let groupIdx = (this.currentPage - 1) * this.pageSize
-      return this.filteredSchedules.slice(groupIdx, groupIdx + this.pageSize)
     }
   },
   components: {
@@ -768,9 +780,9 @@ export default {
       }
     ).then(games => {
       if (this.currentGame) {
-        this.getHistory(this.currentGame, this.nowDate)
+        this.getHistory(this.currentGame, this.nowDate, this.pageSize, 0)
         this.interval = setInterval(() => {
-          this.getHistory(this.currentGame, this.selectedDate)
+          this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
         }, (1 * 60 * 1000))
       }
     })
@@ -788,9 +800,9 @@ export default {
       this.currentPage = 1
       this.schedules = ''
       this.nowDisplay = 'number'
-      this.getHistory(this.currentGame, this.nowDate)
+      this.getHistory(this.currentGame, this.nowDate, this.pageSize, 0)
       this.interval = setInterval(() => {
-        this.getHistory(this.currentGame, this.selectedDate)
+        this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
       }, (5 * 60 * 1000))
     }
   }
@@ -801,7 +813,8 @@ export default {
 @import "../../style/vars.scss";
 
 .bigger, .even, .dragon {
-  color: $red
+  color: $red;
+  padding: 0 5px;
 }
 .game-nav {
   text-decoration: none;
