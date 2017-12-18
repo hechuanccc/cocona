@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table v-loading="loading" :data="displayRecord" stripe>
+    <el-table v-loading="loading" :data="transactionRecords" stripe>
       <el-table-column :label="$t('user.transaction_time')">
         <template slot-scope="scope">
           <span>{{ scope.row.created_at | moment("YYYY-MM-DD HH:mm:ss")}}</span>
@@ -20,11 +20,12 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="paymentRecords.length > pageSize"
+      v-if="totalCount > pageSize"
       :current-page.sync="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"
-      :total="paymentRecords.length">
+      :total="totalCount"
+      @current-change="handlePageChange">
     </el-pagination>
   </div>
 </template>
@@ -52,9 +53,10 @@ export default {
   },
   data () {
     return {
-      paymentRecords: [],
+      transactionRecords: [],
       currentPage: 1,
       pageSize: 10,
+      totalCount: 0,
       loading: false
     }
   },
@@ -65,19 +67,15 @@ export default {
       } else {
         return 'withdraw'
       }
-    },
-    displayRecord () {
-      let groupIdx = (this.currentPage - 1) * this.pageSize
-      return this.paymentRecords.slice(groupIdx, groupIdx + this.pageSize)
     }
   },
   watch: {
     '$route': function () {
-      this.fetchTransactionRecord()
+      this.initFetchTransactionRecord()
     }
   },
   created () {
-    this.fetchTransactionRecord()
+    this.initFetchTransactionRecord()
   },
   methods: {
     color (value) {
@@ -89,10 +87,11 @@ export default {
         return 'red'
       }
     },
-    fetchTransactionRecord () {
+    initFetchTransactionRecord () {
       this.loading = true
-      fetchTransactionRecord(this.transactionType).then(datas => {
-        this.paymentRecords = datas
+      fetchTransactionRecord({ transaction_type: this.transactionType, offset: 0 }).then(data => {
+        this.totalCount = data.count
+        this.transactionRecords = data.results
         this.loading = false
       }, errorMsg => {
         this.$message({
@@ -100,6 +99,15 @@ export default {
           message: msgFormatter(errorMsg),
           type: 'error'
         })
+        this.loading = false
+      })
+    },
+    handlePageChange (currentPage) {
+      this.loading = true
+      fetchTransactionRecord({ transaction_type: this.transactionType, offset: (currentPage - 1) * this.pageSize }).then(data => {
+        this.betRecords = data.results
+        this.loading = false
+      }, () => {
         this.loading = false
       })
     }
