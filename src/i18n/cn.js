@@ -157,8 +157,9 @@ export default {
     setting: '设定'
   },
   validate: {
-    username_validate: '请输入8~15位英数字',
+    username_validate: '请输入6~15位英数字',
     password_validate: '请输入8~15字元，其中至少包含一大写字母及一数字',
+    withdraw_password_validate: '请输入6位纯数字',
     qq_validate: 'qq号码格式无效',
     phone_validate: '手机号码格式无效',
     account_validate: '该帐号格式无效',

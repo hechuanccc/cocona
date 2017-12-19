@@ -6,7 +6,7 @@
     :closable="false">
   </el-alert>
   <div class="form-wp">
-    <el-form class="m-t-lg" method="post" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
+    <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <el-form-item :label="$t('user.amount')" prop="amount">
         <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
         <input name="payee" type="hidden" :value="payment.payee_id" />
@@ -32,9 +32,36 @@
         </ul>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
+        <el-button class="submit-button" type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog
+      :title="'支付信息'"
+      :visible="isSubmit"
+      width="360px"
+      @close="closeDetailDialog()"
+      center>
+      <div>
+        <p>支付方式：在线支付</p>
+        <p>支付金额：{{this.payment.amount|currency('￥')}}</p>
+        <p>1. 成功付款后将会自动到帐，并弹出到帐提示。</p>
+        <p>2. 长时间无反应，请联系客服。</p>
+      </div>
+      <slot name="footer">
+        <el-row class="m-t-lg">
+          <el-col :span="12" class="text-center">
+            <router-link to="/account/finance/payment_record">
+              <el-button class="dialog-button" type="primary">{{$t('user.payment_record')}}</el-button>
+            </router-link>
+          </el-col>
+          <el-col :span="12" class="text-center">
+            <a :href="$store.state.customerServiceUrl" target="_blank">
+              <el-button class="dialog-button" type="primary">在线客服</el-button>
+            </a>
+          </el-col>
+        </el-row>
+      </slot>
+    </el-dialog>
   </div>
 </el-row>
 </template>
@@ -75,7 +102,8 @@ export default {
       paymentTypes: [],
       token: Vue.cookie.get('access_token'),
       paymentUrl: urls.payment,
-      notify_page: 'xxx'
+      notify_page: 'xxx',
+      isSubmit: false
     }
   },
   computed: {
@@ -118,6 +146,7 @@ export default {
       this.$refs['payment'].validate((valid) => {
         if (valid) {
           this.$refs['payment'].$el.submit()
+          this.isSubmit = true
         }
       })
     },
@@ -130,7 +159,10 @@ export default {
         this.payment.gateway_id = paymentType.gateway_id
       }
     },
-    filtAmount
+    filtAmount,
+    closeDetailDialog () {
+      this.isSubmit = false
+    }
   }
 }
 </script>
@@ -170,7 +202,7 @@ export default {
   font-size: 12px;
   color: #666;
 }
-.el-button {
+.submit-button {
   width: 200px;
 }
 .weixin-icon {
@@ -181,5 +213,8 @@ export default {
 }
 .bankcard-icon {
   background-image: url("../../assets/credit-card.png");
+}
+.dialog-button {
+  width: 150px;
 }
 </style>

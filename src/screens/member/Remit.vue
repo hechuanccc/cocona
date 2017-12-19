@@ -10,7 +10,7 @@
         <el-row>
           <el-col :offset="8" :span="16">
             <el-form class="m-t-lg" :model="remitData" status-icon ref="bankForm" :rules="remitDataRules" label-width="128px">
-              <el-form-item :label="$t('user.remit_bank')" ref="bankPayee" prop="remit_info.remit_payee">
+              <el-form-item :label="$t('user.realname')" ref="bankPayee" prop="remit_info.remit_payee">
                 <el-select
                   v-model="remitData.remit_info.remit_payee"
                   class="input-width"
@@ -22,6 +22,9 @@
                     :value="payee.id">
                   </el-option>
                 </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('user.remit_bank')" ref="bankPayee" prop="remit_info.remit_payee">
+                {{bankMap[selectedPayee.bank]}}
               </el-form-item>
               <el-form-item :label="$t('user.remit_account')">
                 {{selectedPayee.account}}
@@ -110,7 +113,7 @@
   </el-row>
 </template>
 <script>
-import { fetchRemitpayee, remit } from '../../api'
+import { fetchRemitpayee, remit, fetchBank } from '../../api'
 import { msgFormatter, filtAmount } from '../../utils'
 export default {
   name: 'Remit',
@@ -152,7 +155,8 @@ export default {
           { required: true, type: 'integer', message: this.$t('validate.required_num'), trigger: 'blur' },
           { validator: limitPass, trigger: 'blur,change' }
         ]
-      }
+      },
+      bankMap: {}
     }
   },
   computed: {
@@ -190,6 +194,11 @@ export default {
   created () {
     fetchRemitpayee().then(payees => {
       this.remitPayees = payees
+    })
+    fetchBank().then(banks => {
+      banks.forEach(bank => {
+        this.bankMap[bank.key] = bank.value
+      })
     })
   },
   methods: {
