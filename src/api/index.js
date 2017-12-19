@@ -93,15 +93,21 @@ export function placeBet (data) {
   })
 }
 
-export function fetchTransactionRecord (type) {
-  return axios.get(`${urls.transaction_record}?transaction_type=${type}`)
+export function fetchTransactionRecord (option) {
+  return axios.get(`${urls.transaction_record}?transaction_type=${option.transaction_type}&limit=10&offset=${option.offset}`)
 }
 
 export function fetchBet (gameData) {
   return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
 }
-export function fetchBetHistory () {
-  return axios.get(`${urls.betrecord}?opt_expand=play`)
+export function fetchBetHistory (option) {
+  let url = `${urls.betrecord}?opt_expand=play&limit=10`
+  Object.keys(option).forEach(key => {
+    if (option[key]) {
+      url += `&${key}=${option[key]}`
+    }
+  })
+  return axios.get(url)
 }
 
 export function getToken (oldToken) {
@@ -136,8 +142,14 @@ export function remit (info) {
   })
 }
 
-export function fetchMessages () {
-  return axios.get(urls.messages)
+export function fetchMessages (option) {
+  let url = `${urls.messages}?limit=10`
+  Object.keys(option).forEach(key => {
+    if (option[key] || option[key] === 0) {
+      url += `&${key}=${option[key]}`
+    }
+  })
+  return axios.get(url)
 }
 
 export function fetchMessageCount () {

@@ -19,10 +19,10 @@
             value="">
           </el-option>
           <el-option
-            v-for="num in gameNames"
-            :key="num"
-            :label="num"
-            :value="num">
+            v-for="game in allGames"
+            :key="game.code"
+            :label="game.display_name"
+            :value="game.code">
           </el-option>
         </el-select>
       </el-form-item>
@@ -32,7 +32,7 @@
     </el-form>
   </el-row>
   <el-row>
-    <el-table v-loading="loading" :data="showRecords" stripe>
+    <el-table v-loading="loading" :data="betRecords" stripe>
       <el-table-column :label="$t('user.game_name')"
         prop="game.display_name">
       </el-table-column>
@@ -43,6 +43,9 @@
       <el-table-column
         :label="$t('user.betdate')"
         prop="created_at">
+        <template slot-scope="scope">
+          <span>{{ scope.row.created_at | moment("YYYY-MM-DD")}}</span>
+        </template>
       </el-table-column>
       <el-table-column :label="$t('user.play')">
         <template slot-scope="scope">
@@ -67,11 +70,12 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="filtRecords.length > pageSize"
+      v-if="totalCount > pageSize"
       :current-page.sync="currentPage"
       :page-size="pageSize"
       layout="total, prev, pager, next"
-      :total="filtRecords.length">
+      :total="totalCount"
+      @current-change="handlePageChange">
     </el-pagination>
   </el-row>
 </div>
@@ -95,39 +99,42 @@ export default {
       currentPage: 1,
       pageSize: 10,
       loading: false,
-      gameNames: [],
-      isUnsettled: false
+      allGames: [],
+      isUnsettled: false,
+      totalCount: 0,
+      nextUrl: '',
+      previousUrl: '',
+      offset: 0
     }
   },
   created () {
     if (!this.lazyFetch) {
-      this.fetchBetHistory()
+      this.initFetchBetHistory()
+      this.allGames = this.$store.state.state
+      if (!this.allGames || this.allGames.length === 0) {
+        this.$store.dispatch('fetchGames').then(games => {
+          this.allGames = this.$store.state.games
+        })
+      }
     }
   },
   computed: {
-    filtRecords () {
-      let filtRecords = this.betRecords
-      if (this.selectedDate) {
-        filtRecords = filtRecords.filter(record => record.created_at === this.selectedDate)
+    conditions () {
+      return {
+        code: this.selectedGame,
+        date: this.selectedDate,
+        unsettled: this.isUnsettled ? 1 : 0
       }
-      if (this.selectedGame) {
-        filtRecords = filtRecords.filter(record => record.game.display_name === this.selectedGame)
-      }
-      if (this.isUnsettled) {
-        filtRecords = filtRecords.filter(record => !record.profit && record.profit !== 0)
-      }
-      return filtRecords
-    },
-    showRecords () {
-      let groupIdx = (this.currentPage - 1) * this.pageSize
-      return this.filtRecords.slice(groupIdx, groupIdx + this.pageSize)
     }
   },
   watch: {
     'lazyFetch': function (lazyFetch) {
       if (!lazyFetch) {
-        this.fetchBetHistory()
+        this.initFetchBetHistory()
       }
+    },
+    'conditions': function (conditions) {
+      this.initFetchBetHistory(conditions)
     }
   },
   methods: {
@@ -140,20 +147,13 @@ export default {
         return 'unsettle'
       }
     },
-    fetchBetHistory () {
+    initFetchBetHistory (option) {
       this.loading = true
-      fetchBetHistory()
-        .then(records => {
-          this.betRecords = records
-          const gameNamesSet = new Set()
-          this.betRecords.forEach(record => {
-            const gameName = record.game.display_name
-            if (!gameNamesSet.has(gameName)) {
-              gameNamesSet.add(gameName)
-              this.gameNames.push(gameName)
-            }
-            record.created_at = this.$moment(record.created_at).format('YYYY-MM-DD')
-          })
+      fetchBetHistory({ ...option, offset: 0 })
+        .then(data => {
+          this.totalCount = data.count
+          this.betRecords = data.results
+          this.currentPage = 1
           this.loading = false
         }, errorMsg => {
           this.$message({
@@ -163,6 +163,15 @@ export default {
           })
           this.loading = false
         })
+    },
+    handlePageChange (currentPage) {
+      this.loading = true
+      fetchBetHistory({ ...this.conditions, offset: (currentPage - 1) * this.pageSize }).then(data => {
+        this.betRecords = data.results
+        this.loading = false
+      }, () => {
+        this.loading = false
+      })
     }
   }
 }
