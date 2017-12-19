@@ -26,7 +26,7 @@
           <el-input class="input-width" v-model="user.email"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
-          <el-input class="input-width" v-model="user.withdraw_password"></el-input>
+          <el-input class="input-width" :maxlength="6" v-model="user.withdraw_password"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.captcha')" required>
           <el-col :span="7">
@@ -51,7 +51,7 @@
 
 <script>
 import { fetchCaptcha, checkUserName, register } from '../../api'
-import { validateUserName, validatePassword, validatePhone } from '../../validate'
+import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword } from '../../validate'
 import { msgFormatter } from '../../utils'
 export default {
   name: 'register',
@@ -112,6 +112,14 @@ export default {
         callback()
       }
     }
+
+    const withdrawPasswordValidator = (rule, value, callback) => {
+      if (!validateWithdrawPassword(value)) {
+        callback(new Error(this.$t('validate.withdraw_password_validate')))
+      } else {
+        callback()
+      }
+    }
     return {
       user: {
         username: '',
@@ -149,7 +157,8 @@ export default {
           { type: 'email', message: this.$t('validate.email_validate'), trigger: 'blur,change' }
         ],
         withdraw_password: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
+          { validator: withdrawPasswordValidator, trigger: 'blur,change' }
         ],
         verification_code_1: [
           { required: true, validator: captchaValidator, trigger: 'blur' }
