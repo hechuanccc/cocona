@@ -174,6 +174,7 @@ export default {
           }).then(result => {
             this.$router.push({ name: 'Game' })
           }, errorMsg => {
+            this.fetchCaptcha()
             this.$message({
               showClose: true,
               message: msgFormatter(errorMsg),

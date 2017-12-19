@@ -113,6 +113,14 @@ export default {
       this.$store.dispatch('openBetRecordDialog')
     }
   },
+  watch: {
+    '$route.path': function (path) {
+      let pat = new RegExp(/\/game\/|\/game|\/account\/|\/gamehistory|\/gameintro/)
+      if (pat.test(path)) {
+        this.showDropdown = false
+      }
+    }
+  },
   created () {
     gethomePage().then(
       response => {
