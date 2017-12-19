@@ -86,7 +86,7 @@ export default {
     city: 'City',
     province: 'Province',
     amount: 'Amount',
-    withdraw_amount: '取款金额',
+    withdraw_amount: 'Withdraw Amount',
     gender: 'Gender',
     male: 'male',
     female: 'female',
@@ -125,7 +125,8 @@ export default {
     profit: 'Profit',
     visitor: 'Visitor',
     min_amount: 'Min Amount',
-    max_amount: 'Max Amount'
+    max_amount: 'Max Amount',
+    unread_email: 'Unread Email'
   },
   gameIntro: {
     gameinfo: 'Game Info:',
@@ -171,7 +172,8 @@ export default {
     max_amount_validate: 'must lower than max deposit amount',
     min_amount_validate: 'must higher than min deposit amount',
     max_withdraw_amount_validate: 'must lower than max withdraw amount',
-    min_withdraw_amount_validate: 'must higher than min withdraw amount'
+    min_withdraw_amount_validate: 'must higher than min withdraw amount',
+    date_range_validate: 'start date must before end date'
   },
   message: {
     save_success: 'Save Success',
