@@ -159,6 +159,7 @@ export default {
   validate: {
     username_validate: 'User name should be 6-15 digit or character',
     password_validate: 'Password must be 8-15 characters and must contain at least one capital letter and a digit',
+    withdraw_password_validate: 'Withdraw Password shold be 6 digit',
     qq_validate: 'This QQ number is invalid',
     phone_validate: 'This phone number is invalid',
     account_validate: 'This Account number is invalid',

@@ -3,7 +3,8 @@ const pattern = {
   password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,15}$/,
   qq: /^[1-9]{4,8}$/,
   phone: /^1[0-9]{10}$/,
-  bankAccount: /^[0-9]{10,}$/
+  bankAccount: /^[0-9]{10,}$/,
+  withdrawPassword: /^[0-9]{6}$/
 }
 
 export function validateUserName (value) {
@@ -24,4 +25,8 @@ export function validatePhone (value) {
 
 export function validateBankAccount (value) {
   return pattern.bankAccount.test(value)
+}
+
+export function validateWithdrawPassword (value) {
+  return pattern.withdrawPassword.test(value)
 }
