@@ -33,6 +33,7 @@
 </template>
 <script>
 import { updateWithdrawPassword } from '../../api'
+import { validateWithdrawPassword } from '../../validate'
 import { msgFormatter } from '../../utils'
 
 export default {
@@ -48,6 +49,13 @@ export default {
           }
           callback()
         }
+      }
+    }
+    const passwordFormatValidator = (rule, value, callback) => {
+      if (!validateWithdrawPassword(value)) {
+        callback(new Error(this.$t('validate.withdraw_password_validate')))
+      } else {
+        callback()
       }
     }
     const repeatPasswordValidator = (form) => {
@@ -72,7 +80,8 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ],
         new_password: [
-          { required: true, validator: passwordValidator('withdraw_password'), trigger: 'blur' }
+          { required: true, validator: passwordValidator('withdraw_password'), trigger: 'blur' },
+          { validator: passwordFormatValidator, trigger: 'blur,change' }
         ],
         repeat_password: [
           { required: true, validator: repeatPasswordValidator('withdraw_password'), trigger: 'blur' }
