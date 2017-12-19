@@ -164,6 +164,7 @@
             agentRegister(this.user).then(result => {
               this.successMsg = this.$t('message.submit_success')
             }, errorMsg => {
+              this.fetchCaptcha()
               this.$message({
                 showClose: true,
                 message: msgFormatter(errorMsg),

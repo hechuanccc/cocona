@@ -125,13 +125,6 @@ export default {
             (schedule.status === 'open' || schedule.status === 'created')
           })
           this.startTimer()
-        }, error => {
-          if (error.response.status > 400) {
-            this.$router.push({
-              path: '/',
-              next: this.$route.path
-            })
-          }
         })
     },
     startTimer () {
