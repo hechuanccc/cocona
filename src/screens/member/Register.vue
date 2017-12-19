@@ -26,7 +26,7 @@
           <el-input class="input-width" v-model="user.email"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
-          <el-input class="input-width" :maxlength="6" v-model="user.withdraw_password"></el-input>
+          <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password"></el-input>
         </el-form-item>
         <el-form-item :label="$t('user.captcha')" required>
           <el-col :span="7">

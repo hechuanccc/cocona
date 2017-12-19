@@ -730,7 +730,7 @@ export default {
             })
           }
           _.each(result.results, (schedule) => {
-            schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD hh:mm:ss')
+            schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD HH:mm:ss')
           })
           this.total = result.count
           this.schedules = result.results
