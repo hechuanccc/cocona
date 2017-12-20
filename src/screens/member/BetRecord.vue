@@ -122,7 +122,7 @@ export default {
     conditions () {
       return {
         game_code: this.selectedGame,
-        date: this.selectedDate,
+        created_at: this.selectedDate,
         unsettled: this.isUnsettled ? 1 : ''
       }
     }

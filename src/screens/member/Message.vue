@@ -121,7 +121,7 @@ export default {
     handlePageChange (currentPage) {
       this.loading = true
       fetchMessages({ ...this.conditions, offset: (currentPage - 1) * this.pageSize }).then(data => {
-        this.betRecords = data.results
+        this.messages = data.results
         this.loading = false
       }, () => {
         this.loading = false
