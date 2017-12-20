@@ -18,7 +18,7 @@
             </li>
             <li class="center">
               <el-button type="primary" plain @click="openBetRecordDialog">我的注单</el-button>
-              <a :href="$store.state.customerServiceUrl" target="_blank" class="m-l">
+              <a :href="$store.state.common.customerServiceUrl" target="_blank" class="m-l">
                 <el-button type="primary" plain>在线客服</el-button>
               </a>
             </li>
@@ -41,7 +41,7 @@
             </li>
             <li class="center">
               <el-button type="primary" plain @click="linkTo('/account/finance/betrecord')">我的注单</el-button>
-              <a :href="$store.state.customerServiceUrl" target="_blank" class="m-l">
+              <a :href="$store.state.common.customerServiceUrl" target="_blank" class="m-l">
                 <el-button type="primary" plain>在线客服</el-button>
               </a>
             </li>

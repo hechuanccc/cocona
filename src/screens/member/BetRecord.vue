@@ -97,7 +97,7 @@ export default {
       selectedDate: '',
       selectedGame: '',
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 20,
       loading: false,
       allGames: [],
       isUnsettled: false,
@@ -121,9 +121,9 @@ export default {
   computed: {
     conditions () {
       return {
-        code: this.selectedGame,
+        game_code: this.selectedGame,
         date: this.selectedDate,
-        unsettled: this.isUnsettled ? 1 : 0
+        unsettled: this.isUnsettled ? 1 : ''
       }
     }
   },

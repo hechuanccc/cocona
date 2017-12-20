@@ -14,6 +14,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Icon from 'vue-awesome/components/Icon'
 import Vue2Filters from 'vue2-filters'
+import { gethomePage } from './api'
 
 Vue.component('icon', Icon)
 Vue.use(require('vue-moment'))
@@ -113,6 +114,16 @@ Vue.mixin({
     }
   }
 })
+
+gethomePage().then(
+  response => {
+    store.dispatch('setCommon',
+      {
+        homePageLogo: response.icon,
+        customerServiceUrl: response.global_preferences.customer_service_url
+      })
+  }
+)
 
 /* eslint-disable no-new */
 new Vue({
