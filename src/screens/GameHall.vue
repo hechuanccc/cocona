@@ -162,7 +162,7 @@ export default {
           tempObj.issue_number = result.issue_number
           tempObj.wins = []
           hash[result.game] = tempObj
-          last = [...last, tempObj]
+          last.push(tempObj)
         }
         tempObj.wins.push(result.win)
       })
