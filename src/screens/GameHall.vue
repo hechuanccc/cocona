@@ -144,7 +144,7 @@ export default {
         let game = {
           game: result.game.display_name,
           issue_number: result.issue_number,
-          wins: [win]
+          win: [win]
         }
         formatted.push(game)
       })
@@ -164,7 +164,7 @@ export default {
           hash[result.game] = tempObj
           last = [...last, tempObj]
         }
-        tempObj.wins = _.concat(tempObj.wins, result.wins)
+        tempObj.wins = _.concat(tempObj.wins, result.win)
       })
 
       return last
