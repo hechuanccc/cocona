@@ -76,6 +76,10 @@ export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`)
 }
 
+export function fetchCurrentSchedules () {
+  return axios.get(`${urls.schedule}?limit=15&offset=15`)
+}
+
 export function fetchCaptcha () {
   return axios.get(urls.verification).then(data => {
     data.captcha_src = urls.domain + data.captcha_src
@@ -100,6 +104,11 @@ export function fetchTransactionRecord (option) {
 export function fetchBet (gameData) {
   return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
 }
+
+export function fetchWinBet (gameData) {
+  return axios.get(`${urls.betrecord}?opt_expand=play&status=win&latest=1`)
+}
+
 export function fetchBetHistory (option) {
   let url = `${urls.betrecord}?opt_expand=play&limit=10`
   Object.keys(option).forEach(key => {

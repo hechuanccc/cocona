@@ -78,8 +78,10 @@
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { fetchBet } from '../api'
+import { fetchBet, fetchWinBet } from '../api'  // fetchWinBet
 import GameMenu from '../components/GameMenu'
+import _ from 'lodash'
+
 let bus = new Vue()
 
 export default {
@@ -95,7 +97,8 @@ export default {
   },
   data () {
     return {
-      betrecords: []
+      betrecords: [],
+      notifyIssueNumber: {}
     }
   },
   computed: {
@@ -129,6 +132,113 @@ export default {
     },
     openBetRecordDialog () {
       this.$store.dispatch('openBetRecordDialog')
+    },
+    formattedWinRecords (results) {
+      let formatted = []
+      _.each(results, (result) => {
+        let wins = []
+        let win = {
+          playgroup: result.play.playgroup,
+          play: result.play.display_name,
+          settlement_amount: result.profit + result.bet_amount
+        }
+        let game = {
+          game: result.game.display_name,
+          issue_number: result.issue_number,
+          wins: [...wins, win]
+        }
+        formatted = [...formatted, game]
+      })
+
+      let last = []
+      let hash = {}
+
+      _.each(formatted, (result) => {
+        let tempObj
+        if (hash[result.game]) {
+          tempObj = hash[result.game]
+        } else {
+          tempObj = {}
+          tempObj.game = result.game
+          tempObj.issue_number = result.issue_number
+          tempObj.wins = []
+          hash[result.game] = tempObj
+          last = [...last, tempObj]
+        }
+        tempObj.wins = _.concat(tempObj.wins, result.wins)
+      })
+
+      return last
+    },
+    pollWinNotify () {
+      this.interval = setInterval(() => {
+        this.getWinNotify()
+      }, 5000)
+    },
+    getWinNotify () {
+      fetchWinBet().then(results => {
+        this.generateWinMessage(results)
+      })
+    },
+    generateWinMessage (results) {
+      let winMsg = (createElement, result) => {
+        if (result) {
+          return createElement('div',
+            {
+              style: {
+                maxHeight: '500px',
+                overflow: 'scroll'
+              }
+            },
+            [
+              createElement('p',
+                {
+                  'class': {
+                    'text-center': true,
+                    'red': true
+                  },
+                  style: {
+                    paddingBottom: '5px'
+                  }
+                },
+                `中奖通知`
+                ),
+              createElement('p', {'class': {'text-center': true, 'm-t-sm': true, 'm-b-sm': true}}, `${result.game} 第${result.issue_number}期`),
+              createElement('ul',
+                    result.wins.map(function (win, index) {
+                      return createElement('li',
+                        [
+                          createElement('span', `${index + 1}. ${win.playgroup} `),
+                          createElement('span', `${win.play} `),
+                          createElement('span',
+                            {
+                              style: {
+                                color: 'red',
+                                fontSize: '14px'
+                              }
+                            },
+                            `中奖金额：${win.settlement_amount}`
+                          )
+                        ]
+                      )
+                    })
+                )
+            ])
+        }
+      }
+
+      _.each(this.formattedWinRecords(results), (result) => {
+        if (this.notifyIssueNumber[result.game] !== result.issue_number) {
+          setTimeout(() => {
+            this.$notify({
+              showClose: true,
+              position: 'right',
+              message: winMsg(this.$createElement, result)
+            })
+          }, 1000)
+        }
+        this.notifyIssueNumber[result.game] = result.issue_number
+      })
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -146,6 +256,16 @@ export default {
     this.$root.bus.$on('new-betrecords', (gameData) => {
       this.fetchOngoingBet(gameData)
     })
+    fetchWinBet().then(results => {
+      _.each(this.formattedWinRecords(results), (result) => {
+        this.notifyIssueNumber[result.game] = result.issue_number
+        this.generateWinMessage(results)
+      })
+    })
+    this.pollWinNotify()
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   }
 }
 </script>
