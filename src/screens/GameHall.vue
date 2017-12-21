@@ -136,7 +136,6 @@ export default {
     formattedWinRecords (results) {
       let formatted = []
       _.each(results, (result) => {
-        let wins = []
         let win = {
           playgroup: result.play.playgroup,
           play: result.play.display_name,
@@ -145,9 +144,9 @@ export default {
         let game = {
           game: result.game.display_name,
           issue_number: result.issue_number,
-          wins: [...wins, win]
+          wins: [win]
         }
-        formatted = [...formatted, game]
+        formatted.push(game)
       })
 
       let last = []
@@ -233,6 +232,7 @@ export default {
             this.$notify({
               showClose: true,
               position: 'right',
+              duration: 0,
               message: winMsg(this.$createElement, result)
             })
           }, 1000)
