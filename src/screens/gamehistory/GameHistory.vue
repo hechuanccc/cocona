@@ -25,13 +25,15 @@
                   type="date"
                   v-model = "selectedDate"
                   placeholder="选择日期"
-                  @change="handleDateChange()">
+                  value-format="yyyy-MM-dd"
+                  format="yyyy-MM-dd">
                   </el-date-picker>
                 </div>
                 <div class="input">
                   <el-input
                     type="number"
-                    v-model.number="inputPeriod"
+                    :value="inputPeriod"
+                    @input="changeIssueNumber"
                     placeholder="输入期数"
                   >
                   </el-input>
@@ -41,7 +43,7 @@
                 <el-button type="primary" @click="getLatest()">刷新数据</el-button>
               </div>
             </div>
-            <div v-if="!filteredSchedules.length">暂无资料</div>
+            <div v-if="!schedules.length">暂无资料</div>
             <table v-else
               class="history-table"
               :key="'table' + gameTable.code">
@@ -69,7 +71,7 @@
                   </div>
                 </th>
               </tr>
-              <tr v-for="schedule in filteredSchedules"
+              <tr v-for="schedule in schedules"
                 :key="'issue-' + schedule.issue_number">
                 <td v-for="(fieldsObject, fieldsIndex) in nowGameTable.table"
                   :key="'field-'+fieldsIndex"
@@ -106,12 +108,12 @@
               </tr>
             </table>
             <el-pagination
-              v-if="total > pageSize"
+              v-if="totalCount > pageSize"
               :current-page.sync="currentPage"
               @current-change="handlePageChange()"
               :page-size="pageSize"
               layout="total, prev, pager, next"
-              :total="total">
+              :total="totalCount">
             </el-pagination>
           </div>
         </el-col>
@@ -123,6 +125,7 @@
 <script>
 import { fetchGames, fetchHistory } from '../../api'
 import ResultNums from './ResultNums'
+import { msgFormatter } from '../../utils'
 import _ from 'lodash'
 
 export default {
@@ -140,9 +143,9 @@ export default {
         {
           displayName: '',
           buttons: [
-          { displayName: '显示号码', show: 'number' },
-          { displayName: '显示大小', show: 'thanSize' },
-          { displayName: '显示单双', show: 'oddEven' }
+            { displayName: '显示号码', show: 'number' },
+            { displayName: '显示大小', show: 'thanSize' },
+            { displayName: '显示单双', show: 'oddEven' }
           ]
         },
         {
@@ -342,7 +345,8 @@ export default {
         },
         {
           displayName: '开奖号码',
-          key: 'result_str'},
+          key: 'result_str'
+        },
         {
           displayName: '总和',
           subHeads: [
@@ -382,7 +386,8 @@ export default {
         },
         {
           displayName: '开奖号码',
-          key: 'result_str'},
+          key: 'result_str'
+        },
         {
           displayName: '总和',
           subHeads: [
@@ -464,7 +469,8 @@ export default {
         },
         {
           displayName: '开奖号码',
-          key: 'result_str'},
+          key: 'result_str'
+        },
         {
           displayName: '开奖',
           subHeads: [
@@ -639,7 +645,7 @@ export default {
       selectedDate: this.$moment().format('YYYY-MM-DD'),
       currentPage: 1,
       pageSize: 30,
-      total: 0
+      totalCount: 0
     }
   },
   filters: {
@@ -717,12 +723,27 @@ export default {
       }))
       return classfied
     },
-    getHistory (game, date, limit, offset) {
-      date = this.$moment(date).format('YYYY-MM-DD')
-      fetchHistory(game, date, limit, offset).then((result) => {
-        this.selectedDate = date
+    initFetchHistory () {
+      clearInterval(this.interval)
+      this.interval = setInterval(() => {
+        this.fetchData((this.currentPage - 1) * this.pageSize)
+      }, (1 * 60 * 1000))
+      this.fetchData(0)
+      this.nowDisplay = 'number'
+      this.currentPage = 1
+    },
+    handlePageChange (currentPage) {
+      clearInterval(this.interval)
+      this.interval = setInterval(() => {
+        this.fetchData((this.currentPage - 1) * this.pageSize)
+      }, (1 * 60 * 1000))
+      this.fetchData((currentPage - 1) * this.pageSize)
+    },
+    fetchData (offset) {
+      this.loading = true
+      fetchHistory({ ...this.conditions, game_code: this.currentGame, offset: offset }).then((result) => {
         if (result.results) {
-          if (game === 'bjkl8') {
+          if (this.currentGame === 'bjkl8') {
             _.each(result.results, (schedule) => {
               let resultArr = schedule.result_str.split(',')
               resultArr.pop() // for bjkl8 useless 21th num
@@ -732,33 +753,39 @@ export default {
           _.each(result.results, (schedule) => {
             schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD HH:mm:ss')
           })
-          this.total = result.count
+          this.totalCount = result.count
           this.schedules = result.results
         }
         this.loading = false
+      }, errorMsg => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorMsg),
+          type: 'error'
+        })
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
       })
-    },
-    handlePageChange () {
-      this.loading = true
-      this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
-    },
-    handleDateChange () {
-      this.loading = true
-      this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
     },
     getLatest () {
-      this.loading = true
-      this.getHistory(this.currentGame, this.nowDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
-    }
+      let currentDate = this.$moment().format('YYYY-MM-DD')
+      if (this.selectedDate === currentDate) {
+        this.initFetchHistory()
+      } else {
+        this.selectedDate = this.$moment().format('YYYY-MM-DD')
+      }
+    },
+    changeIssueNumber: _.debounce(function (value) {
+      this.inputPeriod = value
+    }, 1000)
   },
   computed: {
-    filteredSchedules () {
-      if (!this.schedules) {
-        return []
+    conditions () {
+      return {
+        date: this.selectedDate,
+        issue_number: this.inputPeriod
       }
-      return this.schedules.filter(schedule => {
-        return schedule['issue_number'].indexOf(this.inputPeriod) !== -1
-      })
     }
   },
   components: {
@@ -773,37 +800,21 @@ export default {
         }
         this.games = games
         this.currentGame = games[0].code
-        this.nowGameTable = _.find(this.gameTable, item => {
-          return item.code === this.currentGame
-        })
-        return games
       }
-    ).then(games => {
-      if (this.currentGame) {
-        this.getHistory(this.currentGame, this.nowDate, this.pageSize, 0)
-        this.interval = setInterval(() => {
-          this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
-        }, (1 * 60 * 1000))
-      }
-    })
+    )
   },
   beforeDestroy () {
     clearInterval(this.interval)
   },
   watch: {
     'currentGame': function () {
-      this.loading = true
       this.nowGameTable = _.find(this.gameTable, item => {
         return item.code === this.currentGame
       })
-      clearInterval(this.interval)
-      this.currentPage = 1
-      this.schedules = ''
-      this.nowDisplay = 'number'
-      this.getHistory(this.currentGame, this.nowDate, this.pageSize, 0)
-      this.interval = setInterval(() => {
-        this.getHistory(this.currentGame, this.selectedDate, this.pageSize, (this.currentPage - 1) * this.pageSize)
-      }, (5 * 60 * 1000))
+      this.initFetchHistory()
+    },
+    'conditions': function () {
+      this.initFetchHistory()
     }
   }
 }
@@ -812,7 +823,9 @@ export default {
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
 
-.bigger, .even, .dragon {
+.bigger,
+.even,
+.dragon {
   color: $red;
   padding: 0 5px;
 }
@@ -825,7 +838,7 @@ export default {
   min-height: 100vh;
 }
 .schedule-container {
-  text-align: center
+  text-align: center;
 }
 
 .history-table {
@@ -850,14 +863,15 @@ export default {
 }
 .user-actions {
   text-align: justify;
-  .filters, .refresh {
+  .filters,
+  .refresh {
     display: inline-block;
     .input {
       display: inline-block;
     }
   }
   &:after {
-    content: '';
+    content: "";
     display: inline-block;
     width: 100%;
   }

@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { gethomePage, register } from '../api'
+import { register } from '../api'
 import { msgFormatter } from '../utils'
 export default {
   computed: {
@@ -84,7 +84,6 @@ export default {
     return {
       username: '',
       password: '',
-      homepage: '',
       showDropdown: false,
       nowTime: new Date().toLocaleString()
     }
@@ -122,13 +121,6 @@ export default {
     }
   },
   created () {
-    gethomePage().then(
-      response => {
-        this.homepage = response
-        this.$store.dispatch('setServiceUrl', response.global_preferences.customer_service_url)
-      }
-    )
-
     this.timing = setInterval(() => {
       let now = new Date()
       this.nowTime = now.toLocaleString()

@@ -103,7 +103,10 @@ export function createStore () {
           cols: 7
         }
       ],
-      customerServiceUrl: ''
+      common: {
+        customerServiceUrl: '',
+        homePageLogo: ''
+      }
     },
     actions,
     mutations,

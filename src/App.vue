@@ -39,7 +39,8 @@ export default {
   name: 'app',
   data () {
     return {
-      timer: ''
+      timer: '',
+      getMessageInterval: ''
     }
   },
   components: {
@@ -56,22 +57,19 @@ export default {
       this.$store.dispatch('closeBetRecordDialog')
     },
     replaceToken () {
-      return new Promise((resolve, reject) => {
-        let refreshToken = this.$cookie.get('refresh_token')
-        if (!refreshToken || this.$store.state.user.account_type === 0) {
-          reject(new Error())
-        }
-        getToken(refreshToken).then(res => {
-          let expires = new Date(res.expires_in)
-          this.$cookie.set('access_token', res.access_token, {
-            expires: expires
-          })
-          this.$cookie.set('refresh_token', res.refresh_token, {
-            expires: expires
-          })
-          axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
-          resolve()
+      let refreshToken = this.$cookie.get('refresh_token')
+      if (!refreshToken || this.$store.state.user.account_type === 0) {
+        return
+      }
+      getToken(refreshToken).then(res => {
+        let expires = new Date(res.expires_in)
+        this.$cookie.set('access_token', res.access_token, {
+          expires: expires
         })
+        this.$cookie.set('refresh_token', res.refresh_token, {
+          expires: expires
+        })
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
       })
     },
     getMessageCount () {
@@ -100,14 +98,14 @@ export default {
         Promise.resolve(error)
       })
     }
+
+    this.getMessageInterval = window.setInterval(() => {
+      this.getMessageCount()
+    }, 30000)
     let refreshTokenInterval
     setIndicator(() => {
       refreshTokenInterval = window.setInterval(() => {
-        this.replaceToken().then(() => {
-          this.getMessageCount()
-        }).catch(error => {
-          Promise.resolve(error)
-        })
+        this.replaceToken()
       }, 300000)
     }, () => {
       window.clearInterval(refreshTokenInterval)
@@ -115,6 +113,7 @@ export default {
   },
   beforeDestroy () {
     clearTimeout(this.timer)
+    window.clearInterval(this.getMessageInterval)
   }
 }
 </script>

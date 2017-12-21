@@ -43,7 +43,7 @@ export default {
   [types.SET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = count
   },
-  [types.SET_CUSTOMER_SERVICE_URL]: (state, customerServiceUrl) => {
-    state.customerServiceUrl = customerServiceUrl
+  [types.SET_COMMON]: (state, data) => {
+    state.common = data
   }
 }
