@@ -122,8 +122,8 @@ export default {
     conditions () {
       return {
         game_code: this.selectedGame,
-        created_at: this.selectedDate,
-        unsettled: this.isUnsettled ? 1 : ''
+        bet_date: this.selectedDate,
+        status: this.isUnsettled ? 'ongoing' : ''
       }
     }
   },
