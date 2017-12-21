@@ -76,10 +76,6 @@ export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`)
 }
 
-export function fetchCurrentSchedules () {
-  return axios.get(`${urls.schedule}?limit=15&offset=15`)
-}
-
 export function fetchCaptcha () {
   return axios.get(urls.verification).then(data => {
     data.captcha_src = urls.domain + data.captcha_src
