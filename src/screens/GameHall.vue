@@ -78,7 +78,7 @@
 <script>
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import { fetchBet, fetchWinBet } from '../api'  // fetchWinBet
+import { fetchBet, fetchWinBet } from '../api'
 import GameMenu from '../components/GameMenu'
 import _ from 'lodash'
 
