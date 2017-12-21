@@ -101,7 +101,7 @@ export function fetchBet (gameData) {
   return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
 }
 
-export function fetchWinBet (gameData) {
+export function fetchWinBet () {
   return axios.get(`${urls.betrecord}?opt_expand=play&status=win&latest=1`)
 }
 
