@@ -162,8 +162,14 @@ export function readMessage (ids) {
     { 'Content-Type': 'application/json' })
 }
 
-export function fetchHistory (gameCode, date, limit, offset) {
-  return axios.get(`${urls.gamehistory}?game_code=${gameCode}&date=${date}&limit=${limit}&offset=${offset}`)
+export function fetchHistory (option) {
+  let url = `${urls.gamehistory}?game_code=${option.game_code}&limit=30`
+  Object.keys(option).forEach(key => {
+    if (option[key]) {
+      url += `&${key}=${option[key]}`
+    }
+  })
+  return axios.get(url)
 }
 
 export function fetchPlaySetting (id) {
