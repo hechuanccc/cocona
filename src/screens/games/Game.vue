@@ -124,7 +124,6 @@ export default {
             this.$moment().isBefore(schedule.schedule_result) &&
             (schedule.status === 'open' || schedule.status === 'created')
           })
-          this.$store.dispatch('resetUnsettled')
           this.startTimer()
         })
     },

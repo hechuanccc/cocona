@@ -116,8 +116,5 @@ export default {
   },
   setCommon: ({ commit }, data) => {
     commit(types.SET_COMMON, data)
-  },
-  resetUnsettled: ({ commit }) => {
-    commit(types.RESET_UNSETTLED)
   }
 }
