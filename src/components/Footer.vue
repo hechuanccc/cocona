@@ -58,7 +58,6 @@ export default {
 
 <style lang="scss" scoped>
 @mixin text ($line-height, $color) {
-	font-family: PingFangTC;  //全型
   letter-spacing: 1.3px;
   font-size: 12px;
   font-weight: 500;
