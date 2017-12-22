@@ -24,7 +24,6 @@
                   backgroundImage: game.bg_icon ? `url('${game.bg_icon}')` :''
                 }
               ">
-              <!-- TODO: game-background api data -->
               <div class="game-icon">
                 <img :src="game.icon" :alt="game.id">
               </div>
