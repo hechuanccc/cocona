@@ -21,7 +21,7 @@
               class="game-bg"
               :style="
                 {
-                  backgroundImage: 'linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%)'
+                  backgroundImage: game.bg_icon ? `url('${game.bg_icon}')` :''
                 }
               ">
               <!-- TODO: game-background api data -->
@@ -166,7 +166,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(39, 40, 34, .7);
+  background-color: rgba(39, 40, 34, .5);
 }
 
 .game-icon img{
