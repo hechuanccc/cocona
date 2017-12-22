@@ -28,7 +28,11 @@ export function getAnnouncements () {
 }
 
 export function gethomePage () {
-  return axios.get(urls.homePage)
+  return axios.get(`${urls.website}home-page/`)
+}
+
+export function getDescription () {
+  return axios.get(`${urls.website}descriptions`)
 }
 export function getPromotions () {
   return axios.get(urls.promotions)
