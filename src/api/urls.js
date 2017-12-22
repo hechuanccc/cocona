@@ -24,7 +24,7 @@ export default {
   game_result: apiv1 + '/result/',
   promotions: apiv1 + '/promotion/',
   banner: apiv1 + '/banners/',
-  homePage: apiv1 + '/website/home-page/',
+  website: apiv1 + '/website/',
   announcements: apiv1 + '/announcements/',
   check_username: apiv1 + '/username/',
   check_agentname: host + '/v1/checkagent/',
