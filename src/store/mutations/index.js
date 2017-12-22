@@ -45,5 +45,8 @@ export default {
   },
   [types.SET_COMMON]: (state, data) => {
     state.common = data
+  },
+  [types.RESET_UNSETTLED]: (state) => {
+    state.user.unsettled = 0
   }
 }
