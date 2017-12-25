@@ -1,5 +1,5 @@
 <template>
-  <div class="footer container text-center">
+  <div class="footer text-center">
     <div class="quick-info">
       <div class="sub-menu">
         <router-link class="link"
@@ -57,6 +57,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../style/vars.scss';
 @mixin text ($line-height, $color) {
   letter-spacing: 1.3px;
   font-size: 12px;
@@ -70,7 +71,7 @@ export default {
 }
 
 .quick-info {
-  @include block(200px, #132b47);
+  @include block(200px, $dark-slate-blue);
 }
 
 .sub-menu {
@@ -93,7 +94,7 @@ export default {
   margin: 0 auto;
   width: 638px;
   height: 66px;
-  @include text(1.83, #bfbfbf);
+  @include text(1.83, $pinkish-grey);
 }
 
 .copyright {
