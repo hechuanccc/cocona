@@ -123,6 +123,7 @@ export default {
             if (newIssue !== oldIssue) {
               clearInterval(this.interval)
               clearInterval(this.timer)
+              this.$store.dispatch('fetchUser')
               this.pollResult(gameid)
             }
           })

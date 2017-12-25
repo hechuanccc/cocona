@@ -28,7 +28,11 @@ export function getAnnouncements () {
 }
 
 export function gethomePage () {
-  return axios.get(urls.homePage)
+  return axios.get(`${urls.website}home-page/`)
+}
+
+export function getDescription () {
+  return axios.get(`${urls.website}descriptions`)
 }
 export function getPromotions () {
   return axios.get(urls.promotions)
@@ -100,6 +104,11 @@ export function fetchTransactionRecord (option) {
 export function fetchBet (gameData) {
   return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
 }
+
+export function fetchWinBet () {
+  return axios.get(`${urls.betrecord}?opt_expand=play&status=win&latest=1`)
+}
+
 export function fetchBetHistory (option) {
   let url = `${urls.betrecord}?opt_expand=play&limit=20`
   Object.keys(option).forEach(key => {
