@@ -3,9 +3,17 @@
     <div class="topbar">
       <TopBar/>
     </div>
-    <div class="bottomnavs container">
-      <Logo/>
-      <NavMenu :menus="isUserPage ? showUserMenus : menus" />
+    <div class="bottomnavs">
+      <div :class="
+        ['navs',
+          'container',
+          {
+            'block-center': $route.path === '/'
+          }
+        ]">
+        <Logo/>
+        <NavMenu :menus="isUserPage ? showUserMenus : menus" />
+      </div>
     </div>
   </div>
 </template>
@@ -83,19 +91,24 @@ export default {
 <style lang="sass" scoped>
 
 .header
+  width: 100%
   height: 100px
 .topbar
   display: inline-block
   background-color: #f9f9f9
   height: 40px
+  width: 100%
 .bottomnavs
   display: inline-block
+  width: 100%
   height: 60px
   line-height: 60px
   background-color: #ffffff
   text-align: justify
-  &:after
-    display: inline-block
-    content: ''
-    width: 100%
+  .navs
+    text-align: justify
+    &:after
+      display: inline-block
+      content: ''
+      width: 100%
 </style>

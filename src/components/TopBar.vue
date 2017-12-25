@@ -1,5 +1,10 @@
 <template>
-  <div class="top-bar container" >
+  <div :class="[
+    'top-bar',
+    'container',
+    {
+      'block-center': $route.path === '/'
+    }]">
     <div class="clock">
       {{nowTime}}
     </div>
@@ -135,6 +140,7 @@ export default {
 <style scoped lang='sass'>
 @import '../style/vars.scss';
 .top-bar
+  position: relative
   height: 40px
   line-height: 40px
 .clock
@@ -145,8 +151,7 @@ export default {
   color: #666
 
 .account-links
-  position: absolute
-  right: 0
+  float: right
   padding-right: 50px
   font-size: 14px
   display: inline-block
