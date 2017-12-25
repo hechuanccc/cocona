@@ -1,32 +1,22 @@
 <template>
-  <div class="game-menu">
+  <div>
     <div class="container">
-      <el-menu
-        v-if="this.allGames.length"
-        mode="horizontal"
-        :default-active="activeIndex"
-        @select="handleSelect"
-        :background-color="style.primaryColor"
-        text-color="#fff"
-        active-text-color="#fff">
-        <el-menu-item v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index < 10">{{game.display_name}}</el-menu-item>
-        <li class="more-menu" @mouseover="dropdownActive = true" @mouseleave="dropdownActive = false" :index="'-1'" v-if="allGames.length > 10">
+      <ul class="game-menu">
+        <li :class="['game-menu-item',activeGame===game.id?'active':'']" v-for="(game, index) in allGames" :key="game.id" v-if="index < 10" @click="switchGame(game.id+'')">{{game.display_name}}</li>
+        <li class="game-menu-item more-menu" @mouseover="dropdownActive = true" @mouseleave="dropdownActive = false" v-if="allGames.length > 10">
           更多
           <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
           <i class="el-icon-arrow-down icon" v-else/>
           <div v-show="dropdownActive" class="dropdown">
-            <el-menu
-              class="dropdown-menu"
-              text-color="#fff"
-              active-text-color="#fff"
-              :default-active="activeIndex"
-              @select="handleSelect"
-              :background-color="style.primaryColor">
-               <el-menu-item v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index >= 10">{{game.display_name}}</el-menu-item>
-            </el-menu>
+            <ul class="dropdown-menu">
+               <li :class="['dropdown-menu-item',activeGame===game.id?'active':'']" v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index >= 10" @click="switchGame(game.id)">{{game.display_name}}</li>
+            </ul>
           </div>
         </li>
-      </el-menu>
+      </ul>
+      <ul class="category-menu">
+        <li :class="['category-menu-item',activeCategory===category.id?'active':'']" v-for="(category, index) in categories" :key="'category' + category.id" @click="switchCategory(category)">{{category.display_name}}</li>
+      </ul>
     </div>
   </div>
 </template>
@@ -45,12 +35,16 @@ export default {
   data () {
     return {
       style,
-      dropdownActive: false
+      dropdownActive: false,
+      categories: []
     }
   },
   computed: {
-    activeIndex () {
-      return this.$route.params.gameId
+    activeGame () {
+      return parseInt(this.$route.params.gameId)
+    },
+    activeCategory () {
+      return parseInt(this.$route.params.categoryId)
     },
     ...mapGetters([
       'allGames'
@@ -61,36 +55,104 @@ export default {
   },
   watch: {
     'allGames': function () {
-      if (!this.$route.params.gameId) {
-        const defaultGameId = localStorage.getItem('lastGame') || this.allGames[0].id
-        this.$router.push(`/${this.path}/${defaultGameId}`)
+      let currentGameId = this.$route.params.gameId
+      if (!currentGameId) {
+        currentGameId = localStorage.getItem('lastGame') || this.allGames[0].id
+      }
+      this.categories = this.$store.getters.categoriesByGameId(currentGameId)
+      if (!this.categories.length) {
+        this.$store.dispatch('fetchCategories', currentGameId)
+          .then((res) => {
+            if (res) {
+              this.categories = res
+              this.$router.push(`/${this.path}/${currentGameId}/${this.categories[0].id}`)
+            } else {
+              this.performLogin()
+            }
+          })
+      } else {
+        this.$router.push(`/${this.path}/${currentGameId}/${this.categories[0].id}`)
       }
     }
   },
   name: 'gamemenu',
   methods: {
-    handleSelect (key, keyPath) {
+    switchGame (key) {
       if (key === '-1') {
         return false
       }
       localStorage.setItem('lastGame', key)
-      this.$router.push(`/${this.path}/${key}`)
+      this.categories = this.$store.getters.categoriesByGameId(key)
+      if (!this.categories.length) {
+        this.$store.dispatch('fetchCategories', key)
+          .then((res) => {
+            if (res) {
+              this.categories = res
+              this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
+            } else {
+              this.performLogin()
+            }
+          })
+      } else {
+        this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
+      }
+    },
+    switchCategory (category) {
+      if (!category) {
+        return
+      }
+      this.$router.push({
+        path: `/game/${this.$route.params.gameId}/${category.id}`,
+        params: { formatting: category.formatting }
+      })
     }
   }
 }
 </script>
 
 <style scoped lang='scss'>
-@import '../style/vars.scss';
+@import "../style/vars.scss";
 .game-menu {
-  background: $primary;
+  // background: linear-gradient(to bottom, #006bb3, #00397c);
   text-transform: uppercase;
+  text-align: center;
+  height: 55px;
+  background: linear-gradient(to bottom, #006bb3, #00397c);
+}
+.game-menu-item {
+  height: 55px;
+  line-height: 55px;
+  padding: 0 20px;
+  display: inline-block;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  &.active {
+    background: rgba(0, 0, 0, 0.29);
+  }
+}
+.category-menu {
+  text-align: center;
+  height: 35px;
+  background-color: $marine-blue;
+}
+.category-menu-item {
+  height: 35px;
+  line-height: 35px;
+  padding: 0 10px;
+  display: inline-block;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  &.active {
+    color: $yellow;
+  }
 }
 .more-menu {
+  position: relative;
   float: right;
   color: #fff;
   font-size: 14px;
-  line-height: 44px;
   padding: 0 20px;
   &:hover {
     background-color: rgba(20, 94, 168, 1);
@@ -99,11 +161,12 @@ export default {
 .el-menu--horizontal {
   border: none;
 }
-.el-menu--horizontal .el-menu-item, .el-menu--vertical .el-menu-item {
-  height: 44px;
-  line-height: 44px;
+.el-menu--horizontal .el-menu-item,
+.el-menu--vertical .el-menu-item {
+  height: 55px;
+  line-height: 55px;
   &.is-active {
-    background: url('../assets/active_menu_bg.png') no-repeat center 0;
+    background: rgba(0, 0, 0, 0.29);
     background-size: 200px 44px;
     border-bottom-width: 0;
   }
@@ -113,13 +176,13 @@ export default {
   z-index: 10;
   right: 0;
   width: 150px;
+  background: $darkish-blue;
 }
 .dropdown-menu {
   position: relative;
-
 }
-.dropdown-menu .el-menu-item {
-  float: none;
-  text-align: center;
+.dropdown-menu-item {
+  height: 30px;
+  line-height: 30px;
 }
 </style>

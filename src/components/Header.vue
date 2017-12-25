@@ -5,7 +5,6 @@
     </div>
     <div class="header-nav container">
       <Logo/>
-      <GameResult v-if="$route.params.gameId && isGamePage" :gameid="$route.params.gameId"/>
       <NavMenu :menus="isUserPage ? showUserMenus : menus" />
     </div>
   </div>
@@ -15,7 +14,6 @@
 import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
 import Logo from '../components/Logo'
-import GameResult from '../components/GameResult'
 
 export default {
   data () {
@@ -54,8 +52,7 @@ export default {
   components: {
     TopBar,
     NavMenu,
-    Logo,
-    GameResult
+    Logo
   },
   computed: {
     isUserPage () {
