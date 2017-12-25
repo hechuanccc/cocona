@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <el-row type="flex" class="actions" justify="center" :gutter="10">
+    <el-row type="flex" class="actions" justify="center">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
         <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"  @keypress.native="filtAmount" />
@@ -87,7 +87,7 @@
         </div>
       </div>
     </el-row>
-    <el-row type="flex" class="actions" justify="center" :gutter="10" v-if="!loading">
+    <el-row type="flex" class="actions" justify="center" v-if="!loading">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
         <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
