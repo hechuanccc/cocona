@@ -67,7 +67,7 @@
             <div class="empty" v-else>暂无注单</div>
           </div>
         </el-aside>
-        <el-main>
+        <el-main class="m-t-lg">
           <router-view :key="$route.name + ($route.params.gameId || '')"/>
         </el-main>
       </el-container>

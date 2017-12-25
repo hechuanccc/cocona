@@ -1,42 +1,48 @@
 <template>
-  <div class="game-container">
-    <el-tabs v-model="activeName" @tab-click="switchTab" v-if="categories.length > 0">
-      <el-tab-pane v-for="(category, index) in categories" :key="'category' + category.id" :name="''+category.id" :label="category.display_name" ></el-tab-pane>
-    </el-tabs>
-    <div class="schedule-tips">
-      <div class="current-game" v-if="currentGame && currentCategory">
-        {{currentGame.display_name}} > {{currentCategory.display_name}}
+  <div>
+    <el-row class="info-panel">
+      <GameResult :gameid="$route.params.gameId"/>
+      <div class="countdown-panel">
+        <div class="info-text" v-if="currentGame">
+          <p>{{currentGame.display_name}}</p>
+          <p>{{schedule.issue_number}}期</p>
+        </div>
+        <div class="schedule" v-if="schedule && schedule.issue_number">
+          <div class="schedule-title">封盘</div>
+          <span v-if="!gameClosed" class="red countdown">
+            <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
+            <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
+          </span>
+          <span v-else class="red countdown">已封盘</span>
+        </div>
+        <div class="schedule" v-if="schedule && schedule.issue_number">
+          <div class="schedule-title">开奖</div>
+          <span v-if="!ended" class="green countdown">
+            <span v-if="resultCountDown.days > 0">{{resultCountDown.days}}天 </span>
+            <span v-if="resultCountDown.hours > 0">{{resultCountDown.hours | complete}}:</span>{{resultCountDown.minutes | complete}}:{{resultCountDown.seconds | complete}}
+          </span>
+          <span v-else class="green countdown">已结束</span>
+        </div>
       </div>
-      <span v-if="schedule && schedule.issue_number">
-        <span class="issue-number">{{schedule.issue_number}} 期</span>
-        封盘
-        <span v-if="!gameClosed" class="red countdown">
-          <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
-          <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
-        </span>
-        <span v-else class="red countdown">已封盘</span>
-        开奖
-        <span v-if="!ended" class="green countdown">
-          <span v-if="resultCountDown.days > 0">{{resultCountDown.days}}天 </span>
-          <span v-if="resultCountDown.hours > 0">{{resultCountDown.hours | complete}}:</span>{{resultCountDown.minutes | complete}}:{{resultCountDown.seconds | complete}}
-        </span>
-        <span v-else class="green countdown">已结束</span>
-      </span>
-    </div>
-    <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
+    </el-row>
+    <el-row class="game-container">
+      <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
+    </el-row>
   </div>
 </template>
 
 <script>
 import { fetchSchedule } from '../../api'
+import GameResult from '../../components/GameResult'
 import _ from 'lodash'
 
 export default {
   name: 'game',
+  components: {
+    GameResult
+  },
   data () {
     return {
-      activeName: this.$route.params.categoryId,
-      categories: [],
       gameId: this.$route.params.gameId,
       schedule: {
         id: null
@@ -57,9 +63,6 @@ export default {
     }
   },
   watch: {
-    '$route.params.categoryId': function () {
-      this.activeName = this.$route.params.categoryId
-    },
     'schedule.id': function (newId, oldId) {
       if (newId) {
         this.$root.bus.$emit('new-betrecords', {
@@ -78,31 +81,11 @@ export default {
       const r = this.resultCountDown
       return r.hours + r.hours + r.seconds + r.minutes === 0
     },
-    currentCategory () {
-      return this.$store.getters.categoriesById(this.$route.params.categoryId)
-    },
     currentGame () {
       return this.$store.getters.gameById(this.$route.params.gameId)
     }
   },
   created () {
-    const categoryId = this.$route.params.categoryId
-    this.categories = this.$store.getters.categoriesByGameId(this.$route.params.gameId)
-    if (!this.categories.length) {
-      this.$store.dispatch('fetchCategories', this.gameId)
-        .then((res) => {
-          if (res) {
-            this.categories = res
-            if (!categoryId) {
-              this.forward(res[0])
-            }
-          } else {
-            this.performLogin()
-          }
-        })
-    } else if (!categoryId) {
-      this.forward(this.categories[0])
-    }
     this.updateSchedule()
   },
   beforeDestroy () {
@@ -121,8 +104,8 @@ export default {
         .then(res => {
           this.schedule = _.find(res, schedule => {
             return schedule.id !== this.schedule.id &&
-            this.$moment().isBefore(schedule.schedule_result) &&
-            (schedule.status === 'open' || schedule.status === 'created')
+              this.$moment().isBefore(schedule.schedule_result) &&
+              (schedule.status === 'open' || schedule.status === 'created')
           })
           this.startTimer()
         })
@@ -161,32 +144,13 @@ export default {
         minutes,
         seconds
       }
-    },
-    forward (category) {
-      if (!category) {
-        return
-      }
-      this.activeName = category.id + ''
-      this.$router.push({
-        path: `/game/${this.gameId}/${category.id}`,
-        params: { formatting: category.formatting }
-      })
-    },
-    switchTab (tab, event) {
-      const targetCategory = this.categories[parseInt(tab.index)]
-      this.forward(targetCategory)
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-@import '../../style/vars.scss';
-.game-container {
-  background: #fff;
-  padding: 0 10px 10px;
-  margin-top: 20px;
-}
+@import "../../style/vars.scss";
 .current-game {
   position: absolute;
 }
@@ -196,24 +160,49 @@ export default {
 .game-container /deep/ .el-tabs__item {
   padding: 0 12px;
 }
-.schedule-tips {
-  height: 30px;
-  line-height: 30px;
+.schedule {
   text-align: center;
-  color: #878d99;
-  padding: 0 8px;
-  margin-top: -5px;
-  margin-bottom: 10px;
+  padding: 0 20px;
+  float: left;
+  .schedule-title {
+    height: 30px;
+    line-height: 30px;
+  }
+}
+.info-panel {
+  text-align: justify;
+  &:after {
+    content: "";
+    display: inline-block;
+    width: 100%;
+  }
+}
+.countdown-panel {
+  width: 49%;
+  height: 55px;
+  float: right;
+  background: #fff;
+  border-left: 5px solid $marine-blue;
+}
+.info-text {
+  color: #4a4a4a;
+  padding-left: 20px;
+  float: left;
+  text-align: center;
+  margin-right: 100px;
+  p {
+    height: 27px;
+    line-height: 27px;
+    letter-spacing: 2px;
+  }
 }
 .issue-number {
-  margin-right: 10px;
   display: inline-block;
 }
 .countdown {
-  margin-right: 10px;
-  font-size: 14px;
+  font-size: 18px;
 }
-.el-tabs--top  /deep/.el-tabs__nav-scroll {
+.el-tabs--top /deep/.el-tabs__nav-scroll {
   padding: 0;
 }
 </style>
