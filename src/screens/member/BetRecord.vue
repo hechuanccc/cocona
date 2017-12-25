@@ -20,9 +20,9 @@
           </el-option>
           <el-option
             v-for="game in allGames"
-            :key="game.code"
+            :key="game.id"
             :label="game.display_name"
-            :value="game.code">
+            :value="game.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -121,7 +121,7 @@ export default {
   computed: {
     conditions () {
       return {
-        game_code: this.selectedGame,
+        game: this.selectedGame,
         bet_date: this.selectedDate,
         status: this.isUnsettled ? 'ongoing' : ''
       }

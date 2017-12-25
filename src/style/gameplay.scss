@@ -1,3 +1,4 @@
+@import "./vars.scss";
 
 .el-input {
   width: 94%;
@@ -31,6 +32,7 @@
     line-height: $cell-height;
     text-align: center;
     font-weight: bold;
+    background: $lightblue
   }
   .hover {
     .name,

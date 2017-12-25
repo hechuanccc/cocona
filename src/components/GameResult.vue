@@ -143,18 +143,26 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/resultsball.scss";
+@import "../style/vars.scss";
 
 .result-balls {
-  padding-top: 10px;
-  display: block;
-  margin: 0 0 0 30px;
+  background: #fff;
+  border-left: 5px solid $marine-blue;
+  width: 49%;
+  height: 55px;
   float: left;
-  text-align: center;
   .balls-text {
+    color: #4a4a4a;
+    padding-left: 20px;
     text-align: center;
-    padding: 10px;
+    p{
+      height: 27px;
+      line-height: 27px;
+      letter-spacing: 2px;
+    }
   }
   .balls-number {
+    padding-left: 20px;
     width: 300px;
   }
   div {
@@ -162,14 +170,6 @@ export default {
     position: relative;
     vertical-align: middle;
     font-size: 12px;
-  }
-  .game {
-    color: #666;
-    font-size: 13px;
-    text-transform: uppercase;
-  }
-  .issue {
-    color: #999;
   }
   span {
     display: inline-block;
