@@ -171,6 +171,7 @@ export default {
     pollWinNotify () {
       this.interval = setInterval(() => {
         this.getWinNotify()
+        this.$store.dispatch('fetchUser')
       }, 5000)
     },
     getWinNotify () {
