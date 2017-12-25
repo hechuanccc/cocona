@@ -1,5 +1,6 @@
 <template>
   <div class="footer text-center">
+
     <div class="quick-info">
       <div class="sub-menu">
         <router-link class="link"
@@ -15,7 +16,9 @@
         <p>温馨提示您适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
       </div>
     </div>
+
     <div class="copyright">Copyright © Reserved</div>
+
   </div>
 </template>
 

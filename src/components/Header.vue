@@ -1,9 +1,9 @@
 <template>
-  <div class="top-header">
-    <div class="header-bar">
+  <div class="header">
+    <div class="topbar">
       <TopBar/>
     </div>
-    <div class="header-nav container">
+    <div class="bottomnavs container">
       <Logo/>
       <NavMenu :menus="isUserPage ? showUserMenus : menus" />
     </div>
@@ -30,23 +30,26 @@ export default {
       }, {
         name: this.$t('navMenu.affliate'),
         path: '/agent'
+      }, {
+        name: this.$t('navMenu.online_service'),
+        path: this.$store.state.common.customerServiceUrl ? this.$store.state.common.customerServiceUrl : '/',
+        class: 'online-service'
       }],
-      userMenus: [{
-        name: this.$t('navMenu.game_center'),
-        path: '/game'
-      }, {
-        name: this.$t('navMenu.home_page'),
-        path: '/'
-      }, {
-        name: this.$t('navMenu.draw_history'),
-        path: '/gamehistory'
-      }, {
-        name: this.$t('navMenu.game_intro'),
-        path: '/gameintro'
-      }, {
-        name: this.$t('navMenu.personal_account'),
-        path: '/account'
-      }]
+      userMenus: [
+        {
+          name: this.$t('navMenu.game_intro'),
+          path: '/gameintro'
+        }, {
+          name: this.$t('navMenu.draw_history'),
+          path: '/gamehistory'
+        }, {
+          name: this.$t('navMenu.promotion'),
+          path: '/promotions'
+        }, {
+          name: this.$t('navMenu.online_service'),
+          path: this.$store.state.common.customerServiceUrl ? this.$store.state.common.customerServiceUrl : '/',
+          class: 'online-service'
+        }]
     }
   },
   components: {
@@ -79,14 +82,20 @@ export default {
 
 <style lang="sass" scoped>
 
-.top-header
-  background: #fff
-  .header-bar
-    height: 32px
+.header
+  height: 100px
+.topbar
+  display: inline-block
+  background-color: #f9f9f9
+  height: 40px
+.bottomnavs
+  display: inline-block
+  height: 60px
+  line-height: 60px
+  background-color: #ffffff
+  text-align: justify
+  &:after
+    display: inline-block
+    content: ''
     width: 100%
-    background: #f2f2f2
-    border-bottom: 1px solid #e5e5e5
-    text-align: center
-  .header-nav
-    height: 80px
 </style>
