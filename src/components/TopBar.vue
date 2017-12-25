@@ -1,5 +1,10 @@
 <template>
-  <div class="top-bar container" >
+  <div :class="[
+    'top-bar',
+    'container',
+    {
+      'block-center': $route.path === '/'
+    }]">
     <div class="clock">
       {{nowTime}}
     </div>
@@ -27,9 +32,6 @@
     </ul>
     <ul v-else-if="user.account_type === 1" class="account-links" >
       <li>
-        欢迎, {{user.username}}
-      </li>
-      <li>
         <router-link to="/account/online_payment" class="link">立即存款</router-link>
       </li>
       <li>
@@ -44,7 +46,10 @@
           }]"
           @mouseenter="showDropdown=true"
           @mouseleave="showDropdown=false">
-          <router-link tag="span" to="/account"> 我的账号<span v-if="messageCount" class="msgTooltip">{{messageCount}}</span></router-link>
+          <router-link tag="span" to="/account">
+            <span class="username">欢迎, {{user.username}}</span>
+            <span v-if="messageCount" class="msgTooltip m-l-sm">{{messageCount}}</span>
+          </router-link>
           <i class="el-icon-caret-bottom" v-if="!showDropdown" />
           <i class="el-icon-caret-top" v-else />
           <ul v-show="showDropdown" class="dropdown">
@@ -59,6 +64,7 @@
           </ul>
         </span>
       </li>
+
     </ul>
   </div>
 </template>
@@ -133,63 +139,56 @@ export default {
 </script>
 <style scoped lang='sass'>
 @import '../style/vars.scss';
-.ipt-slot
-  margin-top: 2px
-  padding: 7px
 .top-bar
-  display: inline-block
-.clock
-  float: left
-  line-height: 32px
-  margin-right: 10px
-  color: #666
-.input
-  width: 140px
-  float: left
-  margin-right: 10px
-.actions
-  float: right
-  text-align: right
-.buttons
-  float: right
-.account-links
   position: relative
+  height: 40px
+  line-height: 40px
+.clock
+  display: inline-block
+  padding-left: 40px
+  font-size: 14px
+  font-weight: 500
+  color: #666
+
+.account-links
   float: right
+  padding-right: 50px
+  font-size: 14px
+  display: inline-block
   color: #999
   li
     cursor: pointer
     display: inline-block
-    line-height: 32px
   a
     text-decoration: none
     color: #999
     &:hover
       color: $primary
     &.red
-      color: $red
+      font-size: 14px
+      color: $azul
   .link
     padding: 0 10px
 
-
+.username
+  color: #4a4a4a
+  font-weight: 500
 .account-trigger
-  border: 1px solid #f2f2f2
-  border-width: 0 1px
+  border-left: 1px solid #f2f2f2
+  border-width: 2px 0
   &.active
     padding-bottom: 1px
-    background: #fff
-    border-color: #eee
   display: block
 
 .dropdown
   padding: 5px 0
   text-align: left
   position: absolute
-  top: 33px
-  right: 0
-  border: 1px solid #eee
+  top: 30px
+  right: 65px
   border-top: none
   border-radius: 2px
-  background: #fff
+  background: #f9f9f9
   width: 160px
   z-index: 10
   li

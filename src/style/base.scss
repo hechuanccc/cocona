@@ -29,7 +29,6 @@ body {
 
 .container {
   width: $container_width;
-  margin: 0 auto;
 }
 
 .m-l-lg {
@@ -73,6 +72,10 @@ body {
 }
 .p-t {
   padding-top: 10px;
+}
+
+.block-center {
+  margin: 0 auto;
 }
 
 .faq-content{

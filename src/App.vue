@@ -2,7 +2,7 @@
   <div v-loading.fullscreen="$store.state.loading" element-loading-text="加载中...">
     <Top />
     <router-view/>
-    <Bottom v-if="!$route.params.gameId && $route.path.indexOf('/account') < 0"/>
+    <Bottom v-if="!$route.params.gameId"/>
     <el-dialog
       :title="$t('navMenu.pop_title')"
       :visible="showLoginDialog"

@@ -1,5 +1,6 @@
 <template>
-  <div class="footer container text-center">
+  <div class="footer text-center">
+
     <div class="quick-info">
       <div class="sub-menu">
         <router-link class="link"
@@ -15,7 +16,9 @@
         <p>温馨提示您适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
       </div>
     </div>
+
     <div class="copyright">Copyright © Reserved</div>
+
   </div>
 </template>
 
@@ -57,6 +60,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../style/vars.scss';
 @mixin text ($line-height, $color) {
   letter-spacing: 1.3px;
   font-size: 12px;
@@ -70,7 +74,7 @@ export default {
 }
 
 .quick-info {
-  @include block(200px, #132b47);
+  @include block(200px, $dark-slate-blue);
 }
 
 .sub-menu {
@@ -93,7 +97,7 @@ export default {
   margin: 0 auto;
   width: 638px;
   height: 66px;
-  @include text(1.83, #bfbfbf);
+  @include text(1.83, $pinkish-grey);
 }
 
 .copyright {
