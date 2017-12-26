@@ -127,6 +127,7 @@ export function getToken (oldToken) {
     refresh_token: oldToken
   }).then(
     res => {
+      axios.defaults.withCredentials = true
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
       return res
     })

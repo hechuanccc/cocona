@@ -69,6 +69,7 @@ export default {
         this.$cookie.set('refresh_token', res.refresh_token, {
           expires: expires
         })
+        axios.defaults.withCredentials = true
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
       })
     },
