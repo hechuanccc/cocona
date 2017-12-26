@@ -23,7 +23,8 @@ export default {
     game_intro: '游戏介绍',
     result_period: '期',
     total: '总和',
-    no_result: '尚无开奖结果'
+    no_result: '尚无开奖结果',
+    online_service: '在线客服'
   },
   agent: {
     register: '代理注册',

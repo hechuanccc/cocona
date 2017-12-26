@@ -23,7 +23,8 @@ export default {
     game_intro: 'Game Intro',
     result_period: 'Period',
     total: 'Total',
-    no_result: "There's no result now"
+    no_result: "There's no result now",
+    online_service: 'Service'
   },
   agent: {
     register: 'Register',

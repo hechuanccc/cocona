@@ -154,6 +154,7 @@ export default {
   color: #fff;
   font-size: 14px;
   padding: 0 20px;
+  right: 40px;
   &:hover {
     background-color: rgba(20, 94, 168, 1);
   }

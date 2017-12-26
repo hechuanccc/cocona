@@ -176,7 +176,8 @@ export default {
             {
               style: {
                 maxHeight: '500px',
-                overflow: 'scroll'
+                overflow: 'scroll',
+                paddingRight: '25px'
               }
             },
             [
@@ -249,9 +250,9 @@ export default {
       _.each(this.formattedWinRecords(results), (result) => {
         this.notifyIssueNumber[result.game] = result.issue_number
         this.generateWinMessage(results)
-        this.pollWinNotify()
       })
     })
+    this.pollWinNotify()
   },
   beforeDestroy () {
     clearInterval(this.interval)
