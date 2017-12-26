@@ -43,6 +43,9 @@ export default {
   [types.SET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = count
   },
+  [types.RESET_MESSAGE_COUNT]: (state, count) => {
+    state.messageCount = 0
+  },
   [types.SET_COMMON]: (state, data) => {
     state.common = data
   }
