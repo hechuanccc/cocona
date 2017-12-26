@@ -24,7 +24,7 @@ export default {
     result_period: 'Period',
     total: 'Total',
     no_result: "There's no result now",
-    online_service: 'Online Service'
+    online_service: 'Service'
   },
   agent: {
     register: 'Register',

@@ -185,7 +185,8 @@ export default {
             {
               style: {
                 maxHeight: '500px',
-                overflow: 'scroll'
+                overflow: 'scroll',
+                paddingRight: '25px'
               }
             },
             [
@@ -231,6 +232,7 @@ export default {
             this.$notify({
               showClose: true,
               position: 'right',
+              duration: 0,
               message: winMsg(this.$createElement, result)
             })
           }, 1000)
