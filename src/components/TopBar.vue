@@ -152,7 +152,7 @@ export default {
 
 .account-links
   float: right
-  padding-right: 50px
+  padding-right: 30px
   font-size: 14px
   display: inline-block
   color: #999
@@ -185,7 +185,7 @@ export default {
   text-align: left
   position: absolute
   top: 30px
-  right: 65px
+  right: 45px
   border-top: none
   border-radius: 2px
   background: #f9f9f9

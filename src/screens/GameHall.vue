@@ -185,7 +185,8 @@ export default {
             {
               style: {
                 maxHeight: '500px',
-                overflow: 'scroll'
+                overflow: 'scroll',
+                paddingRight: '25px'
               }
             },
             [
