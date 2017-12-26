@@ -30,7 +30,7 @@
           :style="{width: getWidthForGroup(playSection)}"
           v-for="(playgroup, playgroupIndex) in playSection.playgroups"
           :class="['group-table', {'last': (playgroupIndex + 1) % playSection.groupCol === 0}]"
-          :key="'playgroup' + playgroup.name"
+          :key="'playgroup' + playgroup.id"
           v-if="playgroup.alias ? playgroup.active : true">
           <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
             v-if="!getCustomFormatting(playgroup.code)">
