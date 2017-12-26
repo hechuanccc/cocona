@@ -232,7 +232,6 @@ export default {
             this.$notify({
               showClose: true,
               position: 'right',
-              duration: 0,
               message: winMsg(this.$createElement, result)
             })
           }, 1000)
