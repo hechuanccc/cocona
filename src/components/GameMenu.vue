@@ -2,20 +2,37 @@
   <div>
     <div class="container">
       <ul class="game-menu">
-        <li :class="['game-menu-item',activeGame===game.id?'active':'']" v-for="(game, index) in allGames" :key="game.id" v-if="index < 10" @click="switchGame(game.id+'')">{{game.display_name}}</li>
-        <li class="game-menu-item more-menu" @mouseover="dropdownActive = true" @mouseleave="dropdownActive = false" v-if="allGames.length > 10">
+        <li
+          :class="['game-menu-item',activeGame===game.id?'active':'']"
+          v-for="(game, index) in allGames"
+          :key="game.id" v-if="index < 10"
+          @click="switchGame(game.id+'')">{{game.display_name}}</li>
+        <li
+          class="game-menu-item more-menu"
+          @mouseover="dropdownActive = true"
+          @mouseleave="dropdownActive = false"
+          v-if="allGames.length > 10">
           更多
           <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
           <i class="el-icon-arrow-down icon" v-else/>
           <div v-show="dropdownActive" class="dropdown">
             <ul class="dropdown-menu">
-               <li :class="['dropdown-menu-item',activeGame===game.id?'active':'']" v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index >= 10" @click="switchGame(game.id+'')">{{game.display_name}}</li>
+               <li
+               :class="['dropdown-menu-item',activeGame===game.id?'active':'']"
+                v-for="(game, index) in allGames" :key="game.id"
+                :index="game.id + ''"
+                v-if="index >= 10"
+                @click="switchGame(game.id+'')">{{game.display_name}}</li>
             </ul>
           </div>
         </li>
       </ul>
       <ul class="category-menu">
-        <li :class="['category-menu-item',activeCategory===category.id?'active':'']" v-for="(category, index) in categories" :key="'category' + category.id" @click="switchCategory(category)">{{category.display_name}}</li>
+        <li
+          :class="['category-menu-item',activeCategory===category.id?'active':'']"
+          v-for="(category, index) in categories"
+          :key="'category' + category.id"
+          @click="switchCategory(category)">{{category.display_name}}</li>
       </ul>
     </div>
   </div>
