@@ -53,6 +53,7 @@ const store = createStore()
 
 const token = Vue.cookie.get('access_token')
 if (token) {
+  axios.defaults.withCredentials = true
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 axios.interceptors.response.use(res => {

@@ -26,6 +26,7 @@ export default {
         Vue.cookie.set('refresh_token', res.refresh_token, {
           expires: expires
         })
+        axios.defaults.withCredentials = true
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.access_token
       }
       commit(types.SET_USER, {
@@ -46,6 +47,7 @@ export default {
         router.push('/')
         Vue.cookie.delete('access_token')
         Vue.cookie.delete('refresh_token')
+        commit(types.RESET_MESSAGE_COUNT)
         commit(types.RESET_USER)
       },
       errRes => Promise.reject(errRes)

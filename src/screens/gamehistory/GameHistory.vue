@@ -45,11 +45,10 @@
             </div>
             <div v-if="!schedules.length">暂无资料</div>
             <table v-else
-              class="history-table"
-              :key="'table' + gameTable.code">
+              class="history-table">
               <tr>
                 <th v-for="(fieldsObject, fieldsIndex) in nowGameTable.table"
-                  :key="'fields-'+fieldsIndex"
+                  :key="'fields-' + nowGameTable.code + fieldsIndex"
                   >
                   {{fieldsObject.displayName}}
                   <el-button v-if="fieldsObject.buttons"
