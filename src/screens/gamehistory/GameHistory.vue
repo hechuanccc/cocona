@@ -110,7 +110,7 @@
             <el-pagination
               v-if="totalCount > pageSize"
               :current-page.sync="currentPage"
-              @current-change="handlePageChange()"
+              @current-change="handlePageChange"
               :page-size="pageSize"
               layout="total, prev, pager, next"
               :total="totalCount">

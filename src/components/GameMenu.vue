@@ -9,7 +9,7 @@
           <i class="el-icon-arrow-down icon" v-else/>
           <div v-show="dropdownActive" class="dropdown">
             <ul class="dropdown-menu">
-               <li :class="['dropdown-menu-item',activeGame===game.id?'active':'']" v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index >= 10" @click="switchGame(game.id)">{{game.display_name}}</li>
+               <li :class="['dropdown-menu-item',activeGame===game.id?'active':'']" v-for="(game, index) in allGames" :key="game.id" :index="game.id + ''" v-if="index >= 10" @click="switchGame(game.id+'')">{{game.display_name}}</li>
             </ul>
           </div>
         </li>

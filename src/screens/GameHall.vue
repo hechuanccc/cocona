@@ -1,71 +1,62 @@
 <template>
   <div>
-
     <GameMenu path="game"/>
-
     <div class="container">
       <!-- user key props to force Vue to re-render router-view whenever route change -->
       <el-container>
-        <el-aside width="220px">
+        <el-aside width="200px">
           <ul v-if="user.account_type===0" class="side-menu">
-            <li>
-              <span>账户余额</span>
-              <span class="balance">{{user.balance | currency('￥')}}</span>
+            <li class="side-menu-title">
+              账户信息
             </li>
-            <li>
-              <span>未结余额</span>
-              <span>{{user.unsettled||0 | currency('￥')}}</span>
+            <li class="side-menu-item">
+              <span class="text">余额</span>
+              <span class="amount balance">{{user.balance | currency('￥')}}</span>
             </li>
-            <li class="center">
-              <el-button type="primary" plain @click="openBetRecordDialog">我的注单</el-button>
-              <a :href="$store.state.common.customerServiceUrl" target="_blank" class="m-l">
-                <el-button type="primary" plain>在线客服</el-button>
-              </a>
+            <li class="side-menu-item">
+              <span class="text">未结</span>
+              <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
             </li>
-            <li class="center">
-              <el-button type="primary" class="register" @click="linkTo('/register')">立即注册</el-button>
+            <li class="side-menu-button">
+              <el-button class="large-btn" type="primary" @click="linkTo('/register')">立即注册</el-button>
             </li>
           </ul>
           <ul v-else class="side-menu">
-            <li>
-              <span>账户余额</span>
-              <span class="balance">{{user.balance | currency('￥')}}</span>
+            <li class="side-menu-title">
+              账户信息
             </li>
-            <li>
-              <span>未结余额</span>
-              <span>{{user.unsettled||0 | currency('￥')}}</span>
+            <li class="side-menu-item">
+              <span class="text">余额</span>
+              <span class="amount balance">{{user.balance | currency('￥')}}</span>
             </li>
-            <li class="center">
-              <el-button type="primary" plain @click="linkTo('/account/my/primary_info')">我的账号</el-button>
-              <el-button type="primary" plain @click="linkTo('/account/online_payment')">立即充值</el-button>
+            <li class="side-menu-item">
+              <span class="text">未结</span>
+              <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
             </li>
-            <li class="center">
-              <el-button type="primary" plain @click="linkTo('/account/finance/betrecord')">我的注单</el-button>
-              <a :href="$store.state.common.customerServiceUrl" target="_blank" class="m-l">
-                <el-button type="primary" plain>在线客服</el-button>
-              </a>
+            <li class="side-menu-button">
+              <el-button class="small-btn" type="primary" @click="linkTo('/account/my/primary_info')">我的账号</el-button>
+              <el-button class="small-btn" type="primary" @click="linkTo('/account/online_payment')">立即充值</el-button>
             </li>
           </ul>
-          <div class="betrecords">
-            <h3>
-              最新注单
-            </h3>
-            <ul  v-if="betrecords && betrecords.length > 0">
-              <li v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
-                <span class="issue-number">{{bet.issue_number}} 期</span>
-                <span class="amount">
-                ￥{{bet.bet_amount}}</span>
-                <div>
-                  <span class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</span>
-                  <span class="odds">{{bet.odds}}</span>
-                </div>
-                <div v-if="bet.bet_options.options" class="selected-numbers">
-                  已选号码：{{bet.bet_options.options | betOptionFilter}}
-                </div>
-              </li>
-            </ul>
-            <div class="empty" v-else>暂无注单</div>
-          </div>
+          <ul  class="side-menu">
+            <li class="side-menu-title">最新注单</li>
+            <li class="side-menu-record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
+              <div class="issueNumber">
+                <span>{{bet.issue_number}} 期</span>
+                <span class="amount">{{bet.bet_amount| currency('￥')}}</span>
+              </div>
+              <div class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</div>
+              <div v-if="bet.bet_options.options" class="selected-numbers">
+                已选号码：{{bet.bet_options.options | betOptionFilter}}
+              </div>
+              <div class="odds">{{bet.odds}}</div>
+            </li>
+            <li class="side-menu-empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
+            <li class="side-menu-button">
+              <el-button v-if="user.account_type===0" class="large-btn" type="primary" @click="openBetRecordDialog">查看全部</el-button>
+              <el-button v-else class="large-btn" type="primary" @click="linkTo('/account/finance/betrecord')">查看全部</el-button>
+            </li>
+          </ul>
         </el-aside>
         <el-main class="m-t-lg">
           <router-view :key="$route.name + ($route.params.gameId || '')"/>
@@ -200,27 +191,27 @@ export default {
                   }
                 },
                 `中奖通知`
-                ),
-              createElement('p', {'class': {'text-center': true, 'm-t-sm': true, 'm-b-sm': true}}, `${result.game} 第${result.issue_number}期`),
+              ),
+              createElement('p', { 'class': { 'text-center': true, 'm-t-sm': true, 'm-b-sm': true } }, `${result.game} 第${result.issue_number}期`),
               createElement('ul',
-                    result.wins.map(function (win, index) {
-                      return createElement('li',
-                        [
-                          createElement('span', `${index + 1}. ${win.playgroup} `),
-                          createElement('span', `${win.play} `),
-                          createElement('span',
-                            {
-                              style: {
-                                color: 'red',
-                                fontSize: '14px'
-                              }
-                            },
-                            `中奖金额：${win.settlement_amount}`
-                          )
-                        ]
+                result.wins.map(function (win, index) {
+                  return createElement('li',
+                    [
+                      createElement('span', `${index + 1}. ${win.playgroup} `),
+                      createElement('span', `${win.play} `),
+                      createElement('span',
+                        {
+                          style: {
+                            color: 'red',
+                            fontSize: '14px'
+                          }
+                        },
+                        `中奖金额：${win.settlement_amount}`
                       )
-                    })
-                )
+                    ]
+                  )
+                })
+              )
             ])
         }
       }
@@ -274,76 +265,76 @@ export default {
   padding: 0;
 }
 .side-menu {
-  padding: 10px 0;
   margin-top: 20px;
   background: #fff;
-  color: #333;
+  color: #9b9b9b;
+  font-size: 14px;
   margin-right: 20px;
-  li {
-    padding: 3px 10px;
-    span {
-      display: inline-block;
-      width: 60px;
-      text-align: center;
-      color: #999;
-      &.balance {
-        color: #67c23a;
-        font-size: 14px;
-      }
+  .side-menu-title {
+    font-weight: 200;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 2px solid $pinkish-grey;
+  }
+  .side-menu-item {
+    font-weight: 200;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    .text {
+      font-size: 12px;
     }
-    &.center {
-      margin-top: 10px;
-      text-align: center;
+    .balance {
+      color: $red;
     }
-    .register {
-      width: 100%;
+    .amount {
+      float: right;
+      display: block;
+      text-align: right;
     }
   }
-}
-.betrecords {
-  margin: 10px 20px 0 0;
-  background: #fff;
-  ul {
-    max-height: 400px;
-    overflow-y: scroll;
-  }
-  li {
-    color: #999;
+  .side-menu-record {
     margin: 0 10px;
     padding: 5px 0;
-    border-top: 1px solid #f5f5f5;
+    border-bottom: 1px solid #f5f5f5;
+    font-size: 12px;
+    .issueNumber {
+      .amount {
+        float: right;
+        display: block;
+        text-align: right;
+        color: #000;
+      }
+    }
+    .odds {
+      color: $red;
+    }
+    .play-name {
+      color: #666;
+    }
+    .selected-numbers {
+      word-break: break-all;
+    }
   }
-  h3 {
-    display: block;
-    color: #999;
-    padding-left: 15px;
-    margin-top: 10px;
-    line-height: 36px;
-    height: 36px;
+  .side-menu-empty {
+    color: $pinkish-grey;
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
+    padding: 20px 0;
+    font-weight: 200;
   }
-}
-
-.empty {
-  text-align: center;
-  line-height: 30px;
-  height: 30px;
-  padding-bottom: 10px;
-  color: #999;
-}
-.odds {
-  color: $red;
-}
-.play-name {
-  color: #666;
-}
-.amount {
-  color: #666;
-  line-height: 36px;
-  float: right;
-  font-size: 13px;
-}
-
-.selected-numbers {
-  word-break: break-all;
+  .side-menu-button {
+    text-align: center;
+    padding-bottom: 10px;
+    .el-button:last-child {
+      margin-left: 5px;
+    }
+    .large-btn.el-button {
+      margin: 0;
+      width: 170px;
+    }
+  }
 }
 </style>

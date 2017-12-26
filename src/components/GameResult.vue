@@ -1,10 +1,10 @@
 <template>
-  <div class="result-balls" v-if="gameLatestResult">
-    <div class="balls-text">
+  <div class="result-balls">
+    <div class="balls-text" v-if="gameLatestResult">
       <p class="game">{{gameLatestResult.display_name}}</p>
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
-    <div class="balls-number">
+    <div class="balls-number" v-if="gameLatestResult">
       <span
         v-for="(num, index) in resultNums"
         :key="gameLatestResult.issue_number + index"
@@ -125,6 +125,7 @@ export default {
               clearInterval(this.timer)
               this.$store.dispatch('fetchUser')
               this.pollResult(gameid)
+              this.$emit('refreshResult')
             }
           })
         }, 5000)
