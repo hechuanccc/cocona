@@ -392,6 +392,9 @@ export default {
         errRes => {
           this.submitting = false
           this.errors = errRes.join()
+          setTimeout(() => {
+            this.dialogVisible = false
+          }, 3000)
         })
     },
     initPlaygroups () {
