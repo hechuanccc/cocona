@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import gameTranslator from './gameTranslator'
 
 /**
  * 1. Get chunks from original list using 'size' as chunk's length
@@ -157,4 +158,8 @@ export function filtAmount (evt) {
   if (evt.keyCode === 43 || evt.keyCode === 45 || evt.keyCode === 46 || evt.keyCode === 101) {
     evt.preventDefault()
   }
+}
+
+export function statisticTranslator (code) {
+  return gameTranslator[code]
 }
