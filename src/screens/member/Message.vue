@@ -73,12 +73,6 @@ export default {
     fetchMessageCount().then(res => {
       this.$store.dispatch('setMessageCount', res.message_count)
     })
-    this.interval = setInterval(() => {
-      this.$store.dispatch('fetchUser')
-    }, 10 * 1000)
-  },
-  beforeDestroy () {
-    clearInterval(this.interval)
   },
   computed: {
     conditions () {
