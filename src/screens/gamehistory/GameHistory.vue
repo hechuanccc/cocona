@@ -9,7 +9,7 @@
         <el-col :span="3">
           <el-menu default-active="1">
             <el-menu-item v-for="(game, index) in games"
-              :key="game.id"
+              :key="currentGame + 'gameId' + game.id + index"
               :index="index + 1 + ''"
               @click="currentGame = game.code">
             <span slot="title">{{game.display_name}}</span>
@@ -55,7 +55,7 @@
                     type="info"
                     size="mini"
                     v-for="(button, index) in fieldsObject.buttons"
-                    :key="index"
+                    :key="fieldsIndex + nowGameTable.code + index"
                     @click="nowDisplay = button.show"
                     >
                     {{button.displayName}}
@@ -63,6 +63,7 @@
                   <div>
                     <div v-if="fieldsObject.subHeads && subHead.displayName"
                       v-for="subHead in fieldsObject.subHeads"
+                      :key="'field-' + currentGame + '-subHead-' + subHead.key"
                       :style="{'display': 'inline-block',
                         'width': 1/fieldsObject.subHeads.length * 100 + '%'}">
                       <span>{{subHead.displayName}}</span>
@@ -70,10 +71,10 @@
                   </div>
                 </th>
               </tr>
-              <tr v-for="schedule in schedules"
-                :key="'issue-' + schedule.issue_number">
+              <tr v-for="(schedule, scheduleIndex) in schedules"
+                :key="scheduleIndex + 'issue-' + schedule.issue_number">
                 <td v-for="(fieldsObject, fieldsIndex) in nowGameTable.table"
-                  :key="'field-'+fieldsIndex"
+                  :key="nowGameTable.code + 'field-content-'+ fieldsIndex"
                   v-if="!fieldsObject.buttons && fieldsObject.key !== 'result_str'">
                   <span v-if="schedule[fieldsObject.key]">
                     {{schedule[fieldsObject.key]}}
@@ -82,11 +83,13 @@
                   <div>
                     <span v-if="fieldsObject.subHeads"
                       v-for="subHead in fieldsObject.subHeads"
-                      :key="currentGame+'-'+subHead.key"
+                      :key="'centent-'+currentGame+'-subHead-'+subHead.key"
                       :style="{'display': 'inline-block',
                         'width': 1/fieldsObject.subHeads.length * 100 + '%'}"
                     >
-                      <b :class="schedule.result_category[subHead.key]">{{schedule.result_category[subHead.key] |resultFilter}}</b>
+                      <b :class="schedule.result_category[subHead.key]">
+                        {{schedule.result_category[subHead.key] |resultFilter}}
+                      </b>
                     </span>
                   </div>
                 </td>
@@ -97,7 +100,7 @@
                     }">
                     <ResultNums
                       v-for="result in classifiyResults (schedule)"
-                      :key="result.num"
+                      :key="currentGame + 'result-number' + result.num"
                       :result="result"
                       :displayType="nowDisplay"
                       :game="currentGame">
@@ -727,6 +730,7 @@ export default {
       this.interval = setInterval(() => {
         this.fetchData((this.currentPage - 1) * this.pageSize)
       }, (1 * 60 * 1000))
+      this.schedules = ''
       this.fetchData(0)
       this.nowDisplay = 'number'
       this.currentPage = 1

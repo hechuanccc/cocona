@@ -135,6 +135,7 @@ export default {
             this.$refs.withdrawInfo.resetFields()
             setTimeout(() => {
               this.updateStatus = 0
+              this.$store.dispatch('fetchUser')
             }, 3000)
           }, errorMsg => {
             this.withdrawInfo.withdraw_password = ''
