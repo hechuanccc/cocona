@@ -45,6 +45,10 @@ export default {
       }],
       userMenus: [
         {
+          name: this.$t('navMenu.game_center'),
+          path: '/game'
+        },
+        {
           name: this.$t('navMenu.game_intro'),
           path: '/gameintro'
         }, {

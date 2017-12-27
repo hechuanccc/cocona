@@ -1,24 +1,18 @@
 <template>
   <el-row class="row-bg">
     <div class="container">
-      <el-breadcrumb separator="/">
+      <el-breadcrumb class="p-l-xlg" separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.draw_history')}}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-row class="history-container" v-loading="loading">
-        <el-col :span="3">
-          <el-menu default-active="1">
-            <el-menu-item v-for="(game, index) in games"
-              :key="currentGame + 'gameId' + game.id + index"
-              :index="index + 1 + ''"
-              @click="currentGame = game.code">
-            <span slot="title">{{game.display_name}}</span>
-            </el-menu-item>
-          </el-menu>
-        </el-col>
-        <el-col :span="21" class="schedule-container">
-          <div class="m-r">
-            <div class="m-t user-actions">
+
+      <div class="history-container" v-loading="loading">
+        <div class="aside">
+          <AsideMenu @clicked="onClickChild" :items="games ? games : []"/>
+        </div>
+
+        <div class="main schedule-container">
+          <div class="user-actions">
               <div class="filters">
                 <div class="input">
                   <el-date-picker
@@ -43,6 +37,8 @@
                 <el-button type="primary" @click="getLatest()">刷新数据</el-button>
               </div>
             </div>
+
+          <div class="historydata m-b-xlg">
             <div v-if="!schedules.length">暂无资料</div>
             <table v-else
               class="history-table">
@@ -117,9 +113,9 @@
               layout="total, prev, pager, next"
               :total="totalCount">
             </el-pagination>
-          </div>
-        </el-col>
-      </el-row>
+            </div>
+        </div>
+      </div>
     </div>
   </el-row>
 </template>
@@ -127,6 +123,7 @@
 <script>
 import { fetchGames, fetchHistory } from '../../api'
 import ResultNums from './ResultNums'
+import AsideMenu from '../../components/AsideMenu.vue'
 import { msgFormatter } from '../../utils'
 import _ from 'lodash'
 
@@ -713,6 +710,9 @@ export default {
     }
   },
   methods: {
+    onClickChild (e) {
+      this.currentGame = e
+    },
     classifiyResults (schedule) {
       let classfied = _.map(schedule.result_str.split(','), (num, i) => ({
         oddEven: schedule.result_category[`ball_odd_even_${i + 1}`],
@@ -792,7 +792,8 @@ export default {
     }
   },
   components: {
-    ResultNums
+    ResultNums,
+    AsideMenu
   },
   created () {
     this.loading = true
@@ -836,14 +837,25 @@ export default {
   text-decoration: none;
 }
 .history-container {
-  background-color: white;
   height: 100%;
   min-height: 100vh;
+  .aside, .main {
+    display: inline-block;
+  }
+  .aside {
+    vertical-align: top;
+  }
+  .main {
+    width: 1095px;
+  }
 }
 .schedule-container {
   text-align: center;
 }
-
+.historydata {
+  background: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
 .history-table {
   width: 100%;
   background: white;
@@ -865,13 +877,22 @@ export default {
   border: none;
 }
 .user-actions {
+  height: 70px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   text-align: justify;
+  margin-bottom: 10px;
   .filters,
   .refresh {
+    margin-left: 10px;
+    padding-top: 20px;
     display: inline-block;
     .input {
       display: inline-block;
     }
+  }
+  .refresh {
+    margin-right: 28px;
   }
   &:after {
     content: "";

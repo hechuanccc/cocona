@@ -353,12 +353,11 @@ export default {
   }
 }
 .countdown-panel {
-  width: 400px;
+  width: 500px;
   height: 55px;
   float: right;
   background: #fff;
   border-left: 5px solid $marine-blue;
-  padding-right: 100px;
 }
 .info-text {
   color: #4a4a4a;

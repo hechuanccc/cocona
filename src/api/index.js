@@ -32,7 +32,7 @@ export function gethomePage () {
 }
 
 export function getDescription () {
-  return axios.get(`${urls.website}descriptions`)
+  return axios.get(`${urls.website}descriptions/`)
 }
 export function getPromotions () {
   return axios.get(urls.promotions)

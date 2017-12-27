@@ -34,6 +34,9 @@ body {
 .m-l-lg {
   margin-left: 20px;
 }
+.m-l-xlg {
+  margin-left: 40px;
+}
 .m-l {
   margin-left: 10px;
 }
@@ -67,8 +70,14 @@ body {
 .m-b-sm {
   margin-bottom: 5px;
 }
+.m-b-xlg {
+  margin-bottom: 40px;
+}
 .p-l-lg {
   padding-left: 20px;
+}
+.p-l-xlg {
+  padding-left: 40px;
 }
 .p-t {
   padding-top: 10px;
@@ -77,25 +86,6 @@ body {
 .block-center {
   margin: 0 auto;
 }
-
-.faq-content{
-  .el-card {
-    box-shadow: 0 2px 12px 0 $primary;
-    margin-bottom: 20px;
-  }
-  line-height: 16px + 12px;
-  h1{
-    font-size: 16px + 16px;
-    padding-bottom: 16px;
-    color: $primary;}
-  h2{
-    font-size: 16px + 8px;
-    padding: 20px 0;}
-  p, ol{
-    font-size: 16px;
-    margin-bottom: 8px;}
-}
-
 
 .input-width {
   width: 200px;
