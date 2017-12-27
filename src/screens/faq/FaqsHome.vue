@@ -1,17 +1,15 @@
 <template>
   <el-row class="row-bg">
     <div class="container">
-      <el-breadcrumb separator="/">
+      <el-breadcrumb class="p-l-xlg" separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.qa')}}</el-breadcrumb-item>
       </el-breadcrumb>
-      <ul class="faq-titles">
-        <li :class="{active: nowfaq === faq.source }" v-for="faq in faqs" :key="faq.source" :title="faq.source" @click="switchFaq($event)">{{faq.title}}</li>
-      </ul>
-      <div class="faq-content">
-        <el-collapse-transition>
-          <component :is="nowfaq"></component>
-        </el-collapse-transition>
+      <div class="aside">
+        <AsideMenu @clicked="onClickChild" :items="faqs"/>
+      </div>
+      <div class="main m-b-xlg">
+        <component :is="nowfaq"></component>
       </div>
     </div>
   </el-row>
@@ -20,32 +18,24 @@
 
 <style lang="sass" scoped>
 @import "../../style/vars.scss";
-
-.faq-titles
-  position: relative
-  text-align: center
-  margin-top: 15px
-  li
-    color: rgba(50, 50, 50, 0.8)
-    cursor: pointer
-    display: inline-block
-    width: 10%
-    border-bottom: 1px solid #ddd
-    padding: 15px
-    font-size: 24px
-    margin-right: 10px
-    margin-left: 10px
-    &.active
-      color: $primary
-      border-bottom: 1.5px solid $primary
-      &:after
-        content: ' '
-        position: absolute
-        opacity: 1
-        margin: 0 auto
-        bottom: 0
-        border: 10px solid transparent
-        border-bottom-color: $primary
+.aside
+  display: inline-block
+  vertical-align: top
+.main
+  box-sizing: border-box
+  display: inline-block
+  width: 1094px
+  height: auto
+  padding: 40px
+  background-color: #ffffff
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1)
+  .box-card
+    min-height: 300px
+    font-size: 14px
+    line-height: 2.0
+    font-weight: 500
+    color: #5f5f5f
+    letter-spacing: 2px
 </style>
 <script>
 import FaqDeposit from './FaqDeposit'
@@ -53,22 +43,23 @@ import FaqWithdraw from './FaqWithdraw'
 import FaqFaqs from './FaqFaqs'
 import FaqAbout from './FaqAbout'
 import FaqContact from './FaqContact'
+import AsideMenu from '../../components/AsideMenu'
 export default {
   data () {
     return {
       nowfaq: 'FaqDeposit',
       faqs: [
-        { title: '如何存款', source: 'FaqDeposit' },
-        { title: '如何提款', source: 'FaqWithdraw' },
-        { title: '常見問題', source: 'FaqFaqs' },
-        { title: '關於我們', source: 'FaqAbout' },
-        { title: '聯繫我們', source: 'FaqContact' }
+        { display_name: '如何存款', code: 'FaqDeposit' },
+        { display_name: '如何提款', code: 'FaqWithdraw' },
+        { display_name: '常見問題', code: 'FaqFaqs' },
+        { display_name: '關於我們', code: 'FaqAbout' },
+        { display_name: '聯繫我們', code: 'FaqContact' }
       ]
     }
   },
   methods: {
-    switchFaq (el) {
-      this.nowfaq = el.srcElement.title
+    onClickChild (e) {
+      this.nowfaq = e
     }
   },
   components: {
@@ -76,7 +67,8 @@ export default {
     FaqWithdraw,
     FaqFaqs,
     FaqAbout,
-    FaqContact
+    FaqContact,
+    AsideMenu
   }
 }
 </script>

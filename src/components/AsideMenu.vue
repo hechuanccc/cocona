@@ -1,11 +1,11 @@
 <template>
   <el-aside class="m-l-xlg m-r-sm" width="256px">
-    <el-menu :default-active="0"
+    <el-menu :default-active="'0'"
       text-color="#4a4a4a"
       active-text-color="#fff"
       :background-color="'#fff'">
       <el-menu-item v-for="(item,index) in items"
-        :index="index"
+        :index="''+index"
         :key="item.code + index"
         class="aside-item"
         @click="onClick(item.code)"

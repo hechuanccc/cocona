@@ -38,7 +38,7 @@
               </div>
             </div>
 
-          <div class="historydata m-b">
+          <div class="historydata m-b-xlg">
             <div v-if="!schedules.length">暂无资料</div>
             <table v-else
               class="history-table">
