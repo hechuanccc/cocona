@@ -105,7 +105,7 @@ export default {
     handlePageChange (currentPage) {
       this.loading = true
       fetchTransactionRecord({ transaction_type: this.transactionType, offset: (currentPage - 1) * this.pageSize }).then(data => {
-        this.betRecords = data.results
+        this.transactionRecords = data.results
         this.loading = false
       }, () => {
         this.loading = false
