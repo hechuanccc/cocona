@@ -185,3 +185,7 @@ export function fetchHistory (option) {
 export function fetchPlaySetting (id) {
   return axios.get(`${urls.playSetting}?game=${id}`)
 }
+
+export function fetchStatistic (code) {
+  return axios.get(`${urls.statistic}?game_code=${code}`)
+}

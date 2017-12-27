@@ -15,6 +15,15 @@ import 'element-ui/lib/theme-chalk/index.css'
 import Icon from 'vue-awesome/components/Icon'
 import Vue2Filters from 'vue2-filters'
 import { gethomePage } from './api'
+import qs from 'qs'
+
+let url = window.location.href
+let params = qs.parse(url.slice(url.indexOf('?') + 1, url.length))
+if (params.r) {
+  let expires = new Date()
+  expires.setMonth(expires.getMonth() + 1)
+  VueCookie.set('r', params.r, {expires: expires})
+}
 
 Vue.component('icon', Icon)
 Vue.use(require('vue-moment'))
