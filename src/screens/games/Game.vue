@@ -10,7 +10,7 @@
           </div>
           <div class="schedule" v-if="schedule && schedule.issue_number">
             <div class="schedule-title">封盘</div>
-            <span v-if="!gameClosed" class="red countdown" :style="{ fontSize: closeCountDown.days > 0 ? '15px': '18px' }">
+            <span v-if="!gameClosed" class="red countdown">
               <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
               <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
             </span>
@@ -18,7 +18,7 @@
           </div>
           <div class="schedule" v-if="schedule && schedule.issue_number">
             <div class="schedule-title">开奖</div>
-            <span v-if="!ended" class="green countdown" :style="{ fontSize: closeCountDown.days > 0 ? '15px': '18px' }">
+            <span v-if="!ended" class="green countdown">
               <span v-if="resultCountDown.days > 0">{{resultCountDown.days}}天 </span>
               <span v-if="resultCountDown.hours > 0">{{resultCountDown.hours | complete}}:</span>{{resultCountDown.minutes | complete}}:{{resultCountDown.seconds | complete}}
             </span>
@@ -353,12 +353,11 @@ export default {
   }
 }
 .countdown-panel {
-  width: 400px;
+  width: 500px;
   height: 55px;
   float: right;
   background: #fff;
   border-left: 5px solid $marine-blue;
-  padding-right: 100px;
 }
 .info-text {
   color: #4a4a4a;
