@@ -38,7 +38,7 @@
               <el-button class="small-btn" type="primary" @click="linkTo('/account/online_payment')">立即充值</el-button>
             </li>
           </ul>
-          <ul  class="side-menu">
+          <ul ref="sideMenuUl"  class="side-menu side-menu-ul" :style="{height: betrecords.length && (betrecords.length * 65 + 42 * 2) < gameMainAreaHeight ? betrecords.length * 65 + 42 * 2 + 'px' : betrecords.length ? gameMainAreaHeight + 'px' : 'auto'}">
             <li class="side-menu-title">最新注单</li>
             <li class="side-menu-record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
               <div class="issueNumber">
@@ -58,7 +58,7 @@
             </li>
           </ul>
         </el-aside>
-        <el-main class="m-t-lg">
+        <el-main class="m-t-lg" ref="mainGameArea" id="mainGameArea">
           <router-view :key="$route.name + ($route.params.gameId || '')"/>
         </el-main>
       </el-container>
@@ -89,7 +89,8 @@ export default {
   data () {
     return {
       betrecords: [],
-      notifyIssueNumber: {}
+      notifyIssueNumber: {},
+      gameMainAreaHeight: 0
     }
   },
   computed: {
@@ -99,6 +100,7 @@ export default {
   },
   watch: {
     '$route': function (to, from) {
+      this.betrecords = []
       if (to.path === '/game') {
         this.$store.dispatch('fetchGames').catch(error => {
           if (error.response.status > 400) {
@@ -116,6 +118,7 @@ export default {
       fetchBet(gameData)
         .then(res => {
           this.betrecords = res
+          this.computeMainAearHeight()
         })
     },
     linkTo (path) {
@@ -229,6 +232,12 @@ export default {
         }
         this.notifyIssueNumber[result.game] = result.issue_number
       })
+    },
+    computeMainAearHeight () {
+      setTimeout(() => {
+        let mainHeight = document.getElementById('mainGameArea')
+        this.gameMainAreaHeight = mainHeight.offsetHeight - 194
+      }, 1000)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -271,6 +280,9 @@ export default {
   color: #9b9b9b;
   font-size: 14px;
   margin-right: 20px;
+  &.side-menu-ul {
+    overflow-y: scroll;
+  }
   .side-menu-title {
     font-weight: 200;
     text-align: center;
