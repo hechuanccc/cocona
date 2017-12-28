@@ -99,7 +99,9 @@ export default {
       this.$store.commit('SHOW_LOGIN_DIALOG')
     },
     logout () {
-      this.$store.dispatch('logout')
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push('/')
+      })
     },
     tryplay () {
       register({ account_type: 0 }).then(user => {

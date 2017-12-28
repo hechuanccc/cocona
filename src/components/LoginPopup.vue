@@ -67,7 +67,7 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ]
       },
-      errorMsg: 'ddd'
+      errorMsg: ''
     }
   },
   methods: {
