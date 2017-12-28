@@ -319,7 +319,7 @@ export default {
   }
   .period {
     float: right;
-    color: $azul;
+    color: $watermelon;
   }
 }
 .main {
