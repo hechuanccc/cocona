@@ -353,7 +353,7 @@ export default {
   }
 }
 .countdown-panel {
-  width: 500px;
+  width: 49%;
   height: 55px;
   float: right;
   background: #fff;
