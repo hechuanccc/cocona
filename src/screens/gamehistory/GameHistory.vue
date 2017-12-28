@@ -1,7 +1,7 @@
 <template>
   <el-row class="row-bg">
     <div class="container">
-      <el-breadcrumb class="p-l-xlg" separator="/">
+      <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.draw_history')}}</el-breadcrumb-item>
       </el-breadcrumb>

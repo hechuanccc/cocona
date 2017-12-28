@@ -1,7 +1,7 @@
 <template>
   <el-row class="row-bg">
     <div class="container">
-      <el-breadcrumb class="p-l-xlg" separator="/">
+      <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.qa')}}</el-breadcrumb-item>
       </el-breadcrumb>
@@ -18,6 +18,8 @@
 
 <style lang="sass" scoped>
 @import "../../style/vars.scss";
+@import "../../style/base.scss";
+
 .aside
   display: inline-block
   vertical-align: top
@@ -31,11 +33,8 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1)
   .box-card
     min-height: 300px
-    font-size: 14px
-    line-height: 2.0
-    font-weight: 500
-    color: #5f5f5f
-    letter-spacing: 2px
+    @extend %text;
+
 </style>
 <script>
 import FaqDeposit from './FaqDeposit'
