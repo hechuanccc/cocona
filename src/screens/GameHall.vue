@@ -323,6 +323,7 @@ export default {
     }
     .odds {
       color: $red;
+      word-break: break-all;
     }
     .play-name {
       color: #666;

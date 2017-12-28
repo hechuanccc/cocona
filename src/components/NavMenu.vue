@@ -11,6 +11,7 @@
     </router-link>
     <a v-if="$store.state.common.customerServiceUrl"
       class="online-service"
+      target="_blank"
       :href="$store.state.common.customerServiceUrl ? $store.state.common.customerServiceUrl : '#'">
       {{$t('navMenu.online_service')}}
     </a>
