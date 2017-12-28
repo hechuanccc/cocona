@@ -28,15 +28,11 @@ export default {
       default: '0'
     }
   },
-  data () {
-    return {
-      current: ''
-    }
-  },
   methods: {
     onClick (e) {
-      this.current = e.code ? e.code : e
-      this.$emit('clicked', e)
+      let data
+      data = e.code ? e.code : e
+      this.$emit('clicked', data)
     }
   }
 }
