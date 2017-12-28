@@ -30,8 +30,7 @@ export default {
   },
   methods: {
     onClick (e) {
-      let data
-      data = e.code ? e.code : e
+      let data = e.code ? e.code : e
       this.$emit('clicked', data)
     }
   }
