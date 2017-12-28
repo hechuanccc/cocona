@@ -67,7 +67,7 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ]
       },
-      errorMsg: ''
+      errorMsg: 'ddd'
     }
   },
   methods: {
@@ -206,6 +206,7 @@ export default {
   position: absolute;
   font-size: 13px;
   color: $red;
-  top: 180px;
+  top: 150px;
+  right: 75px;
 }
 </style>
