@@ -85,7 +85,6 @@ const toHomeAndLogin = function (router) {
     }
   })
 
-  store.dispatch('logout')
   store.commit('SHOW_LOGIN_DIALOG')
 }
 

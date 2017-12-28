@@ -122,10 +122,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/vars.scss";
-%fat-button {
-  width: 160px;
-  height: 40px;
-}
+@import "../style/base.scss";
+
 .pop-content {
   padding: 30px 0;
   color: #9b9b9b;
@@ -184,6 +182,8 @@ export default {
   font-size: 12px;
   line-height: 37px;
   color: #4a4a4a;
+  position: relative;
+  right: 20px;
 }
 .forgot-password {
   display: inline-block;

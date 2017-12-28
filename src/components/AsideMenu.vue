@@ -16,7 +16,6 @@
   </el-aside>
 </template>
 
-
 <script>
 export default {
   props: {

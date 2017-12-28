@@ -1,7 +1,7 @@
 <template>
   <div>
     <GameMenu path="game"/>
-    <div class="container">
+    <div class="container p-l-xlg">
       <!-- user key props to force Vue to re-render router-view whenever route change -->
       <el-container>
         <el-aside width="200px">
@@ -118,7 +118,7 @@ export default {
       fetchBet(gameData)
         .then(res => {
           this.betrecords = res
-          this.computeMainAearHeight()
+          this.computeMainAreaHeight()
         })
     },
     linkTo (path) {
@@ -233,7 +233,7 @@ export default {
         this.notifyIssueNumber[result.game] = result.issue_number
       })
     },
-    computeMainAearHeight () {
+    computeMainAreaHeight () {
       setTimeout(() => {
         let mainHeight = document.getElementById('mainGameArea')
         this.gameMainAreaHeight = mainHeight.offsetHeight - 194
@@ -271,6 +271,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../style/vars.scss";
+
 .el-main {
   padding: 0;
 }
