@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import axios from 'axios'
 import Vue from 'vue'
-import router from '../../router'
 
 import * as types from '../mutations/mutation-types'
 
@@ -44,7 +43,6 @@ export default {
   logout: ({ commit, state }) => {
     return logout().then(
       res => {
-        router.push('/')
         Vue.cookie.delete('access_token')
         Vue.cookie.delete('refresh_token')
         commit(types.RESET_MESSAGE_COUNT)
