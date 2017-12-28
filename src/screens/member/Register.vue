@@ -58,8 +58,8 @@ export default {
       if (!validateUserName(value)) {
         callback(new Error(this.$t('validate.username_validate')))
       } else {
-        checkUserName(value).then(isExist => {
-          if (!isExist) {
+        checkUserName(value).then(response => {
+          if (response.length === 0) {
             callback()
           } else {
             callback(new Error(this.$t('validate.username_exist')))
