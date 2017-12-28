@@ -52,7 +52,7 @@
           </router-link>
           <i class="el-icon-caret-bottom" v-if="!showDropdown" />
           <i class="el-icon-caret-top" v-else />
-          <ul v-show="showDropdown" class="dropdown">
+          <ul v-show="showDropdown" class="dropdown" :style="{right: messageCount? '45px': '25px'}">
             <li><router-link to="/account/my/">账户余额: ￥{{user.balance}}</router-link></li>
             <li><router-link to="/account/my/primary_info">{{$t('user.my_account')}}</router-link></li>
             <li><router-link to="/account/online_payment">{{$t('user.online_payment')}}</router-link></li>
@@ -99,7 +99,9 @@ export default {
       this.$store.commit('SHOW_LOGIN_DIALOG')
     },
     logout () {
-      this.$store.dispatch('logout')
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push('/')
+      })
     },
     tryplay () {
       register({ account_type: 0 }).then(user => {

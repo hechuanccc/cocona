@@ -5,20 +5,14 @@
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>{{$t('navMenu.draw_history')}}</el-breadcrumb-item>
       </el-breadcrumb>
-      <el-row class="history-container" v-loading="loading">
-        <el-col :span="3">
-          <el-menu default-active="1">
-            <el-menu-item v-for="(game, index) in games"
-              :key="game.id"
-              :index="index + 1 + ''"
-              @click="currentGame = game.code">
-            <span slot="title">{{game.display_name}}</span>
-            </el-menu-item>
-          </el-menu>
-        </el-col>
-        <el-col :span="21" class="schedule-container">
-          <div class="m-r">
-            <div class="m-t user-actions">
+
+      <div class="history-container" v-loading="loading">
+        <div class="aside">
+          <AsideMenu @clicked="onClickChild" :items="games ? games : []"/>
+        </div>
+
+        <div class="main schedule-container">
+          <div class="user-actions">
               <div class="filters">
                 <div class="input">
                   <el-date-picker
@@ -43,6 +37,8 @@
                 <el-button type="primary" @click="getLatest()">刷新数据</el-button>
               </div>
             </div>
+
+          <div class="historydata m-b-xlg">
             <div v-if="!schedules.length">暂无资料</div>
             <table v-else
               class="history-table">
@@ -55,7 +51,7 @@
                     type="info"
                     size="mini"
                     v-for="(button, index) in fieldsObject.buttons"
-                    :key="index"
+                    :key="fieldsIndex + nowGameTable.code + index"
                     @click="nowDisplay = button.show"
                     >
                     {{button.displayName}}
@@ -63,6 +59,7 @@
                   <div>
                     <div v-if="fieldsObject.subHeads && subHead.displayName"
                       v-for="subHead in fieldsObject.subHeads"
+                      :key="'field-' + currentGame + '-subHead-' + subHead.key"
                       :style="{'display': 'inline-block',
                         'width': 1/fieldsObject.subHeads.length * 100 + '%'}">
                       <span>{{subHead.displayName}}</span>
@@ -70,10 +67,10 @@
                   </div>
                 </th>
               </tr>
-              <tr v-for="schedule in schedules"
-                :key="'issue-' + schedule.issue_number">
+              <tr v-for="(schedule, scheduleIndex) in schedules"
+                :key="scheduleIndex + 'issue-' + schedule.issue_number">
                 <td v-for="(fieldsObject, fieldsIndex) in nowGameTable.table"
-                  :key="'field-'+fieldsIndex"
+                  :key="nowGameTable.code + 'field-content-'+ fieldsIndex"
                   v-if="!fieldsObject.buttons && fieldsObject.key !== 'result_str'">
                   <span v-if="schedule[fieldsObject.key]">
                     {{schedule[fieldsObject.key]}}
@@ -82,11 +79,13 @@
                   <div>
                     <span v-if="fieldsObject.subHeads"
                       v-for="subHead in fieldsObject.subHeads"
-                      :key="currentGame+'-'+subHead.key"
+                      :key="'centent-'+currentGame+'-subHead-'+subHead.key"
                       :style="{'display': 'inline-block',
                         'width': 1/fieldsObject.subHeads.length * 100 + '%'}"
                     >
-                      <b :class="schedule.result_category[subHead.key]">{{schedule.result_category[subHead.key] |resultFilter}}</b>
+                      <b :class="schedule.result_category[subHead.key]">
+                        {{schedule.result_category[subHead.key] |resultFilter}}
+                      </b>
                     </span>
                   </div>
                 </td>
@@ -97,7 +96,7 @@
                     }">
                     <ResultNums
                       v-for="result in classifiyResults (schedule)"
-                      :key="result.num"
+                      :key="currentGame + 'result-number' + result.num"
                       :result="result"
                       :displayType="nowDisplay"
                       :game="currentGame">
@@ -114,9 +113,9 @@
               layout="total, prev, pager, next"
               :total="totalCount">
             </el-pagination>
-          </div>
-        </el-col>
-      </el-row>
+            </div>
+        </div>
+      </div>
     </div>
   </el-row>
 </template>
@@ -124,6 +123,7 @@
 <script>
 import { fetchGames, fetchHistory } from '../../api'
 import ResultNums from './ResultNums'
+import AsideMenu from '../../components/AsideMenu.vue'
 import { msgFormatter } from '../../utils'
 import _ from 'lodash'
 
@@ -710,6 +710,9 @@ export default {
     }
   },
   methods: {
+    onClickChild (e) {
+      this.currentGame = e
+    },
     classifiyResults (schedule) {
       let classfied = _.map(schedule.result_str.split(','), (num, i) => ({
         oddEven: schedule.result_category[`ball_odd_even_${i + 1}`],
@@ -727,6 +730,7 @@ export default {
       this.interval = setInterval(() => {
         this.fetchData((this.currentPage - 1) * this.pageSize)
       }, (1 * 60 * 1000))
+      this.schedules = ''
       this.fetchData(0)
       this.nowDisplay = 'number'
       this.currentPage = 1
@@ -788,7 +792,8 @@ export default {
     }
   },
   components: {
-    ResultNums
+    ResultNums,
+    AsideMenu
   },
   created () {
     this.loading = true
@@ -832,14 +837,25 @@ export default {
   text-decoration: none;
 }
 .history-container {
-  background-color: white;
   height: 100%;
   min-height: 100vh;
+  .aside, .main {
+    display: inline-block;
+  }
+  .aside {
+    vertical-align: top;
+  }
+  .main {
+    width: 1095px;
+  }
 }
 .schedule-container {
   text-align: center;
 }
-
+.historydata {
+  background: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
 .history-table {
   width: 100%;
   background: white;
@@ -861,13 +877,22 @@ export default {
   border: none;
 }
 .user-actions {
+  height: 70px;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   text-align: justify;
+  margin-bottom: 10px;
   .filters,
   .refresh {
+    margin-left: 10px;
+    padding-top: 20px;
     display: inline-block;
     .input {
       display: inline-block;
     }
+  }
+  .refresh {
+    margin-right: 28px;
   }
   &:after {
     content: "";

@@ -49,7 +49,7 @@ export default {
     content: 'Content'
   },
   user: {
-    username: 'User Name',
+    username: 'Username',
     password: 'Password',
     new_password: 'New Password',
     prev_password: 'Old Password',

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-play">
     <div class="main">
       <el-row class="info-panel">
         <GameResult :gameid="$route.params.gameId" @refreshResult="fetchStatistic(currentGame.code)"/>
@@ -342,12 +342,16 @@ export default {
   }
   .period {
     float: right;
-    color: $azul;
+    color: $watermelon;
   }
 }
 .main {
   float: left;
-  width: 1040px;
+  width: 840px;
+}
+
+.main-play {
+  width: 1050px;
 }
 .current-game {
   position: absolute;
@@ -376,7 +380,7 @@ export default {
   }
 }
 .countdown-panel {
-  width: 500px;
+  width: 49%;
   height: 55px;
   float: right;
   background: #fff;

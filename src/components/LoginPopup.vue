@@ -3,43 +3,45 @@
     <el-col :span="12">
       <div class="register">
         <span>{{$t('navMenu.guest')}}:</span>
-        <div class="m-t-lg">
+        <div class="m-t">
           <el-button type="primary" @click="toRegister">
             <span>{{$t('navMenu.user_register')}}</span>
           </el-button>
         </div>
-        <div class="m-t">
+        <div>
           <el-button @click="tryplay">{{$t('navMenu.try_play')}}</el-button>
         </div>
       </div>
     </el-col>
     <el-col :span="12" class="login">
       <div class="login">
-        <span>{{$t('navMenu.user')}} </span>
+        <div class="login-title">
+          <span class="please-login">{{$t('navMenu.user')}} </span>
+        </div>
         <el-form :model="user" status-icon :rules="rules" ref="user">
-          <el-form-item prop="username">
+          <el-form-item prop="username" :label="$t('user.username')" label-width="50px">
             <el-input v-model="user.username"
-              :placeholder="$t('navMenu.user_login')"
               class="m-t-sm"
               @keyup.enter.native="login"
               :autofocus="true"
               ref="username"/>
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item prop="password" :label="$t('user.password')" label-width="50px">
             <el-input v-model="user.password"
               type="password"
-              :placeholder="$t('navMenu.password')"
               @keyup.enter.native="login">
             </el-input>
           </el-form-item>
           <transition name="el-fade-in">
             <span class="error" v-if="errorMsg">{{errorMsg}}</span>
           </transition>
-          <el-form-item>
-            <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
-          </el-form-item>
-          <div class="forgot-password">
-            <a :href="$store.state.common.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
+          <div class="login-actions">
+            <el-form-item>
+              <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
+            </el-form-item>
+            <div class="forgot-password">
+              <a :href="$store.state.common.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
+            </div>
           </div>
         </el-form>
       </div>
@@ -120,9 +122,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "../style/vars.scss";
+@import "../style/base.scss";
 
 .pop-content {
-  padding: 60px 0;
+  padding: 30px 0;
+  color: #9b9b9b;
 }
 .register {
   text-align: center;
@@ -133,36 +137,76 @@ export default {
     position: absolute;
     height: 200px;
     right: 50%;
-    top: 50%;
+    top: 45%;
     transform: translateY(-50%);
-    border-right: 1px solid #eee;
+    border-right: 1px solid $pinkish-grey;
   }
   .el-button {
-    width: 150px;
+    @extend %fat-button;
+    border: 1px solid $azul;
+    font-size: 14px;
+  }
+  .el-button--primary {
+    background-color: $azul;
+    margin-bottom: 15px;
+  }
+  .el-button--default {
+    color: $azul;
   }
 }
 
 .login {
-  padding: 0 40px;
+  padding-left: 40px; /*60 - 20(elementui default)*/
+  .please-login {
+    display: inline-block;
+    text-align: left;
+    width: 160px;
+  }
   .submit {
-    width: 100%;
+    @extend %fat-button;
+    background-color: $azul;
+    font-size: 14px;
   }
 }
-.el-input /deep/ .el-input__suffix {
-  right: 0;
+.login-title {
+  padding-left: 50px;
+}
+.el-input {
+  width: 160px;
+}
+.el-input /deep/ .el-input__inner{
+  height: 25px;
+  border: solid 1px #c8c8c8;
+}
+.el-form-item /deep/ .el-form-item__label {
+  font-size: 12px;
+  line-height: 37px;
+  color: #4a4a4a;
+  position: relative;
+  right: 20px;
 }
 .forgot-password {
+  display: inline-block;
+  width: 160px;
+  text-align: left;
   position: relative;
   bottom: 20px;
   a {
-    color: $primary;
+    color: $azul;
+    font-size: 12px;
+    font-weight: 500;
     text-decoration: none;
   }
+}
+
+.login-actions {
+  padding-left: 50px;
 }
 .error {
   position: absolute;
   font-size: 13px;
   color: $red;
-  top: 180px;
+  top: 150px;
+  right: 75px;
 }
 </style>

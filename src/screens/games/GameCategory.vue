@@ -530,6 +530,7 @@ export default {
       border: 1px solid $primary;
       background: $primary;
       color: #fff;
+      margin-bottom: 10px;
     }
   }
 }
@@ -570,7 +571,7 @@ export default {
 }
 .bet-area {
   background: #fff;
-  padding: 10px;
+  padding: 20px;
 }
 .summary {
   font-size: 12px;
