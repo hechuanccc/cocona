@@ -1,52 +1,50 @@
 <template>
-<el-row class="row-bg">
-  <div class="container">
-    <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>注册会员</el-breadcrumb-item>
-    </el-breadcrumb>
-    <el-col :span="16" :offset="8">
-      <el-form :model="user" status-icon :rules="rules" ref="user" label-width="150px">
-        <el-form-item :label="$t('user.username')" prop="username">
-          <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.password')" prop="password">
-          <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
-          <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.realname')" prop="real_name">
-          <el-input class="input-width" v-model="user.real_name"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.phone')" prop="phone">
-          <el-input class="input-width" v-model="user.phone"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.email')" prop="email">
-          <el-input class="input-width" v-model="user.email"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
-          <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password"></el-input>
-        </el-form-item>
-        <el-form-item :label="$t('user.captcha')" required>
-          <el-col :span="7">
-            <el-form-item  prop="verification_code_1">
-              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
-                <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" :offset="1">
-            <img :src="captcha_src" alt="" height="30">
-          </el-col>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="medium" class="input-width" @click="submitForm">{{$t('action.submit')}}</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-  </div>
-</el-row>
+  <el-row class="row-bg">
+    <div class="container">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>注册会员</el-breadcrumb-item>
+      </el-breadcrumb>
+      <div class="register-container">
+        <el-form :model="user" status-icon :rules="rules" ref="user" label-width="70px">
+          <el-form-item :label="$t('user.username')" prop="username">
+            <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.password')" prop="password">
+            <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
+            <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.realname')" prop="real_name">
+            <el-input class="input-width" v-model="user.real_name"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.phone')" prop="phone">
+            <el-input class="input-width" v-model="user.phone"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.email')" prop="email">
+            <el-input class="input-width" v-model="user.email"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
+            <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password"></el-input>
+          </el-form-item>
+          <el-form-item prop="verification_code_1" :label="$t('user.captcha')" required>
+            <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
+            </el-input>
+          </el-form-item>
+          <div class="captcha-row">
+            <button class="captcha-getter" @click="fetchCaptcha">
+              <i class="el-icon-refresh"></i>
+            </button>
+            <img :src="captcha_src" alt="captcha" class="captcha" width="70" height="30">
+          </div>
+          <el-form-item>
+            <el-button type="primary" size="medium" class="input-width submit" @click="submitForm">{{$t('action.submit')}}</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </el-row>
 </template>
 
 <script>
@@ -209,14 +207,53 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
-.el-input /deep/ .el-input__suffix
-  right: 0
-.el-breadcrumb
-  margin: 20px 0
-.block-button
-  width: 100%
-.el-button.el-button--info.el-button--small.captcha
-  position: absolute
-  right: 0
+<style scoped lang="scss">
+@import '../../style/vars.scss';
+.register-container{
+  box-sizing: border-box;
+  width: 400px;
+  height: auto;
+  padding: 30px 80px 20px 80px;
+  margin: 0 auto 40px auto;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+}
+.captcha-row {
+  width: 160px;
+  height: 30px;
+  padding-left: 70px;
+  text-align: justify;
+  margin-bottom: 20px;
+  &:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+}
+.captcha {
+  display: inline;
+  vertical-align: middle;
+}
+.captcha-getter {
+  display: inline-block;
+  border-radius: 2px;
+  width: 40px;
+  height: 30px;
+  background-color: $pinkish-grey;
+  i {
+    font-size: 8px;
+    color: #ffffff;
+  }
+}
+.submit.el-button--medium {
+  height: 40px;
+}
+.el-form-item /deep/ .el-form-item__label {
+  font-size: 12px;
+  color: #4a4a4a;
+}
+.el-input /deep/ .el-input__inner{
+  height: 25px;
+  border: solid 1px #c8c8c8;
+}
 </style>

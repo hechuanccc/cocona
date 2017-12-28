@@ -1,14 +1,14 @@
 <template>
   <el-aside class="m-l-xlg m-r-sm" width="256px">
-    <el-menu :default-active="'0'"
+    <el-menu :default-active="defaultactive"
       text-color="#4a4a4a"
       active-text-color="#fff"
       :background-color="'#fff'">
       <el-menu-item v-for="(item,index) in items"
-        :index="''+index"
-        :key="item.code + index"
+        :index="item.route ? item.route : ''+index"
+        :key="index"
         class="aside-item"
-        @click="onClick(item.code)"
+        @click="onClick(item)"
         :router="true">
         <span slot="title" class="menu-text">{{item.display_name}}</span>
       </el-menu-item>
@@ -22,6 +22,10 @@ export default {
   props: {
     items: {
       type: Array
+    },
+    defaultactive: {
+      type: String,
+      default: '0'
     }
   },
   data () {
@@ -31,7 +35,7 @@ export default {
   },
   methods: {
     onClick (e) {
-      this.current = e
+      this.current = e.code ? e.code : e
       this.$emit('clicked', e)
     }
   }
