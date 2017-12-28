@@ -163,8 +163,8 @@ export default {
     }
   }
   .balls-number {
-    padding-left: 20px;
-    width: 300px;
+    padding-left: 3px;
+    width: 275px;
   }
   div {
     display: inline-block;
@@ -174,7 +174,7 @@ export default {
   }
   span {
     display: inline-block;
-    margin-left: 4px;
+    margin-left: 2px;
   }
 }
 </style>

@@ -209,6 +209,8 @@ export default {
 
 <style scoped lang="scss">
 @import '../../style/vars.scss';
+@import '../../style/base.scss';
+
 .register-container{
   box-sizing: border-box;
   width: 400px;
@@ -249,8 +251,7 @@ export default {
   height: 40px;
 }
 .el-form-item /deep/ .el-form-item__label {
-  font-size: 12px;
-  color: #4a4a4a;
+  @extend %form-label;
 }
 .el-input /deep/ .el-input__inner{
   height: 25px;

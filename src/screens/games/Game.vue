@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-play">
     <div class="main">
       <el-row class="info-panel">
         <GameResult :gameid="$route.params.gameId" @refreshResult="fetchStatistic(currentGame.code)"/>
@@ -324,7 +324,11 @@ export default {
 }
 .main {
   float: left;
-  width: 1040px;
+  width: 840px;
+}
+
+.main-play {
+  width: 1050px;
 }
 .current-game {
   position: absolute;

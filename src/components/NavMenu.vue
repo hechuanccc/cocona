@@ -9,6 +9,11 @@
       :key="menu.icon">
       <span>{{menu.name}}</span>
     </router-link>
+    <a v-if="$store.state.common.customerServiceUrl"
+      class="online-service"
+      :href="$store.state.common.customerServiceUrl ? $store.state.common.customerServiceUrl : '#'">
+      {{$t('navMenu.online_service')}}
+    </a>
   </ul>
 </template>
 
@@ -52,6 +57,9 @@ export default {
   font-size: 18px
 
 .online-service
+  display: inline-block
+  text-align: center
+  text-decoration: none
   width: 90px
   height: 40px
   line-height: 40px

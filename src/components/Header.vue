@@ -38,10 +38,6 @@ export default {
       }, {
         name: this.$t('navMenu.affliate'),
         path: '/agent'
-      }, {
-        name: this.$t('navMenu.online_service'),
-        path: this.$store.state.common.customerServiceUrl ? this.$store.state.common.customerServiceUrl : '/',
-        class: 'online-service'
       }],
       userMenus: [
         {
@@ -57,10 +53,6 @@ export default {
         }, {
           name: this.$t('navMenu.promotion'),
           path: '/promotions'
-        }, {
-          name: this.$t('navMenu.online_service'),
-          path: this.$store.state.common.customerServiceUrl ? this.$store.state.common.customerServiceUrl : '/',
-          class: 'online-service'
         }]
     }
   },
