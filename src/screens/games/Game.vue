@@ -30,7 +30,7 @@
         <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
       </el-row>
       <el-row>
-        <GameStatistic :gameCode="currentGame.code" :resultStatistic="resultStatistic"/>
+        <GameStatistic v-if="currentGame&&currentGame.code!='hkl'" :gameCode="currentGame.code" :resultStatistic="resultStatistic"/>
       </el-row>
     </div>
     <div class="leaderBoard">

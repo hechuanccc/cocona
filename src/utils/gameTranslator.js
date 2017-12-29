@@ -30,8 +30,8 @@ const transformerTranslator = function (title) {
 }
 
 const ssTranslator = function (title) {
-  for (let i = 1; i < 9; i++) {
-    if (`${i}` === title | `ball_than_size_${i}` === title || `ball_odd_even_${i}` === title) {
+  for (let i = 1; i < 6; i++) {
+    if (`${i}` === title || `ball_than_size_${i}` === title || `ball_odd_even_${i}` === title) {
       return [ballnum[i - 1]]
     }
   }
@@ -53,7 +53,7 @@ const ssTranslator = function (title) {
 }
 const cqlfTranslator = function (title) {
   for (let i = 1; i < 9; i++) {
-    if (`ball_than_size_${i}` === title || `ball_odd_even_${i}` === title || `ball_mahjong_eswn_${i}` === title || `ball_mahjong_zfb_${i}` === title) {
+    if (`${i}` === title || `ball_than_size_${i}` === title || `ball_odd_even_${i}` === title || `ball_mahjong_eswn_${i}` === title || `ball_mahjong_zfb_${i}` === title) {
       return [ballnum[i - 1]]
     }
     if (`ball_of_sum_number_odd_even_${i}` === title) {
@@ -82,8 +82,8 @@ const cqlfTranslator = function (title) {
   return ['']
 }
 const gd11x5Translator = function (title) {
-  for (let i = 1; i < 9; i++) {
-    if (`ball_than_size_${i}` === title || `ball_odd_even_${i}` === title) {
+  for (let i = 1; i < 6; i++) {
+    if (`${i}` === title || `ball_than_size_${i}` === title || `ball_odd_even_${i}` === title) {
       return [ballnum[i - 1]]
     }
   }
