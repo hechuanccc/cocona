@@ -101,6 +101,8 @@ export default {
     remit_address: '开户行网点',
     remit_despositor: '入款人',
     remit_time: '入款时间',
+    remit_please_name: '请输入存款人姓名',
+    remit_name: '存款人',
     issue_number: '期数',
     game_name: '游戏名称',
     play: '玩法',

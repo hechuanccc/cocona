@@ -1,87 +1,75 @@
 <template>
-  <el-row>
-    <Tabs :items="tabs" @clicked="getCurrentContent"/>
-      <div class="tab-pane" v-show="nowTab === 'bank'">
+  <el-row class="remit-area">
+    <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
+      <el-tab-pane  :label="item.remit_type == 1 ? bankMap[String(item.bank)] : item.remit_type == 2 ? '微信' : '支付宝'" :name="String(item.id)" v-for="(item, index) in remitPayees" :key="index">
         <el-alert
           :title="limitAlert"
           type="info"
           :closable="false">
         </el-alert>
-        <el-row>
-          <el-col :offset="8" :span="16">
-            <el-form class="m-t-lg" :model="remitData" status-icon ref="bankForm" :rules="remitDataRules" label-width="128px">
-              <el-form-item :label="$t('user.realname')" ref="bankPayee" prop="remit_info.remit_payee">
-                <el-select
-                  v-model="remitData.remit_info.remit_payee"
-                  class="input-width"
-                  :placeholder="$t('common.please_select')">
-                  <el-option
-                    v-for="payee in remitPayeesWithoutQRCode"
-                    :key="payee.id"
-                    :label="payee.payee_name||payee.nickname"
-                    :value="payee.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('user.remit_bank')" ref="bankPayee" prop="remit_info.remit_payee">
-                {{bankMap[selectedPayee.bank]}}
-              </el-form-item>
-              <el-form-item :label="$t('user.remit_account')">
-                {{selectedPayee.account}}
-              </el-form-item>
-              <el-form-item :label="$t('user.remit_address')">
-                {{selectedPayee.address}}
-              </el-form-item>
-              <el-form-item :label="$t('user.remit_despositor')" prop="remit_info.depositor">
-                <el-input class="input-width" v-model="remitData.remit_info.depositor"></el-input>
+        <el-row class="m-t-lg" v-if="item.remit_type == 1">
+          <el-col :push="2" :span="7">
+            <p class="m-l m-b-sm bank-tip">入款银行资料</p>
+            <ul class="list-group m-l">
+              <li class="list-group-item clearfix">
+                <span class="text-muted fl">银行账号</span>
+                <span class="fr bank-account">{{item.account}}</span>
+              </li>
+              <li class="list-group-item clearfix">
+                <span class="text-muted fl">银行</span>
+                <span class="fr">{{bankMap[item.bank]}}</span>
+              </li>
+              <li class="list-group-item clearfix">
+                <span class="text-muted fl">银行开户行</span>
+                <span class="fr">{{item.address}}</span>
+              </li>
+              <li class="list-group-item clearfix">
+                <span class="text-muted fl">银行开户名</span>
+                <span class="fr">{{item.payee_name}}</span>
+              </li>
+            </ul>
+            <ul class="info-tips m-l">
+              <li>1. 您在给公司入款时请仔细核对入款信息</li>
+              <li>2. 请认真填写存款人信息，以免核对出错</li>
+              <li>3. 填写入款表单完成后，可在财务纪录当中查看入款状态</li>
+            </ul>
+          </el-col>
+          <el-col :push="2" class="m-l-xlg" :span="14">
+            <el-form class="m-t-lg" :model="remitData" status-icon :ref="item.id" :rules="remitDataRules" label-width="128px">
+              <el-form-item :label="$t('user.remit_name')" prop="remit_info.remit_payee">
+                <el-input :key="item.id" clearable class="input-width" v-model="remitData.remit_info.depositor" :placeholder="$t('user.remit_please_name')"></el-input>
               </el-form-item>
               <el-form-item :label="$t('user.remit_time')" prop="remit_info.deposited_at" class="input-width">
                 <el-date-picker
                   v-model="remitData.remit_info.deposited_at"
+                  style="width:270px"
                   type="datetime"
                   :placeholder="$t('common.select_date_time')"
                   format="yyyy-MM-dd HH:mm"
+                  :id="String(index)"
                   value-format="yyyy-MM-dd HH-mm">
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                <el-input class="input-width" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+                <el-input clearable class="input-width" placeHolder="请输入存款金额" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
               </el-form-item>
               <el-form-item :label="$t('common.memo')" prop="memo">
-                <el-input class="input-width" v-model="remitData.memo"></el-input>
+                <el-input clearable class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" class="submit" @click="submitRemitForm('bankForm')">{{$t('action.submit')}}</el-button>
+                <el-button class="m-r-lg" size="medium" type="primary" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
-      </div>
-      <div class="tab-pane"  v-show="nowTab === 'qrcode'">
-        <el-alert
-          :title="limitAlert"
-          type="info"
-          :closable="false">
-        </el-alert>
-        <el-row>
-          <el-col :offset="8" :span="16">
-            <el-form class="m-t-lg" :model="remitData" status-icon ref="qrcodeForm" :rules="remitDataRules" label-width="128px">
-              <el-form-item :label="$t('user.payway')" ref="qrcodePayee" prop="remit_info.remit_payee">
-                <el-select
-                  v-model="remitData.remit_info.remit_payee"
-                  class="input-width"
-                  :placeholder="$t('common.please_select')">
-                  <el-option
-                    v-for="payee in remitPayeesWithQRCode"
-                    :key="payee.id"
-                    :label="payee.payee_name||payee.nickname"
-                    :value="payee.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item v-show="selectedPayee.qr_code">
-                <img :src="selectedPayee.qr_code" alt="">
-              </el-form-item>
+        <el-row class="m-t-lg" v-else>
+          <el-col :push="3" :span="7" class="m-t-lg">
+             <img width="200" height="200" :src="item.qr_code" alt="">
+             <p class="text-info m-t-lg">请用手机扫描此二维码进行充值</p>
+          </el-col>
+          <el-col :push="2" class="m-l-lg" :span="14">
+            <el-form class="m-t-lg" :model="remitData" status-icon :ref="item.id" :rules="remitDataRules" label-width="128px">
               <el-form-item :label="$t('user.remit_despositor')" prop="remit_info.depositor">
                 <el-input class="input-width" v-model="remitData.remit_info.depositor"></el-input>
               </el-form-item>
@@ -89,9 +77,11 @@
                 <el-date-picker
                   class="input-width"
                   v-model="remitData.remit_info.deposited_at"
+                  style="width:270px"
                   type="datetime"
                   :placeholder="$t('common.select_date_time')"
                   format="yyyy-MM-dd HH:mm"
+                  :id="String(index)"
                   value-format="yyyy-MM-dd HH-mm">
                 </el-date-picker>
               </el-form-item>
@@ -102,15 +92,16 @@
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="submit" type="primary" @click="submitRemitForm('qrcodeForm')">{{$t('action.submit')}}</el-button>
+                <el-button class="m-r-lg" type="primary" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
       </div>
 
-
-
+      </el-tab-pane>
+    </el-tabs>
   </el-row>
 </template>
 <script>
@@ -136,6 +127,8 @@ export default {
     }
     return {
       remitPayees: [],
+      activeName: '',
+      successPayeeId: '',
       remitData: {
         amount: '',
         memo: '',
@@ -146,9 +139,6 @@ export default {
         }
       },
       remitDataRules: {
-        'remit_info.remit_payee': [
-          { required: true, type: 'number', message: this.$t('validate.required'), trigger: 'change' }
-        ],
         'remit_info.depositor': [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ],
@@ -191,14 +181,6 @@ export default {
       }
       return alerts.join(', ')
     },
-    selectedPayee () {
-      let payees = this.remitPayees.filter(payee => payee.id === this.remitData.remit_info.remit_payee)
-      if (payees.length > 0) {
-        return payees[0]
-      } else {
-        return {}
-      }
-    },
     remitPayeesWithQRCode () {
       return this.remitPayees.filter(payee => payee.qr_code)
     },
@@ -207,29 +189,31 @@ export default {
     }
   },
   created () {
-    fetchRemitpayee().then(payees => {
-      this.remitPayees = payees
-    })
     fetchBank().then(banks => {
       banks.forEach(bank => {
         this.bankMap[bank.key] = bank.value
       })
+      fetchRemitpayee().then(payees => {
+        this.remitPayees = payees
+        this.activeName = this.remitPayees.length ? String(this.remitPayees[0].id) : ''
+        if (this.remitPayees.length) {
+          this.chooseRemitWay(this.remitPayees[0])
+        }
+      })
     })
   },
   methods: {
-    getCurrentContent (e) {
-      this.nowTab = e.key
-    },
-    submitRemitForm (form) {
-      this.$refs[form].validate((valid) => {
+    submitRemitForm (payeeId) {
+      this.$refs[payeeId][0].validate((valid) => {
         if (valid) {
           remit(this.remitData).then(data => {
+            this.successPayeeId = this.remitData.remit_info.remit_payee
             this.$message({
               showClose: true,
               message: this.$t('message.submit_success'),
               type: 'success'
             })
-            this.$refs[form].resetFields()
+            this.$refs[payeeId][0].resetFields()
           }, errorMsg => {
             this.$message({
               showClose: true,
@@ -241,11 +225,55 @@ export default {
       })
     },
     filtAmount,
-    chooseRemitWay () {
-      this.remitData.remit_info.remit_payee = ''
-      this.$refs['bankForm'].clearValidate()
-      this.$refs['qrcodeForm'].clearValidate()
+    chooseRemitWay (tab, e) {
+      this.remitData.remit_info.remit_payee = tab.name || tab.id
+      this.successPayeeId = ''
+      for (let key in this.$refs) {
+        this.$refs[key] instanceof Array && this.$refs[key][0] && this.$refs[key][0].resetFields && this.$refs[key][0].resetFields()
+      }
     }
   }
 }
 </script>
+
+<style scoped lang="scss">
+  .remit-area {
+    font-size: 14px;
+    .input-width {
+      width: 270px;
+    }
+    .text-info {
+      color: #31708f;
+    }
+  }
+  .text-muted {
+    color: #777;
+  }
+  .bank-tip {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .list-group {
+    padding-left: 0;
+    margin-bottom: 20px;
+    .list-group-item:first-child {
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+    }
+    .list-group-item {
+      position: relative;
+      display: block;
+      padding: 10px 15px;
+      margin-bottom: -1px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      span {
+        font-size: 14px;
+      }
+      .bank-account {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+</style>

@@ -236,8 +236,8 @@ export default {
     computeMainAreaHeight () {
       setTimeout(() => {
         let mainHeight = document.getElementById('mainGameArea')
-        this.gameMainAreaHeight = mainHeight.offsetHeight - 194
-      }, 1000)
+        this.gameMainAreaHeight = mainHeight ? mainHeight.offsetHeight - 194 : 0
+      }, 1200)
     }
   },
   beforeRouteEnter (to, from, next) {
