@@ -9,9 +9,9 @@
         <div class="aside">
           <AsideMenu @clicked="onClickChild" :items="games ? games : []" />
         </div>
-        <div class="main m-b-xlg">
-          <h1 class="main-title m-b-lg">{{currentGame.display_name}}</h1>
-          <h2 class="sub-title">{{$t('gameIntro.gameinfo')}}</h2>
+        <div class="main rules-content m-b-xlg">
+          <h1 class="rules-main-title m-b-lg">{{currentGame.display_name}}</h1>
+          <h2 class="rules-sub-title">{{$t('gameIntro.gameinfo')}}</h2>
           <el-table class="m-b-lg" v-loading="loading" :data="currentPlaySettings" stripe>
             <el-table-column :label="''" prop="display_name">
             </el-table-column>
@@ -35,10 +35,9 @@
               </template>
             </el-table-column>
           </el-table>
-          <h2 class="sub-title">{{$t('gameIntro.rule')}}</h2>
+          <h2 class="rules-sub-title">{{$t('gameIntro.rule')}}</h2>
           <component :is="currentGame.code"></component>
         </div>
-
       </el-row>
     </div>
   </el-row>
@@ -138,7 +137,7 @@ $title-color: black !default;
   display: inline-block;
   vertical-align: top;
 }
-.main {
+.main.rules-content {
   display: inline-block;
   box-sizing: border-box;
   width: 1095px;
@@ -147,11 +146,11 @@ $title-color: black !default;
   padding: 40px;
   @extend %text;
 }
-.main-title {
+.rules-main-title {
   font-size: $title-size;
   color: $title-color;
 }
-.sub-title {
+.rules-sub-title {
   margin-bottom: $common-pixel;
   color: $title-color;
 }
