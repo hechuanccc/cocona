@@ -45,12 +45,18 @@ export default {
     switchTab (e) {
       this.activeTab = e.key
       this.$emit('clicked', e)
+    },
+    setActiveTab (val) {
+      this.activeTab = val
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-@import '../style/vars.scss';
+@import "../style/vars.scss";
+.tabs{
+  font-size: 14px;
+}
 .tab {
   box-sizing: border-box;
   display: inline-block;
@@ -65,7 +71,6 @@ export default {
   }
 }
 .tab-text {
-  font-size: 14px;
   color: #9b9b9b;
   letter-spacing: 1px;
   &.active {
