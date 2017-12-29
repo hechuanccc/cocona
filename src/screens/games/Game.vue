@@ -368,7 +368,7 @@ export default {
   padding-left: 20px;
   float: left;
   text-align: center;
-  margin-right: 50px;
+  margin-right: 30px;
   p {
     height: 27px;
     line-height: 27px;

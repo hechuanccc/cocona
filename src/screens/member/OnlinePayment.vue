@@ -1,13 +1,9 @@
 <template>
 <el-row>
-  <el-alert
-    :title="limitAlert"
-    type="info"
-    :closable="false">
-  </el-alert>
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
-      <el-form-item :label="$t('user.amount')" prop="amount">
+      <div>
+      <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
         <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
         <input name="payee" type="hidden" :value="payment.payee_id" />
         <input name="payment_type" type="hidden" :value="payment.payway" />
@@ -15,7 +11,8 @@
         <input name="token" type="hidden" :value="token" />
         <input name="notify_page" type="hidden" :value="notify_page" />
       </el-form-item>
-      <el-form-item>
+      </div>
+      <div class="payment text-center m-b-lg">
         <ul class="payment-types">
           <li :class="['payment-type', activeType === 'wechat' ? 'active' : '']" @click="select('wechat')">
             <i class="icon weixin-icon"></i>
@@ -30,10 +27,10 @@
             <span class="name">{{$t('user.bankcard')}}</span>
           </li>
         </ul>
-      </el-form-item>
-      <el-form-item>
-        <el-button class="submit-button" type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
-      </el-form-item>
+      </div>
+      <div class="submit-button text-center">
+        <el-button class="submit" type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
+      </div>
     </el-form>
     <el-dialog
       :title="'支付信息'"
@@ -173,14 +170,22 @@ export default {
   width: 400px;
   margin: auto;
 }
+
 .payment-types {
-  float: left;
+  display: inline-block;
+  width: 320px;
+  text-align: justify;
+  &:after {
+    display: inline-block;
+    content: '';
+    width: 100%;
+  }
 }
 .payment-type {
-  width: 80px;
-  float: left;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
   text-align: center;
-  margin-right: 10px;
   cursor: pointer;
   &:hover {
     background: #f0f0f0;
@@ -198,13 +203,10 @@ export default {
 }
 .name {
   display: block;
-  margin-top: -10px;
   font-size: 12px;
   color: #666;
 }
-.submit-button {
-  width: 200px;
-}
+
 .weixin-icon {
   background-image: url("../../assets/weixin.png");
 }

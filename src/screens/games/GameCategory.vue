@@ -1,7 +1,8 @@
 
 <template>
   <div>
-    <el-row type="flex" class="actions" justify="center">
+    <el-row class="bet-area m-b-xlg">
+      <el-row type="flex" class="actions" justify="center">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
         <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"  @keypress.native="filtAmount" />
@@ -11,7 +12,6 @@
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
-    <el-row class="bet-area">
       <div
         v-for="(playSection, index) in playSections"
         class="clearfix"
@@ -86,19 +86,19 @@
             v-else />
         </div>
       </div>
-    </el-row>
-    <el-row type="flex" class="actions" justify="center" v-if="!loading">
-      <el-col :span="1" class="amount">金额</el-col>
-      <el-col :span="3">
-        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
-      </el-col>
-      <el-col :span="4">
-        <el-button type="primary"
-          size="small"
-          @click="openDialog"
-          :disabled="gameClosed">下单</el-button>
-        <el-button size="small" @click="reset">重置</el-button>
-      </el-col>
+       <el-row type="flex" class="actions" justify="center" v-if="!loading">
+                <el-col :span="1" class="amount">金额</el-col>
+                <el-col :span="3">
+                  <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
+                </el-col>
+                <el-col :span="4">
+                  <el-button type="primary"
+                    size="small"
+                    @click="openDialog"
+                    :disabled="gameClosed">下单</el-button>
+                  <el-button size="small" @click="reset">重置</el-button>
+                </el-col>
+              </el-row>
     </el-row>
     <el-dialog title="确认注单"
       width="40%"
@@ -399,6 +399,7 @@ export default {
     },
     initPlaygroups () {
       const categoryId = this.$route.params.categoryId
+      this.$store.commit('START_LOADING')
       fetchPlaygroup(categoryId).then(res => {
         let plays = {}
         res.forEach(item => {
@@ -417,6 +418,7 @@ export default {
         this.raw = res
         this.plays = plays
         this.loading = false
+        this.$store.commit('END_LOADING') // for global
       })
     },
     openDialog () {

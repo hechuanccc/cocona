@@ -6,7 +6,7 @@
     <el-dialog
       :title="$t('navMenu.pop_title')"
       :visible="showLoginDialog"
-      width="700px"
+      width="740px"
       top="205px"
       @close="closeLoginDialog()"
       center>

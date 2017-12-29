@@ -22,7 +22,7 @@
         <el-input class="input-width" v-model="user.email"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.birthday')" prop="birthday">
-        <el-date-picker type="date" :placeholder="$t('user.choose_date')" v-model="user.birthday" value-format="yyyy-MM-dd" style="width: 200px;"></el-date-picker>
+        <el-date-picker type="date" :placeholder="$t('user.choose_date')" v-model="user.birthday" value-format="yyyy-MM-dd"></el-date-picker>
       </el-form-item>
       <el-form-item :label="$t('user.gender')">
         <el-radio-group v-model="user.gender">
@@ -37,7 +37,7 @@
         <el-input class="input-width" v-model="user.wechat"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" :disabled="updateStatus===1" @click="submitForm">{{$t('action.save')}}</el-button>
+        <el-button type="primary" class="submit" :disabled="updateStatus===1" @click="submitForm">{{$t('action.save')}}</el-button>
       </el-form-item>
     </el-form>
   </el-col>
