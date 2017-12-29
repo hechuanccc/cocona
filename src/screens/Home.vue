@@ -7,12 +7,38 @@
             <img :src="banner.image" :alt="banner.image" />
           </el-carousel-item>
         </el-carousel>
+        <el-row class="container">
+          <div class="announcement">
+            <div class="left">
+              <icon class="speaker m-l-xlg" scale="1.25" name="bullhorn"></icon>
+              <span class="text m-l">{{$t('announcement.speaker')}}</span>
+            </div>
+            <div class="right text-center">
+
+                <!-- <span class="content"
+                  v-for="(announcement,index) in announcements"
+                  :key="index">
+                  {{announcement.announcement}}
+                </span> -->
+
+                    <span class="content text-center"
+                      v-if="nowAnnouncement.content"
+                      :style="{
+                        'opacity': nowAnnouncement.transition.opacity,
+                        'transform': `translateY(${nowAnnouncement.transition.translateY}px)`
+                      }">
+                      {{nowAnnouncement.content}}
+                    </span>
+
+            </div>
+          </div>
+        </el-row>
         <el-row class="game-area">
-          <div class="flag">
+          <!-- <div class="flag">
             <span class="flag-text">
               热门彩票
             </span>
-          </div>
+          </div> -->
           <ul>
             <li v-for="(game, index) in games"
               :key="game.id"
@@ -57,6 +83,7 @@
 
 <script>
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
+import 'vue-awesome/icons/bullhorn'
 
 export default {
   name: 'home',
@@ -65,7 +92,14 @@ export default {
       banners: '',
       announcements: '',
       games: '',
-      descriptions: ''
+      descriptions: '',
+      nowAnnouncement: {
+        content: '',
+        transition: {
+          opacity: 1,
+          translateY: 0
+        }
+      }
     }
   },
   computed: {
@@ -74,6 +108,31 @@ export default {
     }
   },
   methods: {
+    announcementTransition () {
+      let i = 0
+      if (i < this.announcements.length) {
+        this.nowAnnouncement.content = this.announcements[0].announcement
+        this.interval = setInterval(() => {
+          this.nowAnnouncement.content = this.announcements[i].announcement
+          i++
+          this.nowAnnouncement.transition.opacity = 1
+          this.nowAnnouncement.transition.translateY = 0
+          setTimeout(() => {
+            this.transitionInterval = setInterval(() => {
+              this.nowAnnouncement.transition.opacity -= 0.1
+              this.nowAnnouncement.transition.translateY -= 1
+              if (this.nowAnnouncement.transition.opacity < 0) {
+                clearInterval(this.transitionInterval)
+              }
+            }, 100)
+          }, 3000)
+          if (i === this.announcements.length - 1) {
+            clearInterval(this.interval)
+            this.announcementTransition()
+          }
+        }, 5000)
+      }
+    },
     navigate (game) {
       if (this.$store.state.user.logined) {
         this.$router.push(`/game/${game.id}/`)
@@ -97,6 +156,7 @@ export default {
     getAnnouncements().then(
       response => {
         this.announcements = response
+        this.announcementTransition()
       }
     )
     fetchGames().then(
@@ -107,16 +167,48 @@ export default {
     getDescription().then(response => {
       this.descriptions = response
     })
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /* banner */
 .el-carousel__item img {
   width: 100%;
   height: 100%;
 }
+
+/* announcement */
+.announcement {
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+  letter-spacing: 1.6px;
+  color: #4a4a4a;
+  background-color: #f9f9f9;
+  .left {
+    display: inline;
+  }
+  .right {
+    display: inline;
+    .content {
+      position: absolute;
+      display: inline-block;
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+  .speaker {
+    vertical-align: text-bottom;
+  }
+  .text {
+    display: inline-block;
+  }
+}
+
 
 /*game area*/
 .flag {
