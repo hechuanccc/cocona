@@ -72,10 +72,6 @@ const cqlfTranslator = function (title) {
       return ['第三球']
     case 'dragon_tiger_4_5':
       return ['第四球']
-    case 'sum_of_1st_2st_than_size':
-      return ['冠、亚军和']
-    case 'sum_of_1st_2st_odd_even':
-      return ['冠、亚军和']
     case 'sum_of_ball_odd_even':
       return ['总和']
     case 'sum_of_ball_than_size':
@@ -111,9 +107,7 @@ const bjkl8Translator = function (title) {
     case 'sum_of_ball_than_size':
       return ['总和']
     case 'sum_of_ball_five_element':
-      return ['总和']
-    case 'sum_of_ball_over_810_odd_even':
-      return ['总和810']
+      return ['五行']
     case 'balls_front_rear_count_cp':
       return ['前后和']
     case 'balls_odd_even_cp':
