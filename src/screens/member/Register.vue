@@ -59,7 +59,7 @@ export default {
         callback(new Error(this.$t('validate.username_validate')))
       } else {
         checkUserName(value).then(response => {
-          if (response.length === 0) {
+          if (response.length > 0) {
             callback()
           } else {
             callback(new Error(this.$t('validate.username_exist')))
