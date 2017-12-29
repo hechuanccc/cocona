@@ -236,8 +236,8 @@ export default {
     computeMainAreaHeight () {
       setTimeout(() => {
         let mainHeight = document.getElementById('mainGameArea')
-        this.gameMainAreaHeight = mainHeight.offsetHeight - 194
-      }, 1000)
+        this.gameMainAreaHeight = mainHeight ? mainHeight.offsetHeight - 194 : 0
+      }, 1200)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -342,10 +342,14 @@ export default {
   .side-menu-button {
     text-align: center;
     padding-bottom: 10px;
+    .el-button {
+      background-color: $azul;
+    }
     .el-button:last-child {
       margin-left: 5px;
     }
     .large-btn.el-button {
+      background-color: $azul;
       margin: 0;
       width: 170px;
     }

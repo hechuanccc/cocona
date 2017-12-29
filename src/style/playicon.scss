@@ -190,8 +190,11 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
     }
     .jsk3_pl_dxtb_tri_#{$i} {
       background: url(../assets/ball_4.png) repeat-x;
-      background-position: 0 (-27px * ($i - 1));
-      width: 81px;
+      background-position: 0 (-27px * ($i - 1)) * 0.8;
+      background-size: (27px * 0.8) (162px * 0.8);
+      width: 63px;
+      height: 22px;
+      line-height: 22px;
       text-indent: -9999px;
     }
     .jsk3_pl_dxtb_dbl_#{$i}{

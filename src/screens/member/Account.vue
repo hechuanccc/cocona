@@ -128,7 +128,9 @@ export default {
   display: inline-block;
   box-sizing: border-box;
   width: 1095px;
-  min-height: 280px;
+  min-height: 50vh;
+  max-height: 200vh;
+  overflow: scroll;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   padding: 20px;
