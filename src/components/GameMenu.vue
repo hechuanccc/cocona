@@ -1,14 +1,15 @@
 <template>
   <div>
-    <div class="container">
-      <ul class="game-menu">
+    <div>
+      <div class="game-menu-container">
+      <ul class="game-menu p-l-xlg container">
         <li
           :class="['game-menu-item',activeGame===game.id?'active':'']"
           v-for="(game, index) in allGames"
           :key="game.id" v-if="index < 10"
           @click="switchGame(game.id+'')">{{game.display_name}}</li>
         <li
-          class="game-menu-item more-menu"
+          class="game-menu-item more-menu m-r-lg text-center"
           @mouseover="dropdownActive = true"
           @mouseleave="dropdownActive = false"
           v-if="allGames.length > 10">
@@ -27,6 +28,7 @@
           </div>
         </li>
       </ul>
+      </div>
       <ul class="category-menu">
         <li
           :class="['category-menu-item',activeCategory===category.id?'active':'']"
@@ -34,7 +36,7 @@
           :key="'category' + category.id"
           @click="switchCategory(category)">{{category.display_name}}</li>
       </ul>
-    </div>
+      </div>
   </div>
 </template>
 
@@ -132,8 +134,9 @@ export default {
 .game-menu {
   // background: linear-gradient(to bottom, #006bb3, #00397c);
   text-transform: uppercase;
-  text-align: center;
   height: 55px;
+}
+.game-menu-container {
   background: linear-gradient(to bottom, #006bb3, #00397c);
 }
 .game-menu-item {
