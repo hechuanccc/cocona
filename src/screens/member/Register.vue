@@ -58,8 +58,8 @@ export default {
       if (!validateUserName(value)) {
         callback(new Error(this.$t('validate.username_validate')))
       } else {
-        checkUserName(value).then(isExist => {
-          if (!isExist) {
+        checkUserName(value).then(response => {
+          if (response.length > 0) {
             callback()
           } else {
             callback(new Error(this.$t('validate.username_exist')))
@@ -221,7 +221,7 @@ export default {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 .captcha-row {
-  width: 160px;
+  width: $form_width;
   height: 30px;
   padding-left: 70px;
   text-align: justify;

@@ -156,11 +156,11 @@ export default {
 }
 
 .login {
-  padding-left: 40px; /*60 - 20(elementui default)*/
+  padding-left: 30px;
   .please-login {
     display: inline-block;
     text-align: left;
-    width: 160px;
+    width: $form_width;
   }
   .submit {
     @extend %fat-button;
@@ -172,7 +172,7 @@ export default {
   padding-left: 50px;
 }
 .el-input {
-  width: 160px;
+  width: $form_width;
 }
 .el-input /deep/ .el-input__inner{
   height: 25px;
@@ -187,7 +187,7 @@ export default {
 }
 .forgot-password {
   display: inline-block;
-  width: 160px;
+  width: $form_width;
   text-align: left;
   position: relative;
   bottom: 20px;

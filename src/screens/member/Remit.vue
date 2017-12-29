@@ -1,7 +1,7 @@
 <template>
   <el-row>
-    <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
-      <el-tab-pane :label="$t('user.bank')" name="bank">
+    <Tabs :items="tabs" @clicked="getCurrentContent"/>
+      <div class="tab-pane" v-show="nowTab === 'bank'">
         <el-alert
           :title="limitAlert"
           type="info"
@@ -35,10 +35,9 @@
               <el-form-item :label="$t('user.remit_despositor')" prop="remit_info.depositor">
                 <el-input class="input-width" v-model="remitData.remit_info.depositor"></el-input>
               </el-form-item>
-              <el-form-item :label="$t('user.remit_time')" prop="remit_info.deposited_at">
+              <el-form-item :label="$t('user.remit_time')" prop="remit_info.deposited_at" class="input-width">
                 <el-date-picker
                   v-model="remitData.remit_info.deposited_at"
-                  style="width:200px"
                   type="datetime"
                   :placeholder="$t('common.select_date_time')"
                   format="yyyy-MM-dd HH:mm"
@@ -52,13 +51,13 @@
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitRemitForm('bankForm')">{{$t('action.submit')}}</el-button>
+                <el-button type="primary" class="submit" @click="submitRemitForm('bankForm')">{{$t('action.submit')}}</el-button>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
-      </el-tab-pane>
-      <el-tab-pane :label="'QR Code'" name="qrcode">
+      </div>
+      <div class="tab-pane"  v-show="nowTab === 'qrcode'">
         <el-alert
           :title="limitAlert"
           type="info"
@@ -88,8 +87,8 @@
               </el-form-item>
               <el-form-item :label="$t('user.remit_time')" prop="remit_info.deposited_at">
                 <el-date-picker
+                  class="input-width"
                   v-model="remitData.remit_info.deposited_at"
-                  style="width:200px"
                   type="datetime"
                   :placeholder="$t('common.select_date_time')"
                   format="yyyy-MM-dd HH:mm"
@@ -103,20 +102,26 @@
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="submitRemitForm('qrcodeForm')">{{$t('action.submit')}}</el-button>
+                <el-button class="submit" type="primary" @click="submitRemitForm('qrcodeForm')">{{$t('action.submit')}}</el-button>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+
+
+
   </el-row>
 </template>
 <script>
 import { fetchRemitpayee, remit, fetchBank } from '../../api'
 import { msgFormatter, filtAmount } from '../../utils'
+import Tabs from '../../components/Tabs.vue'
 export default {
   name: 'Remit',
+  components: {
+    Tabs
+  },
   data () {
     let limitPass = (rule, value, callback) => {
       const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
@@ -130,7 +135,6 @@ export default {
       }
     }
     return {
-      activeName: 'bank',
       remitPayees: [],
       remitData: {
         amount: '',
@@ -156,7 +160,18 @@ export default {
           { validator: limitPass, trigger: 'blur,change' }
         ]
       },
-      bankMap: {}
+      bankMap: {},
+      nowTab: 'bank',
+      tabs: [
+        {
+          label: this.$t('user.bank'),
+          key: 'bank'
+        },
+        {
+          label: 'QR Code',
+          key: 'qrcode'
+        }
+      ]
     }
   },
   computed: {
@@ -202,6 +217,9 @@ export default {
     })
   },
   methods: {
+    getCurrentContent (e) {
+      this.nowTab = e.key
+    },
     submitRemitForm (form) {
       this.$refs[form].validate((valid) => {
         if (valid) {
@@ -231,5 +249,3 @@ export default {
   }
 }
 </script>
-
-

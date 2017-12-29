@@ -1,50 +1,49 @@
 <template>
   <div class="m-t-lg">
     <el-row class="account-content" v-if="user.bank">
-      <el-col :span="8" >
         <div class="bank-info clearfix">
           <el-row>
             <div>
-              <el-col :span="8">
+              <el-col class="text-right p-r" :span="12">
                 <label>当前账户余额</label>
               </el-col>
-              <el-col :span="16">{{user.balance||0 | currency('￥')}}</el-col>
+              <el-col class="text-left p-l" :span="12">{{user.balance||0 | currency('￥')}}</el-col>
             </div>
             <div v-if="limit.lower">
-              <el-col :span="8">
+              <el-col class="text-right p-r" :span="12">
                 <label>最小取款金额</label>
               </el-col>
-              <el-col :span="16">{{limit.lower | currency('￥')}}</el-col>
+              <el-col class="text-left p-l" :span="12">{{limit.lower | currency('￥')}}</el-col>
             </div>
             <div v-if="limit.upper">
-              <el-col :span="8">
+              <el-col class="text-right p-r" :span="12">
                 <label>最大取款金额</label>
               </el-col>
-              <el-col :span="16">{{limit.upper | currency('￥')}}</el-col>
+              <el-col class="text-left p-l" :span="12">{{limit.upper | currency('￥')}}</el-col>
             </div>
           </el-row>
           <h3 class="m-t">你的取款银行信息如下，如需修改请联系客服</h3>
           <div>
-            <el-col :span="8">
+            <el-col class="text-right p-r" :span="12">
               <label>银行</label>
             </el-col>
-            <el-col :span="16">{{user.bank.bank}}</el-col>
+            <el-col class="text-left p-l" :span="12">{{user.bank.bank}}</el-col>
           </div>
           <div>
-            <el-col :span="8">
+            <el-col class="text-right p-r" :span="12">
               <label>账号</label>
             </el-col>
-            <el-col :span="16">{{user.bank.account}}</el-col>
+            <el-col class="text-left p-l" :span="12">{{user.bank.account}}</el-col>
           </div>
           <div>
-            <el-col :span="8">
+            <el-col class="text-right p-r" :span="12">
               <label>收款人</label>
             </el-col>
-            <el-col :span="16">{{user.real_name}}</el-col>
+            <el-col class="text-left p-l" :span="12">{{user.real_name}}</el-col>
           </div>
         </div>
-      </el-col>
-      <el-col :span="12" :offset="2">
+      <div class="text-center m-t-xlg">
+        <div class="withdraw-actions">
         <el-alert
           v-if="updateStatus !== 0"
           :title="message"
@@ -60,10 +59,11 @@
             <el-input class="input-width" name="withdraw_password" type="password" v-model="withdrawInfo.withdraw_password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="input-width" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
+            <el-button class="input-width submit" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
           </el-form-item>
         </el-form>
-      </el-col>
+        </div>
+      </div>
     </el-row>
     <div v-else>
       <el-alert
@@ -152,12 +152,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../style/vars.scss';
+@import '../../style/base.scss';
+.submit {
+  @extend %fat-button;
+  font-size: 14px;
+  background-color: $azul;
+}
+.withdraw-actions {
+  display: inline-block;
+}
 .bank-info {
   font-size: 13px;
   line-height: 26px;
   border-radius: 4px;
-  padding: 20px;
-  background: #f5f5f5;
+  padding: 15px 60px;
+  background: #ffffff;
+  border: solid 1px $pinkish-grey;
   width: 300px;
   margin: 0 auto;
   h3 {
@@ -167,9 +178,5 @@ export default {
     color: #999;
   }
 }
-.submit {
-  margin: 30px auto;
-  display: block;
-  width: 200px;
-}
+
 </style>
