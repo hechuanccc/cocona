@@ -221,7 +221,7 @@ export default {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 .captcha-row {
-  width: 160px;
+  width: $form_width;
   height: 30px;
   padding-left: 70px;
   text-align: justify;

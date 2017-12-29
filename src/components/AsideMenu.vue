@@ -10,7 +10,8 @@
         class="aside-item"
         @click="onClick(item)"
         :router="true">
-        <span slot="title" class="menu-text">{{item.display_name}}</span>
+        <i v-if="item.icon" :name="item.icon" :class="['aside-icon' ,item.icon]"></i>
+        <span slot="title" class="menu-text p-l">{{item.display_name}}</span>
       </el-menu-item>
     </el-menu>
   </el-aside>
@@ -45,9 +46,8 @@ export default {
   margin-right: 0;
   font-size: 14px;
   letter-spacing: 2px;
-  border-bottom: 1px solid #F0F0F0;
+  border-bottom: 1px solid #F9F9F9;
 }
-
 .el-menu .el-menu-item {
   &.is-active {
     background: url("../assets/active_menu_bg_right.png") no-repeat center right;
