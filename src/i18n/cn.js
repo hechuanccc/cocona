@@ -46,6 +46,7 @@ export default {
   },
   announcement: {
     title: '公告标题',
+    speaker: '最新消息',
     content: '公告内容'
   },
   user: {

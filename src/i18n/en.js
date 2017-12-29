@@ -46,6 +46,7 @@ export default {
   },
   announcement: {
     title: 'Title',
+    speaker: 'News',
     content: 'Content'
   },
   user: {

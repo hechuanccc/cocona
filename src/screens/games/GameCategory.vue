@@ -7,8 +7,8 @@
       <el-col :span="3">
         <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"  @keypress.native="filtAmount" />
       </el-col>
-      <el-col :span="4">
-        <el-button type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
+      <el-col class="m-l-lg" :span="4">
+        <el-button class="placeOrder-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
@@ -55,16 +55,16 @@
                 @mouseleave="toggleHover(play, false)"
                 @click="toggleActive(plays[play.id], $event)"
                 v-if="play.code">
-                <el-col :span="play.value?2:7" class="name">
+                <el-col :span="play.value?2:6" class="name">
                   <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
                 </el-col>
                 <el-col v-if="play.value" :span="15" class="number">
                   <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
                 </el-col>
-                <el-col :span="play.value?4:7" class="odds">
+                <el-col :span="play.value?4:6" class="odds">
                   {{ !gameClosed ? play.odds : '-'}}
                 </el-col>
-                <el-col :span="play.value?3:10" class="input">
+                <el-col :span="play.value?3:12" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
@@ -91,8 +91,9 @@
                 <el-col :span="3">
                   <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
                 </el-col>
-                <el-col :span="4">
+                <el-col class="m-l-lg" :span="4">
                   <el-button type="primary"
+                    class="placeOrder-btn"
                     size="small"
                     @click="openDialog"
                     :disabled="gameClosed">下单</el-button>
@@ -593,6 +594,18 @@ export default {
 .combination-detail {
   padding-left: 10px;
   font-weight: 700;
+}
+.placeOrder-btn {
+  background-color: $azul;
+}
+.el-input /deep/ .el-input__inner{
+  height: 30px;
+  border: solid 1px #c8c8c8;
+}
+
+.extramini  /deep/ .el-input__inner {
+  width: 70px;
+  height: 28px;
 }
 </style>
 
