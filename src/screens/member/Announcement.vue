@@ -5,11 +5,6 @@
       style="width: 100%"
       class="announcement">
       <el-table-column
-        prop="name"
-        :label= "$t('announcement.title')"
-        width="180">
-      </el-table-column>
-      <el-table-column
         :label= "$t('announcement.content')"
         prop="announcement"
         >
@@ -29,7 +24,14 @@ export default{
   name: 'Announcements',
   created () {
     getAnnouncements().then(result => {
-      this.announcements = result
+      result.forEach((item) => {
+        if (item.platform !== 0) {
+          this.announcements.push(item)
+        }
+      })
+      this.announcements.sort((a, b) => {
+        return a.rank - b.rank
+      })
     })
   }
 }

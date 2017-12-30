@@ -14,21 +14,12 @@
               <span class="text m-l">{{$t('announcement.speaker')}}</span>
             </div>
             <div class="right text-center">
-
-                <!-- <span class="content"
-                  v-for="(announcement,index) in announcements"
-                  :key="index">
-                  {{announcement.announcement}}
-                </span> -->
-
-                    <span class="content text-center"
-                      v-if="nowAnnouncement.content"
-                      :style="{
+              <span class="content text-center" v-if="nowAnnouncement.content" :style="{
                         'opacity': nowAnnouncement.transition.opacity,
                         'transform': `translateY(${nowAnnouncement.transition.translateY}px)`
                       }">
-                      {{nowAnnouncement.content}}
-                    </span>
+                {{nowAnnouncement.content}}
+              </span>
 
             </div>
           </div>
@@ -40,12 +31,7 @@
             </span>
           </div> -->
           <ul>
-            <li v-for="(game, index) in games"
-              :key="game.id"
-              v-if="game.icon && index < 9"
-              @click="navigate(game)"
-              class="game-bg"
-              :style="
+            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)" class="game-bg" :style="
                 {
                   backgroundImage: game.bg_icon ? `url('${game.bg_icon}')` :''
                 }
@@ -57,18 +43,15 @@
           </ul>
         </el-row>
         <el-row class="ads">
-          <div
-            v-for="(item, index) in descriptions"
-            :key="item.id"
-            :class="[
+          <div v-for="(item, index) in descriptions" :key="item.id" :class="[
               'ad',
               {'m-r-lg': (index+1) !== descriptions.length}
             ]">
             <div class="ad-title">
-              <img :src="item.header_image" :alt="item.id"/>
+              <img :src="item.header_image" :alt="item.id" />
             </div>
             <div :class="[`ad-content${descriptions.length}`]">
-              <img class="content-img" :src="item.main_image" v-if="item.main_image"/>
+              <img class="content-img" :src="item.main_image" v-if="item.main_image" />
               <p class="content-text" v-if="item.main_description" v-html="formattedText(item.main_description)"></p>
             </div>
           </div>
@@ -81,6 +64,7 @@
   </div>
 </template>
 
+
 <script>
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
 import 'vue-awesome/icons/bullhorn'
@@ -89,8 +73,8 @@ export default {
   name: 'home',
   data () {
     return {
-      banners: '',
-      announcements: '',
+      banners: [],
+      announcements: [],
       games: '',
       descriptions: '',
       nowAnnouncement: {
@@ -149,13 +133,27 @@ export default {
       this.$store.commit('SHOW_LOGIN_DIALOG')
     }
     getBanner().then(
-      response => {
-        this.banners = response
+      result => {
+        result.forEach((item) => {
+          if (item.platform !== 0) {
+            this.banners.push(item)
+          }
+        })
+        this.banners.sort((a, b) => {
+          return a.rank - b.rank
+        })
       }
     )
     getAnnouncements().then(
-      response => {
-        this.announcements = response
+      result => {
+        result.forEach((item) => {
+          if (item.platform !== 0) {
+            this.announcements.push(item)
+          }
+        })
+        this.announcements.sort((a, b) => {
+          return a.rank - b.rank
+        })
         this.announcementTransition()
       }
     )
