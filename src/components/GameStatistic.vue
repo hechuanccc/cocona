@@ -95,6 +95,8 @@ export default {
           return '单'
         case 'even_more':
           return '双'
+        case 'leopard':
+          return '豹子'
       }
       return value
     }

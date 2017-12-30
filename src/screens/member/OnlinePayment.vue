@@ -3,14 +3,19 @@
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <div>
-      <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
-        <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
-        <input name="payee" type="hidden" :value="payment.payee_id" />
-        <input name="payment_type" type="hidden" :value="payment.payway" />
-        <input name="payment_gateway" type="hidden" :value="payment.gateway_id" />
-        <input name="token" type="hidden" :value="token" />
-        <input name="notify_page" type="hidden" :value="notify_page" />
-      </el-form-item>
+        <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
+          <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+          <div class="min-amount">
+            <span class="text">{{$t('user.min_amount')}}:</span>
+            <icon scale="0.75" name="jpy"></icon>
+            <span class="amount">10</span>
+          </div>
+          <input name="payee" type="hidden" :value="payment.payee_id" />
+          <input name="payment_type" type="hidden" :value="payment.payway" />
+          <input name="payment_gateway" type="hidden" :value="payment.gateway_id" />
+          <input name="token" type="hidden" :value="token" />
+          <input name="notify_page" type="hidden" :value="notify_page" />
+        </el-form-item>
       </div>
       <div class="payment text-center m-b-lg">
         <ul class="payment-types">
@@ -68,6 +73,7 @@ import { fetchPaymentType } from '../../api'
 import { msgFormatter, filtAmount } from '../../utils'
 import urls from '../../api/urls'
 import Vue from 'vue'
+import 'vue-awesome/icons/jpy'
 export default {
   name: 'Payment',
   data () {
@@ -218,5 +224,19 @@ export default {
 }
 .dialog-button {
   width: 150px;
+}
+.min-amount {
+  display: inline-block;
+  height: 12px;
+  line-height: 12px;
+  font-size: 10px;
+  color: #9b9b9b;
+  .text {
+    vertical-align: text-top;
+  }
+  .amount {
+    vertical-align: text-top;
+    letter-spacing: 0px;
+  }
 }
 </style>
