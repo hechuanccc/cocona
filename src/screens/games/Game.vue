@@ -29,6 +29,9 @@
       <el-row class="game-container">
         <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
       </el-row>
+      <el-row>
+        <GameStatistic v-if="currentGame&&currentGame.code!='hkl'" :gameCode="currentGame.code" :resultStatistic="resultStatistic"/>
+      </el-row>
     </div>
     <div class="leaderBoard">
       <div class="leaderBoard-title">
@@ -49,12 +52,14 @@
 import { fetchSchedule, fetchStatistic } from '../../api'
 import gameTranslator from '../../utils/gameTranslator'
 import GameResult from '../../components/GameResult'
+import GameStatistic from '../../components/GameStatistic'
 import _ from 'lodash'
 
 export default {
   name: 'game',
   components: {
-    GameResult
+    GameResult,
+    GameStatistic
   },
   filters: {
     complete (value) {
@@ -139,6 +144,18 @@ export default {
           return '发'
         case 'bai':
           return '白'
+        case 'sumodd':
+          return '合数单'
+        case 'sumeven':
+          return '合数双'
+        case 'sumbigger':
+          return '合数大'
+        case 'sumsmaller':
+          return '合数小'
+        case 'tailbigger':
+          return '尾大'
+        case 'tailsmaller':
+          return '尾小'
         default:
           return val
       }
@@ -163,7 +180,8 @@ export default {
         minutes: 0,
         seconds: 0
       },
-      statistic: []
+      statistic: [],
+      resultStatistic: {}
     }
   },
   computed: {
@@ -259,6 +277,10 @@ export default {
       fetchStatistic(code).then(result => {
         const translator = gameTranslator[code]
         const frequencyStats = result.frequency_stats
+        this.resultStatistic = {
+          resultSingleStatistic: result.result_single_statistic,
+          historyStatistic: result.result_category_statistic
+        }
         const keys = Object.keys(frequencyStats)
         const statistic = []
         _.each(keys, (key) => {
@@ -271,9 +293,10 @@ export default {
           if (item[type] < 3) {
             return
           }
+          let translated = translator(key)
           statistic.push({
-            title: translator(key),
-            type: type,
+            title: translated[0],
+            type: translated[1] ? translated[1] + type : type,
             num: item[type]
           })
         })
