@@ -175,6 +175,7 @@ export default {
 
 /* announcement */
 .announcement {
+  display: inline-block;
   height: 36px;
   line-height: 36px;
   font-size: 14px;
@@ -188,7 +189,10 @@ export default {
     display: inline;
     .content {
       position: absolute;
+      top: 0;
       display: inline-block;
+      box-sizing: border-box;
+      padding-left: 140px;
       width: 100%;
       overflow: hidden;
     }
@@ -282,13 +286,13 @@ export default {
 }
 
 .ad-content4 {
-  width: 250px;
+  width: 300px;
   height: 300px;
 }
 
 .ad-content3 {
-  width: 340px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
 }
 
 .ad-content2 {
