@@ -45,12 +45,13 @@
       <tr>
         <td v-for="play in playChunk"
           :key="play.code + '-play-' + play.id"
-          class="group-name"
+          :class="['group-name', {'gd11x5-groupname': play.code.indexOf('gd11x5_pl_wc_wc')!== -1}]"
           @click="activePlayId = play.id">
           <el-radio
             name="radio"
             v-model="activePlayId"
             :label="play.id"
+            style="font-size: 12px"
             key="'radio' + index">{{play.display_name}}</el-radio>
         </td>
       </tr>
@@ -329,5 +330,8 @@ export default {
   &:nth-child(2) {
     border-left: 1px solid #ddd
   }
+}
+.group-name.gd11x5-groupname /deep/ .el-radio__label {
+  font-size: 12px;
 }
 </style>

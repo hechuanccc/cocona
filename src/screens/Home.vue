@@ -7,19 +7,27 @@
             <img :src="banner.image" :alt="banner.image" />
           </el-carousel-item>
         </el-carousel>
-        <el-row class="game-area">
-          <div class="flag">
-            <span class="flag-text">
-              热门彩票
-            </span>
+        <el-row class="container">
+          <div class="announcement">
+            <div class="left">
+              <icon class="speaker m-l-xlg" scale="1.25" name="bullhorn"></icon>
+              <span class="text m-l">{{$t('announcement.speaker')}}</span>
+            </div>
+            <div class="right text-center">
+              <span class="content text-center"
+                v-if="announcements.length"
+                :style="{
+                  'opacity': nowAnnouncement.transition.opacity,
+                  'transform': `translateY(${nowAnnouncement.transition.translateY}px)`
+                }">
+                {{announcements[nowAnnouncement.index].announcement}}
+              </span>
+            </div>
           </div>
+        </el-row>
+        <el-row class="game-area">
           <ul>
-            <li v-for="(game, index) in games"
-              :key="game.id"
-              v-if="game.icon && index < 9"
-              @click="navigate(game)"
-              class="game-bg"
-              :style="
+            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)" class="game-bg" :style="
                 {
                   backgroundImage: game.bg_icon ? `url('${game.bg_icon}')` :''
                 }
@@ -31,18 +39,15 @@
           </ul>
         </el-row>
         <el-row class="ads">
-          <div
-            v-for="(item, index) in descriptions"
-            :key="item.id"
-            :class="[
+          <div v-for="(item, index) in descriptions" :key="item.id" :class="[
               'ad',
               {'m-r-lg': (index+1) !== descriptions.length}
             ]">
             <div class="ad-title">
-              <img :src="item.header_image" :alt="item.id"/>
+              <img :src="item.header_image" :alt="item.id" />
             </div>
             <div :class="[`ad-content${descriptions.length}`]">
-              <img class="content-img" :src="item.main_image" v-if="item.main_image"/>
+              <img class="content-img" :src="item.main_image" v-if="item.main_image" />
               <p class="content-text" v-if="item.main_description" v-html="formattedText(item.main_description)"></p>
             </div>
           </div>
@@ -55,17 +60,26 @@
   </div>
 </template>
 
+
 <script>
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
+import 'vue-awesome/icons/bullhorn'
 
 export default {
   name: 'home',
   data () {
     return {
-      banners: '',
-      announcements: '',
+      banners: [],
+      announcements: [],
       games: '',
-      descriptions: ''
+      descriptions: '',
+      nowAnnouncement: {
+        index: 0,
+        transition: {
+          opacity: 1,
+          translateY: 0
+        }
+      }
     }
   },
   computed: {
@@ -74,6 +88,27 @@ export default {
     }
   },
   methods: {
+    announcementTransition () {
+      if (this.announcements) {
+        this.interval = setInterval(() => {
+          if (this.nowAnnouncement.index >= this.announcements.length) this.nowAnnouncement.index = 0
+
+          this.nowAnnouncement.transition.opacity = 1
+          this.nowAnnouncement.transition.translateY = 0
+
+          setTimeout(() => {
+            this.transitionInterval = setInterval(() => {
+              this.nowAnnouncement.transition.opacity -= 0.1
+              this.nowAnnouncement.transition.translateY -= 1
+              if (this.nowAnnouncement.transition.opacity < 0) {
+                this.nowAnnouncement.index++
+                clearInterval(this.transitionInterval)
+              }
+            }, 100)
+          }, 3000)
+        }, 5000)
+      }
+    },
     navigate (game) {
       if (this.$store.state.user.logined) {
         this.$router.push(`/game/${game.id}/`)
@@ -90,13 +125,30 @@ export default {
       this.$store.commit('SHOW_LOGIN_DIALOG')
     }
     getBanner().then(
-      response => {
-        this.banners = response
+      result => {
+        result.forEach((item) => {
+          if (item.platform !== 0) {
+            this.banners.push(item)
+          }
+        })
+        this.banners.sort((a, b) => {
+          return a.rank - b.rank
+        })
       }
     )
     getAnnouncements().then(
-      response => {
-        this.announcements = response
+      result => {
+        result.forEach((item) => {
+          if (item.platform !== 0) {
+            this.announcements.push(item)
+          }
+        })
+
+        this.announcements.sort((a, b) => {
+          return a.rank - b.rank
+        })
+
+        this.announcementTransition()
       }
     )
     fetchGames().then(
@@ -107,15 +159,46 @@ export default {
     getDescription().then(response => {
       this.descriptions = response
     })
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 /* banner */
 .el-carousel__item img {
   width: 100%;
   height: 100%;
+}
+
+/* announcement */
+.announcement {
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+  letter-spacing: 1.6px;
+  color: #4a4a4a;
+  background-color: #f9f9f9;
+  .left {
+    display: inline;
+  }
+  .right {
+    display: inline;
+    .content {
+      position: absolute;
+      display: inline-block;
+      width: 100%;
+      overflow: hidden;
+    }
+  }
+  .speaker {
+    vertical-align: text-bottom;
+  }
+  .text {
+    display: inline-block;
+  }
 }
 
 /*game area*/
