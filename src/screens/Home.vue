@@ -286,13 +286,13 @@ export default {
 }
 
 .ad-content4 {
-  width: 250px;
+  width: 300px;
   height: 300px;
 }
 
 .ad-content3 {
-  width: 340px;
-  height: 300px;
+  width: 400px;
+  height: 400px;
 }
 
 .ad-content2 {
