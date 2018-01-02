@@ -168,12 +168,9 @@ export default {
       }, 5000)
     },
     getWinNotify () {
-      let path = this.$route.path.split('/')
-      if (path[1] === 'game') {
-        fetchWinBet().then(results => {
-          this.generateWinMessage(results)
-        })
-      }
+      fetchWinBet().then(results => {
+        this.generateWinMessage(results)
+      })
     },
     generateWinMessage (results) {
       let winMsg = (createElement, result) => {
