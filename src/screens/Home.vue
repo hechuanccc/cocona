@@ -102,6 +102,7 @@ export default {
               this.nowAnnouncement.transition.translateY -= 1
               if (this.nowAnnouncement.transition.opacity < 0) {
                 this.nowAnnouncement.index++
+                this.initAnnouncementPlacement()
                 clearInterval(this.transitionInterval)
               }
             }, 100)
@@ -175,6 +176,7 @@ export default {
 
 /* announcement */
 .announcement {
+  display: inline-block;
   height: 36px;
   line-height: 36px;
   font-size: 14px;
@@ -188,7 +190,10 @@ export default {
     display: inline;
     .content {
       position: absolute;
+      top: 0;
       display: inline-block;
+      box-sizing: border-box;
+      padding-left: 140px;
       width: 100%;
       overflow: hidden;
     }
