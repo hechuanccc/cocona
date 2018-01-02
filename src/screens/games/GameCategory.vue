@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <el-row class="bet-area m-b-xlg">
+    <el-row class="bet-area m-b-lg">
       <el-row type="flex" class="actions" justify="center">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
@@ -419,7 +419,9 @@ export default {
         this.raw = res
         this.plays = plays
         this.loading = false
-        this.$store.commit('END_LOADING') // for global
+        this.$store.commit('END_LOADING')
+      }, errRes => {
+        this.$store.commit('END_LOADING')
       })
     },
     openDialog () {
