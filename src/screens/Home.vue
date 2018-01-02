@@ -14,22 +14,18 @@
               <span class="text m-l">{{$t('announcement.speaker')}}</span>
             </div>
             <div class="right text-center">
-              <span class="content text-center" v-if="nowAnnouncement.content" :style="{
-                        'opacity': nowAnnouncement.transition.opacity,
-                        'transform': `translateY(${nowAnnouncement.transition.translateY}px)`
-                      }">
-                {{nowAnnouncement.content}}
+              <span class="content text-center"
+                v-if="announcements.length"
+                :style="{
+                  'opacity': nowAnnouncement.transition.opacity,
+                  'transform': `translateY(${nowAnnouncement.transition.translateY}px)`
+                }">
+                {{announcements[nowAnnouncement.index].announcement}}
               </span>
-
             </div>
           </div>
         </el-row>
         <el-row class="game-area">
-          <!-- <div class="flag">
-            <span class="flag-text">
-              热门彩票
-            </span>
-          </div> -->
           <ul>
             <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)" class="game-bg" :style="
                 {
@@ -78,7 +74,7 @@ export default {
       games: '',
       descriptions: '',
       nowAnnouncement: {
-        content: '',
+        index: 0,
         transition: {
           opacity: 1,
           translateY: 0
@@ -93,27 +89,23 @@ export default {
   },
   methods: {
     announcementTransition () {
-      let i = 0
-      if (i < this.announcements.length) {
-        this.nowAnnouncement.content = this.announcements[0].announcement
+      if (this.announcements) {
         this.interval = setInterval(() => {
-          this.nowAnnouncement.content = this.announcements[i].announcement
-          i++
+          if (this.nowAnnouncement.index >= this.announcements.length) this.nowAnnouncement.index = 0
+
           this.nowAnnouncement.transition.opacity = 1
           this.nowAnnouncement.transition.translateY = 0
+
           setTimeout(() => {
             this.transitionInterval = setInterval(() => {
               this.nowAnnouncement.transition.opacity -= 0.1
               this.nowAnnouncement.transition.translateY -= 1
               if (this.nowAnnouncement.transition.opacity < 0) {
+                this.nowAnnouncement.index++
                 clearInterval(this.transitionInterval)
               }
             }, 100)
           }, 3000)
-          if (i === this.announcements.length - 1) {
-            clearInterval(this.interval)
-            this.announcementTransition()
-          }
         }, 5000)
       }
     },
@@ -151,9 +143,11 @@ export default {
             this.announcements.push(item)
           }
         })
+
         this.announcements.sort((a, b) => {
           return a.rank - b.rank
         })
+
         this.announcementTransition()
       }
     )
@@ -206,7 +200,6 @@ export default {
     display: inline-block;
   }
 }
-
 
 /*game area*/
 .flag {
