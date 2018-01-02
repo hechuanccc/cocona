@@ -102,7 +102,6 @@ export default {
               this.nowAnnouncement.transition.translateY -= 1
               if (this.nowAnnouncement.transition.opacity < 0) {
                 this.nowAnnouncement.index++
-                this.initAnnouncementPlacement()
                 clearInterval(this.transitionInterval)
               }
             }, 100)
