@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <el-row class="bet-area m-b-xlg">
+    <el-row class="bet-area m-b-lg">
       <el-row type="flex" class="actions" justify="center">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
@@ -58,10 +58,10 @@
                 <el-col :span="play.value?2:6" class="name">
                   <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
                 </el-col>
-                <el-col v-if="play.value" :span="15" class="number">
+                <el-col v-if="play.value" :span="17" class="number">
                   <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
                 </el-col>
-                <el-col :span="play.value?4:6" class="odds">
+                <el-col :span="play.value?2:6" class="odds">
                   {{ !gameClosed ? play.odds : '-'}}
                 </el-col>
                 <el-col :span="play.value?3:12" class="input">
@@ -419,7 +419,9 @@ export default {
         this.raw = res
         this.plays = plays
         this.loading = false
-        this.$store.commit('END_LOADING') // for global
+        this.$store.commit('END_LOADING')
+      }, errRes => {
+        this.$store.commit('END_LOADING')
       })
     },
     openDialog () {
@@ -604,8 +606,16 @@ export default {
 }
 
 .extramini  /deep/ .el-input__inner {
-  width: 70px;
+  width: 90%;
   height: 28px;
+}
+.sssss {
+  &:after {
+    display: inline-block;
+    content: '';
+    height: 100%;
+    vertical-align: middle;
+  }
 }
 </style>
 

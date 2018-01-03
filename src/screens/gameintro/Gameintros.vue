@@ -111,6 +111,9 @@
       fetchPlaySetting () {
         this.loading = true
         fetchPlaySetting(this.currentGame.id).then(playSettings => {
+          _.each(playSettings, (item) => {
+            item.return_rate = item.return_rate + '%'
+          })
           this.currentPlaySettings = playSettings
           this.loading = false
         }, () => {

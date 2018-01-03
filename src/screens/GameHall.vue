@@ -281,6 +281,7 @@ export default {
   color: #9b9b9b;
   font-size: 14px;
   margin-right: 20px;
+  max-height: 100vh;
   &.side-menu-ul {
     overflow-y: scroll;
   }

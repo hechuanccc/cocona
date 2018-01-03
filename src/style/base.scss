@@ -154,3 +154,10 @@ body {
 .fl {
   float: left;
 }
+
+.el-message-box__title {
+  padding-right: 10px;
+}
+.el-message-box {
+  word-break: break-all;
+}
