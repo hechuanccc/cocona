@@ -22,7 +22,7 @@ ARG MAX_AGE
 
 # Cannot be made into one line as it has a possibility that it will return a 'text file busy' making the shell script unexecutable
 RUN chmod u+x cloud_deploy.sh
-RUN ./cloud_deploy.sh || exit 2
+RUN ./cloud_deploy.sh
 
 EXPOSE 8080
 CMD npm run dev
