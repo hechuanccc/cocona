@@ -297,20 +297,11 @@ export default {
 }
 
 .ad-content4 {
-<<<<<<< HEAD
-=======
-  width: 300px;
->>>>>>> 4f1d31f8517fffdca2e4dcf7c6c89d7de69bd814
   height: 300px;
 }
 
 .ad-content3 {
-<<<<<<< HEAD
   height: 300px;
-=======
-  width: 400px;
-  height: 400px;
->>>>>>> 4f1d31f8517fffdca2e4dcf7c6c89d7de69bd814
 }
 
 .ad-content2 {
