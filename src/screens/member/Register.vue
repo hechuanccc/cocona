@@ -33,7 +33,7 @@
             </el-input>
           </el-form-item>
           <div class="captcha-row">
-            <button class="captcha-getter" @click="fetchCaptcha">
+            <button type="button" class="captcha-getter" @click="fetchCaptcha">
               <i class="el-icon-refresh"></i>
             </button>
             <img :src="captcha_src" alt="captcha" class="captcha" width="70" height="30">
