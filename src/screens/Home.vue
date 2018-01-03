@@ -39,10 +39,13 @@
           </ul>
         </el-row>
         <el-row class="ads">
-          <div v-for="(item, index) in descriptions" :key="item.id" :class="[
-              'ad',
-              {'m-r-lg': (index+1) !== descriptions.length}
-            ]">
+          <el-col
+            v-for="(item, index) in descriptions"
+            class="ad"
+            :key="item.id"
+            :offset="descriptions.length===1?6:0"
+            :span="dynamicAdWidth"
+            >
             <div class="ad-title">
               <img :src="item.header_image" :alt="item.id" />
             </div>
@@ -50,7 +53,7 @@
               <img class="content-img" :src="item.main_image" v-if="item.main_image" />
               <p class="content-text" v-if="item.main_description" v-html="formattedText(item.main_description)"></p>
             </div>
-          </div>
+          </el-col>
         </el-row>
       </el-main>
       <el-main v-else>
@@ -85,6 +88,14 @@ export default {
   computed: {
     isHome () {
       return this.$store.state.route.path === '/'
+    },
+    dynamicAdWidth () {
+      let length = this.descriptions.length
+      if (length === 1) {
+        return 12
+      } else {
+        return 24 / length
+      }
     }
   },
   methods: {
@@ -211,7 +222,7 @@ export default {
   display: inline-block;
   width: 133px;
   height: 67px;
-  background: url('../assets/icon-hot@.png') no-repeat;
+  background: url("../assets/icon-hot@.png") no-repeat;
   background-size: contain;
   background-position: center center;
   left: 50%;
@@ -245,17 +256,17 @@ export default {
 }
 
 .game-bg:before {
-  content: '';
+  content: "";
   display: inline-block;
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(39, 40, 34, .5);
+  background-color: rgba(39, 40, 34, 0.5);
 }
 
-.game-icon img{
+.game-icon img {
   top: 50%;
   transform: translateY(50%);
   line-height: 150px;
@@ -265,12 +276,12 @@ export default {
 
 /*advertisement*/
 .ads {
+  width: 1060px;
   text-align: center;
-  margin: 80px 0;
+  margin: 80px auto;
 }
-
 .ad {
-  display: inline-block;
+  padding: 0 10px;
 }
 .ad-title {
   width: 250px;
@@ -286,26 +297,23 @@ export default {
 }
 
 .ad-content4 {
-  width: 300px;
   height: 300px;
 }
 
 .ad-content3 {
-  width: 400px;
-  height: 400px;
+  height: 300px;
 }
 
 .ad-content2 {
-  width: 520px;
   height: 400px;
 }
 
 .content-text {
-	font-size: 12px;
-	font-weight: 500;
-	line-height: 2.0;
-	letter-spacing: 0.5px;
-	text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0.5px;
+  text-align: left;
   color: #878787;
   height: 100%;
   overflow: hidden;
@@ -313,11 +321,10 @@ export default {
 
 .content-img {
   width: 100%;
-  height: 100%;
 }
 
 /* lay over the default padding */
 .el-main {
-  padding: 0
+  padding: 0;
 }
 </style>

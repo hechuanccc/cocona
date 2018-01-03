@@ -5,7 +5,7 @@
       <el-row type="flex" class="actions" justify="center">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
-        <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"  @keypress.native="filtAmount" />
+        <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount" />
       </el-col>
       <el-col class="m-l-lg" :span="4">
         <el-button class="placeOrder-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
@@ -65,7 +65,7 @@
                   {{ !gameClosed ? play.odds : '-'}}
                 </el-col>
                 <el-col :span="play.value?3:12" class="input">
-                  <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" type="number" min="1" step="10"
+                  <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
                 </el-col>
@@ -89,7 +89,7 @@
        <el-row type="flex" class="actions" justify="center" v-if="!loading">
                 <el-col :span="1" class="amount">金额</el-col>
                 <el-col :span="3">
-                  <el-input v-model.number="amount" :min="1" type="number" @change="validateAmount"/>
+                  <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount"/>
                 </el-col>
                 <el-col class="m-l-lg" :span="4">
                   <el-button type="primary"

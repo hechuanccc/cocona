@@ -1,5 +1,16 @@
 <template>
 <el-row>
+  <el-row class="m-t-lg">
+    <el-col :offset="7" :span="10">
+      <el-alert
+        v-if="payeeError"
+        :title="`${payeeErrorMessage}异常，请联系客服`"
+        :type="'error'"
+        :closable="false"
+        center>
+      </el-alert>
+    </el-col>
+  </el-row>
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <div>
@@ -34,7 +45,7 @@
         </ul>
       </div>
       <div class="submit-button text-center">
-        <el-button class="submit" type="primary" @click="submit($event)">{{$t('action.submit')}}</el-button>
+        <el-button class="submit" type="primary" :disabled="payeeError" @click="submit($event)">{{$t('action.submit')}}</el-button>
       </div>
     </el-form>
     <el-dialog
@@ -102,7 +113,7 @@ export default {
         ]
       },
       activeType: '',
-      paymentTypes: [],
+      paymentTypes: {},
       token: Vue.cookie.get('access_token'),
       paymentUrl: urls.payment,
       notify_page: 'xxx',
@@ -125,6 +136,19 @@ export default {
         alerts.push(upperAlert)
       }
       return alerts.join(', ')
+    },
+    payeeError () {
+      return this.payment.gateway_id === undefined
+    },
+    payeeErrorMessage () {
+      switch (this.activeType) {
+        case 'wechat':
+          return this.$t('user.weixin')
+        case 'alipay':
+          return this.$t('user.alipay')
+        case 'bank':
+          return this.$t('user.bankcard')
+      }
     }
   },
   created () {
@@ -183,7 +207,7 @@ export default {
   text-align: justify;
   &:after {
     display: inline-block;
-    content: '';
+    content: "";
     width: 100%;
   }
 }
