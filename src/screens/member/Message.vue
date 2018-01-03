@@ -12,7 +12,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>~</el-form-item>
-      <el-form-item prop="endDate" :error="dateValidate">
+      <el-form-item prop="endDate" :error="' '">
         <el-date-picker
           v-model="endDate"
           type="date"
