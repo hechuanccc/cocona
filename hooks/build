@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e  # to stop script when error occurs
 
 # THIS IS REQUIRED to put environment variables in DockerCloud as stated here https://forums.docker.com/t/docker-cloud-build-environment-variables-not-being-passed-to-the-auto-build/24010
 
