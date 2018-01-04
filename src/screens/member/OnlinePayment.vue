@@ -19,7 +19,7 @@
           <div class="min-amount">
             <span class="text">{{$t('user.min_amount')}}:</span>
             <icon scale="0.75" name="jpy"></icon>
-            <span class="amount">10</span>
+            <span class="amount">{{limit.lower}}</span>
           </div>
           <input name="payee" type="hidden" :value="payment.payee_id" />
           <input name="payment_type" type="hidden" :value="payment.payway" />
