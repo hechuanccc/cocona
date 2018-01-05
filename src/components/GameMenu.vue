@@ -103,6 +103,7 @@ export default {
       localStorage.setItem('lastGame', key)
       this.categories = this.$store.getters.categoriesByGameId(key)
       if (!this.categories.length) {
+        this.$store.commit('START_LOADING')
         this.$store.dispatch('fetchCategories', key)
           .then((res) => {
             if (res) {
@@ -111,6 +112,8 @@ export default {
             } else {
               this.performLogin()
             }
+          }, errRes => {
+            this.$store.commit('END_LOADING')
           })
       } else {
         this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
