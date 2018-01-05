@@ -2,7 +2,7 @@
 <div>
   <el-row class="m-b">
     <el-form :inline="true" :model="conditions">
-      <el-form-item :label="$t('user.send_date')" prop="startDate" :error="dateValidate">
+      <el-form-item :label="$t('user.send_date')" prop="startDate" :error="startDateValidate">
         <el-date-picker
           v-model="startDate"
           type="date"
@@ -12,7 +12,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item>~</el-form-item>
-      <el-form-item prop="endDate" :error="' '">
+      <el-form-item prop="endDate" :error="endDateValidate">
         <el-date-picker
           v-model="endDate"
           type="date"
@@ -65,7 +65,9 @@ export default {
       startDate: '',
       endDate: '',
       unReadOnly: false,
-      dateValidate: ''
+      startDateValidate: '',
+      endDateValidate: ''
+
     }
   },
   created () {
@@ -88,9 +90,11 @@ export default {
       let startDate = this.$moment(conditions.sent_at_0)
       let endDate = this.$moment(conditions.sent_at_1)
       if (startDate && endDate && startDate.diff(endDate) > 0) {
-        this.dateValidate = this.$t('validate.date_range_validate')
+        this.startDateValidate = this.$t('validate.date_range_validate')
+        this.endDateValidate = ' '
       } else {
-        this.dateValidate = ''
+        this.startDateValidate = ''
+        this.endDateValidate = ''
         this.initFetchMessage(conditions)
       }
     }
