@@ -1,6 +1,6 @@
 <template>
   <el-aside class="m-l-xlg m-r-sm" width="256px">
-    <el-menu :default-active="defaultactive"
+    <el-menu :default-active="active"
       text-color="#4a4a4a"
       active-text-color="#fff"
       :background-color="'#fff'">
@@ -16,7 +16,6 @@
     </el-menu>
   </el-aside>
 </template>
-
 <script>
 export default {
   props: {
@@ -26,6 +25,11 @@ export default {
     defaultactive: {
       type: String,
       default: '0'
+    }
+  },
+  computed: {
+    active: function () {
+      return this.defaultactive.indexOf('online_payment_success') !== -1 ? '/account/online_payment' : this.defaultactive
     }
   },
   methods: {

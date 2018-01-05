@@ -10,6 +10,7 @@ import Register from '@/screens/member/Register'
 import Account from '@/screens/member/Account'
 import Withdraw from '@/screens/member/Withdraw'
 import OnlinePayment from '@/screens/member/OnlinePayment'
+import OnlinePaymentSuccess from '@/screens/member/OnlinePaymentSuccess'
 import Remit from '@/screens/member/Remit'
 
 import MyAccount from '@/screens/member/MyAccount'
@@ -71,6 +72,11 @@ export default new Router({
           path: 'online_payment',
           name: 'OnlinePayment',
           component: OnlinePayment
+        },
+        {
+          path: 'online_payment_success',
+          name: 'OnlinePaymentSuccess',
+          component: OnlinePaymentSuccess
         },
         {
           path: 'remit',
