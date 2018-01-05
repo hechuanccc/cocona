@@ -114,6 +114,7 @@ export default {
     failed: 'Failed',
     ongoing: 'Ongoing',
     cancelled: 'Cancelled',
+    no_draw: 'No Draw',
     declined: 'Declined',
     finance: 'Financing',
     message: 'Message',
