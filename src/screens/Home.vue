@@ -7,7 +7,7 @@
             <img :src="banner.image" :alt="banner.image" />
           </el-carousel-item>
         </el-carousel>
-        <el-row class="container">
+        <el-row class="container block-center">
           <div class="announcement">
             <div class="left">
               <icon class="speaker m-l-xlg" scale="1.25" name="bullhorn"></icon>
