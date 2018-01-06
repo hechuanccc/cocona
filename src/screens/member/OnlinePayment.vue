@@ -116,7 +116,7 @@ export default {
       paymentTypes: {},
       token: Vue.cookie.get('access_token'),
       paymentUrl: urls.payment,
-      notify_page: 'xxx',
+      notify_page: `${window.location.origin}/#/account/online_payment_success/`,
       isSubmit: false
     }
   },
