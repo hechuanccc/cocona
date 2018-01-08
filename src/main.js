@@ -39,7 +39,6 @@ Vue.use(Vue2Filters)
 Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
-Vue.use(VueI18n)
 Vue.use(Vuex)
 
 Vue.config.productionTip = false

@@ -92,7 +92,7 @@ export default {
 .topbar
   display: inline-block
   background-color: #f9f9f9
-  height: 40px
+  height: 36px
   width: 100%
 .bottomnavs
   display: inline-block

@@ -1,12 +1,12 @@
 <template>
-  <div class="main-play">
+  <div>
     <div class="main">
-      <el-row class="info-panel">
+      <el-row class="m-b">
         <GameResult :gameid="$route.params.gameId" @refreshResult="fetchStatistic(currentGame.code)"/>
         <div class="countdown-panel">
           <div class="info-text" v-if="currentGame && schedule">
             <p>{{currentGame.display_name}}</p>
-            <p>{{schedule.issue_number}}{{$t('navMenu.result_period')}}</p>
+            <p class='issue-number'>{{schedule.issue_number}}{{$t('navMenu.result_period')}}</p>
           </div>
           <div class="schedule" v-if="schedule && schedule.issue_number">
             <div class="schedule-title">封盘</div>
@@ -33,16 +33,16 @@
         <GameStatistic v-if="currentGame&&currentGame.code!='hkl'" :gameCode="currentGame.code" :resultStatistic="resultStatistic"/>
       </el-row>
     </div>
-    <div class="leaderBoard">
-      <div class="leaderBoard-title">
+    <div class="leader-board">
+      <div class="title">
         长龙排行榜
       </div>
-      <ul class="leaderBoard-menu">
-        <li class="leaderBoard-menu-item" v-for="(item,index) in sortedStatistic" :key="index">
+      <ul class="menu">
+        <li class="menu-item" v-for="(item,index) in sortedStatistic" :key="index">
           <span class="text">{{item.title}} - {{item.type | typeFilter}}</span>
           <span class="period">{{item.num}}期</span>
         </li>
-        <li v-if="sortedStatistic.length === 0" class="leaderBoard-menu-empty">暂无排行榜</li>
+        <li v-if="sortedStatistic.length === 0" class="menu-empty">暂无排行榜</li>
       </ul>
     </div>
   </div>
@@ -309,45 +309,42 @@ export default {
 
 <style scoped lang="scss">
 @import "../../style/vars.scss";
-.leaderBoard {
+.leader-board {
   float: right;
-  width: 180px;
+  width: 200px;
   background: #fff;
-  color: #9b9b9b;
-  font-size: 14px;
-}
-.leaderBoard-title {
-  font-weight: 200;
-  text-align: center;
-  height: 40px;
-  line-height: 40px;
-  border-bottom: 2px solid $pinkish-grey;
-}
-.leaderBoard-menu-empty {
-  color: $pinkish-grey;
-  text-align: center;
-  line-height: 30px;
-  height: 30px;
-  padding: 20px 0;
-  font-weight: 200;
-}
-.leaderBoard-menu-item {
-  padding: 0 5px;
-  height: 30px;
-  line-height: 30px;
-  font-size: 12px;
-  border-bottom: 1px solid $pinkish-grey;
-  .text {
-    color: #000;
+  font-size: 13px;
+  .title {
+    color: #9b9b9b;
+    text-align: center;
+    height: 32px;
+    line-height: 32px;
+    border-bottom: 1px solid $pinkish-grey;
   }
-  .period {
-    float: right;
-    color: $watermelon;
+  .menu-empty {
+    color: #ccc;
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
+    padding: 10px 0;
+    font-weight: 200;
+  }
+  .menu-item {
+    padding: 0 10px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 12px;
+    color: #666;
+    border-bottom: 1px solid $pinkish-grey;
+    .period {
+      float: right;
+      color: $watermelon;
+    }
   }
 }
 .main {
   float: left;
-  width: 840px;
+  width: 1030px;
 }
 
 .main-play {
@@ -371,14 +368,6 @@ export default {
     line-height: 30px;
   }
 }
-.info-panel {
-  text-align: justify;
-  &:after {
-    content: "";
-    display: inline-block;
-    width: 100%;
-  }
-}
 .countdown-panel {
   width: 49%;
   height: 55px;
@@ -388,17 +377,16 @@ export default {
 }
 .info-text {
   color: #4a4a4a;
-  padding-left: 20px;
+  padding: 10px 0 0 20px;
   float: left;
   text-align: center;
-  margin-right: 30px;
   p {
-    height: 27px;
-    line-height: 27px;
-    letter-spacing: 2px;
+    height: 16px;
+    line-height: 16px;
   }
 }
 .issue-number {
+  color: #999;
   display: inline-block;
 }
 .countdown {
