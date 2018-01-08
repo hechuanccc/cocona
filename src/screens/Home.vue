@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-main class="container" v-if="isHome">
+      <el-main class='container' v-if="isHome">
         <el-carousel indicator-position="inside" height="500px">
           <el-carousel-item v-for="banner in banners" :key="banner.id">
             <img :src="banner.image" :alt="banner.image" />
@@ -15,12 +15,11 @@
             </div>
             <div class="right text-center">
               <span class="content text-center"
-                v-if="announcements.length"
                 :style="{
-                  'opacity': nowAnnouncement.transition.opacity,
-                  'transform': `translateY(${nowAnnouncement.transition.translateY}px)`
+                  'opacity': announcementStyle.opacity,
+                  'transform': `translateY(${announcementStyle.translateY}px)`
                 }">
-                {{announcements[nowAnnouncement.index].announcement}}
+                {{currentAnnouncement}}
               </span>
             </div>
           </div>
@@ -76,13 +75,11 @@ export default {
       announcements: [],
       games: '',
       descriptions: '',
-      nowAnnouncement: {
-        index: 0,
-        transition: {
-          opacity: 1,
-          translateY: 0
-        }
-      }
+      announcementStyle: {
+        opacity: 1,
+        translateY: 0
+      },
+      currentAnnouncementIndex: 0
     }
   },
   computed: {
@@ -96,29 +93,31 @@ export default {
       } else {
         return 24 / length
       }
+    },
+    currentAnnouncement () {
+      if (this.announcements[this.currentAnnouncementIndex]) {
+        return this.announcements[this.currentAnnouncementIndex].announcement
+      } else {
+        return ''
+      }
     }
   },
   methods: {
-    announcementTransition () {
-      if (this.announcements) {
-        this.interval = setInterval(() => {
-          if (this.nowAnnouncement.index >= this.announcements.length) this.nowAnnouncement.index = 0
-
-          this.nowAnnouncement.transition.opacity = 1
-          this.nowAnnouncement.transition.translateY = 0
-
+    animate () {
+      setTimeout(() => {
+        if (this.announcementStyle.opacity <= 0) {
+          this.currentAnnouncementIndex = (this.currentAnnouncementIndex + 1) % this.announcements.length
+          this.announcementStyle.opacity = 1
+          this.announcementStyle.translateY = 0
           setTimeout(() => {
-            this.transitionInterval = setInterval(() => {
-              this.nowAnnouncement.transition.opacity -= 0.1
-              this.nowAnnouncement.transition.translateY -= 1
-              if (this.nowAnnouncement.transition.opacity < 0) {
-                this.nowAnnouncement.index++
-                clearInterval(this.transitionInterval)
-              }
-            }, 100)
-          }, 3000)
-        }, 5000)
-      }
+            this.animate()
+          }, 5000)
+        } else {
+          this.announcementStyle.opacity -= 0.05
+          this.announcementStyle.translateY -= 1
+          this.animate()
+        }
+      }, 100)
     },
     navigate (game) {
       if (this.$store.state.user.logined) {
@@ -155,11 +154,14 @@ export default {
           }
         })
 
-        this.announcements.sort((a, b) => {
-          return a.rank - b.rank
-        })
-
-        this.announcementTransition()
+        if (this.announcements.length > 0) {
+          this.announcements.sort((a, b) => {
+            return a.rank - b.rank
+          })
+          setTimeout(() => {
+            this.animate()
+          }, 5000)
+        }
       }
     )
     fetchGames().then(
