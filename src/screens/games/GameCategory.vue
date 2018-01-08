@@ -400,7 +400,6 @@ export default {
     },
     initPlaygroups () {
       const categoryId = this.$route.params.categoryId
-      this.$store.commit('START_LOADING')
       fetchPlaygroup(categoryId).then(res => {
         let plays = {}
         res.forEach(item => {
@@ -413,15 +412,11 @@ export default {
             if (item.code === 'hkl_pg_txiao_spczdc' || item.code === 'hkl_pg_shawzdc' || item.code === 'hkl_pg_pxxmzdc') {
               plays[play.id]['value'] = this.zodiacMap[play.display_name]
             }
-          }
-          )
+          })
         })
         this.raw = res
         this.plays = plays
         this.loading = false
-        this.$store.commit('END_LOADING')
-      }, errRes => {
-        this.$store.commit('END_LOADING')
       })
     },
     openDialog () {

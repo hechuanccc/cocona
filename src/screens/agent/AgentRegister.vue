@@ -1,7 +1,7 @@
 <template>
 <el-row>
   <div class="container">
-    <el-col :span="16" :offset="8">
+    <el-col :span="16" :offset="4">
       <el-form :model="user"
         status-icon
         :rules="rules"
@@ -25,21 +25,20 @@
         <el-form-item :label="$t('user.email')" prop="email">
           <el-input class="input-width" v-model="user.email"></el-input>
         </el-form-item>
-        <el-form-item :label="$t('user.captcha')" required>
-          <el-col :span="7">
-            <el-form-item  prop="captcha_1">
-              <el-input class="input-width" :maxlength="4" v-model="user.captcha_1" auto-complete="off">
-                <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4" :offset="1">
-            <img :src="captcha_src" alt="" height="30">
-          </el-col>
+        <el-form-item  :label="$t('user.captcha')" prop="captcha_1">
+          <el-input class="input-width" :maxlength="4" v-model="user.captcha_1" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <div class="captcha-row">
+            <img :src="captcha_src" alt="captcha" class="captcha" width="70" height="30">
+            <button type="button" class="captcha-getter" @click="fetchCaptcha">
+              <i class="el-icon-refresh"></i>
+            </button>
+          </div>
         </el-form-item>
         <el-form-item>
           <div class="success" v-if="successMsg">{{successMsg}}</div>
-          <el-button type="primary" size="medium" class="input-width" @click="submitForm">{{$t('action.submit')}}</el-button>
+          <el-button type="primary" size="medium" class="input-width submit" @click="submitForm">{{$t('action.submit')}}</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -189,15 +188,44 @@
   }
 </script>
 
-<style lang="sass" scoped>
-@import '../../style/vars.scss'
-.el-input /deep/ .el-input__suffix
+<style lang="scss" scoped>
+@import '../../style/vars.scss';
+.el-input /deep/ .el-input__suffix{
   right: 0
-.el-button.el-button--info.el-button--small.captcha
-  position: absolute
-  right: 0
-.success
-  position: absolute
-  bottom: 35px
-  color: $green
+}
+.el-button.el-button--info.el-button--small.captcha {
+  position: absolute;
+  right: 0;
+}
+.captcha-row {
+  width: $form_width;
+  height: 30px;
+  text-align: justify;
+  &:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+  }
+}
+.captcha {
+  display: inline;
+  vertical-align: middle;
+}
+.captcha-getter {
+  display: inline-block;
+  border-radius: 2px;
+  width: 40px;
+  height: 30px;
+  background-color: $pinkish-grey;
+  i {
+    font-size: 8px;
+    color: #ffffff;
+  }
+}
+
+.success {
+  position: absolute;
+  bottom: 35px;
+  color: $green;
+}
 </style>

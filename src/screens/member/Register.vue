@@ -33,10 +33,10 @@
             </el-input>
           </el-form-item>
           <div class="captcha-row">
+            <img :src="captcha_src" alt="captcha" class="captcha" width="70" height="30">
             <button type="button" class="captcha-getter" @click="fetchCaptcha">
               <i class="el-icon-refresh"></i>
             </button>
-            <img :src="captcha_src" alt="captcha" class="captcha" width="70" height="30">
           </div>
           <el-form-item>
             <el-button type="primary" size="medium" class="input-width submit" @click="submitForm">{{$t('action.submit')}}</el-button>
