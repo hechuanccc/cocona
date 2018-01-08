@@ -189,3 +189,7 @@ export function fetchPlaySetting (id) {
 export function fetchStatistic (code) {
   return axios.get(`${urls.statistic}?game_code=${code}`)
 }
+
+export function fetchTransactionStatus (id) {
+  return axios.get(`${urls.payment}?transaction_ids=${id}`)
+}
