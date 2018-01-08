@@ -55,7 +55,8 @@ export default {
     return {
       style,
       dropdownActive: false,
-      categories: []
+      categories: [],
+      isBusy: false
     }
   },
   computed: {
@@ -100,12 +101,16 @@ export default {
       if (key === '-1') {
         return false
       }
+      if (this.isBusy) {
+        return false
+      }
+      this.isBusy = true
       localStorage.setItem('lastGame', key)
       this.categories = this.$store.getters.categoriesByGameId(key)
       if (!this.categories.length) {
-        this.$store.commit('START_LOADING')
         this.$store.dispatch('fetchCategories', key)
           .then((res) => {
+            this.isBusy = false
             if (res) {
               this.categories = res
               this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
@@ -113,9 +118,10 @@ export default {
               this.performLogin()
             }
           }, errRes => {
-            this.$store.commit('END_LOADING')
+            this.isBusy = false
           })
       } else {
+        this.isBusy = false
         this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
       }
     },
