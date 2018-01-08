@@ -2,40 +2,46 @@
   <div>
     <div>
       <div class="game-menu-container">
-      <ul class="game-menu p-l-xlg container">
-        <li
-          :class="['game-menu-item',activeGame===game.id?'active':'']"
-          v-for="(game, index) in allGames"
-          :key="game.id" v-if="index < 10"
-          @click="switchGame(game.id+'')">{{game.display_name}}</li>
-        <li
-          class="game-menu-item more-menu m-r-lg text-center"
-          @mouseover="dropdownActive = true"
-          @mouseleave="dropdownActive = false"
-          v-if="allGames.length > 10">
-          更多
-          <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
-          <i class="el-icon-arrow-down icon" v-else/>
-          <div v-show="dropdownActive" class="dropdown">
-            <ul class="dropdown-menu">
-               <li
-               :class="['dropdown-menu-item',activeGame===game.id?'active':'']"
-                v-for="(game, index) in allGames" :key="game.id"
-                :index="game.id + ''"
-                v-if="index >= 10"
-                @click="switchGame(game.id+'')">{{game.display_name}}</li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+        <ul class="game-menu p-l container">
+          <li
+            :class="['game-menu-item', activeGame === game.id ? 'active' : '', game.hover ? 'hover' : '']"
+            v-for="(game, index) in allGames"
+            @mouseover="$set(game, 'hover', true)"
+            @mouseleave="$set(game, 'hover', false)"
+            :key="game.id" v-if="index < exposedCount"
+            @click="switchGame(game.id+'')">{{game.display_name}}</li>
+          <li
+            class="game-menu-item more-menu m-r-lg text-center"
+            @mouseover="dropdownActive = true"
+            @mouseleave="dropdownActive = false"
+            v-if="allGames.length > exposedCount">
+            更多
+            <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
+            <i class="el-icon-arrow-down icon" v-else/>
+            <div v-show="dropdownActive" class="dropdown">
+              <ul class="dropdown-menu">
+                 <li
+                 :class="['dropdown-menu-item',activeGame===game.id?'active':'']"
+                  v-for="(game, index) in allGames" :key="game.id"
+                  :index="game.id + ''"
+                  v-if="index >= exposedCount"
+                  @click="switchGame(game.id+'')">{{game.display_name}}</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
       </div>
-      <ul class="category-menu">
-        <li
-          :class="['category-menu-item',activeCategory===category.id?'active':'']"
-          v-for="(category, index) in categories"
-          :key="'category' + category.id"
-          @click="switchCategory(category)">{{category.display_name}}</li>
-      </ul>
+      <div class="category-menu">
+        <div class="container">
+          <ul>
+            <li
+              :class="['category-menu-item',activeCategory===category.id?'active':'']"
+              v-for="(category, index) in categories"
+              :key="'category' + category.id"
+              @click="switchCategory(category)">{{category.display_name}}</li>
+          </ul>
+        </div>
+      </div>
       </div>
   </div>
 </template>
@@ -54,6 +60,7 @@ export default {
   data () {
     return {
       style,
+      exposedCount: 12,
       dropdownActive: false,
       categories: [],
       isBusy: false
@@ -141,23 +148,24 @@ export default {
 <style scoped lang='scss'>
 @import "../style/vars.scss";
 .game-menu {
-  // background: linear-gradient(to bottom, #006bb3, #00397c);
   text-transform: uppercase;
-  height: 55px;
 }
 .game-menu-container {
   background: linear-gradient(to bottom, #006bb3, #00397c);
 }
 .game-menu-item {
-  height: 55px;
-  line-height: 55px;
+  height: 48px;
+  line-height: 48px;
   padding: 0 20px;
   display: inline-block;
   color: #fff;
   font-size: 14px;
   cursor: pointer;
   &.active {
-    background: rgba(0, 0, 0, 0.29);
+    background: rgba(0, 0, 0, 0.3);
+  }
+  &.hover {
+    background: rgba(0, 0, 0, 0.2);
   }
 }
 .category-menu {
@@ -171,7 +179,7 @@ export default {
   padding: 0 10px;
   display: inline-block;
   color: #fff;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   &.active {
     color: $yellow;
@@ -183,9 +191,8 @@ export default {
   color: #fff;
   font-size: 14px;
   padding: 0 20px;
-  right: 40px;
   &:hover {
-    background-color: rgba(20, 94, 168, 1);
+    background: rgba(0, 0, 0, 0.2);
   }
 }
 .el-menu--horizontal {
@@ -212,7 +219,10 @@ export default {
   position: relative;
 }
 .dropdown-menu-item {
-  height: 30px;
-  line-height: 30px;
+  height: 44px;
+  line-height: 44px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
 }
 </style>

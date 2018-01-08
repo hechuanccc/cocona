@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs m-b-lg">
+  <div class="tabs m-b">
     <div :class="[
       'tab',
       'text-center',
@@ -54,27 +54,24 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../style/vars.scss";
-.tabs{
-  font-size: 14px;
-}
 .tab {
-  box-sizing: border-box;
   display: inline-block;
-  height: 35px;
-  line-height: 1;
-  background-color: #ffffff;
-  border: solid 0.5px #cbcbcb;
-  padding: 10px 15px;
+  height: 32px;
+  line-height: 32px;
+  background-color: #fff;
+  border: solid 1px #cbcbcb;
+  margin-right: -1px;
+  padding: 0 15px;
   cursor: pointer;
   &.active {
-    border: solid 1.5px $azul;
+    border: solid 1px $primary;
+    background: $primary;
   }
 }
 .tab-text {
   color: #9b9b9b;
-  letter-spacing: 1px;
   &.active {
-    color: $azul;
+    color: #fff;
   }
 }
 </style>

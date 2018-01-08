@@ -124,10 +124,6 @@ body {
 .input-width {
   width: $form_width;
 }
-.el-input /deep/ .el-input__inner{
-  height: 25px;
-  border: solid 1px #c8c8c8;
-}
 .el-form-item /deep/ .el-form-item__label {
   @extend %form-label;
 }

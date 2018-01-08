@@ -48,14 +48,13 @@ export default {
 @import "../style/vars.scss";
 .main-navs
   display: inline-block
-  padding-right: 40px
 .nav-link
   display: inline-block
-  width: 127px
+  padding: 0 20px
   cursor: pointer
   text-align: center
-  color: $pinkish-grey
-  font-size: 18px
+  color: #666
+  font-size: 16px
 
 .online-service
   display: inline-block

@@ -383,7 +383,7 @@ export default {
 .main {
   box-sizing: border-box;
   background: #fff;
-  padding: 20px;
+  padding: 10px;
 }
 .tabs.small-font {
   font-size: 12px;

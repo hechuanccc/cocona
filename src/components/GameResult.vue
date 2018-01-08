@@ -4,7 +4,7 @@
       <p class="game">{{gameLatestResult.display_name}}</p>
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
-    <div class="balls-number" v-if="gameLatestResult">
+    <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult">
       <span
         v-for="(num, index) in resultNums"
         :key="gameLatestResult.issue_number + index"
@@ -13,7 +13,7 @@
         <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]}} </p>
       </span>
       <div class="ball-sum" v-if="showSum">
-        {{$t('navMenu.total')}}:
+        {{$t('navMenu.total')}}
         <span>
           <b>{{resultsSum}}</b>
         </span>
@@ -147,34 +147,44 @@ export default {
 @import "../style/vars.scss";
 
 .result-balls {
+  display: table;
   background: #fff;
   border-left: 5px solid $marine-blue;
   width: 49%;
   height: 55px;
   float: left;
   .balls-text {
+    display: table-cell;
+    vertical-align: middle;
     color: #4a4a4a;
-    padding-left: 20px;
     text-align: center;
-    p{
-      height: 27px;
-      line-height: 27px;
-      letter-spacing: 2px;
+    p {
+      width: 120px;
+      height: 18px;
+      line-height: 18px;
+    }
+    .issue {
+      color: #999;
+      font-size: 11px;
     }
   }
   .balls-number {
-    padding-left: 3px;
-    width: 275px;
-  }
-  div {
-    display: inline-block;
-    position: relative;
+    display: table-cell;
+    text-align: center;
     vertical-align: middle;
-    font-size: 12px;
+    height: 100%;
+    width: 100%;
   }
   span {
     display: inline-block;
-    margin-left: 2px;
+    margin: 1px 5px 1px 0;
+    vertical-align: middle;
+  }
+  .ball-sum {
+    display: inline-block;
+  }
+  .wrapper-hkl span{
+    margin-bottom: 10px;
   }
 }
 </style>

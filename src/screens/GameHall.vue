@@ -1,64 +1,63 @@
 <template>
   <div>
     <GameMenu path="game"/>
-    <div class="container p-l-xlg">
+    <div class="container m-l">
       <!-- user key props to force Vue to re-render router-view whenever route change -->
       <el-container>
         <el-aside width="200px">
-          <ul v-if="user.account_type===0" class="side-menu">
-            <li class="side-menu-title">
-              账户信息
-            </li>
-            <li class="side-menu-item">
-              <span class="text">余额</span>
-              <span class="amount balance">{{user.balance | currency('￥')}}</span>
-            </li>
-            <li class="side-menu-item">
-              <span class="text">未结</span>
-              <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
-            </li>
-            <li class="side-menu-button">
+          <div class="box">
+            <span class="title">账户信息</span>
+            <ul v-if="user.account_type===0" class="side-menu">
+              <li class="item">
+                <span class="text">余额</span>
+                <span class="amount balance">{{user.balance | currency('￥')}}</span>
+              </li>
+              <li class="item">
+                <span class="text">未结</span>
+                <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
+              </li>
+            </ul>
+            <ul v-else class="items">
+              <li class="item">
+                <span class="text">余额</span>
+                <span class="amount balance">{{user.balance | currency('￥')}}</span>
+              </li>
+              <li class="item">
+                <span class="text">未结</span>
+                <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
+              </li>
+            </ul>
+            <div v-if="user.account_type===0" class="buttons">
               <el-button class="large-btn" type="primary" @click="linkTo('/register')">立即注册</el-button>
-            </li>
-          </ul>
-          <ul v-else class="side-menu">
-            <li class="side-menu-title">
-              账户信息
-            </li>
-            <li class="side-menu-item">
-              <span class="text">余额</span>
-              <span class="amount balance">{{user.balance | currency('￥')}}</span>
-            </li>
-            <li class="side-menu-item">
-              <span class="text">未结</span>
-              <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
-            </li>
-            <li class="side-menu-button">
+            </div>
+            <div v-else class="buttons">
               <el-button class="small-btn" type="primary" @click="linkTo('/account/my/primary_info')">我的账号</el-button>
               <el-button class="small-btn" type="primary" @click="linkTo('/account/online_payment')">立即充值</el-button>
-            </li>
-          </ul>
-          <ul ref="sideMenuUl"  class="side-menu side-menu-ul" :style="{height: betrecords.length && (betrecords.length * 65 + 42 * 2) < gameMainAreaHeight ? betrecords.length * 65 + 42 * 2 + 'px' : betrecords.length ? gameMainAreaHeight + 'px' : 'auto'}">
-            <li class="side-menu-title">最新注单</li>
-            <li class="side-menu-record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
-              <div class="issueNumber">
-                <span>{{bet.issue_number}} 期</span>
-                <span class="amount">{{bet.bet_amount| currency('￥')}}</span>
-              </div>
-              <div class="play-name">{{bet.play.playgroup}}-{{bet.play.display_name}}</div>
-              <div v-if="bet.bet_options.options" class="selected-numbers">
-                已选号码：{{bet.bet_options.options | betOptionFilter}}
-              </div>
-              <div class="odds">{{bet.odds}}</div>
-            </li>
-            <li class="side-menu-empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
-            <li class="side-menu-button">
+            </div>
+          </div>
+          <div class="box">
+            <span class="title">最新注单</span>
+            <ul class="items" >
+              <li class="record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
+                <div class="issueNumber">
+                  <span>{{bet.issue_number}} 期</span>
+                </div>
+                <div class="play-name">玩法: {{bet.play.playgroup}}-{{bet.play.display_name}} & <span class="odds">{{bet.odds}}</span></div>
+                <div v-if="bet.bet_options.options" class="selected-numbers">
+                  号码：{{bet.bet_options.options | betOptionFilter}}
+                </div>
+                <div >金额: {{bet.bet_amount| currency('￥')}}</div>
+              </li>
+              <li class="empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
+              
+            </ul>
+            <div class="buttons" v-if="betrecords && betrecords.length > 0">
               <el-button v-if="user.account_type===0" class="large-btn" type="primary" @click="openBetRecordDialog">查看全部</el-button>
               <el-button v-else class="large-btn" type="primary" @click="linkTo('/account/finance/betrecord')">查看全部</el-button>
-            </li>
-          </ul>
+            </div>
+          </div>
         </el-aside>
-        <el-main class="m-t-lg" ref="mainGameArea" id="mainGameArea">
+        <el-main class="m-t">
           <router-view :key="$route.name + ($route.params.gameId || '')"/>
         </el-main>
       </el-container>
@@ -118,7 +117,6 @@ export default {
       fetchBet(gameData)
         .then(res => {
           this.betrecords = res
-          this.computeMainAreaHeight()
         })
     },
     linkTo (path) {
@@ -232,12 +230,6 @@ export default {
         }
         this.notifyIssueNumber[result.game] = result.issue_number
       })
-    },
-    computeMainAreaHeight () {
-      setTimeout(() => {
-        let mainHeight = document.getElementById('mainGameArea')
-        this.gameMainAreaHeight = mainHeight ? mainHeight.offsetHeight - 194 : 0
-      }, 1200)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -271,32 +263,34 @@ export default {
 
 <style scoped lang="scss">
 @import "../style/vars.scss";
-
 .el-main {
   padding: 0;
 }
-.side-menu {
-  margin-top: 20px;
+.box {
+  margin-top: 10px;
   background: #fff;
-  color: #9b9b9b;
-  font-size: 14px;
-  margin-right: 20px;
+  margin-right: 10px;
   max-height: 100vh;
-  &.side-menu-ul {
+  .items {
+    max-height: 300px;
+    overflow: scroll;
     overflow-y: scroll;
   }
-  .side-menu-title {
-    font-weight: 200;
+  .title {
+    display: block;
+    color: #9b9b9b;
+    font-size: 13px;
     text-align: center;
-    height: 40px;
-    line-height: 40px;
-    border-bottom: 2px solid $pinkish-grey;
+    height: 32px;
+    line-height: 32px;
+    border-bottom: 1px solid $pinkish-grey;
+    margin-bottom: 10px;
   }
-  .side-menu-item {
-    font-weight: 200;
+  .item {
     padding: 0 10px;
-    height: 40px;
-    line-height: 40px;
+    height: 24px;
+    line-height: 24px;
+    color: #666;
     .text {
       font-size: 12px;
     }
@@ -309,7 +303,8 @@ export default {
       text-align: right;
     }
   }
-  .side-menu-record {
+  .record {
+    color: #666;
     margin: 0 10px;
     padding: 5px 0;
     border-bottom: 1px solid #f5f5f5;
@@ -332,15 +327,16 @@ export default {
       word-break: break-all;
     }
   }
-  .side-menu-empty {
-    color: $pinkish-grey;
+  .empty {
+    color: #ccc;
     text-align: center;
     line-height: 30px;
     height: 30px;
-    padding: 20px 0;
+    padding: 0 0 10px;
     font-weight: 200;
   }
-  .side-menu-button {
+  .buttons {
+    margin-top: 10px;
     text-align: center;
     padding-bottom: 10px;
     .el-button {
