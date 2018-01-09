@@ -1,5 +1,5 @@
 <template>
-  <div class="logo">
+  <div class="logo p-l">
     <router-link to="/">
       <img :src="$store.state.common.homePageLogo" alt="logo" />
     </router-link>
@@ -21,10 +21,7 @@ export default {
   display: inline-block
   width: 225px
   height: 50px
-  padding-left: 40px
   vertical-align: middle
-  position: relative
-  top: -4px
   img
     width: 100%
     height: 100%

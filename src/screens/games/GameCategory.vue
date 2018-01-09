@@ -2,13 +2,13 @@
 <template>
   <div>
     <el-row class="bet-area m-b-lg">
-      <el-row type="flex" class="actions" justify="center">
+      <el-row type="flex" class="actions m-b" justify="center">
       <el-col :span="1" class="amount">金额</el-col>
       <el-col :span="3">
         <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount" />
       </el-col>
       <el-col class="m-l-lg" :span="4">
-        <el-button class="placeOrder-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
+        <el-button class="place-order-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
         <el-button size="small" @click="reset">重置</el-button>
       </el-col>
     </el-row>
@@ -87,19 +87,19 @@
         </div>
       </div>
        <el-row type="flex" class="actions" justify="center" v-if="!loading">
-                <el-col :span="1" class="amount">金额</el-col>
-                <el-col :span="3">
-                  <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount"/>
-                </el-col>
-                <el-col class="m-l-lg" :span="4">
-                  <el-button type="primary"
-                    class="placeOrder-btn"
-                    size="small"
-                    @click="openDialog"
-                    :disabled="gameClosed">下单</el-button>
-                  <el-button size="small" @click="reset">重置</el-button>
-                </el-col>
-              </el-row>
+        <el-col :span="1" class="amount">金额</el-col>
+        <el-col :span="3">
+          <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount"/>
+        </el-col>
+        <el-col class="m-l" :span="4">
+          <el-button type="primary"
+            class="place-order-btn"
+            size="small"
+            @click="openDialog"
+            :disabled="gameClosed">下单</el-button>
+          <el-button size="small" @click="reset">重置</el-button>
+        </el-col>
+      </el-row>
     </el-row>
     <el-dialog title="确认注单"
       width="40%"
@@ -521,7 +521,7 @@ export default {
     display: inline-block;
     cursor: pointer;
     float: left;
-    padding: 8px 20px;
+    padding: 6px 15px;
     margin: 0 -1px 2px 0;
     background: #fff;
     color: #666;
@@ -535,7 +535,6 @@ export default {
   }
 }
 .name {
-  font-weight: bold;
   line-height: $cell-height;
   border-right: $cell-border;
 }
@@ -564,14 +563,9 @@ export default {
   padding-left: 10px;
   font-weight: 700;
 }
-.actions {
-  background: #fff;
-  padding: 10px;
-  margin: 10px 0;
-}
 .bet-area {
   background: #fff;
-  padding: 20px;
+  padding: 10px;
 }
 .summary {
   font-size: 12px;
@@ -592,7 +586,7 @@ export default {
   padding-left: 10px;
   font-weight: 700;
 }
-.placeOrder-btn {
+.place-order-btn {
   background-color: $azul;
 }
 .el-input /deep/ .el-input__inner{
