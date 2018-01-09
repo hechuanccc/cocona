@@ -66,6 +66,13 @@
         </template>
       </el-table-column>
       <el-table-column
+        :width="70"
+        :label="$t('gameIntro.return_rate')">
+        <template slot-scope="scope">
+          <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${scope.row.play.return_rate}%)`: '0' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         :width="135"
         :label="$t('user.profit')">
         <template slot-scope="scope">
@@ -73,12 +80,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        :width="100"
+        :width="80"
         :label="$t('user.odd')"
         prop="odds">
       </el-table-column>
       <el-table-column
-        :width="100"
+        :width="80"
         :label="$t('common.memo')">
         <template slot-scope="scope">
           <span>{{ scope.row.remarks | statusFilter }}</span>
