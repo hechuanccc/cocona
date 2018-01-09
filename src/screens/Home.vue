@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container>
-      <el-main class='container' v-if="isHome">
+      <el-main class="container" v-if="isHome">
         <el-carousel indicator-position="inside" height="500px">
           <el-carousel-item v-for="banner in banners" :key="banner.id">
             <img :src="banner.image" :alt="banner.image" />
