@@ -135,7 +135,7 @@ export default {
 .main {
   display: inline-block;
   box-sizing: border-box;
-  width: 1095px;
+  width: 1170px;
   min-height: 50vh;
   max-height: 200vh;
   overflow: scroll;
