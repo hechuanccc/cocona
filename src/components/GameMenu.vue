@@ -116,7 +116,7 @@ export default {
   },
   name: 'gamemenu',
   methods: {
-    switchGame (key, index) {
+    switchGame (key) {
       if (key === '-1') {
         return false
       }
