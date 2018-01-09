@@ -68,7 +68,7 @@
             </router-link>
           </el-col>
           <el-col :span="12" class="text-center">
-            <a :href="$store.state.common.customerServiceUrl" target="_blank">
+            <a :href="$store.state.systemConfig.customerServiceUrl" target="_blank">
               <el-button class="dialog-button" type="primary">在线客服</el-button>
             </a>
           </el-col>
