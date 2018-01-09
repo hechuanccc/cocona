@@ -107,12 +107,8 @@
 <script>
 import { fetchRemitpayee, remit, fetchBank } from '../../api'
 import { msgFormatter, filtAmount } from '../../utils'
-import Tabs from '../../components/Tabs.vue'
 export default {
   name: 'Remit',
-  components: {
-    Tabs
-  },
   data () {
     let limitPass = (rule, value, callback) => {
       const lower = this.limit.lower ? parseFloat(this.limit.lower) : null

@@ -62,7 +62,7 @@ export default {
         },
         {
           display_name: this.$t('user.finance'),
-          route: '/account/finance/payment_record',
+          route: '/account/finance',
           icon: 'list-ul'
         },
         {
@@ -96,7 +96,7 @@ export default {
       const path = this.$route.path
       const paths = path.split('/')
       if (paths.length > 3) {
-        return `/${paths[1]}/${paths[2]}/${paths[3]}`
+        return `/${paths[1]}/${paths[2]}`
       } else {
         return path
       }

@@ -28,16 +28,18 @@
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
             <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password"></el-input>
           </el-form-item>
-          <el-form-item prop="verification_code_1" :label="$t('user.captcha')" required>
-            <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
-            </el-input>
+          <el-form-item :label="$t('user.captcha')" required>
+            <el-col :span="7">
+              <el-form-item  prop="verification_code_1">
+                <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
+                  <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4" :offset="12">
+              <img :src="captcha_src" alt="" height="30">
+            </el-col>
           </el-form-item>
-          <div class="captcha-row">
-            <img :src="captcha_src" alt="captcha" class="captcha" width="70" height="30">
-            <button type="button" class="captcha-getter" @click="fetchCaptcha">
-              <i class="el-icon-refresh"></i>
-            </button>
-          </div>
           <el-form-item>
             <el-button type="primary" size="medium" class="input-width submit" @click="submitForm">{{$t('action.submit')}}</el-button>
           </el-form-item>
@@ -220,31 +222,11 @@ export default {
   background-color: #ffffff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
-.captcha-row {
-  width: $form_width;
-  height: 30px;
-  padding-left: 70px;
-  text-align: justify;
-  margin-bottom: 20px;
-  &:after {
-    content: '';
-    display: inline-block;
-    width: 100%;
-  }
+.el-input /deep/ .el-input__suffix {
+  right: 0
 }
-.captcha {
-  display: inline;
-  vertical-align: middle;
-}
-.captcha-getter {
-  display: inline-block;
-  border-radius: 2px;
-  width: 40px;
-  height: 30px;
-  background-color: $pinkish-grey;
-  i {
-    font-size: 8px;
-    color: #ffffff;
-  }
+.el-button.el-button--info.el-button--small.captcha {
+  position: absolute;
+  right: 0;
 }
 </style>
