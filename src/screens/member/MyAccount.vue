@@ -1,41 +1,20 @@
 <template>
 <el-row>
-  <Tabs :items="tabs" @clicked="getCurrentContent"/>
+  <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tab-pane :label="$t('user.primary_info')" name="PrimaryInfo"></el-tab-pane>
+    <el-tab-pane :label="$t('user.password_setting')" name="PasswordSetting"></el-tab-pane>
+    <el-tab-pane :label="$t('user.withdraw_password')" name="WithdrawPassword"></el-tab-pane>
+    <el-tab-pane :label="$t('user.bank_info')" name="BankInfo"></el-tab-pane>
+  </el-tabs>
   <router-view/>
 </el-row>
 </template>
 <script>
-import Tabs from '../../components/Tabs.vue'
 export default {
   name: 'MyAccount',
-  components: {
-    Tabs
-  },
   data () {
     return {
-      nowTab: this.$route.name,
-      tabs: [
-        {
-          label: this.$t('user.primary_info'),
-          key: 'PrimaryInfo',
-          routename: 'PrimaryInfo'
-        },
-        {
-          label: this.$t('user.password_setting'),
-          key: 'PasswordSetting',
-          routename: 'PasswordSetting'
-        },
-        {
-          label: this.$t('user.withdraw_password'),
-          key: 'WithdrawPassword',
-          routename: 'WithdrawPassword'
-        },
-        {
-          label: this.$t('user.bank_info'),
-          key: 'BankInfo',
-          routename: 'BankInfo'
-        }
-      ]
+      activeName: this.$route.name
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -52,15 +31,13 @@ export default {
       }
     },
     '$route.name': function () {
-      this.nowTab = this.$route.name
+      this.activeName = this.$route.name
     }
   },
   methods: {
-    getCurrentContent (e) {
-      this.$router.push({ name: e.routename })
-      this.nowTab = e.routename
+    handleClick (tab, event) {
+      this.$router.push({ name: tab.name })
     }
   }
 }
 </script>
-
