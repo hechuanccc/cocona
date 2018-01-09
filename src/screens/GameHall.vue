@@ -339,14 +339,10 @@ export default {
     margin-top: 10px;
     text-align: center;
     padding-bottom: 10px;
-    .el-button {
-      background-color: $azul;
-    }
     .el-button:last-child {
       margin-left: 5px;
     }
     .large-btn.el-button {
-      background-color: $azul;
       margin: 0;
       width: 170px;
     }

@@ -2,7 +2,7 @@
   <el-row :gutter="40" class="pop-content">
     <el-col :span="12">
       <div class="register">
-        <span>{{$t('navMenu.guest')}}:</span>
+        <span>{{$t('navMenu.guest')}}</span>
         <div class="m-t">
           <el-button type="primary" @click="toRegister">
             <span>{{$t('navMenu.user_register')}}</span>
@@ -130,7 +130,7 @@ export default {
 }
 .register {
   text-align: center;
-  margin: auto;
+  
   &:after {
     content: " ";
     display: inline-block;
@@ -142,16 +142,12 @@ export default {
     border-right: 1px solid $pinkish-grey;
   }
   .el-button {
-    @extend %fat-button;
-    border: 1px solid $azul;
-    font-size: 14px;
+    margin: auto;
+    width: 200px;
+    display: block;
   }
   .el-button--primary {
-    background-color: $azul;
     margin-bottom: 15px;
-  }
-  .el-button--default {
-    color: $azul;
   }
 }
 
@@ -160,12 +156,9 @@ export default {
   .please-login {
     display: inline-block;
     text-align: left;
-    width: $form_width;
   }
-  .submit {
-    @extend %fat-button;
-    background-color: $azul;
-    font-size: 14px;
+  .el-button {
+    width: 220px;
   }
 }
 .login-title {
@@ -174,17 +167,6 @@ export default {
 .el-input {
   width: $form_width;
 }
-.el-input /deep/ .el-input__inner{
-  height: 25px;
-  border: solid 1px #c8c8c8;
-}
-.el-form-item /deep/ .el-form-item__label {
-  font-size: 12px;
-  line-height: 37px;
-  color: #4a4a4a;
-  position: relative;
-  right: 20px;
-}
 .forgot-password {
   display: inline-block;
   width: $form_width;
@@ -192,7 +174,6 @@ export default {
   position: relative;
   bottom: 20px;
   a {
-    color: $azul;
     font-size: 12px;
     font-weight: 500;
     text-decoration: none;
