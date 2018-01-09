@@ -22,6 +22,14 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/credit-card'
+import 'vue-awesome/icons/credit-card-alt'
+import 'vue-awesome/icons/file-text-o'
+import 'vue-awesome/icons/list-ul'
+import 'vue-awesome/icons/user'
+import 'vue-awesome/icons/envelope-o'
+import 'vue-awesome/icons/bullhorn'
+
 import urls from '../../api/urls'
 import style from '../../style'
 import Vue from 'vue'
@@ -40,37 +48,37 @@ export default {
         {
           display_name: this.$t('user.online_payment'),
           route: '/account/online_payment',
-          icon: 'el-icon-info'
+          icon: 'credit-card'
         },
         {
           display_name: this.$t('user.remit'),
           route: '/account/remit',
-          icon: 'el-icon-info'
+          icon: 'credit-card-alt'
         },
         {
           display_name: this.$t('user.withdraw'),
           route: '/account/withdraw',
-          icon: 'el-icon-info'
+          icon: 'file-text-o'
         },
         {
           display_name: this.$t('user.finance'),
           route: '/account/finance/payment_record',
-          icon: 'el-icon-info'
+          icon: 'list-ul'
         },
         {
           display_name: this.$t('user.my_account'),
           route: '/account/my',
-          icon: 'el-icon-info'
+          icon: 'user'
         },
         {
           display_name: this.$t('user.message'),
           route: '/account/message',
-          icon: 'el-icon-info'
+          icon: 'envelope-o'
         },
         {
           display_name: this.$t('user.announcement'),
           route: '/account/announcement',
-          icon: 'el-icon-info'
+          icon: 'bullhorn'
         }
       ]
     }

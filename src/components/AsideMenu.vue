@@ -10,13 +10,14 @@
         class="aside-item"
         @click="onClick(item)"
         :router="true">
-        <i v-if="item.icon" :name="item.icon" :class="['aside-icon' ,item.icon]"></i>
+        <icon v-if="item.icon" :name="item.icon" :class="['aside-icon' ,item.icon]"></icon>
         <span slot="title" class="menu-text p-l">{{item.display_name}}</span>
       </el-menu-item>
     </el-menu>
   </el-aside>
 </template>
 <script>
+
 export default {
   props: {
     items: {
