@@ -7,7 +7,7 @@
               <el-col class="text-right p-r" :span="12">
                 <label>当前账户余额</label>
               </el-col>
-              <el-col class="text-left p-l" :span="12">{{user.balance||0 | currency('￥')}}</el-col>
+              <el-col class="text-left p-l balance" :span="12">{{user.balance||0 | currency('￥')}}</el-col>
             </div>
             <div v-if="limit.lower">
               <el-col class="text-right p-r" :span="12">
@@ -51,7 +51,7 @@
           :closable="false"
           center>
         </el-alert>
-        <el-form :model="withdrawInfo" class="m-t" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="120px">
+        <el-form :model="withdrawInfo" class="m-t" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="80px">
           <el-form-item :label="$t('user.withdraw_amount')" prop="amount">
             <el-input class="input-width" type="number" v-model.number="withdrawInfo.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
           </el-form-item>
@@ -155,6 +155,9 @@ export default {
 @import '../../style/vars.scss';
 @import '../../style/base.scss';
 
+.balance {
+  color: $red;
+}
 .withdraw-actions {
   display: inline-block;
 }

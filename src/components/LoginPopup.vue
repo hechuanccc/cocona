@@ -37,7 +37,7 @@
           </transition>
           <div class="login-actions">
             <el-form-item>
-              <el-button type="primary" class="submit" @click="login">{{$t('navMenu.login')}}</el-button>
+              <el-button type="primary" @click="login">{{$t('navMenu.login')}}</el-button>
             </el-form-item>
             <div class="forgot-password">
               <a :href="$store.state.common.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>

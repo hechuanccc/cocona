@@ -61,7 +61,7 @@ export default {
   width: 1094px;
   height: auto;
   padding: 40px;
-  background-color: #ffffff;
+  background-color: #fff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   .box-card {
     min-height: 300px;
@@ -71,14 +71,12 @@ export default {
 
 .login {
   display: block;
-  box-sizing: border-box;
-  width: 256px;
+  width: 210px;
   height: 40px;
   line-height: 40px;
   padding-left: 30px;
   font-size: 14px;
-  letter-spacing: 2px;
-  background-color: #ffffff;
+  background-color: #fff;
   color: $azul;
   text-decoration: none;
   cursor: pointer;
