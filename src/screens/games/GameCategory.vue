@@ -586,9 +586,6 @@ export default {
   padding-left: 10px;
   font-weight: 700;
 }
-.place-order-btn {
-  background-color: $azul;
-}
 .el-input /deep/ .el-input__inner{
   height: 30px;
   border: solid 1px #c8c8c8;
