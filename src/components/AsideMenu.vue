@@ -50,7 +50,6 @@ export default {
   line-height: 40px;
   margin-right: 0;
   font-size: 14px;
-  letter-spacing: 2px;
   border-bottom: 1px solid #F9F9F9;
 }
 .el-menu .el-menu-item {

@@ -6,7 +6,7 @@
         <el-breadcrumb-item>注册会员</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="register-container">
-        <el-form :model="user" status-icon :rules="rules" ref="user" label-width="70px">
+        <el-form :model="user" status-icon :rules="rules" ref="user" label-width="120px">
           <el-form-item :label="$t('user.username')" prop="username">
             <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
           </el-form-item>
@@ -213,7 +213,7 @@ export default {
 
 .register-container{
   box-sizing: border-box;
-  width: 400px;
+  width: 600px;
   height: auto;
   padding: 30px 80px 20px 80px;
   margin: 0 auto 40px auto;
@@ -246,15 +246,5 @@ export default {
     font-size: 8px;
     color: #ffffff;
   }
-}
-.submit.el-button--medium {
-  height: 40px;
-}
-.el-form-item /deep/ .el-form-item__label {
-  @extend %form-label;
-}
-.el-input /deep/ .el-input__inner{
-  height: 25px;
-  border: solid 1px #c8c8c8;
 }
 </style>
