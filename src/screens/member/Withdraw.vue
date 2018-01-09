@@ -59,7 +59,7 @@
             <el-input class="input-width" name="withdraw_password" type="password" v-model="withdrawInfo.withdraw_password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="input-width submit" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
+            <el-button class="input-width" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
           </el-form-item>
         </el-form>
         </div>
@@ -73,7 +73,7 @@
         description=""
         show-icon>
       </el-alert>
-      <el-button class="submit" size="medium" type="primary" @click="$router.push('/account/my/bank_info')">添加银行信息</el-button>
+      <el-button class="input-width" size="medium" type="primary" @click="$router.push('/account/my/bank_info')">添加银行信息</el-button>
     </div>
   </div>
 </template>
@@ -154,11 +154,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../style/vars.scss';
 @import '../../style/base.scss';
-.submit {
-  @extend %fat-button;
-  font-size: 14px;
-  background-color: $azul;
-}
+
 .withdraw-actions {
   display: inline-block;
 }

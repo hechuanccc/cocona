@@ -24,7 +24,7 @@
             <el-input class="input-width" type="password" v-model="withdraw_password.repeat_password" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" class="submit" :disabled="updateStatus===1" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
+            <el-button type="primary" class="input-width" :disabled="updateStatus===1" @click="submitWithdrawForm">{{$t('action.submit')}}</el-button>
           </el-form-item>
         </el-form>
       </el-col>

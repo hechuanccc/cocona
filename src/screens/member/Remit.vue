@@ -57,7 +57,7 @@
                 <el-input clearable class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="m-r-lg" size="medium" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <el-button class="m-r-lg input-width" size="medium" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
                 <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
@@ -92,7 +92,7 @@
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="m-r-lg" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <el-button class="m-r-lg input-width" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
                 <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
