@@ -256,10 +256,14 @@ export default {
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
     }
+    .list-group-item:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
     .list-group-item {
       position: relative;
       display: block;
-      padding: 10px 15px;
+      padding: 5px 15px;
       margin-bottom: -1px;
       background-color: #fff;
       border: 1px solid #ddd;
@@ -271,5 +275,8 @@ export default {
         font-weight: bold;
       }
     }
+  }
+  .info-tips {
+    color: #999;
   }
 </style>

@@ -7,7 +7,7 @@
               <el-col class="text-right p-r" :span="12">
                 <label>当前账户余额</label>
               </el-col>
-              <el-col class="text-left p-l" :span="12">{{user.balance||0 | currency('￥')}}</el-col>
+              <el-col class="text-left p-l balance" :span="12">{{user.balance||0 | currency('￥')}}</el-col>
             </div>
             <div v-if="limit.lower">
               <el-col class="text-right p-r" :span="12">
@@ -51,7 +51,7 @@
           :closable="false"
           center>
         </el-alert>
-        <el-form :model="withdrawInfo" class="m-t" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="120px">
+        <el-form :model="withdrawInfo" class="m-t" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="80px">
           <el-form-item :label="$t('user.withdraw_amount')" prop="amount">
             <el-input class="input-width" type="number" v-model.number="withdrawInfo.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
           </el-form-item>
@@ -59,7 +59,7 @@
             <el-input class="input-width" name="withdraw_password" type="password" v-model="withdrawInfo.withdraw_password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="input-width submit" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
+            <el-button class="input-width" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
           </el-form-item>
         </el-form>
         </div>
@@ -154,10 +154,8 @@ export default {
 <style lang="scss" scoped>
 @import '../../style/vars.scss';
 @import '../../style/base.scss';
-.submit {
-  @extend %fat-button;
-  font-size: 14px;
-  background-color: $azul;
+.balance {
+  color: $red;
 }
 .withdraw-actions {
   display: inline-block;
