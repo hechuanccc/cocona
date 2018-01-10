@@ -58,7 +58,7 @@ export default {
 .main {
   box-sizing: border-box;
   display: inline-block;
-  width: 1094px;
+  width: 1170px;
   height: auto;
   padding: 40px;
   background-color: #fff;
