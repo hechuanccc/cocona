@@ -34,7 +34,7 @@
   <el-row>
     <el-table v-loading="loading" :data="betRecords" stripe>
       <el-table-column
-        :width="135"
+        :width="130"
         :label="$t('user.game_name')"
         prop="game.display_name">
       </el-table-column>
@@ -44,7 +44,7 @@
         prop="issue_number">
       </el-table-column>
       <el-table-column
-        :width="135"
+        :width="130"
         :label="$t('user.betdate')"
         prop="created_at">
         <template slot-scope="scope">
@@ -66,7 +66,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        :width="70"
+        :width="100"
         :label="$t('gameIntro.return_rate')">
         <template slot-scope="scope">
           <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${scope.row.play.return_rate}%)`: '0' }}</span>
@@ -80,12 +80,12 @@
         </template>
       </el-table-column>
       <el-table-column
-        :width="80"
+        :width="65"
         :label="$t('user.odd')"
         prop="odds">
       </el-table-column>
       <el-table-column
-        :width="80"
+        :width="75"
         :label="$t('common.memo')">
         <template slot-scope="scope">
           <span>{{ scope.row.remarks | statusFilter }}</span>

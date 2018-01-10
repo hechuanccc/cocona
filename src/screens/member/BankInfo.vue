@@ -29,7 +29,7 @@
           <el-input :disabled="!!user.bank" class="input-width" type="text" v-model="bankInfo.account"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="!!user.bank" class="input-width submit" type="primary" @click="submitBankInfo">{{$t('action.submit')}}</el-button>
+          <el-button :disabled="!!user.bank" class="input-width" type="primary" @click="submitBankInfo">{{$t('action.submit')}}</el-button>
           <div class="tips" v-if="user.bank">您的银行卡信息已提交，如需修改请联系客服</div>
           <div v-else>银行卡信息提交之后需联系客服方可修改，请谨慎填写。</div>
         </el-form-item>
