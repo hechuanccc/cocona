@@ -137,7 +137,6 @@ export default {
   box-sizing: border-box;
   width: 1170px;
   min-height: 50vh;
-  max-height: 200vh;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
   padding: 10px 20px;
