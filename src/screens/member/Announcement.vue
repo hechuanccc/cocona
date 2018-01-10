@@ -1,9 +1,15 @@
 <template>
   <div>
     <el-table
+      stripe
       :data="announcements"
       style="width: 100%"
       class="announcement">
+      <el-table-column
+        type="index"
+        label="#"
+        >
+      </el-table-column>
       <el-table-column
         :label= "$t('announcement.content')"
         prop="announcement"

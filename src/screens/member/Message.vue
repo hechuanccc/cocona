@@ -28,14 +28,24 @@
   </el-row>
   <el-table v-loading="loading" :data="messages" stripe :row-class-name="rowClassName" @row-click="readMsg">
     <el-table-column
-      :label="$t('user.sender')"
-      prop="sender_displayname">
-    </el-table-column>
-    <el-table-column
       :label="$t('user.title')"
       prop="title">
     </el-table-column>
-    <el-table-column :label="$t('user.send_date')">
+    <el-table-column
+      width="200"
+      :label="$t('user.sender')"
+      prop="sender_displayname">
+    </el-table-column>
+    
+    <el-table-column
+      width="150"
+      :label="$t('user.read_status')">
+      <template slot-scope="scope">
+        {{scope.row.status ? $t('user.read') : $t('user.unread')}}
+      </template>
+    </el-table-column>
+
+    <el-table-column :label="$t('user.send_date')" width="200">
       <template slot-scope="scope">
         <span>{{scope.row.sent_at | moment("YYYY-MM-DD HH:mm:ss")}}</span>
       </template>
@@ -144,7 +154,7 @@ export default {
   color: #999;
 }
 .unread {
-  color: #666;
+  color: #333;
 }
 </style>
 
