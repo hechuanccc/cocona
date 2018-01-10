@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <div class="aside">
         <AsideMenu @clicked="onClickChild" :items="pages"/>
-        <a class="m-l-xlg m-r-sm login" :href="$store.state.systemConfig.agentDashboardUrl">代理登入</a>
+        <a class="login m-l m-r" :href="$store.state.systemConfig.agentDashboardUrl">代理登入</a>
       </div>
       <div class="main m-b-xlg">
         <component :is="currentPage"></component>
