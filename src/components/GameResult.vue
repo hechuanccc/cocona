@@ -148,10 +148,9 @@ export default {
 
 .result-balls {
   display: table;
-  background: #fff;
-  border-left: 5px solid $marine-blue;
-  width: 49%;
-  height: 55px;
+  max-width: 440px;
+  height: 60px;
+  margin-left: 100px;
   float: left;
   .balls-text {
     display: table-cell;
@@ -165,7 +164,6 @@ export default {
     }
     .issue {
       color: #999;
-      font-size: 11px;
     }
   }
   .balls-number {
