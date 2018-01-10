@@ -131,7 +131,10 @@ export default {
     visitor: '游客',
     min_amount: '最小金额',
     max_amount: '最大金额',
-    unread_email: '未读信件'
+    unread_email: '未读信件',
+    read_status: '状态',
+    read: '已读',
+    unread: '未读'
   },
   gameIntro: {
     gameinfo: '游戏资讯：',
