@@ -12,7 +12,7 @@
           }
         ]">
         <Logo/>
-        <GameResult :gameid="$route.params.gameId" v-if="$route.path.indexOf('/game') >= 0"/>
+        <GameResult :gameid="$route.params.gameId" v-if="$route.path.indexOf('/game/') >= 0"/>
 
         <NavMenu :menus="isUserPage ? showUserMenus : menus" />
       </div>
