@@ -102,6 +102,8 @@ router.beforeEach((to, from, next) => {
   if ((firstMatched || to).meta.requiresAuth) {
     if (from && from.matched[0] && from.matched[0].path === to.matched[0].path) {
       next()
+    } else if (!store.state.user.logined) {
+      toHomeAndLogin(router)
     } else {
       store.commit('START_LOADING')
       store.dispatch('fetchUser')
@@ -120,6 +122,7 @@ router.beforeEach((to, from, next) => {
           }
         })
         .catch(error => {
+          store.commit('END_LOADING')
           // can't get user info
           toHomeAndLogin(router)
           return Promise.resolve(error)

@@ -258,6 +258,7 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.interval)
+    this.$root.bus.$off('new-betrecords')
   }
 }
 </script>
