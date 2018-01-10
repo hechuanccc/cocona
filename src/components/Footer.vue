@@ -2,12 +2,10 @@
   <div class="footer text-center">
     <div class="quick-info">
       <div class="sub-menu m-b-xlg container">
-        <router-link class="link"
+        <router-link class="link p-l p-r"
           v-for="(item, index) in subMenu"
           :key="index"
-          :to="item.route">
-          {{item.option}}
-        </router-link>
+          :to="item.route">{{item.option}}</router-link>
       </div>
       <div class="advice block-center">
         <div class="container">
@@ -80,9 +78,13 @@ export default {
 .sub-menu {
   padding-top: 35px;
   .link {
+    border-right: 1px solid #4a4a4a;
     @include text(1, #4a4a4a, 14px);
-    &:nth-child(n + 2):before {
-      content: '|';
+    &:last-child {
+      border: none
+    }
+    &:hover {
+      color: $primary
     }
   }
 }

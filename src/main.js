@@ -121,6 +121,9 @@ router.beforeEach((to, from, next) => {
         })
         .catch(error => {
           // can't get user info
+          setTimeout(() => {
+            store.commit('END_LOADING')
+          }, 1000)
           toHomeAndLogin(router)
           return Promise.resolve(error)
         })
