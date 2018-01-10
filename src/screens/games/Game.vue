@@ -3,11 +3,11 @@
     <div class="main">
       <el-row class="game-container">
         <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
-        <Countdown 
-          :schedule="schedule" 
-          v-if="schedule.id" 
-          :currentGame="currentGame" 
-          :gameClosed="gameClosed" 
+        <Countdown
+          :schedule="schedule"
+          v-if="schedule.id"
+          :currentGame="currentGame"
+          :gameClosed="gameClosed"
           :closeCountDown="closeCountDown"
           :resultCountDown="resultCountDown"/>
       </el-row>
@@ -190,6 +190,10 @@ export default {
     }
   },
   created () {
+    this.$root.bus.$on('refreshResult', () => {
+      this.fetchStatistic(this.currentGame.code)
+    })
+
     this.updateSchedule()
     const currentGame = this.$store.getters.gameById(this.$route.params.gameId)
     if (currentGame) {
@@ -197,6 +201,7 @@ export default {
     }
   },
   beforeDestroy () {
+    this.$root.bus.$off('refreshResult')
     clearInterval(this.timer)
   },
   methods: {
