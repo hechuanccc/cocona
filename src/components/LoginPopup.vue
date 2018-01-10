@@ -40,7 +40,7 @@
               <el-button type="primary" @click="login">{{$t('navMenu.login')}}</el-button>
             </el-form-item>
             <div class="forgot-password">
-              <a :href="$store.state.common.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
+              <a :href="$store.state.systemConfig.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
             </div>
           </div>
         </el-form>

@@ -49,7 +49,7 @@
                 <div >金额: {{bet.bet_amount| currency('￥')}}</div>
               </li>
               <li class="empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
-              
+
             </ul>
             <div class="buttons" v-if="betrecords && betrecords.length > 0">
               <el-button v-if="user.account_type===0" class="large-btn" type="primary" @click="openBetRecordDialog">查看全部</el-button>
@@ -273,8 +273,7 @@ export default {
   max-height: 100vh;
   .items {
     max-height: 300px;
-    overflow: scroll;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .title {
     display: block;

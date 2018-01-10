@@ -50,14 +50,6 @@ export default {
       value = parseInt(value)
       return value < 10 ? ('0' + value) : value
     }
-  },
-  data () {
-    return {
-    }
-  },
-  created () {
-  },
-  methods: {
   }
 }
 </script>
