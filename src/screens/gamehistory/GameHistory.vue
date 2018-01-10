@@ -787,7 +787,7 @@ export default {
     conditions () {
       return {
         date: this.selectedDate,
-        issue_number: this.inputPeriod
+        issue_number_q: this.inputPeriod
       }
     }
   },

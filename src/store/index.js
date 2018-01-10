@@ -103,8 +103,9 @@ export function createStore () {
           cols: 7
         }
       ],
-      common: {
+      systemConfig: {
         customerServiceUrl: '',
+        agentDashboardUrl: '',
         homePageLogo: ''
       }
     },

@@ -12,11 +12,11 @@
     </header>
     <el-container class="container no-border">
       <div class="aside m-r-sm">
-          <AsideMenu @clicked="onClickChild" :items="menus ? menus : []" :defaultactive="currentPath" />
-        </div>
-        <div class="main m-b-xlg">
-          <router-view/>
-        </div>
+        <AsideMenu @clicked="onClickChild" :items="menus ? menus : []" :defaultactive="currentPath" />
+      </div>
+      <div class="main m-b-xlg">
+        <router-view/>
+      </div>
     </el-container>
   </div>
 </template>
@@ -135,12 +135,12 @@ export default {
 .main {
   display: inline-block;
   box-sizing: border-box;
-  width: 1095px;
+  width: 1071px;
   min-height: 50vh;
   max-height: 200vh;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   background-color: #ffffff;
-  padding: 20px;
+  padding: 10px 20px;
   @extend %text;
 }
 .el-main {
