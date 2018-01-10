@@ -9,10 +9,10 @@
       :key="menu.icon">
       <span>{{menu.name}}</span>
     </router-link>
-    <a v-if="$store.state.common.customerServiceUrl"
+    <a v-if="$store.state.systemConfig.customerServiceUrl"
       class="online-service"
       target="_blank"
-      :href="$store.state.common.customerServiceUrl ? $store.state.common.customerServiceUrl : '#'">
+      :href="$store.state.systemConfig.customerServiceUrl ? $store.state.systemConfig.customerServiceUrl : '#'">
       {{$t('navMenu.online_service')}}
     </a>
   </ul>
