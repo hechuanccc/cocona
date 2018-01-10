@@ -228,6 +228,26 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 }
 
 @include bjkl8-num;
+
+@mixin auluck8-num {
+  .auluck8_pg_pc_pc{
+    display: inline-block;
+    background: url(../assets/ball_5_small.png) repeat-x;
+    width: 21px;
+    text-indent: -9999px;
+    height: 23px;
+    line-height: 23px;
+  }
+  @for $i from 1 through 80 {
+    .auluck8_pl_pc_pc_#{$i} {
+      background-position: 0 (-23px * ($i - 1));
+    }
+  }
+}
+
+@include auluck8-num;
+
+
 %cqlfball{
   display: inline-block;
   background: url(../assets/ball_nc_top.png) repeat-x;
