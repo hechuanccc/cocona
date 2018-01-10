@@ -127,7 +127,7 @@ export default {
                 this.$store.dispatch('fetchUser')
               }, 2000)
               this.pollResult(gameid)
-              this.$emit('refreshResult')
+              this.$root.bus.$emit('refreshResult')
             }
           })
         }, 5000)
