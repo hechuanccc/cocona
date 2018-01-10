@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs m-b">
+  <div class="tabs m-b-sm">
     <div :class="[
       'tab',
       'text-center',

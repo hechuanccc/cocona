@@ -47,8 +47,9 @@ export default {
 <style lang="sass" scoped>
 @import "../style/vars.scss";
 .main-navs
-  display: inline-block
+  float: right
 .nav-link
+  line-height: 60px
   display: inline-block
   padding: 0 20px
   cursor: pointer
