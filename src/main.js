@@ -102,8 +102,6 @@ router.beforeEach((to, from, next) => {
   if ((firstMatched || to).meta.requiresAuth) {
     if (from && from.matched[0] && from.matched[0].path === to.matched[0].path) {
       next()
-    } else if (!store.state.user.logined) {
-      toHomeAndLogin(router)
     } else {
       store.dispatch('fetchUser')
         .then(res => {
