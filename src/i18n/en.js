@@ -131,7 +131,10 @@ export default {
     visitor: 'Visitor',
     min_amount: 'Min Amount',
     max_amount: 'Max Amount',
-    unread_email: 'Unread Email'
+    unread_email: 'Unread Email',
+    read_status: '状态',
+    read: '已读',
+    unread: '未读'
   },
   gameIntro: {
     gameinfo: 'Game Info:',

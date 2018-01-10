@@ -6,6 +6,8 @@
         <el-date-picker
           v-model="startDate"
           type="date"
+          :id="'date1'"
+          :name="'date1'"
           :placeholder="$t('user.choose_date')"
           format="yyyy-MM-dd"
           value-format="yyyy-MM-dd">
@@ -15,6 +17,8 @@
       <el-form-item prop="endDate" :error="endDateValidate">
         <el-date-picker
           v-model="endDate"
+          :id="'date2'"
+          :name="'date2'"
           type="date"
           :placeholder="$t('user.choose_date')"
           format="yyyy-MM-dd"
@@ -36,7 +40,7 @@
       :label="$t('user.sender')"
       prop="sender_displayname">
     </el-table-column>
-    
+
     <el-table-column
       width="150"
       :label="$t('user.read_status')">
