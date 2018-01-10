@@ -84,6 +84,7 @@ axios.interceptors.response.use(res => {
 })
 
 const toHomeAndLogin = function (router) {
+  store.commit('RESET_USER')
   router.push({
     path: '/',
     query: {
@@ -141,10 +142,11 @@ Vue.mixin({
 
 gethomePage().then(
   response => {
-    store.dispatch('setCommon',
+    store.dispatch('setSystemConfig',
       {
         homePageLogo: response.icon,
-        customerServiceUrl: response.global_preferences.customer_service_url
+        customerServiceUrl: response.global_preferences.customer_service_url,
+        agentDashboardUrl: response.global_preferences.agent_dashboard_url
       })
   }
 )
