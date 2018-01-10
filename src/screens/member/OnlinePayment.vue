@@ -45,7 +45,7 @@
         </ul>
       </div>
       <div class="submit-button text-center">
-        <el-button class="submit" type="primary" :disabled="payeeError" @click="submit($event)">{{$t('action.submit')}}</el-button>
+        <el-button class="input-width" type="primary" :disabled="payeeError" @click="submit($event)">{{$t('action.submit')}}</el-button>
       </div>
     </el-form>
     <el-dialog

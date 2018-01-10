@@ -37,7 +37,7 @@
         <el-input class="input-width" v-model="user.wechat"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="submit" :disabled="updateStatus===1" @click="submitForm">{{$t('action.save')}}</el-button>
+        <el-button type="primary" class="input-width" :disabled="updateStatus===1" @click="submitForm">{{$t('action.save')}}</el-button>
       </el-form-item>
     </el-form>
   </el-col>

@@ -530,7 +530,7 @@ export default {
       border: 1px solid $primary;
       background: $primary;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
     }
   }
 }
@@ -593,15 +593,7 @@ export default {
 
 .extramini  /deep/ .el-input__inner {
   width: 90%;
-  height: 28px;
-}
-.sssss {
-  &:after {
-    display: inline-block;
-    content: '';
-    height: 100%;
-    vertical-align: middle;
-  }
+  height: 26px;
 }
 </style>
 

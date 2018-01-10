@@ -10,7 +10,8 @@
         class="aside-item"
         @click="onClick(item)"
         :router="true">
-        <icon v-if="item.icon" :name="item.icon" :class="['aside-icon' ,item.icon]"></icon>
+        <icon v-if="item.leftIcon" :name="item.leftIcon" :class="['aside-icon' ,item.leftIcon]"></icon>
+        <!-- for making a distinction with api 'icon' filed -->
         <span slot="title" class="menu-text p-l">{{item.display_name}}</span>
       </el-menu-item>
     </el-menu>

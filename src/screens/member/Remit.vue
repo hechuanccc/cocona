@@ -1,5 +1,5 @@
 <template>
-  <el-row class="remit-area">
+  <el-row>
     <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
       <el-tab-pane  v-if="item.payee_name||item.nickname" :label="item.payee_name||item.nickname" :name="String(item.id)" v-for="(item, index) in remitPayees" :key="index">
         <el-alert
@@ -42,7 +42,6 @@
               <el-form-item :label="$t('user.remit_time')" prop="remit_info.deposited_at" class="input-width">
                 <el-date-picker
                   v-model="remitData.remit_info.deposited_at"
-                  style="width:270px"
                   type="datetime"
                   :placeholder="$t('common.select_date_time')"
                   format="yyyy-MM-dd HH:mm"
@@ -57,7 +56,7 @@
                 <el-input clearable class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="m-r-lg" size="medium" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <el-button class="m-r-lg input-width" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
                 <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
@@ -77,7 +76,6 @@
                 <el-date-picker
                   class="input-width"
                   v-model="remitData.remit_info.deposited_at"
-                  style="width:270px"
                   type="datetime"
                   :placeholder="$t('common.select_date_time')"
                   format="yyyy-MM-dd HH:mm"
@@ -92,7 +90,7 @@
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="m-r-lg" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <el-button class="m-r-lg input-width" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
                 <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
@@ -235,14 +233,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .remit-area {
-    font-size: 14px;
-    .input-width {
-      width: 270px;
-    }
-    .text-info {
-      color: #31708f;
-    }
+  .text-info {
+    color: #31708f;
   }
   .text-muted {
     color: #777;
