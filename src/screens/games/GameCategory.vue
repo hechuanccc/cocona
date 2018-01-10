@@ -595,13 +595,5 @@ export default {
   width: 90%;
   height: 28px;
 }
-.sssss {
-  &:after {
-    display: inline-block;
-    content: '';
-    height: 100%;
-    vertical-align: middle;
-  }
-}
 </style>
 

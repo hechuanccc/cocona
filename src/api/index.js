@@ -110,7 +110,7 @@ export function fetchWinBet () {
 }
 
 export function fetchBetHistory (option) {
-  let url = `${urls.betrecord}?opt_expand=play&limit=20`
+  let url = `${urls.betrecord}?limit=20`
   Object.keys(option).forEach(key => {
     if (option[key]) {
       url += `&${key}=${option[key]}`

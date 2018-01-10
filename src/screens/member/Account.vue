@@ -48,37 +48,37 @@ export default {
         {
           display_name: this.$t('user.online_payment'),
           route: '/account/online_payment',
-          icon: 'credit-card'
+          leftIcon: 'credit-card'
         },
         {
           display_name: this.$t('user.remit'),
           route: '/account/remit',
-          icon: 'credit-card-alt'
+          leftIcon: 'credit-card-alt'
         },
         {
           display_name: this.$t('user.withdraw'),
           route: '/account/withdraw',
-          icon: 'file-text-o'
+          leftIcon: 'file-text-o'
         },
         {
           display_name: this.$t('user.finance'),
           route: '/account/finance',
-          icon: 'list-ul'
+          leftIcon: 'list-ul'
         },
         {
           display_name: this.$t('user.my_account'),
           route: '/account/my',
-          icon: 'user'
+          leftIcon: 'user'
         },
         {
           display_name: this.$t('user.message'),
           route: '/account/message',
-          icon: 'envelope-o'
+          leftIcon: 'envelope-o'
         },
         {
           display_name: this.$t('user.announcement'),
           route: '/account/announcement',
-          icon: 'bullhorn'
+          leftIcon: 'bullhorn'
         }
       ]
     }
