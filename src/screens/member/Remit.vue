@@ -1,7 +1,7 @@
 <template>
   <el-row class="remit-area">
     <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
-      <el-tab-pane  :label="item.remit_type == 1 ? bankMap[String(item.bank)] : item.remit_type == 2 ? '微信' : '支付宝'" :name="String(item.id)" v-for="(item, index) in remitPayees" :key="index">
+      <el-tab-pane  v-if="item.payee_name||item.nickname" :label="item.payee_name||item.nickname" :name="String(item.id)" v-for="(item, index) in remitPayees" :key="index">
         <el-alert
           :title="limitAlert"
           type="info"
