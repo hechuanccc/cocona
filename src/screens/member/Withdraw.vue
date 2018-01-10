@@ -74,7 +74,7 @@
         description=""
         show-icon>
       </el-alert>
-      <el-button class="input-width" size="medium" type="primary" @click="$router.push('/account/my/bank_info')">添加银行信息</el-button>
+      <el-button class="input-width m-t" size="medium" type="primary" @click="$router.push('/account/my/bank_info')">添加银行信息</el-button>
     </div>
   </div>
 </template>

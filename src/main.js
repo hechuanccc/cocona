@@ -105,24 +105,16 @@ router.beforeEach((to, from, next) => {
     } else if (!store.state.user.logined) {
       toHomeAndLogin(router)
     } else {
-      store.commit('START_LOADING')
       store.dispatch('fetchUser')
         .then(res => {
           // got user info
           if (res.account_type === 0 && to.matched[0].path === '/account') {
-            setTimeout(() => {
-              store.commit('END_LOADING')
-            }, 1000)
             toHomeAndLogin(router)
           } else {
-            setTimeout(() => {
-              store.commit('END_LOADING')
-            }, 1000)
             next()
           }
         })
         .catch(error => {
-          store.commit('END_LOADING')
           // can't get user info
           toHomeAndLogin(router)
           return Promise.resolve(error)
