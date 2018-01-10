@@ -114,7 +114,7 @@ export default {
   setMessageCount: ({ commit }, count) => {
     commit(types.SET_MESSAGE_COUNT, count)
   },
-  setCommon: ({ commit }, data) => {
-    commit(types.SET_COMMON, data)
+  setSystemConfig: ({ commit }, data) => {
+    commit(types.SET_SYSTEM_CONFIG, data)
   }
 }

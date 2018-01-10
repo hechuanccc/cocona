@@ -1,7 +1,7 @@
 <template>
   <div class="logo p-l">
     <router-link to="/">
-      <img :src="$store.state.common.homePageLogo" alt="logo" />
+      <img :src="$store.state.systemConfig.homePageLogo" alt="logo" />
     </router-link>
   </div>
 </template>

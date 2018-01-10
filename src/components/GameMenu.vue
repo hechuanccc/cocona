@@ -83,7 +83,7 @@ export default {
       return parseInt(this.$route.params.categoryId)
     },
     currentGame () {
-      return this.$store.getters.gameById(this.$route.params.gameId)
+      return this.$store.getters.gameById(this.$route.params.gameId) || {rank: 0}
     },
     ...mapGetters([
       'allGames'
