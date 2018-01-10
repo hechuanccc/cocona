@@ -223,7 +223,8 @@ export default {
           setTimeout(() => {
             this.$notify({
               showClose: true,
-              position: 'right',
+              position: 'left',
+              duration: 8000,
               message: winMsg(this.$createElement, result)
             })
           }, 1000)
