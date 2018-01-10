@@ -11,11 +11,20 @@
             :key="game.id" v-if="index < exposedCount"
             @click="switchGame(game.id+'')">{{game.display_name}}</li>
           <li
-            class="game-menu-item more-menu m-r-lg text-center"
+            :class="[
+              'game-menu-item',
+              'more-menu',
+              'm-r-lg',
+              'text-center',
+              {
+                'active': currentGame.rank > exposedCount
+              }
+            ]"
             @mouseover="dropdownActive = true"
             @mouseleave="dropdownActive = false"
             v-if="allGames.length > exposedCount">
-            更多
+            <span v-if="currentGame.rank > exposedCount">{{currentGame.display_name}}</span>
+            <span v-else>更多</span>
             <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
             <i class="el-icon-arrow-down icon" v-else/>
             <div v-show="dropdownActive" class="dropdown">
@@ -72,6 +81,9 @@ export default {
     },
     activeCategory () {
       return parseInt(this.$route.params.categoryId)
+    },
+    currentGame () {
+      return this.$store.getters.gameById(this.$route.params.gameId)
     },
     ...mapGetters([
       'allGames'

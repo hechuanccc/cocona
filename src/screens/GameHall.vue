@@ -42,7 +42,7 @@
                 <div class="issueNumber">
                   <span>{{bet.issue_number}} 期</span>
                 </div>
-                <div class="play-name">玩法: {{bet.play.playgroup}}-{{bet.play.display_name}} & <span class="odds">{{bet.odds}}</span></div>
+                <div class="play-name">玩法: {{bet.play.playgroup}}-{{bet.play.display_name}} @ <span class="odds">{{bet.odds}}</span></div>
                 <div v-if="bet.bet_options.options" class="selected-numbers">
                   号码：{{bet.bet_options.options | betOptionFilter}}
                 </div>

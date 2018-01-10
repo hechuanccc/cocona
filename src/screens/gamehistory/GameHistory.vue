@@ -846,20 +846,24 @@ export default {
     vertical-align: top;
   }
   .main {
-    width: 1095px;
+    width: 1170px;
   }
 }
 .schedule-container {
   text-align: center;
 }
 .historydata {
-  background: #ffffff;
+  padding: 10px;
+  background: #fff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
 .history-table {
   width: 100%;
   background: white;
   margin-bottom: 10px;
+  th {
+    font-weight: bold;
+  }
   td,
   th {
     border: $cell-border;

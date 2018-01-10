@@ -194,9 +194,9 @@ export default {
   font-size: 14px;
   letter-spacing: 1.6px;
   color: #4a4a4a;
-  background-color: #f9f9f9;
   .left {
-    display: inline;
+    display: inline-block;
+    width: 100%;
   }
   .right {
     display: inline;

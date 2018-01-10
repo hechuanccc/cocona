@@ -57,7 +57,7 @@
                 <el-input clearable class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="m-r-lg" size="medium" type="primary" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <el-button class="m-r-lg" size="medium" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
                 <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
@@ -92,14 +92,12 @@
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
               </el-form-item>
               <el-form-item>
-                <el-button class="m-r-lg" type="primary" @click="submitRemitForm(item.id)">提交入款资料</el-button>
+                <el-button class="m-r-lg" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
                 <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
               </el-form-item>
             </el-form>
           </el-col>
         </el-row>
-      </div>
-
       </el-tab-pane>
     </el-tabs>
   </el-row>
@@ -157,7 +155,8 @@ export default {
           label: 'QR Code',
           key: 'qrcode'
         }
-      ]
+      ],
+      remiting: false
     }
   },
   computed: {
@@ -202,6 +201,7 @@ export default {
     submitRemitForm (payeeId) {
       this.$refs[payeeId][0].validate((valid) => {
         if (valid) {
+          this.remiting = true
           remit(this.remitData).then(data => {
             this.successPayeeId = this.remitData.remit_info.remit_payee
             this.$message({
@@ -209,8 +209,10 @@ export default {
               message: this.$t('message.submit_success'),
               type: 'success'
             })
+            this.remiting = false
             this.$refs[payeeId][0].resetFields()
           }, errorMsg => {
+            this.remiting = false
             this.$message({
               showClose: true,
               message: msgFormatter(errorMsg),
@@ -256,10 +258,14 @@ export default {
       border-top-left-radius: 4px;
       border-top-right-radius: 4px;
     }
+    .list-group-item:last-child {
+      border-bottom-left-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
     .list-group-item {
       position: relative;
       display: block;
-      padding: 10px 15px;
+      padding: 5px 15px;
       margin-bottom: -1px;
       background-color: #fff;
       border: 1px solid #ddd;
@@ -271,5 +277,8 @@ export default {
         font-weight: bold;
       }
     }
+  }
+  .info-tips {
+    color: #999;
   }
 </style>

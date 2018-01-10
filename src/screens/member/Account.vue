@@ -135,7 +135,7 @@ export default {
 .main {
   display: inline-block;
   box-sizing: border-box;
-  width: 1071px;
+  width: 1170px;
   min-height: 50vh;
   max-height: 200vh;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
