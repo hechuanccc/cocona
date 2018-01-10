@@ -84,6 +84,7 @@ axios.interceptors.response.use(res => {
 })
 
 const toHomeAndLogin = function (router) {
+  store.commit('RESET_USER')
   router.push({
     path: '/',
     query: {
