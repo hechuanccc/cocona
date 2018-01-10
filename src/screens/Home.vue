@@ -4,7 +4,7 @@
       <el-main class="container" v-if="isHome">
         <el-carousel indicator-position="inside" height="500px">
           <el-carousel-item v-for="banner in banners" :key="banner.id">
-            <img :src="banner.image" :alt="banner.image" />
+            <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
           </el-carousel-item>
         </el-carousel>
         <el-row class="container block-center">
@@ -61,7 +61,6 @@
     </el-container>
   </div>
 </template>
-
 
 <script>
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
@@ -181,9 +180,11 @@ export default {
 
 <style lang="scss" scoped>
 /* banner */
-.el-carousel__item img {
+.el-carousel__item .banner-img {
   width: 100%;
   height: 100%;
+  background-size: cover;
+  background-position: center center;
 }
 
 /* announcement */
