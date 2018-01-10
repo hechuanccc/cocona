@@ -1,33 +1,15 @@
 <template>
   <div>
     <div class="main">
-      <el-row class="m-b">
-        <GameResult :gameid="$route.params.gameId" @refreshResult="fetchStatistic(currentGame.code)"/>
-        <div class="countdown-panel">
-          <div class="info-text" v-if="currentGame && schedule">
-            <p>{{currentGame.display_name}}</p>
-            <p class="issue-number">{{schedule.issue_number}}{{$t('navMenu.result_period')}}</p>
-          </div>
-          <div class="schedule" v-if="schedule && schedule.issue_number">
-            <div class="schedule-title">封盘</div>
-            <span v-if="!gameClosed" class="red countdown">
-              <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
-              <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
-            </span>
-            <span v-else class="red countdown">已封盘</span>
-          </div>
-          <div class="schedule" v-if="schedule && schedule.issue_number">
-            <div class="schedule-title">开奖</div>
-            <span v-if="!ended" class="green countdown">
-              <span v-if="resultCountDown.days > 0">{{resultCountDown.days}}天 </span>
-              <span v-if="resultCountDown.hours > 0">{{resultCountDown.hours | complete}}:</span>{{resultCountDown.minutes | complete}}:{{resultCountDown.seconds | complete}}
-            </span>
-            <span v-else class="green countdown">已结束</span>
-          </div>
-        </div>
-      </el-row>
       <el-row class="game-container">
         <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
+        <Countdown 
+          :schedule="schedule" 
+          v-if="schedule.id" 
+          :currentGame="currentGame" 
+          :gameClosed="gameClosed" 
+          :closeCountDown="closeCountDown"
+          :resultCountDown="resultCountDown"/>
       </el-row>
       <el-row class="m-b-xlg">
         <GameStatistic v-if="currentGame&&currentGame.code!='hkl'" :gameCode="currentGame.code" :resultStatistic="resultStatistic"/>
@@ -51,21 +33,17 @@
 <script>
 import { fetchSchedule, fetchStatistic } from '../../api'
 import gameTranslator from '../../utils/gameTranslator'
-import GameResult from '../../components/GameResult'
 import GameStatistic from '../../components/GameStatistic'
+import Countdown from '../../components/Countdown'
 import _ from 'lodash'
 
 export default {
   name: 'game',
   components: {
-    GameResult,
-    GameStatistic
+    GameStatistic,
+    Countdown
   },
   filters: {
-    complete (value) {
-      value = parseInt(value)
-      return value < 10 ? ('0' + value) : value
-    },
     typeFilter (val) {
       switch (val) {
         case 'dragon':
@@ -188,10 +166,6 @@ export default {
     gameClosed () {
       const c = this.closeCountDown
       return c.days + c.hours + c.minutes + c.seconds === 0
-    },
-    ended () {
-      const r = this.resultCountDown
-      return r.hours + r.hours + r.seconds + r.minutes === 0
     },
     currentGame () {
       return this.$store.getters.gameById(this.$route.params.gameId)
@@ -359,39 +333,7 @@ export default {
 .game-container /deep/ .el-tabs__item {
   padding: 0 12px;
 }
-.schedule {
-  text-align: center;
-  padding: 0 20px;
-  float: right;
-  .schedule-title {
-    height: 30px;
-    line-height: 30px;
-  }
-}
-.countdown-panel {
-  width: 49%;
-  height: 55px;
-  float: right;
-  background: #fff;
-  border-left: 5px solid $marine-blue;
-}
-.info-text {
-  color: #4a4a4a;
-  padding: 10px 0 0 20px;
-  float: left;
-  text-align: center;
-  p {
-    height: 16px;
-    line-height: 16px;
-  }
-}
-.issue-number {
-  color: #999;
-  display: inline-block;
-}
-.countdown {
-  font-size: 18px;
-}
+
 .el-tabs--top /deep/.el-tabs__nav-scroll {
   padding: 0;
 }
