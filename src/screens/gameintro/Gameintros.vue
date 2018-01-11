@@ -63,6 +63,7 @@
   import tjssc from './rules/tjssc'
   import bjkl8 from './rules/bjkl8'
   import er75ft from './rules/er75ft'
+  import auluck8 from './rules/auluck8'
   import AsideMenu from '../../components/AsideMenu'
   import _ from 'lodash'
 
@@ -84,7 +85,8 @@
       xjssc,
       tjssc,
       bjkl8,
-      er75ft
+      er75ft,
+      auluck8
     },
     data () {
       return {
