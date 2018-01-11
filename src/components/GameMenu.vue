@@ -4,10 +4,8 @@
       <div class="game-menu-container">
         <ul class="game-menu p-l container">
           <li
-            :class="['game-menu-item', activeGame === game.id ? 'active' : '', game.hover ? 'hover' : '']"
+            :class="['game-menu-item', activeGame === game.id ? 'active' : '']"
             v-for="(game, index) in allGames"
-            @mouseover="$set(game, 'hover', true)"
-            @mouseleave="$set(game, 'hover', false)"
             :key="game.id" v-if="index < exposedCount"
             @click="switchGame(game.id+'')">{{game.display_name}}</li>
           <li
@@ -176,7 +174,7 @@ export default {
   &.active {
     background: rgba(0, 0, 0, 0.3);
   }
-  &.hover {
+  &:hover {
     background: rgba(0, 0, 0, 0.2);
   }
 }
