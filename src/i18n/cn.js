@@ -136,7 +136,7 @@ export default {
     read_status: '状态',
     read: '已读',
     unread: '未读',
-    agreement: '用戶協議'
+    agreement: '用户协议'
   },
   gameIntro: {
     gameinfo: '游戏资讯：',
@@ -185,7 +185,7 @@ export default {
     max_withdraw_amount_validate: '必须小于最大取款金额',
     min_withdraw_amount_validate: '必须大于最小取款金额',
     date_range_validate: '起日不得晚于迄日',
-    agreement_validate: '请阅读并同意用戶協議'
+    agreement_validate: '请阅读并同意用户协议'
   },
   message: {
     save_success: '保存成功',
