@@ -55,22 +55,24 @@
                 @mouseleave="toggleHover(play, false)"
                 @click="toggleActive(plays[play.id], $event)"
                 v-if="play.code">
-                <el-col :span="play.value?2:6" class="name">
-                  <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
+                <el-col :span="play.value ? 2 : 6" class="name">
+                  <span>
+                    <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
+                  </span>
                 </el-col>
-                <el-col v-if="play.value" :span="17" class="number">
+                <el-col v-if="play.value" :span="13" class="number">
                   <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
                 </el-col>
-                <el-col :span="play.value?2:6" class="odds">
-                  {{ !gameClosed ? play.odds : '-'}}
+                <el-col :span="play.value ? 3 : 6" class="odds">
+                  <span>{{ !gameClosed ? play.odds : '-'}}</span>
                 </el-col>
-                <el-col :span="play.value?3:12" class="input">
+                <el-col :span="play.value ? 6 : 12" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
                 </el-col>
               </td>
-              <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol && playChunkIndex === playgroup.plays.length - 1"></td>
+              <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol"></td>
             </tr>
           </table>
           <component
@@ -108,7 +110,7 @@
       :close-on-click-modal="false"
       :close-on-press-escape="false">
       <el-table :data="activePlays" stripe max-height="350">
-        <el-table-column property="display_name" label="号码" width="150">
+        <el-table-column property="display_name" label="内容" >
           <template slot-scope="scope">
             <span class="play-name">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
@@ -138,12 +140,12 @@
             <span class="red bet-amount">{{scope.row.odds}}</span>
           </template>
         </el-table-column>
-        <el-table-column property="bet_amount" label="金额">
+        <el-table-column property="bet_amount" label="金额" width="150">
           <template slot-scope="scope">
             <el-input size="mini" v-model.number="scope.row.bet_amount" type="number" @keypress.native="filtAmount"></el-input>
           </template>
         </el-table-column>
-        <el-table-column property="active" label="确认">
+        <el-table-column property="active" label="确认" width="100">
           <template slot-scope="scope">
             <el-checkbox v-model="scope.row.active">确认</el-checkbox>
           </template>
@@ -534,20 +536,7 @@ export default {
     }
   }
 }
-.name {
-  line-height: $cell-height;
-  border-right: $cell-border;
-}
-.number {
-  text-align: left;
-}
-.odds {
-  background-color: #fff;
-  line-height: $cell-height;
-  border-right: $cell-border;
-  color: $red;
-  font-weight: 700;
-}
+
 .clickable {
   cursor: pointer;
 }
