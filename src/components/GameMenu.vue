@@ -166,7 +166,7 @@ export default {
 .game-menu-item {
   height: 48px;
   line-height: 48px;
-  padding: 0 20px;
+  padding: 0 16px;
   display: inline-block;
   color: #fff;
   font-size: 14px;
