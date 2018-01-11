@@ -75,7 +75,7 @@ export default {
 }
 .schedule {
   text-align: center;
-  padding: 0 20px;
+  padding: 0 15px;
   float: right;
   padding-top: 5px;
   .title {

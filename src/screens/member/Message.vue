@@ -88,7 +88,7 @@ export default {
     this.initFetchMessage()
     fetchMessageCount().then(res => {
       this.$store.dispatch('setMessageCount', res.message_count)
-    })
+    }).catch(() => {})
   },
   computed: {
     conditions () {

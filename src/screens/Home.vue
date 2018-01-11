@@ -8,7 +8,7 @@
           </el-carousel-item>
         </el-carousel>
         <el-row class="container block-center">
-          <div class="announcement" @click="showAnnouncementPopup = true">
+          <div class="announcement">
             <div class="left">
               <icon class="speaker m-l-xlg" scale="1.25" name="bullhorn"></icon>
               <span class="text m-l">{{$t('announcement.speaker')}}</span>
@@ -59,24 +59,6 @@
         <router-view/>
       </el-main>
     </el-container>
-    <el-dialog
-      class="announcement-popup"
-      :arrow="'always'"
-      :visible.sync="showAnnouncementPopup"
-      :width="'500px'">
-      <el-carousel height="200px"
-        :trigger="'click'"
-        :interval="5000"
-        :initial-index="currentAnnouncementIndex"
-        @change="showCurrentAnnouncementInPopup = false">
-        <el-carousel-item
-          v-for="item in announcements"
-          :key="item.rank">
-          <p class="text-center text" v-if="showCurrentAnnouncementInPopup">{{ announcements[currentAnnouncementIndex].announcement }}</p>
-          <p class="text-center text" v-else>{{ item.announcement }}</p>
-        </el-carousel-item>
-    </el-carousel>
-    </el-dialog>
   </div>
 </template>
 
@@ -96,9 +78,7 @@ export default {
         opacity: 1,
         translateY: 0
       },
-      currentAnnouncementIndex: 0,
-      showAnnouncementPopup: false,
-      showCurrentAnnouncementInPopup: true
+      currentAnnouncementIndex: 0
     }
   },
   computed: {
@@ -122,9 +102,6 @@ export default {
     }
   },
   methods: {
-    handlePopupCarouselActions () {
-      this.showCurrentAnnouncementInPopup = true
-    },
     animate () {
       setTimeout(() => {
         if (this.announcementStyle.opacity <= 0) {
@@ -231,7 +208,6 @@ export default {
       box-sizing: border-box;
       padding-left: 140px;
       width: 100%;
-      cursor: pointer;
       overflow: hidden;
     }
   }
@@ -353,21 +329,5 @@ export default {
 /* lay over the default padding */
 .el-main {
   padding: 0;
-}
-
-.announcement-popup {
-  .text {
-    padding-bottom: 80px;
-  }
-}
-
-.announcement-popup /deep/ .el-carousel__indicator {
-  .el-carousel__button {
-    width: 5px;
-    height: 5px;
-    margin: 2px;
-    background-color: black;
-    border-radius: 50%;
-  }
 }
 </style>
