@@ -1,67 +1,65 @@
 <template>
   <div>
     <GameMenu path="game"/>
-    <div class="container m-l">
-      <!-- user key props to force Vue to re-render router-view whenever route change -->
-      <el-container>
-        <el-aside width="200px">
-          <div class="box">
-            <span class="title">账户信息</span>
-            <ul v-if="user.account_type===0" class="side-menu">
-              <li class="item">
-                <span class="text">余额</span>
-                <span class="amount balance">{{user.balance | currency('￥')}}</span>
-              </li>
-              <li class="item">
-                <span class="text">未结</span>
-                <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
-              </li>
-            </ul>
-            <ul v-else class="items">
-              <li class="item">
-                <span class="text">余额</span>
-                <span class="amount balance">{{user.balance | currency('￥')}}</span>
-              </li>
-              <li class="item">
-                <span class="text">未结</span>
-                <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
-              </li>
-            </ul>
-            <div v-if="user.account_type===0" class="buttons">
-              <el-button class="large-btn" type="primary" @click="linkTo('/register')">立即注册</el-button>
-            </div>
-            <div v-else class="buttons">
-              <el-button class="small-btn" type="primary" @click="linkTo('/account/my/primary_info')">我的账号</el-button>
-              <el-button class="small-btn" type="primary" @click="linkTo('/account/online_payment')">立即充值</el-button>
-            </div>
+    <!-- user key props to force Vue to re-render router-view whenever route change -->
+    <el-container>
+      <el-aside width="200px">
+        <div class="box">
+          <span class="title">账户信息</span>
+          <ul v-if="user.account_type===0" class="side-menu">
+            <li class="item">
+              <span class="text">余额</span>
+              <span class="amount balance">{{user.balance | currency('￥')}}</span>
+            </li>
+            <li class="item">
+              <span class="text">未结</span>
+              <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
+            </li>
+          </ul>
+          <ul v-else class="items">
+            <li class="item">
+              <span class="text">余额</span>
+              <span class="amount balance">{{user.balance | currency('￥')}}</span>
+            </li>
+            <li class="item">
+              <span class="text">未结</span>
+              <span class="amount">{{user.unsettled||0 | currency('￥')}}</span>
+            </li>
+          </ul>
+          <div v-if="user.account_type===0" class="buttons">
+            <el-button class="large-btn" type="primary" @click="linkTo('/register')">立即注册</el-button>
           </div>
-          <div class="box">
-            <span class="title">最新注单</span>
-            <ul class="items" >
-              <li class="record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
-                <div class="issueNumber">
-                  <span>{{bet.issue_number}} 期</span>
-                </div>
-                <div class="play-name">玩法: {{bet.play.playgroup}}-{{bet.play.display_name}} @ <span class="odds">{{bet.odds}}</span></div>
-                <div v-if="bet.bet_options.options" class="selected-numbers">
-                  号码：{{bet.bet_options.options | betOptionFilter}}
-                </div>
-                <div >金额: {{bet.bet_amount| currency('￥')}}</div>
-              </li>
-              <li class="empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
+          <div v-else class="buttons">
+            <el-button class="small-btn" type="primary" @click="linkTo('/account/my/primary_info')">我的账号</el-button>
+            <el-button class="small-btn" type="primary" @click="linkTo('/account/online_payment')">立即充值</el-button>
+          </div>
+        </div>
+        <div class="box">
+          <span class="title">最新注单</span>
+          <ul class="items" >
+            <li class="record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
+              <div class="issueNumber">
+                <span>{{bet.issue_number}} 期</span>
+              </div>
+              <div class="play-name">玩法: {{bet.play.playgroup}}-{{bet.play.display_name}} @ <span class="odds">{{bet.odds}}</span></div>
+              <div v-if="bet.bet_options.options" class="selected-numbers">
+                号码：{{bet.bet_options.options | betOptionFilter}}
+              </div>
+              <div >金额: {{bet.bet_amount| currency('￥')}}</div>
+            </li>
+            <li class="empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
 
-            </ul>
-            <div class="buttons" v-if="betrecords && betrecords.length > 0">
-              <el-button v-if="user.account_type===0" class="large-btn" type="primary" @click="openBetRecordDialog">查看全部</el-button>
-              <el-button v-else class="large-btn" type="primary" @click="linkTo('/account/finance/betrecord')">查看全部</el-button>
-            </div>
+          </ul>
+          <div class="buttons" v-if="betrecords && betrecords.length > 0">
+            <el-button v-if="user.account_type===0" class="large-btn" type="primary" @click="openBetRecordDialog">查看全部</el-button>
+            <el-button v-else class="large-btn" type="primary" @click="linkTo('/account/finance/betrecord')">查看全部</el-button>
           </div>
-        </el-aside>
-        <el-main class="m-t">
-          <router-view :key="$route.name + ($route.params.gameId || '')"/>
-        </el-main>
-      </el-container>
-    </div>
+        </div>
+      </el-aside>
+      <el-main class="m-t">
+        <router-view :key="$route.name + ($route.params.gameId || '')"/>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
@@ -271,9 +269,8 @@ export default {
   padding: 0;
 }
 .box {
-  margin-top: 10px;
+  margin: 10px 10px 0;
   background: #fff;
-  margin-right: 10px;
   max-height: 100vh;
   .items {
     max-height: 300px;

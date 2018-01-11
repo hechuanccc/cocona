@@ -67,7 +67,7 @@ export default {
   data () {
     return {
       style,
-      exposedCount: 12,
+      exposedCount: 11,
       dropdownActive: false,
       categories: [],
       isBusy: false

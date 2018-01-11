@@ -84,13 +84,6 @@
         :label="$t('user.odd')"
         prop="odds">
       </el-table-column>
-      <el-table-column
-        :width="75"
-        :label="$t('common.memo')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.remarks | statusFilter }}</span>
-        </template>
-      </el-table-column>
     </el-table>
     <el-pagination
       v-if="totalCount > pageSize"
