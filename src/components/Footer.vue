@@ -46,7 +46,7 @@ export default {
         },
         {
           option: '关于我们',
-          route: '/'
+          route: '/faq'
         },
         {
           option: '最新优惠',
