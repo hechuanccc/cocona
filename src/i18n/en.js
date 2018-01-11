@@ -133,9 +133,10 @@ export default {
     min_amount: 'Min Amount',
     max_amount: 'Max Amount',
     unread_email: 'Unread Email',
-    read_status: '状态',
-    read: '已读',
-    unread: '未读'
+    read_status: 'status',
+    read: 'read',
+    unread: 'unread',
+    agreement: 'Agreement'
   },
   gameIntro: {
     gameinfo: 'Game Info:',
@@ -183,7 +184,8 @@ export default {
     min_amount_validate: 'must higher than min deposit amount',
     max_withdraw_amount_validate: 'must lower than max withdraw amount',
     min_withdraw_amount_validate: 'must higher than min withdraw amount',
-    date_range_validate: 'start date must before end date'
+    date_range_validate: 'start date must before end date',
+    agreement_validate: 'Please accept the agreement first'
   },
   message: {
     save_success: 'Save Success',
