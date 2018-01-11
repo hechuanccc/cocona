@@ -1,6 +1,6 @@
 <template>
   <el-row class="row-bg">
-    <div class="container">
+    <div class="container m-b-xlg">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item> {{$t('navMenu.promotion')}} </el-breadcrumb-item>
@@ -9,7 +9,6 @@
     </div>
   </el-row>
 </template>
-
 <script>
 import PromoBanner from './PromoBanner.vue'
 import { getPromotions } from '../../api'

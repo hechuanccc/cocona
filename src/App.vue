@@ -1,7 +1,9 @@
 <template>
   <div v-loading.fullscreen="$store.state.loading" element-loading-text="加载中...">
     <Top />
-    <router-view/>
+    <div :style="{minHeight: bodyHeight + 'px'}">
+      <router-view/>
+    </div>
     <Bottom v-if="!$route.params.gameId"/>
     <el-dialog
       :title="$t('navMenu.pop_title')"
@@ -85,6 +87,9 @@ export default {
     }
   },
   computed: {
+    bodyHeight () {
+      return ~~(document.documentElement.clientHeight - 330)
+    },
     showLoginDialog () {
       return this.$store.state.loginDialogVisible
     },
