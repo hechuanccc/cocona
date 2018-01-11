@@ -2,10 +2,10 @@
   <div>
     <div class="main">
       <el-row class="game-container">
-        <router-view 
-          :key="$route.name + ($route.params.categoryId || '')" 
-          :game="currentGame" 
-          :scheduleId="schedule ? schedule.id : null" 
+        <router-view
+          :key="$route.name + ($route.params.categoryId || '')"
+          :game="currentGame"
+          :scheduleId="schedule ? schedule.id : null"
           :gameClosed="gameClosed" />
         <Countdown
           :schedule="schedule"
@@ -16,9 +16,9 @@
           :resultCountDown="resultCountDown"/>
       </el-row>
       <el-row class="m-b-xlg">
-        <GameStatistic 
-          v-if="currentGame&&currentGame.code!='hkl' && resultStatistic.historyStatistic" 
-          :gameCode="currentGame.code" 
+        <GameStatistic
+          v-if="currentGame&&currentGame.code!='hkl'"
+          :gameCode="currentGame.code"
           :resultStatistic="resultStatistic"/>
       </el-row>
     </div>
@@ -261,9 +261,6 @@ export default {
     },
     fetchStatistic (code) {
       fetchStatistic(code).then(result => {
-        if (!result.length) {
-          return
-        }
         const translator = gameTranslator[code]
         const frequencyStats = result.frequency_stats
         this.resultStatistic = {
