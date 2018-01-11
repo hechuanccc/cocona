@@ -1,5 +1,5 @@
 <template>
-  <el-aside class="m-l m-r" width="240px">
+  <el-aside class="m-l m-r" width="200px">
     <el-menu :default-active="active"
       text-color="#4a4a4a"
       active-text-color="#fff"
@@ -46,17 +46,19 @@ export default {
 <style lang="scss" scopex>
 @import '../style/vars';
 .aside-item {
-  width: 240px;
   height: 40px;
   line-height: 40px;
   margin-right: 0;
   font-size: 14px;
   border-bottom: 1px solid #F9F9F9;
 }
+.aside .el-menu {
+  border: none;
+}
 .el-menu .el-menu-item {
   &.is-active {
-    background: url("../assets/active_menu_bg_right.png") no-repeat -10px center;
-    background-size: 256px 44px;
+    background: url("../assets/active_menu_bg_right.png") no-repeat 0px center;
+    background-size: 200px 44px;
     border-bottom-width: 0;
   }
 }

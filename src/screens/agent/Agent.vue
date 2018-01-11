@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <div class="aside">
         <AsideMenu @clicked="onClickChild" :items="pages"/>
-        <a class="login m-l m-r" :href="$store.state.systemConfig.agentDashboardUrl">代理登入</a>
+        <a class="login m-l m-r" :href="$store.state.systemConfig.agentDashboardUrl" target="_blank">代理登录 &raquo;</a>
       </div>
       <div class="main m-b-xlg">
         <component :is="currentPage"></component>
@@ -58,7 +58,7 @@ export default {
 .main {
   box-sizing: border-box;
   display: inline-block;
-  width: 1170px;
+  width: $main_width;
   height: auto;
   padding: 40px;
   background-color: #fff;
@@ -71,7 +71,7 @@ export default {
 
 .login {
   display: block;
-  width: 210px;
+  width: 170px;
   height: 40px;
   line-height: 40px;
   padding-left: 30px;

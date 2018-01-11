@@ -26,7 +26,7 @@
 .main
   box-sizing: border-box
   display: inline-block
-  width: 1094px
+  width: $main_width;
   height: auto
   padding: 40px
   background-color: #ffffff
