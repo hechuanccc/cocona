@@ -101,11 +101,12 @@ $gd_length: length($results_gd);
     margin-left: 1px;
   }
   &:nth-child(7) {
+    margin-left: 10px;
     &:before {
       content: '＋';
       color: black;
       position: relative;
-      right: 11px;
+      right: 15px;
       top: 3px;
     }
   }

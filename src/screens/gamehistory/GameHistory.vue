@@ -846,7 +846,7 @@ export default {
     vertical-align: top;
   }
   .main {
-    width: 1170px;
+    width: $main_width;
   }
 }
 .schedule-container {
