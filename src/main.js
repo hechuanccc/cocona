@@ -139,7 +139,8 @@ gethomePage().then(
       {
         homePageLogo: response.icon,
         customerServiceUrl: response.global_preferences.customer_service_url,
-        agentDashboardUrl: response.global_preferences.agent_dashboard_url
+        agentDashboardUrl: response.global_preferences.agent_dashboard_url,
+        siteName: response.name
       })
   }
 )

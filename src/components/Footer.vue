@@ -1,14 +1,14 @@
 <template>
   <div class="footer text-center">
     <div class="quick-info">
-      <div class="sub-menu m-b-xlg container">
+      <div :class="['sub-menu', 'm-b-xlg', {'container': notHomePage}]">
         <router-link class="link p-l p-r"
           v-for="(item, index) in subMenu"
           :key="index"
           :to="item.route">{{item.option}}</router-link>
       </div>
       <div class="advice block-center">
-        <div class="container">
+        <div :class="[{'container': notHomePage}]">
           <p>理性购彩，未满 18 周岁未成年人禁止购彩及兑奖</p>
           <p>健康游戏忠告：抵制黑平台不良游戏，拒绝盗版小平台游戏。注意自我保护，谨防受骗上当。</p>
           <p>温馨提示您适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="copyright">
-      <div class="text container">Copyright © Reserved</div>
+      <div :class="['text',{'container': notHomePage}]">Copyright © Reserved</div>
     </div>
   </div>
 </template>
@@ -53,6 +53,11 @@ export default {
           route: '/promotions'
         }
       ]
+    }
+  },
+  computed: {
+    notHomePage () {
+      return this.$route.name !== 'Home'
     }
   }
 }

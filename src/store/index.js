@@ -106,7 +106,8 @@ export function createStore () {
       systemConfig: {
         customerServiceUrl: '',
         agentDashboardUrl: '',
-        homePageLogo: ''
+        homePageLogo: '',
+        siteName: ''
       }
     },
     actions,
