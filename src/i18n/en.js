@@ -24,7 +24,8 @@ export default {
     result_period: 'Period',
     total: 'Total',
     no_result: "There's no result now",
-    online_service: 'Service'
+    online_service: 'Service',
+    register_now: 'Register Now'
   },
   agent: {
     register: 'Register',
@@ -131,7 +132,10 @@ export default {
     visitor: 'Visitor',
     min_amount: 'Min Amount',
     max_amount: 'Max Amount',
-    unread_email: 'Unread Email'
+    unread_email: 'Unread Email',
+    read_status: '状态',
+    read: '已读',
+    unread: '未读'
   },
   gameIntro: {
     gameinfo: 'Game Info:',

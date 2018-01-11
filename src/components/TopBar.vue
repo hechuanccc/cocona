@@ -29,6 +29,9 @@
       <li>
         <a class="link" @click="openBetRecordDialog">我的注单</a>
       </li>
+      <li>
+        <router-link to="/register" class="link">{{$t('navMenu.register_now')}}</router-link>
+      </li>
     </ul>
     <ul v-else-if="user.account_type === 1" class="account-links" >
       <li>
