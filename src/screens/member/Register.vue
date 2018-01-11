@@ -40,8 +40,8 @@
           </el-form-item>
           <el-form-item :label="''" prop="hasAgree">
             <el-checkbox-group v-model="user.hasAgree">
-              <el-checkbox name="hasAgree">
-                我已阅读并完全同意<a class="agreement-link" @click="dialogVisible = true">用戶協議</a>
+              <el-checkbox :label="'hasAgree'" name="hasAgree">
+                我已阅读并完全同意<a class="agreement-link" @click="dialogVisible = true">用户协议</a>
               </el-checkbox>
             </el-checkbox-group>
           </el-form-item>
@@ -51,7 +51,7 @@
         </el-form>
       </div>
     </div>
-    <el-dialog title="用戶協議"
+    <el-dialog title="用户协议"
       width="40%"
       :visible.sync="dialogVisible">
       <p>01. 使用本公司网站的客户，请留意阁下所在的国家或居住地的相关法律规定，如有疑问应就相关问题，寻求当地法律意见。</p>
@@ -155,7 +155,7 @@ export default {
         withdraw_password: '',
         verification_code_0: '',
         verification_code_1: '',
-        hasAgree: []
+        hasAgree: ['hasAgree']
       },
       dialogVisible: false,
       captcha_src: '',
