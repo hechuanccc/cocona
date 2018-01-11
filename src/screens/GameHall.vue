@@ -99,7 +99,9 @@ export default {
   },
   watch: {
     '$route': function (to, from) {
-      this.betrecords = []
+      if (to.params.gameId !== from.params.gameId) {
+        this.betrecords = []
+      }
       if (to.path === '/game') {
         this.$store.dispatch('fetchGames').catch(error => {
           if (error.response.status > 400) {
@@ -168,7 +170,7 @@ export default {
     getWinNotify () {
       fetchWinBet().then(results => {
         this.generateWinMessage(results)
-      })
+      }).catch(() => {})
     },
     generateWinMessage (results) {
       let winMsg = (createElement, result) => {

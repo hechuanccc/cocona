@@ -36,7 +36,7 @@
       :label="$t('user.sender')"
       prop="sender_displayname">
     </el-table-column>
-    
+
     <el-table-column
       width="150"
       :label="$t('user.read_status')">
@@ -84,7 +84,7 @@ export default {
     this.initFetchMessage()
     fetchMessageCount().then(res => {
       this.$store.dispatch('setMessageCount', res.message_count)
-    })
+    }).catch(() => {})
   },
   computed: {
     conditions () {

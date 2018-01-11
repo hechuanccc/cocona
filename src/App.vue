@@ -81,7 +81,7 @@ export default {
       }
       fetchMessageCount().then(res => {
         this.$store.dispatch('setMessageCount', res.message_count)
-      })
+      }).catch(() => {})
     }
   },
   computed: {
@@ -96,9 +96,7 @@ export default {
     if (this.$cookie.get('access_token')) {
       this.$store.dispatch('fetchUser').then(() => {
         this.getMessageCount()
-      }).catch(error => {
-        Promise.resolve(error)
-      })
+      }).catch(() => {})
     }
 
     this.getMessageInterval = window.setInterval(() => {
