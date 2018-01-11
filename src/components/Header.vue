@@ -13,7 +13,7 @@
         ]">
         <Logo/>
         <GameResult :gameid="$route.params.gameId" v-if="$route.path.indexOf('/game/') >= 0"/>
-
+        <AudioButton/>
         <NavMenu :menus="isUserPage ? showUserMenus : menus" />
       </div>
     </div>
@@ -25,6 +25,7 @@ import TopBar from '../components/TopBar'
 import NavMenu from '../components/NavMenu'
 import Logo from '../components/Logo'
 import GameResult from '../components/GameResult'
+import AudioButton from '../components/AudioButton'
 
 export default {
   data () {
@@ -63,7 +64,8 @@ export default {
     TopBar,
     NavMenu,
     Logo,
-    GameResult
+    GameResult,
+    AudioButton
   },
   computed: {
     currentGame () {
