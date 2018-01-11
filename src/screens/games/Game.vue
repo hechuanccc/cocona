@@ -185,8 +185,8 @@ export default {
         })
       }
     },
-    'currentGame': function (currentGame) {
-      this.fetchStatistic(currentGame.code)
+    'currentGame.code': function (code) {
+      this.fetchStatistic(code)
     }
   },
   created () {
