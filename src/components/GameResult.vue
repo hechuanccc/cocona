@@ -153,6 +153,7 @@ export default {
   margin-left: 100px;
   float: left;
   .balls-text {
+    font-size: 13px;
     display: table-cell;
     vertical-align: middle;
     color: #4a4a4a;

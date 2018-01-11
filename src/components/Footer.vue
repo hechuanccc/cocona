@@ -2,7 +2,7 @@
   <div class="footer text-center">
     <div class="quick-info">
       <div :class="['sub-menu', 'm-b-xlg', {'container': notHomePage}]">
-        <router-link class="link p-l p-r"
+        <router-link class="link"
           v-for="(item, index) in subMenu"
           :key="index"
           :to="item.route">{{item.option}}</router-link>
@@ -46,7 +46,7 @@ export default {
         },
         {
           option: '关于我们',
-          route: '/'
+          route: '/faq'
         },
         {
           option: '最新优惠',
@@ -66,7 +66,6 @@ export default {
 <style lang="scss" scoped>
 @import '../style/vars.scss';
 @mixin text ($line-height, $color, $sz) {
-  letter-spacing: 1.3px;
   font-size:  $sz;
   line-height: $line-height;
   color: $color;
@@ -83,8 +82,9 @@ export default {
 .sub-menu {
   padding-top: 35px;
   .link {
-    border-right: 1px solid #4a4a4a;
-    @include text(1, #4a4a4a, 14px);
+    padding: 0 20px;
+    border-right: 1px solid #ccc;
+    @include text(1, #666, 14px);
     &:last-child {
       border: none
     }
@@ -95,13 +95,13 @@ export default {
 }
 
 .advice {
-  @include text(1.8, #4a4a4a, 12px);
+  @include text(1.8, #999, 12px);
 }
 
 .copyright {
   @include block(34px, #2f2f2f);
   .text {
-    @include text(34px, #ffffff, 12px);
+    @include text(34px, #ccc, 12px);
   }
 }
 </style>

@@ -2,7 +2,11 @@
   <div>
     <div class="main">
       <el-row class="game-container">
-        <router-view :key="$route.name + ($route.params.categoryId || '')" :game="currentGame" :scheduleId="schedule ? schedule.id : null" :gameClosed="gameClosed" />
+        <router-view 
+          :key="$route.name + ($route.params.categoryId || '')" 
+          :game="currentGame" 
+          :scheduleId="schedule ? schedule.id : null" 
+          :gameClosed="gameClosed" />
         <Countdown
           :schedule="schedule"
           v-if="schedule.id"
@@ -12,7 +16,10 @@
           :resultCountDown="resultCountDown"/>
       </el-row>
       <el-row class="m-b-xlg">
-        <GameStatistic v-if="currentGame&&currentGame.code!='hkl'" :gameCode="currentGame.code" :resultStatistic="resultStatistic"/>
+        <GameStatistic 
+          v-if="currentGame&&currentGame.code!='hkl' && resultStatistic.historyStatistic" 
+          :gameCode="currentGame.code" 
+          :resultStatistic="resultStatistic"/>
       </el-row>
     </div>
     <div class="leader-board">
@@ -254,6 +261,9 @@ export default {
     },
     fetchStatistic (code) {
       fetchStatistic(code).then(result => {
+        if (!result.length) {
+          return
+        }
         const translator = gameTranslator[code]
         const frequencyStats = result.frequency_stats
         this.resultStatistic = {
@@ -290,7 +300,7 @@ export default {
 @import "../../style/vars.scss";
 .leader-board {
   float: right;
-  width: 200px;
+  width: 180px;
   background: #fff;
   font-size: 13px;
   .title {
@@ -323,12 +333,9 @@ export default {
 }
 .main {
   float: left;
-  width: 1030px;
+  width: 890px;
 }
 
-.main-play {
-  width: 1050px;
-}
 .current-game {
   position: absolute;
 }
