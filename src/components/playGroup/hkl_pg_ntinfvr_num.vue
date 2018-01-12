@@ -16,7 +16,7 @@
       </tbody>
     </table>
     <table class="play-table">
-      <tr>
+      <tr class="group-name">
         <td :colspan="customPlayGroup.cols" align="center">
           <div v-if="!gameClosed">请勾选</div>
           <div v-else>封盘</div>
@@ -38,8 +38,10 @@
             }
           ]">
           <el-col :span="12" class="name">
-            <span :class="[playgroup.code, playgroup.code + '_' + option.num]">
-              {{option.num}}
+            <span>
+              <span :class="[playgroup.code, playgroup.code + '_' + option.num]">
+                {{option.num}}
+              </span>
             </span>
           </el-col>
           <el-col :span="12" class="checkbox input">
@@ -202,6 +204,7 @@ export default {
   text-align: center;
   display: block;
   font-weight: 700;
+  border: none;
 }
 .disabled {
   color: #ccc;

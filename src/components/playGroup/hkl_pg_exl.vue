@@ -24,7 +24,7 @@
         <el-col :span="2" class="name">
           <span>{{option.display_name}}</span>
         </el-col>
-        <el-col :span="15" class="number">
+        <el-col :span="15" class="number p-l">
           <span :class="['hkl_pg_exl', `hkl_pg_exl_${num}`]" v-for="(num,index) in option.value" :key="index">{{num}}</span>
         </el-col>
         <el-col :span="4" class="odds">
@@ -195,9 +195,6 @@ export default {
   text-align: center;
   display: block;
   font-weight: 700;
-}
-.number {
-  text-align: left;
 }
 .disabled {
   color: #ccc;
