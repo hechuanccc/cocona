@@ -135,7 +135,7 @@ export default {
               this.$root.bus.$emit('refreshResult')
             }
           })
-        }, 5000)
+        }, 1000)
         this.pollResult(gameid)
       }, startPollingTime)
     }
