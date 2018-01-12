@@ -95,7 +95,10 @@ export default {
   computed: {
     ...mapGetters([
       'user'
-    ])
+    ]),
+    currentGame () {
+      return this.$store.getters.gameById(this.$route.params.gameId)
+    }
   },
   watch: {
     '$route': function (to, from) {
@@ -229,6 +232,9 @@ export default {
               duration: 8000,
               message: winMsg(this.$createElement, result)
             })
+            if (result.game === this.currentGame.display_name) {
+              this.$root.bus.$emit('win-notify')
+            }
           }, 1000)
         }
         this.notifyIssueNumber[result.game] = result.issue_number

@@ -163,7 +163,7 @@ export default {
     color: #4a4a4a;
     text-align: center;
     p {
-      width: 120px;
+      width: 100px;
       height: 18px;
       line-height: 18px;
     }
