@@ -16,13 +16,13 @@
       </tbody>
     </table>
     <table class="play-table">
-      <tr>
+      <tr class="group-name">
         <td :colspan="customPlayGroup.cols" align="center">
           <div v-if="!gameClosed">请勾选</div>
           <div v-else>封盘</div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup" :key="row+'optionGroup'">
+      <tr v-for="row in optionGroup" :key="row+'optionGroup'" align="center">
         <td
           @click="selectOption(option, $event)"
           @mouseover="option.hover = true"
@@ -36,9 +36,11 @@
             }
           ]">
           <el-col :span="3" class="name">
-            <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacs[option.num - 1].xiao}}</span>
+            <span>
+              <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacs[option.num - 1].xiao}}</span>
+            </span>
           </el-col>
-          <el-col :span="17" class="number" align="left">
+          <el-col :span="17" class="number" align="center">
             <span v-for="(zodiacNum, index) in formattedZodiacNums[option.num - 1]"
               :class="['m-r-sm',playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
               :key="index">
@@ -196,6 +198,7 @@ export default {
   text-align: center;
   display: block;
   font-weight: 700;
+  border: none;
 }
 .disabled {
   color: #ccc;

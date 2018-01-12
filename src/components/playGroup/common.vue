@@ -107,7 +107,9 @@
             }
           ]">
           <el-col :span="12" class="name">
-            <span :class="[playgroup.code, playgroup.code + '_' + option.num]">{{option.num}}</span>
+            <span>
+              <span :class="[playgroup.code, playgroup.code + '_' + option.num]">{{option.num}}</span>
+            </span>
           </el-col>
           <el-col :span="12" class="checkbox input">
             <el-checkbox v-model="option.selected" v-if="!gameClosed"></el-checkbox>
@@ -297,6 +299,7 @@ export default {
 
 .group-name {
   cursor: pointer;
+
 }
 .odds {
   line-height: $cell-height;
@@ -304,6 +307,8 @@ export default {
   text-align: center;
   display: block;
   font-weight: 700;
+  height: auto;
+  border: none;
 }
 .disabled {
   color: #ccc;

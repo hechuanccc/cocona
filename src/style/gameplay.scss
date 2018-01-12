@@ -14,24 +14,59 @@
 
 .input {
   background: #fff;
-  height: $cell-height;
+  height: 100%;
+  display: table;
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
 }
-
+.name {
+  height: 100%;
+  display: table;
+  background: #ecf5ff;
+  > span {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+.number {
+  height: 100%;
+  border-left: $cell-border;
+}
+.odds {
+  background-color: #fff;
+  height: 100%;
+  border-right: $cell-border;
+  border-left: $cell-border;
+  color: $red;
+  line-height: 100%;
+  font-weight: 700;
+  display: table;
+  span {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
 .play-table {
   width: 100%;
-  background: #ecf5ff;
   margin-bottom: 10px;
   border: $cell-border;
   td,
   th {
+    background: #fff;
     border: $cell-border;
     height: $cell-height;
     line-height: $cell-height;
   }
   .group-name {
+    background: #ecf5ff;
     line-height: $cell-height;
     text-align: center;
     font-weight: bold;
+    td {
+      background: #ecf5ff;
+    }
   }
   .hover {
     .name,
