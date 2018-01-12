@@ -19,14 +19,17 @@ export default {
     }
   },
   created () {
-    this.$root.bus.$on('win-notify', () => {
+    this.$root.bus.$on('refreshResult', this.play)
+  },
+  methods: {
+    play () {
       if (this.audioStatus) {
         this.$refs.audio.play()
       }
-    })
+    }
   },
   beforeDestroy () {
-    this.$root.bus.$off('win-notify')
+    this.$root.bus.$off('refreshResult', this.play)
   }
 }
 </script>
