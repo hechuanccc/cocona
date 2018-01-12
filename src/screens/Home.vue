@@ -12,7 +12,7 @@
               <icon class="speaker" color="#666" scale="1" name="bullhorn"></icon>
               <span class="text">{{$t('announcement.speaker')}}</span>
             </div>
-            <div class="content">
+            <div class="content" @click="announcementDialogVisible = true">
               <span class="text"
                 :style="{
                   'opacity': announcementStyle.opacity,
@@ -40,7 +40,7 @@
             <el-button round type="primary" size="large" @click.native="$router.push('/game/')">更多游戏 &raquo;</el-button>
           </div>
         </el-row>
-        <el-row class="ads container">
+       <el-row class="ads container">
           <el-col
             v-for="(item, index) in descriptions"
             class="ad"
@@ -61,6 +61,27 @@
       <el-main v-else>
         <router-view/>
       </el-main>
+    <el-dialog
+      :title="$t('announcement.speaker')"
+      :visible.sync="announcementDialogVisible"
+      :width="'400px'"
+      @close="showCurrentAnnouncementInPopup = true"
+      center>
+      <el-carousel :height="'200px'"
+        @change="showCurrentAnnouncementInPopup = false"
+        class="announcement-popup"
+        :initial-index="currentAnnouncementIndex">
+        <el-carousel-item v-for="item in announcements"
+          :key="item.rank">
+          <p v-if="showCurrentAnnouncementInPopup && announcements[currentAnnouncementIndex]" class="text-center" key="announcement">
+            {{announcements[currentAnnouncementIndex].announcement || ''}}
+          </p>
+          <p class="text-center" key="announcement" v-else>
+            {{ item.announcement }}
+          </p>
+        </el-carousel-item>
+      </el-carousel>
+    </el-dialog>
   </div>
 </template>
 
@@ -80,7 +101,9 @@ export default {
         opacity: 1,
         translateY: 0
       },
-      currentAnnouncementIndex: 0
+      currentAnnouncementIndex: 0,
+      announcementDialogVisible: false,
+      showCurrentAnnouncementInPopup: true
     }
   },
   computed: {
@@ -211,6 +234,7 @@ export default {
   }
   .content {
     display: inline-block;
+    cursor: pointer;
     .text {
       padding-left: 20px;
       width: 100%;
@@ -322,4 +346,12 @@ export default {
 .el-main {
   padding: 0;
 }
+
+.el-carousel.announcement-popup /deep/ .el-carousel__button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: black;
+}
+
 </style>

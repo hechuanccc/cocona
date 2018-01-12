@@ -208,7 +208,8 @@ export default {
                         {
                           style: {
                             color: 'red',
-                            fontSize: '14px'
+                            fontSize: '14px',
+                            lineHeight: '28px'
                           }
                         },
                         `中奖金额：${win.settlement_amount}`
