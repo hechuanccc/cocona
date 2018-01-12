@@ -5,7 +5,7 @@
       :visible.sync="showContent"
       :width="'700px'">
       <div v-html="promo.description"></div>
-  </el-dialog>
+    </el-dialog>
   </div>
 </template>
 <style lang="sass" scoped>
