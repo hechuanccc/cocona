@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-main class="container" v-if="isHome">
+      <el-main v-if="isHome">
         <el-carousel indicator-position="inside" height="500px">
           <el-carousel-item v-for="banner in banners" :key="banner.id">
             <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
@@ -62,7 +61,6 @@
       <el-main v-else>
         <router-view/>
       </el-main>
-    </el-container>
     <el-dialog
       :title="$t('announcement.speaker')"
       :visible.sync="announcementDialogVisible"
