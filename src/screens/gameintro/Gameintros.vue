@@ -64,6 +64,8 @@
   import bjkl8 from './rules/bjkl8'
   import er75ft from './rules/er75ft'
   import auluck8 from './rules/auluck8'
+  import jnd28 from './rules/jnd28'
+  import fc3d from './rules/fc3d'
   import AsideMenu from '../../components/AsideMenu'
   import _ from 'lodash'
 
@@ -86,7 +88,9 @@
       tjssc,
       bjkl8,
       er75ft,
-      auluck8
+      auluck8,
+      jnd28,
+      fc3d
     },
     data () {
       return {
