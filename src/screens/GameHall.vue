@@ -93,7 +93,10 @@ export default {
   computed: {
     ...mapGetters([
       'user'
-    ])
+    ]),
+    currentGame () {
+      return this.$store.getters.gameById(this.$route.params.gameId)
+    }
   },
   watch: {
     '$route': function (to, from) {

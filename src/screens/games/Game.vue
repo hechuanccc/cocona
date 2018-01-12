@@ -192,23 +192,21 @@ export default {
         })
       }
     },
-    'currentGame.code': function (code) {
-      this.fetchStatistic(code)
+    'currentGame.code': function () {
+      this.fetchStatistic()
     }
   },
   created () {
-    this.$root.bus.$on('refreshResult', () => {
-      this.fetchStatistic(this.currentGame.code)
-    })
+    this.$root.bus.$on('refreshResult', this.fetchStatistic)
 
     this.updateSchedule()
     const currentGame = this.$store.getters.gameById(this.$route.params.gameId)
     if (currentGame) {
-      this.fetchStatistic(currentGame.code)
+      this.fetchStatistic()
     }
   },
   beforeDestroy () {
-    this.$root.bus.$off('refreshResult')
+    this.$root.bus.$off('refreshResult', this.fetchStatistic)
     clearInterval(this.timer)
   },
   methods: {
@@ -259,7 +257,8 @@ export default {
         seconds
       }
     },
-    fetchStatistic (code) {
+    fetchStatistic () {
+      const code = this.currentGame.code
       fetchStatistic(code).then(result => {
         const translator = gameTranslator[code]
         const frequencyStats = result.frequency_stats
