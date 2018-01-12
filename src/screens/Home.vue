@@ -73,10 +73,10 @@
         :initial-index="currentAnnouncementIndex">
         <el-carousel-item v-for="item in announcements"
           :key="item.rank">
-          <p v-if="showCurrentAnnouncementInPopup && announcements[currentAnnouncementIndex]" class="text-center">
+          <p v-if="showCurrentAnnouncementInPopup && announcements[currentAnnouncementIndex]" class="text-center" key="announcement">
             {{announcements[currentAnnouncementIndex].announcement || ''}}
           </p>
-          <p class="text-center" v-else>
+          <p class="text-center" key="announcement" v-else>
             {{ item.announcement }}
           </p>
         </el-carousel-item>
