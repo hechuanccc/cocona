@@ -113,7 +113,7 @@ export function fetchBetHistory (option) {
   let url = `${urls.betrecord}?limit=20`
   Object.keys(option).forEach(key => {
     if (option[key]) {
-      url += `&${key}=${option[key].slice()}`
+      url += `&${key}=${option[key]}`
     }
   })
   return axios.get(url)
