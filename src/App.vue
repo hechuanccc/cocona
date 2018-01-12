@@ -43,7 +43,8 @@ export default {
   data () {
     return {
       timer: '',
-      getMessageInterval: ''
+      getMessageInterval: '',
+      bodyHeight: ~~(document.documentElement.clientHeight - 330)
     }
   },
   components: {
@@ -87,9 +88,6 @@ export default {
     }
   },
   computed: {
-    bodyHeight () {
-      return ~~(document.documentElement.clientHeight - 330)
-    },
     showLoginDialog () {
       return this.$store.state.loginDialogVisible
     },
