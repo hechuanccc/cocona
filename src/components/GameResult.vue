@@ -4,6 +4,7 @@
       <p class="game">{{gameLatestResult.display_name}}</p>
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
+    <AudioButton class="audio-button"/>
     <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult">
       <span
         v-for="(num, index) in resultNums"
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+import AudioButton from '../components/AudioButton'
 import {fetchGameResult} from '../api'
 import _ from 'lodash'
 
@@ -31,6 +33,9 @@ export default {
     gameid: {
       type: String
     }
+  },
+  components: {
+    AudioButton
   },
   data () {
     return {
@@ -159,13 +164,18 @@ export default {
     color: #4a4a4a;
     text-align: center;
     p {
-      width: 120px;
+      width: 100px;
       height: 18px;
       line-height: 18px;
     }
     .issue {
       color: #999;
     }
+  }
+  .audio-button{
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
   }
   .balls-number {
     display: table-cell;
