@@ -148,7 +148,7 @@ export default {
 
 .result-balls {
   display: table;
-  max-width: 440px;
+  max-width: 425px;
   height: 60px;
   margin-left: 100px;
   float: left;

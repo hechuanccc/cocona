@@ -8,7 +8,7 @@
           </el-carousel-item>
         </el-carousel>
         <el-row class="container block-center">
-          <div class="announcement">
+          <div class="announcement" @click="announcementDialogVisible = true">
             <div class="left">
               <icon class="speaker m-l-xlg" scale="1.25" name="bullhorn"></icon>
               <span class="text m-l">{{$t('announcement.speaker')}}</span>
@@ -59,6 +59,28 @@
         <router-view/>
       </el-main>
     </el-container>
+    <el-dialog
+      :title="$t('announcement.speaker')"
+      :visible.sync="announcementDialogVisible"
+      :width="'400px'"
+      @close="showCurrentAnnouncementInPopup = true"
+      center>
+      <el-carousel :height="'200px'"
+        @change="showCurrentAnnouncementInPopup = false"
+        class="announcement-popup"
+        :initial-index="currentAnnouncementIndex">
+        <el-carousel-item v-for="item in announcements"
+          :key="item.rank"
+          >
+          <p v-if="showCurrentAnnouncementInPopup && announcements[currentAnnouncementIndex]" class="text-center">
+            {{announcements[currentAnnouncementIndex].announcement || ''}}
+          </p>
+          <p class="text-center" v-else>
+            {{ item.announcement }}
+          </p>
+        </el-carousel-item>
+      </el-carousel>
+    </el-dialog>
   </div>
 </template>
 
@@ -78,7 +100,9 @@ export default {
         opacity: 1,
         translateY: 0
       },
-      currentAnnouncementIndex: 0
+      currentAnnouncementIndex: 0,
+      announcementDialogVisible: false,
+      showCurrentAnnouncementInPopup: true
     }
   },
   computed: {
@@ -195,6 +219,7 @@ export default {
   font-size: 14px;
   letter-spacing: 1.6px;
   color: #4a4a4a;
+  cursor: pointer;
   .left {
     display: inline-block;
     width: 100%;
@@ -330,4 +355,12 @@ export default {
 .el-main {
   padding: 0;
 }
+
+.el-carousel.announcement-popup /deep/ .el-carousel__button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: black;
+}
+
 </style>
