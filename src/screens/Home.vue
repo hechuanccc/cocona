@@ -12,7 +12,7 @@
               <icon class="speaker" color="#666" scale="1" name="bullhorn"></icon>
               <span class="text">{{$t('announcement.speaker')}}</span>
             </div>
-            <div class="content">
+            <div class="content" @click="announcementDialogVisible = true">
               <span class="text"
                 :style="{
                   'opacity': announcementStyle.opacity,
@@ -235,6 +235,7 @@ export default {
   }
   .content {
     display: inline-block;
+    cursor: pointer;
     .text {
       padding-left: 20px;
       width: 100%;
