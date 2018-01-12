@@ -10,7 +10,7 @@
       <span>{{menu.name}}</span>
     </router-link>
     <a v-if="$store.state.systemConfig.customerServiceUrl"
-      class="online-service"
+      class="online-service m-r"
       target="_blank"
       :href="$store.state.systemConfig.customerServiceUrl ? $store.state.systemConfig.customerServiceUrl : '#'">
       {{$t('navMenu.online_service')}}
@@ -34,7 +34,7 @@ export default {
   methods: {
     getMenuClass (menu) {
       return {
-        'active': this.$route.path.split('/')[1] === menu.path,
+        'active': this.$route.path.split('/')[1] === menu.path.slice(1),
         [menu.class]: menu.class,
         'nav-link': true
       }
@@ -56,6 +56,8 @@ export default {
   text-align: center
   color: #666
   font-size: 16px
+  &.active
+    color: $primary
 
 .online-service
   display: inline-block

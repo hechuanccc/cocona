@@ -53,7 +53,7 @@
         </el-alert>
         <el-form :model="withdrawInfo" class="m-t" :rules="withdrawRules" status-icon ref="withdrawInfo" label-width="80px">
           <el-form-item :label="$t('user.withdraw_amount')" prop="amount">
-            <el-input class="input-width" type="number" v-model="withdrawInfo.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+            <el-input class="input-width" type="number" v-model.number="withdrawInfo.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
             <el-input :style="{display:'none'}"></el-input> <!--prevent chrome autofill-->
           </el-form-item>
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
