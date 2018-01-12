@@ -251,20 +251,21 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 %cqlfball{
   display: inline-block;
   background: url(../assets/ball_nc_top.png) repeat-x;
-  width: 32px;
+  background-size: (32px * 0.95) (659px *0.95);
+  width: 30px;
   text-indent: -9999px;
-  height: 33px;
-  line-height: 33px;
+  height: 30px;
+  line-height: 30px;
 }
 @mixin cqlf-num {
   @for $j from 1 through 20 {
     .cqlf_pg_wc_wc_#{$j} {
-      background-position: 0 (-33px * ($j - 1));
+      background-position: 0 (-33px * ($j - 1)) * 0.95;
       @extend %cqlfball;
     }
     @for $i from 1 through 8 {
       .cqlf_pl_sbssb#{$i}_sb_#{$j} {
-        background-position: 0 (-33px * ($j - 1));
+        background-position: 0 (-33px * ($j - 1)) * 0.95;
         @extend %cqlfball;
       }
     }
