@@ -7,14 +7,14 @@
             <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
           </el-carousel-item>
         </el-carousel>
-        <el-row class="container block-center">
-          <div class="announcement" @click="announcementDialogVisible = true">
-            <div class="left">
-              <icon class="speaker m-l-xlg" scale="1.25" name="bullhorn"></icon>
-              <span class="text m-l">{{$t('announcement.speaker')}}</span>
+        <el-row class="announcement-wp">
+          <div class="announcement container">
+            <div class="title">
+              <icon class="speaker" color="#666" scale="1" name="bullhorn"></icon>
+              <span class="text">{{$t('announcement.speaker')}}</span>
             </div>
-            <div class="right text-center">
-              <span class="content text-center"
+            <div class="content">
+              <span class="text"
                 :style="{
                   'opacity': announcementStyle.opacity,
                   'transform': `translateY(${announcementStyle.translateY}px)`
@@ -24,9 +24,10 @@
             </div>
           </div>
         </el-row>
-        <el-row class="game-area">
-          <ul>
-            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)" class="game-bg" :style="
+        <el-row class="game-area container">
+          <h2>热门游戏</h2>
+          <ul class="clearfix">
+            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 8" @click="navigate(game)" class="game-bg" :style="
                 {
                   backgroundImage: game.bg_icon ? `url('${game.bg_icon}')` :''
                 }
@@ -36,8 +37,11 @@
               </div>
             </li>
           </ul>
+          <div class="action">
+            <el-button round type="primary" size="large" @click.native="$router.push('/game/')">更多游戏 &raquo;</el-button>
+          </div>
         </el-row>
-        <el-row class="ads">
+       <el-row class="ads container">
           <el-col
             v-for="(item, index) in descriptions"
             class="ad"
@@ -49,7 +53,7 @@
               <img :src="item.header_image" :alt="item.id" />
             </div>
             <div :class="[`ad-content${descriptions.length}`]">
-              <img class="content-img" :src="item.main_image" v-if="item.main_image" />
+              <img :src="item.main_image" v-if="item.main_image" />
               <p class="content-text" v-if="item.main_description" v-html="formattedText(item.main_description)"></p>
             </div>
           </el-col>
@@ -211,36 +215,36 @@ export default {
   background-position: center center;
 }
 
-/* announcement */
+.announcement-wp {
+  background: #fff;
+}
 .announcement {
-  display: inline-block;
+  margin: auto;
+  overflow: hidden;
   height: 36px;
   line-height: 36px;
   font-size: 14px;
-  letter-spacing: 1.6px;
   color: #4a4a4a;
-  cursor: pointer;
-  .left {
+  .title {
     display: inline-block;
-    width: 100%;
-  }
-  .right {
-    display: inline;
-    .content {
-      position: absolute;
-      top: 0;
+    float: left;
+    .text {
+      color: #666;
       display: inline-block;
-      box-sizing: border-box;
-      padding-left: 140px;
+      margin-left: 5px;
+      font-size: 13px;
+    }
+  }
+  .content {
+    display: inline-block;
+    .text {
+      padding-left: 20px;
       width: 100%;
       overflow: hidden;
     }
   }
   .speaker {
     vertical-align: text-bottom;
-  }
-  .text {
-    display: inline-block;
   }
 }
 
@@ -268,14 +272,28 @@ export default {
   color: #ffffff;
 }
 
-.game-area li {
-  cursor: pointer;
-  float: left;
-  width: 25%;
-  height: 360px;
-  line-height: 360px;
-  position: relative;
-  text-align: center;
+.game-area {
+  margin: 0 auto;
+  h2 {
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    padding: 20px 0;
+  }
+  li {
+    cursor: pointer;
+    float: left;
+    overflow: hidden;
+    width: 25%;
+    height: 320px;
+    line-height: 320px;
+    position: relative;
+    text-align: center;
+  }
+  .action {
+    text-align: center;
+    padding: 20px 0 0;
+  }
 }
 
 .game-bg {
@@ -302,9 +320,7 @@ export default {
   height: 150px;
 }
 
-/*advertisement*/
 .ads {
-  width: 1060px;
   text-align: center;
   margin: 80px auto;
 }
@@ -319,39 +335,16 @@ export default {
   text-align: center;
 }
 
-.ad-title img {
-  width: 100%;
-  height: 100%;
-}
-
-.ad-content4 {
-  height: 300px;
-}
-
-.ad-content3 {
-  height: 300px;
-}
-
-.ad-content2 {
-  height: 400px;
-}
-
 .content-text {
   font-size: 12px;
   font-weight: 500;
   line-height: 2;
-  letter-spacing: 0.5px;
   text-align: left;
   color: #878787;
   height: 100%;
   overflow: hidden;
 }
 
-.content-img {
-  width: 100%;
-}
-
-/* lay over the default padding */
 .el-main {
   padding: 0;
 }
