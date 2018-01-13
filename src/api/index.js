@@ -56,8 +56,8 @@ export function fetchGames () {
 export function fetchUser () {
   return axios.get(urls.user)
 }
-export function updateUser (user) {
-  return axios.put(`${urls.user}${user.id}/`, user)
+export function updateUser (user, id) {
+  return axios.put(`${urls.user}${user.id ? user.id : id}/`, user)
 }
 
 export function updatePassword (password) {
@@ -192,4 +192,13 @@ export function fetchStatistic (code) {
 
 export function fetchTransactionStatus (id) {
   return axios.get(`${urls.payment}?transaction_ids=${id}`)
+}
+
+export function fetchChatEmoji () {
+  let instance = axios.create()
+  return instance.get(`${urls.chatEmoji}`)
+}
+
+export function sendImgToChat (data) {
+  return axios.post(`${urls.sendImgToChat}`, data)
 }

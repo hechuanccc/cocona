@@ -33,6 +33,8 @@ Icon.register({'volume-up': {'width': 1664, 'height': 1792, 'paths': [{'d': 'M76
 Icon.register({'unsorted': {'width': 1024, 'height': 1792, 'paths': [{'d': 'M1024 1088q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45zM1024 704q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z'}]}})
 Icon.register({'trash': {'width': 1408, 'height': 1792, 'paths': [{'d': 'M512 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM768 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM1024 1376v-704q0-14-9-23t-23-9h-64q-14 0-23 9t-9 23v704q0 14 9 23t23 9h64q14 0 23-9t9-23zM480 384h448l-48-117q-7-9-17-11h-317q-10 2-17 11zM1408 416v64q0 14-9 23t-23 9h-96v948q0 83-47 143.5t-113 60.5h-832q-66 0-113-58.5t-47-141.5v-952h-96q-14 0-23-9t-9-23v-64q0-14 9-23t23-9h309l70-167q15-37 54-63t79-26h320q40 0 79 26t54 63l70 167h309q14 0 23 9t9 23z'}]}})
 Icon.register({'spinner': {'width': 1792, 'height': 1792, 'paths': [{'d': 'M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zM1024 1600q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zM320 896q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zM1522 1394q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zM558 398q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zM1728 896q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zM1088 192q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zM1618 398q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z'}]}})
+Icon.register({'external-link': {'width': 1792, 'height': 1792, 'paths': [{'d': 'M1408 928v320q0 119-84.5 203.5t-203.5 84.5h-832q-119 0-203.5-84.5t-84.5-203.5v-832q0-119 84.5-203.5t203.5-84.5h704q14 0 23 9t9 23v64q0 14-9 23t-23 9h-704q-66 0-113 47t-47 113v832q0 66 47 113t113 47h832q66 0 113-47t47-113v-320q0-14 9-23t23-9h64q14 0 23 9t9 23zM1792 64v512q0 26-19 45t-45 19-45-19l-176-176-652 652q-10 10-23 10t-23-10l-114-114q-10-10-10-23t10-23l652-652-176-176q-19-19-19-45t19-45 45-19h512q26 0 45 19t19 45z'}]}})
+Icon.register({'exchange': {'width': 1792, 'height': 1792, 'paths': [{'d': 'M1792 1184v192q0 13-9.5 22.5t-22.5 9.5h-1376v192q0 13-9.5 22.5t-22.5 9.5q-12 0-24-10l-319-320q-9-9-9-22 0-14 9-23l320-320q9-9 23-9 13 0 22.5 9.5t9.5 22.5v192h1376q13 0 22.5 9.5t9.5 22.5zM1792 640q0 14-9 23l-320 320q-9 9-23 9-13 0-22.5-9.5t-9.5-22.5v-192h-1376q-13 0-22.5-9.5t-9.5-22.5v-192q0-13 9.5-22.5t22.5-9.5h1376v-192q0-14 9-23t23-9q12 0 24 10l319 319q9 9 9 23z'}]}})
 
 Vue.use(require('vue-moment'))
 Vue.use(Vue2Filters)
@@ -40,6 +42,8 @@ Vue.use(VueI18n)
 Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
 Vue.use(Vuex)
+const store = createStore()
+const token = Vue.cookie.get('access_token')
 
 Vue.config.productionTip = false
 
@@ -56,9 +60,6 @@ Object.keys(locales).forEach(lang => {
   Vue.locale(lang, locales[lang])
 })
 
-const store = createStore()
-
-const token = Vue.cookie.get('access_token')
 if (token) {
   axios.defaults.withCredentials = true
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
@@ -114,6 +115,7 @@ router.beforeEach((to, from, next) => {
         })
         .catch(error => {
           // can't get user info
+          console.log(error)
           toHomeAndLogin(router)
           return Promise.resolve(error)
         })
@@ -140,7 +142,8 @@ gethomePage().then(
         homePageLogo: response.icon,
         customerServiceUrl: response.global_preferences.customer_service_url,
         agentDashboardUrl: response.global_preferences.agent_dashboard_url,
-        siteName: response.name
+        siteName: response.name,
+        global_preferences: response.global_preferences
       })
   }
 )

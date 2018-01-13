@@ -22,6 +22,7 @@
       center>
       <BetRecord v-if="showBetRecordDialog" :lazyFetch="!showBetRecordDialog"/>
     </el-dialog>
+    <chat-room></chat-room>
   </div>
 </template>
 
@@ -30,9 +31,12 @@
 import './style/reset.css'
 import './style/base.scss'
 import './style/theme.scss'
+import './style/animate.css'
 import Top from './components/Header'
 import Bottom from './components/Footer'
 import LoginPopup from './components/LoginPopup'
+import ChatRoom from './components/ChatRoom'
+
 import BetRecord from './screens/member/BetRecord'
 import { getToken, fetchMessageCount } from './api'
 import axios from 'axios'
@@ -51,7 +55,8 @@ export default {
     Top,
     Bottom,
     LoginPopup,
-    BetRecord
+    BetRecord,
+    ChatRoom
   },
   methods: {
     closeLoginDialog () {
