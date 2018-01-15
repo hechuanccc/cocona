@@ -7,12 +7,12 @@
           </el-carousel-item>
         </el-carousel>
         <el-row class="announcement-wp">
-          <div class="announcement container">
+          <div class="announcement container" @click="announcementDialogVisible = true">
             <div class="title">
               <icon class="speaker" color="#666" scale="1" name="bullhorn"></icon>
               <span class="text">{{$t('announcement.speaker')}}</span>
             </div>
-            <div class="content" @click="announcementDialogVisible = true">
+            <div class="content">
               <span class="text"
                 :style="{
                   'opacity': announcementStyle.opacity,
@@ -222,6 +222,7 @@ export default {
   line-height: 36px;
   font-size: 14px;
   color: #4a4a4a;
+  cursor: pointer;
   .title {
     display: inline-block;
     float: left;
@@ -234,7 +235,6 @@ export default {
   }
   .content {
     display: inline-block;
-    cursor: pointer;
     .text {
       padding-left: 20px;
       width: 100%;

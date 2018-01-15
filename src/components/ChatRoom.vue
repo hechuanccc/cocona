@@ -4,17 +4,16 @@
       class="chat-box" 
       v-loading="loading"
       id="chatBox"
-      element-loading-text="正在登陆聊天室"
+      element-loading-text="正在登陆"
       v-if="isLogin && showChatRoom">
       <el-header class="title clearfix" height="40px">
-        <div class="l fl clearfix">
+        <div class="left fl clearfix">
           <icon class="font-home fl" name="home" scale="2"></icon>
-          <h3 class="fl" style="margin-left: 14px">聊天室</h3>
+          <h3 class="fl m-l">聊天室</h3>
         </div>
-        <div class="r fr clearfix">
-          <icon class="fl" title="修改昵称" name="user-plus" scale="1.6" style="padding-top: 4px; cursor: pointer;" @click.native="showEditProfile = true"></icon>
-          <icon name="external-link" class="fl" scale="1.6" style="padding-top: 4px; margin: 0 4px; cursor: pointer;" @click.native="showChatNewWindow"></icon>
-          <i class="el-icon-close close fl" title="关闭聊天室" style="padding-top: 6px; cursor: pointer;" @click="showChatRoom = false"></i>
+        <div class="right fr clearfix">
+          <icon class="icon-user fl" title="修改昵称" name="user-plus" scale="1.6" @click.native="showEditProfile = true"></icon>
+          <i class="el-icon-close close fl" title="关闭聊天室" @click="showChatRoom = false"></i>
         </div>
         <transition
           enter-class="profileFadeInEnter"
@@ -40,16 +39,16 @@
               </el-upload>
             </div>
            
-            <p style="{font-size: 12px; color: rgb(255, 127, 77);}">(您还未设置头像, 请点击头像上传)</p>
+            <p class="avatar-upload-tip">(您还未设置头像, 请点击头像上传)</p>
             <p>
               <span class="txt-nick">{{user.nickname || user.username}}</span>
-              <a href="#" style="{font-size: 20px}" @click="showNickNameBox = true">
+              <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
                 <span class="el-icon-edit-outline"></span>
               </a>
             </p>
             <div>
               <p>
-                <a href="javascript:void(0)" class="u-btn1" @click="showEditProfile = false">关闭</a>
+                <a href="javascript:void(0)" class="u-btn" @click="showEditProfile = false">关闭</a>
               </p>
             </div>
           </div>
@@ -62,53 +61,55 @@
             <span class="fl">公告:</span>
           </div>
           <div class="scroll">
-            <MarqueeTips :content="announcement" :speed="Number(10)"></MarqueeTips>
+            <MarqueeTips :content="announcement" :speed="10"></MarqueeTips>
           </div>
         </div>
         <div class="controls">
-          <a class="listCtrl clearfix" href="javascript:void(0)">
+          <a class="list-ctrl clearfix" href="javascript:void(0)">
             <icon class="fl"  name="unsorted"></icon>
             <span class="fl" @click="$refs.msgEnd.scrollIntoView()">滚屏</span>
           </a>
-          <a class="listCtrl clearfix" href="javascript:void(0)">
+          <a class="list-ctrl clearfix" href="javascript:void(0)">
             <icon class="fl"  name="trash"></icon>
             <span class="fl" @click="messages = []">清屏</span>
           </a>
         </div>
         <ul class="lay-scroll">
-          <li v-for="(item, index) in messages" :class="['clearfix', 'item', item.sender && ((item.sender.nickname && item.sender.nickname == user.nickname) || user.username == item.sender.username) ? 'item-right' : 'item-left', item.type < 0 ? 'sysMsg' : '']">
+          <li v-for="(item, index) in messages" :class="['clearfix', 'item', item.sender && ((item.sender.nickname && item.sender.nickname === user.nickname) || user.username === item.sender.username) ? 'item-right' : 'item-left', item.type < 0 ? 'sys-msg' : '']">
             <div class="lay-block clearfix" v-if="item.type >= 0">
               <div class="avatar">
-                <img :src="item.type == 4 ? require('../assets/sys.png') : item.sender && ((item.sender.nickname && item.sender.nickname == user.nickname) || user.username == item.sender.username) ? user.avatar : item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')">
+                <icon name="cog" class="font-cog" v-if="item.type == 4" scale="3"></icon>
+                <img :src="computeAvatar(item)" v-else>
               </div>
               <div class="lay-content">
                 <div class="msg-header">
-                  <h4 v-html="item.type == 4 ? '计划消息' : item.sender && item.sender.username == user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
-                  <span v-if="item.type != 4">
-                    <img src="../assets/icon_member01.gif" alt="普通会员">
+                  <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
+                  <span class="common-member" v-if="item.type != 4">
+                    <!-- <img src="../assets/icon_member01.gif" alt="普通会员"> -->
+                    普通会员
                   </span>
                   <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
                 </div>
                 <div :class="['bubble', 'bubble' + item.type]">
                   <p>
-                    <span v-if="item.type == 0 || item.type == 4" v-html="item.content"></span>
-                    <img @click="showImageMsg = true; showImageMsgUrl = item.content" v-else-if="item.type == 1" :src="item.content">
+                    <span v-if="item.type === 0 || item.type === 4" v-html="item.content"></span>
+                    <img @click="showImageMsg = true; showImageMsgUrl = item.content" v-else-if="item.type === 1" :src="item.content">
                   </p>
                 </div>
               </div>
             </div>
-            <div class="inner" v-else-if="item.type == -1">
+            <div class="inner" v-else-if="item.type === -1">
               <p>以上是历史消息</p>
             </div>
-            <div v-else-if="item.type == -2 || item.type == -3" class="inner Txt type-warning">
+            <div v-else-if="item.type === -2 || item.type === -3" class="inner type-warning">
               <p>
                 <span></span>
-                <span v-if="item.type == -2">您尚未设置昵称, 点击</span>
+                <span v-if="item.type === -2">您尚未设置昵称, 点击</span>
                 <span v-else>您可以上传自己的头像啦, 点击</span>
-                <a href="javascript:void(0)" style="color: rgb(25, 158, 216);" @click="item.type == -3 ? showEditProfile = true : showNickNameBox = true">这里</a>
+                <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>
                 设置
               </p>
-              <p v-if="item.type == -2">昵称设置过后将无法再次更改哦</p>
+              <p v-if="item.type === -2">昵称设置过后将无法再次更改哦</p>
             </div>
           </li>
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
@@ -135,17 +136,17 @@
             <label for="imgUploadInput">
               <span title="上传图片">
                 <i class="el-icon-picture"></i>
-                <input @change="sendMsgImg" type="file" ref="fileImgSend" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif" style="width: 0.1px; height: 0.1px; opacity: 0; position: absolute; top: -20px;" >
+                <input @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
         </div>
         <div class="typing">
           <div class="txtinput el-textarea">
-            <textarea :placeholder="sendMsgCondition"  type="textarea" rows="2" autocomplete="off" validateevent="true" class="el-textarea_inner" style="height: 54px" v-model="msgCnt"></textarea>
+            <textarea :placeholder="sendMsgCondition"  type="textarea" rows="2" autocomplete="off" validateevent="true" class="el-textarea-inner" v-model="msgCnt"></textarea>
           </div>
           <div class="sendbtn fr">
-            <a href="javascript:void(0)" class="u-btn1" @click="sendMsg">发送</a>
+            <a href="javascript:void(0)" class="u-btn" @click="sendMsg">发送</a>
           </div>
         </div>
       </el-footer>
@@ -161,13 +162,20 @@
         <el-button type="primary" @click="submitNickName">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="showImageMsg" width="400px" custom-class="showImageMsg">
+    <el-dialog :visible.sync="showImageMsg" width="640px" custom-class="show-image-msg text-center">
       <img :src="showImageMsgUrl">
     </el-dialog>
     <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg">
       <p>{{errMsgCnt}}</p>
     </el-dialog>
-    <div v-if="isLogin" class="chat-guide" @click="joinChatRoom"></div>
+    <div v-if="isLogin" class="chat-guide text-center" @click="joinChatRoom">
+      <icon class="font-wechat" name="wechat" scale="1.7"></icon>
+      <p class="text-center">
+        <span>聊</span>
+        <span>天</span>
+        <span>室</span>
+      </p>
+    </div>
   </div>
  
 </template>
@@ -179,6 +187,8 @@ import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
 import { msgFormatter } from '../utils'
 import { updateUser, fetchChatEmoji, sendImgToChat } from '../api'
+const WSHOST = 'ws://a546542.eastasia.cloudapp.azure.com:8003'
+const RECEIVER = 1
 
 export default {
   data () {
@@ -216,22 +226,20 @@ export default {
     sendMsgCondition() {
       let condition = JSON.parse(this.$store.state.systemConfig.global_preferences.send_chat_conditions)
       if (Object.keys(condition).length) {
-        return `发言条件：前${condition['天数']}天充值不少于${condition['存款打码量']}元；${condition['投注打码量']}不少于10元`
+        return `发言条件：前${condition['days']}天充值不少于${condition['deposit_threshold']}元；投注打码量不少于${condition['bet_threshold']}元`
       }
       return ''
     }
-  },
-  created () {
   },
   methods: {
     joinChatRoom () {
       this.showChatRoom = true
       let token = Vue.cookie.get('access_token')
-      if (this.$socket && this.$socket.readyState == 1) {
+      if (this.$socket && this.$socket.readyState === 1) {
         this.handleMsg()
       } else {
         this.loading = true
-        Vue.use(VueNativeSock, `ws://a546542.eastasia.cloudapp.azure.com:8003/chat/stream?username=${this.$store.state.user.username}&token=${token}`, {
+        Vue.use(VueNativeSock, `${WSHOST}/chat/stream?username=${this.$store.state.user.username}&token=${token}`, {
           format: 'json',
           reconnection: true,
           reconnectionDelay: 3000
@@ -257,33 +265,22 @@ export default {
     },
     handleMsg () {
       this.loading = false
-      this.$socket.sendObj({"command": "join", "receivers": [1]})
+      this.$socket.sendObj({
+        "command": "join", 
+        "receivers": [RECEIVER]
+      })
       this.$socket.onmessage = (resData) => {
         let data
-        if (typeof resData.data == 'string') {
+        if (typeof resData.data === 'string') {
           try {
             data = JSON.parse(resData.data)
-            if (data.type == 2 && data.command == 'banned') {
-              this.errMsg = true
-              this.errMsgCnt = data.content
-            }
-            else if (data.type == 2) {
-              this.$notify({
-                message: data.content,
-                offset: 100,
-                type: 'success',
-                duration: 1200,
-                customClass: 'top-right-msg',
-                showClose: false
-              })
-            } else if (!data.error) {
+            if (!data.error) {
               if (data.latest_message) {
-                if (data.latest_message[data.latest_message.length - 1].type == 3) {
+                if (data.latest_message[data.latest_message.length - 1].type === 3) {
                   let annouce = data.latest_message.pop()
                   this.announcement = annouce.content
                 }
-                this.messages = this.messages.concat(data.latest_message)
-
+                this.messages = this.messages.concat(data.latest_message.reverse())
                 this.messages = this.messages.concat([{
                   type: -1
                 }, {
@@ -295,23 +292,40 @@ export default {
                   this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
                 })
                 return
-              } else if (data.type == 3) {
-                this.announcement = data.content
-                return
               } else {
-                this.messages.push(data)
-              }
+                switch(data.type) {
+                  case 2:
+                    if (data.command === 'banned') {
+                      this.errMsg = true
+                      this.errMsgCnt = data.content
+                    } else {
+                      this.$notify({
+                        message: data.content,
+                        offset: 100,
+                        type: 'success',
+                        duration: 1200,
+                        customClass: 'top-right-msg',
+                        showClose: false
+                      })
+                    }
+                    return
+                    break;
+                  case 3:
+                    return this.announcement = data.content
+                    break;
+                  default:
+                    this.messages.push(data)
+                }
 
-              let chatBox = document.getElementById('chatBox')
-
-              let h = chatBox.clientHeight
-              let sh = chatBox.scrollHeight
-              let st = chatBox.scrollTop
-
-              if (h + st >= sh) {
+                let chatBox = document.getElementById('chatBox')
+                let h = chatBox.clientHeight
+                let sh = chatBox.scrollHeight
+                let st = chatBox.scrollTop
+                if (h + st >= sh) {
                   this.$nextTick(() => {
-                      this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+                    this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
                   })
+                }
               }
              
             } else {
@@ -353,17 +367,26 @@ export default {
       })
     },
     sendMsgImg (e) {
-
+      let file = this.$refs.fileImgSend.files[0]
+      if (file.size > 1024 * 1024) {
+        this.errMsg = true
+        this.errMsgCnt = '图片尺寸太大，请选择较小尺寸的图片。'
+        return
+      }
       let formData = new FormData()
-      formData.append('receivers', '1')
-      formData.append('image', this.$refs.fileImgSend.files[0])
-
+      formData.append('receivers', RECEIVER)
+      formData.append('image', file)
       sendImgToChat(formData).then((data) => {
       })
     },
     sendMsg () {
       if (!this.msgCnt) { return false }
-      this.$socket.sendObj({"command": "send", "receivers": [1], "type":0, "content": this.msgCnt})
+      this.$socket.sendObj({
+        "command": "send", 
+        "receivers": [RECEIVER], 
+        "type":0, 
+        "content": this.msgCnt
+      })
       this.msgCnt = ''
     },
     submitNickName () {
@@ -372,7 +395,6 @@ export default {
           user: data
         })
         this.showNickNameBox = false
-
       }, errorMsg => {
         this.$message({
           showClose: true,
@@ -380,11 +402,19 @@ export default {
           type: 'error'
         })
       })
+    },
+    computeAvatar (item) {
+      if (item.sender && ((item.sender.nickname && item.sender.nickname === this.user.nickname) || this.user.username === item.sender.username)) {
+        return this.user.avatar
+      } else if (item.sender && item.sender.avatar_url) {
+        return  item.sender.avatar_url
+      } else {
+        return require('../assets/avatar.png')
+      }
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
   .chat-box {
     position: fixed;
@@ -415,16 +445,18 @@ export default {
         color: #fff;
         font-size: 20px;
         cursor: pointer;
+        padding-top: 6px;
       }
-      .r {
+      .right {
         padding-top: 4px;
         font-size: 14px;
+        .icon-user {
+          padding-top: 4px;
+        }
       }
     }
     .content {
       padding: 4px;
-
-
       .chat-announce {
         position: absolute;
         top: 43px;
@@ -464,7 +496,7 @@ export default {
         width: 100%;
         text-align: center;
         z-index: 999;
-        .listCtrl {
+        .list-ctrl {
           margin: 0 5px;
           display: inline-block;
           background: #fff;
@@ -478,11 +510,10 @@ export default {
       }
       .lay-scroll {
         padding-top: 36px;
-
         .item {
           margin-top: 15px;
           padding: 5px 10px;
-          &.sysMsg {
+          &.sys-msg {
             text-align: center;
             margin-top: 0px;
             .inner {
@@ -494,6 +525,9 @@ export default {
             }
             .type-warning {
               color: #f60;
+              .btn-here {
+                color: rgb(25, 158, 216);
+              }
             }
           }
           .lay-block {
@@ -502,6 +536,9 @@ export default {
               height: 48px;
               cursor: pointer;
               float: left;
+              .font-cog {
+                color: #7285d6;
+              }
               img {
                 display: block;
                 width: 100%;
@@ -509,97 +546,12 @@ export default {
                 border-radius: 7px;
               }
             }
-            .lay-content {
-              margin-left: 18px;
-              float: left;
-              max-width: 75%;
-              .msg-header {
-                overflow: hidden;
-                h4 {
-                  display: inline-block;
-                  font-size: 12px;
-                  color: #4f77ab;
-                  display: inline-block;
-                  font-weight: 400;
-                  cursor: pointer;
-                  max-width: 73px;
-                  overflow:hidden;text-overflow:ellipsis;
-                  line-height: 12px;
-                }
-                span {
-                  display: inline-block;
-                  margin: 0 2px;
-                  img {
-                    vertical-align: middle;
-                  }
-                  &.msg-time {
-                    background: rgba(70,70,70,.12);
-                    color: #a0a0a0;
-                    padding: 0 6px;
-                    border-radius: 10px;
-                    font-weight: 400;
-                    font-size: 10px;
-                  }
-                }
-              }
-              .bubble {
-                background: linear-gradient(to right, rgb(25, 158, 216), rgb(25, 158, 216)); 
-                border-left-color: rgb(25, 158, 216); 
-                border-right-color: rgb(25, 158, 216); 
-                color: rgb(255, 255, 255);
-                margin-top: 3px;
-                position: relative;
-                border-radius: 5px;
-                padding: 6px 9px;
-                font-size: 13px;
-                line-height: 1.2;
-                display: inline-block;
-                text-shadow: 0 0 1px #35406d;
-                &.bubble1 {
-                  width: 55%;
-                }
-                &.bubble4 {
-                  background: #ab47bc;
-                  background: -webkit-linear-gradient(left,#ab47bc,#5169DE);
-                  background: -moz-linear-gradient(left,#ab47bc,#5169DE);
-                  background: -ms-linear-gradient(left,#ab47bc,#5169DE);
-                  background: -o-linear-gradient(left,#ab47bc,#5169DE);
-                  background: linear-gradient(to right,#ab47bc,#5169DE);
-                  border-left-color: #5169de;
-                  border-right-color: #ab47bc;
-                }
-                p {
-                  display: inline-block;
-                  span {
-                    white-space: pre-wrap; 
-                    word-break: break-all;
-                  }
-                  img {
-                    width: 100%;
-                    min-height: 50px;
-                    cursor: pointer;
-                  }
-                }
-              }
-              .bubble:after {
-                content: '';
-                position: absolute;
-                top: 14px;
-                width: 0;
-                height: 0;
-                border: 9px solid transparent;
-                border-top: 0;
-                margin-top: -7px;
-              }
-            }
           }
 
           &.item-left {
             .lay-block {
-             
               .lay-content {
                 .bubble:after {
-                 
                   left: 0;
                   border-left: 0;
                   margin-left: -9px;
@@ -607,6 +559,14 @@ export default {
                 }
               }
             }
+          }
+          .common-member {
+            background: #cb9b64;
+            color: #fff;
+            padding: 0 6px;
+            border-radius: 10px;
+            font-weight: 400;
+            font-size: 10px;
           }
 
           &.item-right {
@@ -621,7 +581,9 @@ export default {
                   h4 {
                     text-align: right;
                     float: right;
+                    padding-top: 2px;
                   }
+
                   span {
                     float: right;
                   }
@@ -640,6 +602,86 @@ export default {
           }
         }
       }
+      .lay-content {
+        margin-left: 18px;
+        float: left;
+        max-width: 75%;
+        .msg-header {
+          overflow: hidden;
+          h4 {
+            display: inline-block;
+            font-size: 12px;
+            color: #4f77ab;
+            display: inline-block;
+            font-weight: 400;
+            cursor: pointer;
+            max-width: 73px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            line-height: 12px;
+          }
+          span {
+            display: inline-block;
+            margin: 0 2px;
+            img {
+              vertical-align: middle;
+            }
+            &.msg-time {
+              background: rgba(70,70,70,.12);
+              color: #a0a0a0;
+              padding: 0 6px;
+              border-radius: 10px;
+              font-weight: 400;
+              font-size: 10px;
+            }
+          }
+        }
+        .bubble {
+          background: linear-gradient(to right, rgb(25, 158, 216), rgb(25, 158, 216)); 
+          border-left-color: rgb(25, 158, 216); 
+          border-right-color: rgb(25, 158, 216); 
+          color: rgb(255, 255, 255);
+          margin-top: 3px;
+          position: relative;
+          border-radius: 5px;
+          padding: 6px 9px;
+          font-size: 13px;
+          line-height: 1.2;
+          display: inline-block;
+          text-shadow: 0 0 1px #35406d;
+          &.bubble1 {
+            width: 55%;
+          }
+          &.bubble4 {
+            background: #ab47bc;
+            background: linear-gradient(to right,#ab47bc,#5169DE);
+            border-left-color: #5169de;
+            border-right-color: #ab47bc;
+          }
+          p {
+            display: inline-block;
+            span {
+              white-space: pre-wrap; 
+              word-break: break-all;
+            }
+            img {
+              width: 100%;
+              min-height: 50px;
+              cursor: pointer;
+            }
+          }
+        }
+        .bubble:after {
+          content: '';
+          position: absolute;
+          top: 14px;
+          width: 0;
+          height: 0;
+          border: 9px solid transparent;
+          border-top: 0;
+          margin-top: -7px;
+        }
+      }
     }
     .footer {
       padding: 0;
@@ -650,8 +692,16 @@ export default {
         border-left: 0;
         border-right: 0;
         position: relative;
-        z-index: 100;
         overflow: hidden;
+        .btn-smile {
+          .img-upload-input {
+            width: 0.1px; 
+            height: 0.1px; 
+            opacity: 0; 
+            position: absolute; 
+            top: -20px;
+          }
+        }
         .btn-smile:hover {
           background: #ffd4c0;
         }
@@ -668,14 +718,15 @@ export default {
           vertical-align: bottom;
         }
         .is-disabled {
-          .el-textarea_inner {
+          .el-textarea-inner {
             background-color: #eef1f6;
             border-color: #d1dbe5;
             color: #bbb;
             cursor: not-allowed;
+            height: 54px;
           }
         }
-        .el-textarea_inner {
+        .el-textarea-inner {
           display: block;
           resize: vertical;
           padding: 5px 7px;
@@ -724,6 +775,13 @@ export default {
       width: 90%;
       z-index: 9999;
       color: #4f77ab;
+      .avatar-upload-tip {
+        font-size: 12px; 
+        color: rgb(255, 127, 77);
+      }
+      .icon-edit {
+        font-size: 20px;
+      }
       .avatar {
         display: inline-block;
         border-radius: 50%;
@@ -756,7 +814,7 @@ export default {
         margin-top: 5px;
         cursor: pointer;
       }
-      .u-btn1 {
+      .u-btn {
         width: 56px;
         height: 20px;
         font-size: 12px;
@@ -767,7 +825,7 @@ export default {
       }
     }
 
-    .u-btn1 {
+    .u-btn {
       display: inline-block;
       text-align: center;
       vertical-align: bottom;
@@ -778,8 +836,6 @@ export default {
       font-size: 14px;
       line-height: 51px;
       background: #5b8ac7;
-      background: -moz-linear-gradient(top,#5b8ac7 0,#2765b5 100%);
-      background: -webkit-linear-gradient(top,#5b8ac7 0,#2765b5 100%);
       background: linear-gradient(to bottom,#5b8ac7 0,#2765b5 100%);
       border: 1px solid #1e57a0;
       color: #fff;
@@ -791,12 +847,25 @@ export default {
     right: 10px;
     top: 50%;
     width: 40px;
-    height: 152px;
+    height: 122px;
     margin-top: -76px;
-    background: url('../assets/chat_float_blue.png') no-repeat;
     background-size: 100%;
     cursor: pointer;
     z-index: 0;
+    background: #1e72df;
+    border-radius: 8px 0 0 8px;
+    padding-top: 14px;
+    .font-wechat {
+      color: #d1e6fe;
+    }
+    p {
+      font-size: 18px;
+      color: #fff;
+      span {
+        display: inline-block;
+        padding: 4px 0;
+      }
+    }
   }
 
   .emoji-container {
