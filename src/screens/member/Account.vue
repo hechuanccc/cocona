@@ -12,7 +12,7 @@
     </header>
     <el-container class="container no-border">
       <div class="aside m-r-sm">
-        <AsideMenu @clicked="onClickChild" :items="menus ? menus : []" :defaultactive="currentPath" />
+        <AsideMenu @clicked="onClickChild" :items="menus ? menus : []" :defaultActive="currentPath" />
       </div>
       <div class="main m-b-xlg">
         <router-view/>
