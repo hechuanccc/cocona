@@ -76,7 +76,8 @@
         :width="135"
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥') | placeholder($t('user.unsettled'))}}</span>
+          <span v-if="scope.row.profit === null">{{ scope.row.remarks | statusFilter}}</span>
+          <span v-else :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -115,7 +116,7 @@ export default {
       } else if (value === 'cancelled') {
         return Vue.t('user.cancelled')
       } else {
-        return ''
+        return Vue.t('user.unsettled')
       }
     }
   },
@@ -137,7 +138,7 @@ export default {
   },
   created () {
     if (!this.lazyFetch) {
-      this.initFetchBetHistory()
+      this.initFetchBetHistory({status: 'win,lose,tie'})
       this.allGames = this.$store.state.state
       if (!this.allGames || this.allGames.length === 0) {
         this.$store.dispatch('fetchGames').then(games => {
@@ -151,7 +152,7 @@ export default {
       return {
         game: this.selectedGame,
         bet_date: this.selectedDate,
-        status: this.isUnsettled ? 'ongoing' : ''
+        status: this.isUnsettled ? 'ongoing,cancelled,no_draw' : 'win,lose,tie'
       }
     }
   },
