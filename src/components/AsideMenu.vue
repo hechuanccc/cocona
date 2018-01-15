@@ -24,14 +24,14 @@ export default {
     items: {
       type: Array
     },
-    defaultactive: {
+    defaultActive: {
       type: String,
       default: '0'
     }
   },
   computed: {
     active: function () {
-      return this.defaultactive.indexOf('online_payment_success') !== -1 ? '/account/online_payment' : this.defaultactive
+      return this.defaultActive.indexOf('online_payment_success') !== -1 ? '/account/online_payment' : this.defaultActive
     }
   },
   methods: {

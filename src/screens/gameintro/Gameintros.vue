@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <el-row class="rules-container">
         <div class="aside">
-          <AsideMenu @clicked="onClickChild" :items="games ? games : []" :defaultactive="active"/>
+          <AsideMenu @clicked="onClickChild" :items="games ? games : []" :defaultActive="active"/>
         </div>
         <div class="main rules-content m-b-xlg">
           <h1 class="rules-main-title m-b-lg">{{currentGame.display_name}}</h1>

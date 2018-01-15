@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <div class="history-container" v-loading="childLoading">
         <div class="aside">
-          <AsideMenu @clicked="onClickChild" :items="games ? games : []" :defaultactive="active"/>
+          <AsideMenu @clicked="onClickChild" :items="games ? games : []" :defaultActive="active"/>
         </div>
         <router-view @load="load"></router-view>
       </div>
