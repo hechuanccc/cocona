@@ -140,6 +140,10 @@ gethomePage().then(
         homePageLogo: response.icon,
         customerServiceUrl: response.global_preferences.customer_service_url,
         agentDashboardUrl: response.global_preferences.agent_dashboard_url,
+        agentBusinessConsultingQQ: response.global_preferences.agent_business_consulting_qq,
+        contactEmail: response.global_preferences.contact_email,
+        contactPhoneNumber: response.global_preferences.contact_phone_number,
+        openAccountConsultingQQ: response.global_preferences.open_account_consulting_qq,
         siteName: response.name
       })
   }
