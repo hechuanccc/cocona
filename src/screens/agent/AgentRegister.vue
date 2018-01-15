@@ -204,4 +204,9 @@
   position: absolute;
   right: 0;
 }
+.success {
+  position: absolute;
+  bottom: 35px;
+  color: $green;
+}
 </style>
