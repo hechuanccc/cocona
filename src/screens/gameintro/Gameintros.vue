@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <el-row class="rules-container">
         <div class="aside">
-          <AsideMenu @clicked="onClickChild" :items="games ? games : []" />
+          <AsideMenu @clicked="onClickChild" :items="games ? games : []" :defaultActive="active"/>
         </div>
         <div class="main rules-content m-b-xlg">
           <h1 class="rules-main-title m-b-lg">{{currentGame.display_name}}</h1>
@@ -97,16 +97,27 @@
         games: '',
         currentGame: {},
         currentPlaySettings: [],
-        loading: false
+        loading: false,
+        playing: localStorage.getItem('lastGame')
       }
     },
     created () {
       fetchGames().then(
         games => {
           this.games = games
-          this.currentGame = games[0]
+          if (this.playing && this.$store.state.games.length > 0) {
+            this.currentGame = this.$store.getters.gameById(this.playing)
+          } else {
+            this.currentGame = games[0]
+          }
         }
       )
+    },
+    computed: {
+      active () {
+        // the second judgement is for the page refresh condition
+        return (this.playing && this.$store.state.games.length > 0) ? String(this.$store.getters.gameById(this.playing).rank - 1) : '0'
+      }
     },
     watch: {
       'currentGame': function () {
