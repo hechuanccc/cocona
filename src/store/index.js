@@ -101,7 +101,14 @@ export function createStore () {
           component: 'hklPgNtinfvrNum',
           options: Array.from(Array(49).keys()).map(item => item + 1),
           cols: 7
+        },
+        {
+          code: 'fc3d_pg_msic',
+          component: 'fc3dPgMsic',
+          options: Array.from(Array(10).keys()),
+          cols: 2
         }
+
       ],
       systemConfig: {
         customerServiceUrl: '',
