@@ -115,6 +115,35 @@ const bjkl8Translator = function (title) {
   }
   return ['']
 }
+const auluck8Translator = function (title) {
+  for (let i = 1; i < 21; i++) {
+    if (`${i}` === title || `ball_than_size_${i}` === title || `ball_odd_even_${i}` === title) {
+      return [`第${i}球`]
+    }
+  }
+  switch (title) {
+    case 'sum_of_ball_odd_even':
+      return ['总和']
+    case 'sum_of_ball_than_size':
+      return ['总和']
+    case 'sum_of_ball_five_element':
+      return ['五行']
+  }
+  return ['']
+}
+
+const auluck8StatisticTranslator = function (title) {
+  switch (title) {
+    case 'sum_of_ball_odd_even':
+      return ['总和']
+    case 'sum_of_ball_than_size':
+      return ['总和']
+    case 'sum_of_ball_five_element':
+      return ['五行']
+  }
+  return ['']
+}
+
 const pcddTranslator = function (title) {
   switch (title) {
     case 'sum_of_ball_odd_even':
@@ -172,7 +201,10 @@ export default {
   'gdklsf': cqlfTranslator,
   'gd11x5': gd11x5Translator,
   'bjkl8': bjkl8Translator,
+  'auluck8': auluck8Translator,
+  'auluck8Statistic': auluck8StatisticTranslator,
   'pcdd': pcddTranslator,
+  'jnd28': pcddTranslator,
   'hkl': hklTranslator,
   'jsk3': jsk3Translator
 }
