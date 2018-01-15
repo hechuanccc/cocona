@@ -115,6 +115,7 @@
     },
     computed: {
       active () {
+        // the second judgement is for the page refresh condition
         return (this.playing && this.$store.state.games.length > 0) ? String(this.$store.getters.gameById(this.playing).rank - 1) : '0'
       }
     },
