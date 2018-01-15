@@ -91,7 +91,7 @@
                 </td>
                 <td v-else>
                   <div :style="{
-                    'width': currentGame === 'bjkl8' ? '340px' : 'auto',
+                    'width': currentGame === 'bjkl8' || currentGame === 'auluck8'? '340px' : 'auto',
                     'margin': '0 auto'
                     }">
                     <ResultNums
@@ -568,6 +568,43 @@ export default {
         }
       ]
 
+    const auluck8Table =
+      [
+        {
+          displayName: '时间',
+          key: 'schedule_result'
+        },
+        {
+          displayName: '期数',
+          key: 'issue_number'
+        },
+        {
+          displayName: '开奖号码',
+          key: 'result_str'
+        },
+        {
+          displayName: '开奖',
+          subHeads: [
+            {
+              displayName: '号码',
+              key: 'sum_of_ball'
+            },
+            {
+              displayName: '大小',
+              key: 'sum_of_ball_than_size'
+            },
+            {
+              displayName: '单双',
+              key: 'sum_of_ball_odd_even'
+            },
+            {
+              displayName: '五行',
+              key: 'sum_of_ball_five_element'
+            }
+          ]
+        }
+      ]
+
     const gameTable = [
       {
         code: 'jspk10',
@@ -628,6 +665,14 @@ export default {
       {
         code: 'hkl',
         table: hklTable
+      },
+      {
+        code: 'auluck8',
+        table: auluck8Table
+      },
+      {
+        code: 'jnd28',
+        table: pcddTable
       }
     ]
 

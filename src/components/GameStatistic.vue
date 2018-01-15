@@ -178,7 +178,12 @@ export default {
           dragonTigerSpecial = '龙虎'
         }
 
-        const translator = gameTranslator[this.gameCode]
+        let translator
+        if (this.gameCode === 'auluck8') {
+          translator = gameTranslator['auluck8Statistic']
+        } else {
+          translator = gameTranslator[this.gameCode]
+        }
         let keys = Object.keys(resultSingleStatistic)
         const statisticsMap = {}
         const statistic = []

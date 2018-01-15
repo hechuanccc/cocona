@@ -112,7 +112,7 @@ export default {
 }
 @include hkl-num;
 
-$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd;
+$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd, jnd28;
 
 %sscball{
   background: url("../../assets/ball_2.png") no-repeat;
@@ -196,6 +196,23 @@ $transformergames: mlaft, bcr, jspk10, er75ft;
 }
 
 @include bjkl8-num;
+
+@mixin auluck8-num {
+  @for $i from 1 through 80 {
+    @if $i < 10 {
+      .auluck8-0#{$i} {
+        @extend %bjkl8ball;
+        background-position: 0 (-23px * ($i - 1));
+    }
+    }
+    .auluck8-#{$i} {
+      @extend %bjkl8ball;
+      background-position: 0 (-23px * ($i - 1));
+    }
+  }
+}
+
+@include auluck8-num;
 
 %cqlfball{
   display: inline-block;
