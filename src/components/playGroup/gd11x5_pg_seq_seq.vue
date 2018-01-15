@@ -59,7 +59,9 @@
               }
             ]">
             <el-col :span="12" class="name">
-              <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
+              <span>
+                <span :class="playgroup.code + '_' + option.num">{{option.num}}</span>
+              </span>
             </el-col>
             <el-col :span="12" class="checkbox input">
               <el-checkbox v-model="option.selected" v-if="!gameClosed&&!option.disabled"></el-checkbox>

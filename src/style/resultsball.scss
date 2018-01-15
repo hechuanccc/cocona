@@ -159,6 +159,21 @@ $gd_length: length($results_gd);
   }
 }
 
+.result-jnd28 {
+  background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
+  height: 27px;
+  text-align: center;
+
+  b {
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    width: 24px;
+    font-size: 16px;
+    color: black;
+  }
+}
+
 .result-cqlf {
   background: url("../assets/ball_nc_top.png") no-repeat;
   height: 32px;

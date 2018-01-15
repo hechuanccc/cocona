@@ -18,7 +18,7 @@
   }
   @for $i from 1 through 11 {
     .gd11x5_pg_wc_wc_#{$i},
-    .gd11x5_pg_seq_seq_#{$i}{
+    .gd11x5_pg_seq_seq_#{$i} {
       @extend %gd11x5ball;
     }
   }
@@ -260,6 +260,10 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 @mixin cqlf-num {
   @for $j from 1 through 20 {
     .cqlf_pg_wc_wc_#{$j} {
+      background-position: 0 (-33px * ($j - 1)) * 0.95;
+      @extend %cqlfball;
+    }
+    .cqlf_pl_pc_pc_#{$j} {
       background-position: 0 (-33px * ($j - 1)) * 0.95;
       @extend %cqlfball;
     }
