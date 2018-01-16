@@ -103,8 +103,14 @@ export function createStore () {
           cols: 7
         },
         {
+          code: 'fc3d_pg_pic',
+          component: 'fc3dPgIc',
+          options: Array.from(Array(10).keys()),
+          cols: 2
+        },
+        {
           code: 'fc3d_pg_msic',
-          component: 'fc3dPgMsic',
+          component: 'fc3dPgIc',
           options: Array.from(Array(10).keys()),
           cols: 2
         }

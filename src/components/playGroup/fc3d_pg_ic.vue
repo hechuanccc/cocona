@@ -3,7 +3,7 @@
     <table class="play-table" align="center" >
       <tr class="group-name">
         <td>种类</td>
-        <td>合肖</td>
+        <td>{{playgroup.display_name}}</td>
       </tr>
       <tbody class="tbody">
         <tr>
@@ -37,7 +37,7 @@
           ]">
           <el-col :span="3" class="name">
             <span>
-              <span :class="[playgroup.code + '-' + option.num]">{{option.num}}</span>
+              <span>{{option.num}}</span>
             </span>
           </el-col>
           <el-col :span="21" class="checkbox input">
@@ -68,7 +68,7 @@ export default {
       type: Boolean
     }
   },
-  name: 'fc3dPgMsic',
+  name: 'fc3dPgIc',
   data () {
     const customPlayGroup = _.find(this.$store.state.customPlayGroups, item => {
       return item.code === this.playgroup.code
@@ -111,15 +111,18 @@ export default {
       })
     },
     activePlayOdds () {
-      if (this.selectedOptions.length < 4) {
+      if (this.selectedOptions.length < this.maxOptionCount / 2) {
         return '--'
       }
       return this.activePlay.odds
+    },
+    maxOptionCount () {
+      return this.playgroup.code === 'fc3d_pg_pic' ? 10 : 8
     }
   },
   watch: {
     'selectedOptions': function () {
-      if (this.selectedOptions.length < 4) {
+      if (this.selectedOptions.length < this.maxOptionCount / 2) {
         this.updateForSubmit()
         return
       }
@@ -143,7 +146,7 @@ export default {
   },
   methods: {
     updateForSubmit () {
-      this.valid = this.selectedOptions.length > 3
+      this.valid = this.selectedOptions.length >= this.maxOptionCount / 2
       this.$emit('updatePlayForSubmit', {
         activePlayId: this.activePlay.id,
         selectedOptions: this.selectedOptions.map(option => {
@@ -161,7 +164,7 @@ export default {
       }
       event.preventDefault()
       if (!option.selected) {
-        if (this.selectedOptions.length < 8) {
+        if (this.selectedOptions.length < this.maxOptionCount) {
           option.selected = true
         }
       } else {
