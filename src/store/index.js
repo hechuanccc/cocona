@@ -113,7 +113,20 @@ export function createStore () {
           component: 'fc3dPg2df',
           options: Array.from(Array(10).keys()).map(item => item),
           cols: 5
+        },
+        {
+          code: 'fc3d_pg_pic',
+          component: 'fc3dPgIc',
+          options: Array.from(Array(10).keys()),
+          cols: 2
+        },
+        {
+          code: 'fc3d_pg_msic',
+          component: 'fc3dPgIc',
+          options: Array.from(Array(10).keys()),
+          cols: 2
         }
+
       ],
       systemConfig: {
         customerServiceUrl: '',
