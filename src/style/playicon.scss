@@ -103,6 +103,17 @@ $sscgames: tjssc, xjssc, cqssc, jsssc;
 }
 @include ssc-num;
 
+@mixin fc3d-num{
+  @for $i from 0 through 9 {
+    .fc3d_pg_2df_#{$i}, .fc3d_pg_3df_#{$i} {
+      @extend %sscball;
+      background-position: 0 (-27px * $i);
+    }
+  }
+}
+
+@include fc3d-num;
+
 
 $hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode, ntinfvr_num ,'5elmnts',clrwvs_color, txiao_spczdc, shawzdc, pxxmzdc, exl;
 $hk6_plays: spcb, spca, posc, poscspcnump1;
