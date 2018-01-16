@@ -64,9 +64,6 @@ import _ from 'lodash'
 import Combinatorics from 'js-combinatorics'
 export default {
   props: {
-    formatting: {
-      type: Object
-    },
     playgroup: {
       type: Object
     },
@@ -92,23 +89,26 @@ export default {
 
     const options = customPlayGroup.options
     const rows = Math.ceil(options.length / customPlayGroup.cols)
-    let optionGroup
+    let optionGroup = []
 
-    optionGroup = _.flatMap(options.slice(0, rows), n => {
-      let index = 0
-      let result = []
-      while (index < customPlayGroup.cols) {
-        result.push({
-          num: n + (rows) * index,
-          selected: false,
-          hover: false
-        })
-        index++
-      }
-      return [result]
-    })
+    let n = customPlayGroup.code === 'fc3d_pg_2df' ? 2 : 3
+    for (let i = 0; i <= n - 1; i++) {
+      let raw = _.flatMap(options.slice(0, rows), n => {
+        let index = 0
+        let result = []
+        while (index < customPlayGroup.cols) {
+          result.push({
+            num: n + (rows) * index,
+            selected: false,
+            hover: false
+          })
+          index++
+        }
+        return [result]
+      })
 
-    optionGroup = customPlayGroup.code.indexOf('2') !== -1 ? [optionGroup, _.cloneDeep(optionGroup)] : [optionGroup, _.cloneDeep(optionGroup), _.cloneDeep(optionGroup)]
+      optionGroup.push(raw)
+    }
 
     return {
       optionGroup,
@@ -216,17 +216,6 @@ export default {
 }
 .checkbox {
   border-left: $cell-border;
-}
-.combinations li {
-  max-width: 300px;
-  display: inline-block;
-  margin: 5px;
-  color: $red;
-}
-.odds {
-  &:nth-child(2) {
-    border-left: 1px solid #ddd
-  }
 }
 .group-name.gd11x5-groupname /deep/ .el-radio__label {
   font-size: 12px;
