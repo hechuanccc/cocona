@@ -84,7 +84,7 @@
               <div class="lay-content">
                 <div class="msg-header">
                   <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
-                  <span class="common-member" v-if="item.type != 4">
+                  <span class="common-member" v-if="item.type !== 4">
                     <!-- <img src="../assets/icon_member01.gif" alt="普通会员"> -->
                     普通会员
                   </span>
@@ -195,7 +195,6 @@ export default {
     return {
       showChatRoom: false,
       messages: [],
-      loading: false,
       showEditProfile: false,
       swichAvatar: false,
       msgCnt: '',
@@ -218,12 +217,12 @@ export default {
   },
   computed: {
     isLogin () {
-      return this.$store.state.user.logined && this.$route.name != 'Home'
+      return this.$store.state.user.logined && this.$route.name !== 'Home'
     },
     user () {
       return this.$store.state.user
     },
-    sendMsgCondition() {
+    sendMsgCondition () {
       let condition = JSON.parse(this.$store.state.systemConfig.global_preferences.send_chat_conditions)
       if (Object.keys(condition).length) {
         return `发言条件：前${condition['days']}天充值不少于${condition['deposit_threshold']}元；投注打码量不少于${condition['bet_threshold']}元`
@@ -249,7 +248,7 @@ export default {
             this.joinChatRoom()
             return
           }
-          if (this.$socket && this.$socket.readyState != 1) {
+          if (this.$socket && this.$socket.readyState !== 1) {
             this.joinChatRoom()
             return
           } else {
@@ -266,8 +265,8 @@ export default {
     handleMsg () {
       this.loading = false
       this.$socket.sendObj({
-        "command": "join", 
-        "receivers": [RECEIVER]
+        'command': 'join',
+        'receivers': [RECEIVER]
       })
       this.$socket.onmessage = (resData) => {
         let data
@@ -293,7 +292,7 @@ export default {
                 })
                 return
               } else {
-                switch(data.type) {
+                switch (data.type) {
                   case 2:
                     if (data.command === 'banned') {
                       this.errMsg = true
@@ -309,10 +308,9 @@ export default {
                       })
                     }
                     return
-                    break;
                   case 3:
-                    return this.announcement = data.content
-                    break;
+                    this.announcement = data.content
+                    return
                   default:
                     this.messages.push(data)
                 }
@@ -327,15 +325,14 @@ export default {
                   })
                 }
               }
-             
             } else {
               if (data.error.indexOf('存款') !== -1) {
                 this.errMsg = true
                 this.errMsgCnt = data.error
               }
             }
-          } catch(e) {
-            console.log(e);
+          } catch (e) {
+            console.log(e)
           }
         }
       }
@@ -382,10 +379,10 @@ export default {
     sendMsg () {
       if (!this.msgCnt) { return false }
       this.$socket.sendObj({
-        "command": "send", 
-        "receivers": [RECEIVER], 
-        "type":0, 
-        "content": this.msgCnt
+        'command': 'send',
+        'receivers': [RECEIVER],
+        'type': 0,
+        'content': this.msgCnt
       })
       this.msgCnt = ''
     },
@@ -407,7 +404,7 @@ export default {
       if (item.sender && ((item.sender.nickname && item.sender.nickname === this.user.nickname) || this.user.username === item.sender.username)) {
         return this.user.avatar
       } else if (item.sender && item.sender.avatar_url) {
-        return  item.sender.avatar_url
+        return item.sender.avatar_url
       } else {
         return require('../assets/avatar.png')
       }
