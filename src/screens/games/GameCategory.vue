@@ -184,6 +184,7 @@ const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_se
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
 const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'], resolve)
 const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
+const fc3dPgIc = (resolve) => require(['../../components/playGroup/fc3d_pg_ic'], resolve)
 
 export default {
   props: {
@@ -204,7 +205,8 @@ export default {
     hklPgShxiaoSpczdc,
     gd11x5Seq,
     hklPgExl,
-    hklPgNtinfvrNum
+    hklPgNtinfvrNum,
+    fc3dPgIc
   },
   data () {
     return {
