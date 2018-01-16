@@ -54,7 +54,9 @@
     name: 'agentRegister',
     data () {
       const userNameValidator = (rule, value, callback) => {
-        if (!validateUserName(value)) {
+        if (!value) {
+          callback(new Error(this.$t('validate.required')))
+        } else if (!validateUserName(value)) {
           callback(new Error(this.$t('validate.username_validate')))
         } else {
           checkAgentName(value).then(data => {
@@ -124,8 +126,7 @@
         captcha_src: '',
         rules: {
           username: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { validator: userNameValidator, trigger: 'blur,change' }
+          { required: true, validator: userNameValidator, trigger: 'blur' }
           ],
           password: [
           { required: true, validator: passwordValidator, trigger: 'blur' },
