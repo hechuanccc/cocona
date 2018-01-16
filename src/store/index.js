@@ -101,6 +101,18 @@ export function createStore () {
           component: 'hklPgNtinfvrNum',
           options: Array.from(Array(49).keys()).map(item => item + 1),
           cols: 7
+        },
+        {
+          code: 'fc3d_pg_2df',
+          component: 'fc3dPg2df',
+          options: Array.from(Array(10).keys()).map(item => item),
+          cols: 5
+        },
+        {
+          code: 'fc3d_pg_3df',
+          component: 'fc3dPg2df',
+          options: Array.from(Array(10).keys()).map(item => item),
+          cols: 5
         }
       ],
       systemConfig: {
