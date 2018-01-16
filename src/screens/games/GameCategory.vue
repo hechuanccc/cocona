@@ -230,8 +230,7 @@ export default {
       showCombinationsTips: false,
       zodiacs,
       zodiacMap,
-      colorWave,
-      showAlias: false
+      colorWave
     }
   },
   computed: {
