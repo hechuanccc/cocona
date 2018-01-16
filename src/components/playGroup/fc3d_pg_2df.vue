@@ -156,7 +156,6 @@ export default {
       _.each(this.selectedOptions, (item) => {
         positionNums.push(item.map(option => option.num))
       })
-      console.log(...positionNums)
 
       let filtered = _.filter(this.selectedOptions, (i) => i.length === 0)
       if (filtered.length === 0) {
