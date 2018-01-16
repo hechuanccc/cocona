@@ -230,7 +230,8 @@ export default {
       showCombinationsTips: false,
       zodiacs,
       zodiacMap,
-      colorWave
+      colorWave,
+      showAlias: false
     }
   },
   computed: {
@@ -441,6 +442,7 @@ export default {
           }
         }
       )
+      console.log(validedPlays)
       this.activePlays = _.values(validedPlays.map(play => {
         let betOptions
         let isCustom = play.isCustom
@@ -464,9 +466,25 @@ export default {
         } else {
           optionDisplayNames = ''
         }
+
+        let forShow = ''
+
+        if (play.hideName) {
+          forShow = play.group
+        } else {
+          if (play.alias) {
+            if (play.alias === play.display_name) {
+              forShow = `${play.group} - ${play.alias}`
+            } else {
+              forShow = `${play.alias} - ${play.display_name}`
+            }
+          } else {
+            forShow = `${play.group} - ${play.display_name}`
+          }
+        }
         return {
           game_schedule: 10,
-          display_name: play.hideName ? play.group : `${play.group} - ${play.display_name}`,
+          display_name: forShow,
           odds: play.odds,
           bet_amount: play.amount,
           id: play.id,
