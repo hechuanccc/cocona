@@ -441,7 +441,6 @@ export default {
           }
         }
       )
-      console.log(validedPlays)
       this.activePlays = _.values(validedPlays.map(play => {
         let betOptions
         let isCustom = play.isCustom
