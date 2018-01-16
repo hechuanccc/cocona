@@ -103,12 +103,14 @@ export function createStore () {
           cols: 7
         },
         {
+          // 福彩3D 二字定位
           code: 'fc3d_pg_2df',
           component: 'fc3dPg2df',
           options: Array.from(Array(10).keys()).map(item => item),
           cols: 5
         },
         {
+          // 福彩3D 三字定位
           code: 'fc3d_pg_3df',
           component: 'fc3dPg2df',
           options: Array.from(Array(10).keys()).map(item => item),
