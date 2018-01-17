@@ -4,7 +4,7 @@ const env = process.env.NODE_ENV === 'development' ? config.dev.env : config.bui
 const host = env.HOST.replace(/"/g, '')
 const prefix = host + '/member'
 const apiv1 = host + '/v1/member'
-const apiChat = env.chatHost
+const apiChat = env.chatHost.replace(/"/g, '')
 
 export default {
   domain: host,
@@ -44,5 +44,7 @@ export default {
   gamehistory: apiv1 + '/history/',
   statistic: apiv1 + '/statistic/',
   chatRoomLogin: apiChat + '/chat/',
-  article: apiv1 + '/website/franchising-program-page'
+  article: apiv1 + '/website/franchising-program-page',
+  chatEmoji: apiChat + '/v1/emoji/',
+  sendImgToChat: host + '/v1/manage/attachment/'
 }

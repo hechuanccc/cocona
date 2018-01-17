@@ -56,8 +56,8 @@ export function fetchGames () {
 export function fetchUser () {
   return axios.get(urls.user)
 }
-export function updateUser (user) {
-  return axios.put(`${urls.user}${user.id}/`, user)
+export function updateUser (user, id) {
+  return axios.put(`${urls.user}${user.id ? user.id : id}/`, user)
 }
 
 export function updatePassword (password) {
@@ -102,11 +102,11 @@ export function fetchTransactionRecord (option) {
 }
 
 export function fetchBet (gameData) {
-  return axios.get(`${urls.betrecord}?opt_expand=play&game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
+  return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
 }
 
 export function fetchWinBet () {
-  return axios.get(`${urls.betrecord}?opt_expand=play&status=win&latest=1`)
+  return axios.get(`${urls.betrecord}?status=win&latest=1`)
 }
 
 export function fetchBetHistory (option) {
@@ -196,4 +196,13 @@ export function fetchTransactionStatus (id) {
 
 export function fetchArticle () {
   return axios.get(urls.article)
+}
+
+export function fetchChatEmoji () {
+  let instance = axios.create()
+  return instance.get(`${urls.chatEmoji}`)
+}
+
+export function sendImgToChat (data) {
+  return axios.post(`${urls.sendImgToChat}`, data)
 }

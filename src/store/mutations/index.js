@@ -16,6 +16,9 @@ export default {
     Vue.cookie.delete('access_token')
     Vue.cookie.delete('refresh_token')
   },
+  [types.SET_SYSTEM_CONFIG]: (state, data) => {
+    state.systemConfig = data
+  },
   [types.SHOW_LOGIN_DIALOG]: (state) => {
     state.loginDialogVisible = true
   },
@@ -45,8 +48,5 @@ export default {
   },
   [types.RESET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = 0
-  },
-  [types.SET_SYSTEM_CONFIG]: (state, data) => {
-    state.systemConfig = data
   }
 }

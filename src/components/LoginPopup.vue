@@ -40,7 +40,7 @@
               <el-button type="primary" @click="login">{{$t('navMenu.login')}}</el-button>
             </el-form-item>
             <div class="forgot-password">
-              <a :href="$store.state.systemConfig.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
+              <a :href="$store.state.systemConfig && $store.state.systemConfig.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
             </div>
           </div>
         </el-form>
@@ -80,7 +80,7 @@ export default {
     },
     login () {
       if (!this.user.username || !this.user.password) {
-        this.$refs.username.focus()
+        this.$refs.username && this.$refs.username.focus()
         return
       }
       this.$store.dispatch('login', {
@@ -109,7 +109,7 @@ export default {
   },
   watch: {
     '$store.state.loginDialogVisible': function () {
-      this.$refs.username.focus()
+      this.$refs.username && this.$refs.username.focus()
     },
     'errorMsg': function () {
       setTimeout(() => {

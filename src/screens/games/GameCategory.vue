@@ -184,6 +184,7 @@ const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_se
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
 const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'], resolve)
 const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
+const fc3dPg2df = (resolve) => require(['../../components/playGroup/fc3d_pg_2df'], resolve)
 const fc3dPgIc = (resolve) => require(['../../components/playGroup/fc3d_pg_ic'], resolve)
 
 export default {
@@ -206,6 +207,7 @@ export default {
     gd11x5Seq,
     hklPgExl,
     hklPgNtinfvrNum,
+    fc3dPg2df,
     fc3dPgIc
   },
   data () {
@@ -457,9 +459,25 @@ export default {
         } else {
           optionDisplayNames = ''
         }
+
+        let forShow = ''
+
+        if (play.hideName) {
+          forShow = play.group
+        } else {
+          if (play.alias) {
+            if (play.alias === play.display_name) {
+              forShow = `${play.group} - ${play.alias}`
+            } else {
+              forShow = `${play.alias} - ${play.display_name}`
+            }
+          } else {
+            forShow = `${play.group} - ${play.display_name}`
+          }
+        }
         return {
           game_schedule: 10,
-          display_name: play.hideName ? play.group : `${play.group} - ${play.display_name}`,
+          display_name: forShow,
           odds: play.odds,
           bet_amount: play.amount,
           id: play.id,

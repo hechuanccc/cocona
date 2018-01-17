@@ -64,7 +64,7 @@
     <el-dialog
       :title="$t('announcement.speaker')"
       :visible.sync="announcementDialogVisible"
-      :width="'400px'"
+      :width="'600px'"
       @close="showCurrentAnnouncementInPopup = true"
       center>
       <el-carousel :height="'200px'"

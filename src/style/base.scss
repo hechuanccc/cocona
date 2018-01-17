@@ -142,3 +142,11 @@ body {
 a {
   text-decoration: none;
 }
+.top-right-msg {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  width: 220px;
+}
+.show-image-msg .el-dialog__body img {
+  width: 80%;
+}
