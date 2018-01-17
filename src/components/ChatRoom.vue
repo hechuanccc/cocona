@@ -187,7 +187,8 @@ import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
 import { msgFormatter } from '../utils'
 import { updateUser, fetchChatEmoji, sendImgToChat } from '../api'
-const WSHOST = 'ws://a546542.eastasia.cloudapp.azure.com:8003'
+import config from '../../config'
+const WSHOST = 'ws://' + config.chatHost + ''
 const RECEIVER = 1
 
 export default {
