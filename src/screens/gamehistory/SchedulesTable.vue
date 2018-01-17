@@ -578,6 +578,64 @@ export default {
           ]
         }
       ]
+    const fc3dTable = [
+      {
+        displayName: '时间',
+        key: 'schedule_result'
+      },
+      {
+        displayName: '期数',
+        key: 'issue_number'
+      },
+      {
+        displayName: '开奖号码',
+        key: 'result_str'
+      },
+      {
+        displayName: '佰拾个和數',
+        key: 'three_balls_sum'
+      },
+      {
+        displayName: '跨度',
+        key: 'ball_max_min_diff'
+      },
+      {
+        displayName: '佰大小',
+        key: 'ball_than_size_1'
+      },
+      {
+        displayName: '佰单双',
+        key: 'ball_odd_even_1'
+      },
+      {
+        displayName: '佰质合',
+        key: 'ball_prime_composite_1'
+      },
+      {
+        displayName: '拾大小',
+        key: 'ball_than_size_2'
+      },
+      {
+        displayName: '拾单双',
+        key: 'ball_odd_even_2'
+      },
+      {
+        displayName: '拾质合',
+        key: 'ball_prime_composite_2'
+      },
+      {
+        displayName: '个大小',
+        key: 'ball_than_size_3'
+      },
+      {
+        displayName: '个单双',
+        key: 'ball_odd_even_3'
+      },
+      {
+        displayName: '个质合',
+        key: 'ball_prime_composite_3'
+      }
+    ]
 
     const gameTable = [
       {
@@ -647,6 +705,10 @@ export default {
       {
         code: 'auluck8',
         table: auluck8Table
+      },
+      {
+        code: 'fc3d',
+        table: fc3dTable
       }
     ]
 
@@ -721,6 +783,10 @@ export default {
           return '单多'
         case 'even_more':
           return '双多'
+        case 'prime':
+          return '质'
+        case 'composite':
+          return '合'
         default:
           return val
       }
@@ -740,6 +806,38 @@ export default {
       return classfied
     },
     initFetchHistory () {
+      // todo
+      // this.schedules = [{
+      //   'result_category': {
+      //     'ball_odd_even_1': 'even',
+      //     'ball_odd_even_2': 'odd',
+      //     'ball_odd_even_3': 'odd',
+      //     'three_balls_sum': 20,
+      //     'ball_than_size_1': 'bigger',
+      //     'ball_than_size_2': 'bigger',
+      //     'ball_than_size_3': 'bigger',
+      //     'balls_odd_even_1_2': 'odd',
+      //     'balls_odd_even_1_3': 'odd',
+      //     'balls_odd_even_2_3': 'even',
+      //     'sum_of_ball_odd_even': 'even',
+      //     'three_balls_sum_tail': 0,
+      //     'sum_of_ball_than_size': 'bigger',
+      //     'balls_prime_composite_1': 'composite',
+      //     'balls_prime_composite_2': 'prime',
+      //     'balls_prime_composite_3': 'prime',
+      //     'balls_than_size_tail_1_2': 'bigger',
+      //     'balls_than_size_tail_1_3': 'smaller',
+      //     'balls_than_size_tail_2_3': 'smaller',
+      //     'sum_of_ball_than_size_tail': 'smaller',
+      //     'balls_prime_composite_tail_1_2': 'prime',
+      //     'balls_prime_composite_tail_1_3': 'prime',
+      //     'balls_prime_composite_tail_2_3': 'prime',
+      //     'sum_of_ball_prime_composite_tail': 'composite'
+      //   },
+      //   'result_str': '8,7,5',
+      //   'schedule_result': '2018-01-15T13:15:00Z',
+      //   'issue_number': '2018015'
+      // }]
       clearInterval(this.interval)
       this.interval = setInterval(() => {
         this.fetchData((this.currentPage - 1) * this.pageSize)
@@ -843,7 +941,8 @@ export default {
 
 .bigger,
 .even,
-.dragon {
+.dragon,
+.composite {
   color: $red;
   padding: 0 5px;
 }

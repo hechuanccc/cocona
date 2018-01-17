@@ -193,3 +193,7 @@ export function fetchStatistic (code) {
 export function fetchTransactionStatus (id) {
   return axios.get(`${urls.payment}?transaction_ids=${id}`)
 }
+
+export function fetchArticle () {
+  return axios.get(urls.article)
+}

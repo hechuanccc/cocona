@@ -43,5 +43,6 @@ export default {
   messageCount: apiv1 + '/message/count/',
   gamehistory: apiv1 + '/history/',
   statistic: apiv1 + '/statistic/',
-  chatRoomLogin: apiChat + '/chat/'
+  chatRoomLogin: apiChat + '/chat/',
+  article: apiv1 + '/website/franchising-program-page'
 }

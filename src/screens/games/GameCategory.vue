@@ -352,11 +352,6 @@ export default {
         return item.code === groupCode
       })
     },
-    getResultClass (resultNum) {
-      let gameClass = `result-${this.gameLatestResult.game_code}`
-      let resultClass = `resultnum-${resultNum}`
-      return [gameClass, resultClass]
-    },
     updateBetrecords () {
       this.$root.bus.$emit('new-betrecords', {
         gameId: this.game.id,
@@ -507,11 +502,6 @@ export default {
       })
 
       Vue.set(this, 'playReset', !this.playReset)
-    },
-    validateAmount (value) {
-      if (value < 1) {
-        this.amount = 1
-      }
     }
   }
 }
