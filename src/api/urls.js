@@ -44,6 +44,7 @@ export default {
   gamehistory: apiv1 + '/history/',
   statistic: apiv1 + '/statistic/',
   chatRoomLogin: apiChat + '/chat/',
+  article: apiv1 + '/website/franchising-program-page',
   chatEmoji: apiChat + '/v1/emoji/',
   sendImgToChat: host + '/v1/manage/attachment/'
 }

@@ -17,7 +17,7 @@
       </el-row>
       <el-row class="m-b-xlg">
         <GameStatistic
-          v-if="currentGame&&currentGame.code!='hkl'"
+          v-if="currentGame&&currentGame.code!=='hkl'&&currentGame.code!=='fc3d'"
           :gameCode="currentGame.code"
           :resultStatistic="resultStatistic"/>
       </el-row>
@@ -141,6 +141,14 @@ export default {
           return '尾大'
         case 'tailsmaller':
           return '尾小'
+        case 'tailprime':
+          return '尾质'
+        case 'tailcomposite':
+          return '尾合'
+        case 'prime':
+          return '质'
+        case 'composite':
+          return '合'
         default:
           return val
       }
@@ -275,10 +283,13 @@ export default {
             return
           }
           type = type[0]
-          if (item[type] < 3) {
+          if (item[type] < 3) { // 只取連續三期以上
             return
           }
           let translated = translator(key)
+          if (!translated[0]) {
+            return
+          }
           statistic.push({
             title: translated[0],
             type: translated[1] ? translated[1] + type : type,
