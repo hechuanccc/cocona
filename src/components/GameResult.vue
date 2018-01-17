@@ -155,13 +155,13 @@ export default {
   display: table;
   max-width: 425px;
   height: 60px;
-  margin-left: 100px;
+  margin-left: 40px;
   float: left;
   .balls-text {
     font-size: 13px;
     display: table-cell;
     vertical-align: middle;
-    color: #4a4a4a;
+    color: #666;
     text-align: center;
     p {
       width: 100px;

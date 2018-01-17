@@ -1,14 +1,7 @@
 <template>
   <div class="countdown-panel">
     <p class="issue">{{schedule.issue_number}}{{$t('navMenu.result_period')}}</p>
-    <div class="schedule" v-if="schedule && schedule.issue_number">
-      <div class="title">封盘</div>
-      <span v-if="!gameClosed" class="red countdown">
-        <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
-        <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
-      </span>
-      <span v-else class="red countdown">已封盘</span>
-    </div>
+    
     <div class="schedule" v-if="schedule && schedule.issue_number">
       <div class="title">开奖</div>
       <span v-if="!ended" class="green countdown">
@@ -16,6 +9,14 @@
         <span v-if="resultCountDown.hours > 0">{{resultCountDown.hours | complete}}:</span>{{resultCountDown.minutes | complete}}:{{resultCountDown.seconds | complete}}
       </span>
       <span v-else class="green countdown">已结束</span>
+    </div>
+    <div class="schedule" v-if="schedule && schedule.issue_number">
+      <div class="title">封盘</div>
+      <span v-if="!gameClosed" class="red countdown">
+        <span v-if="closeCountDown.days > 0">{{closeCountDown.days}}天 </span>
+        <span v-if="closeCountDown.hours > 0">{{closeCountDown.hours | complete}}:</span>{{closeCountDown.minutes | complete}}:{{closeCountDown.seconds | complete}}
+      </span>
+      <span v-else class="red countdown">已封盘</span>
     </div>
   </div>
 </template>
@@ -75,7 +76,7 @@ export default {
 }
 .schedule {
   text-align: center;
-  padding: 0 15px;
+  padding: 0 10px;
   float: right;
   padding-top: 5px;
   .title {
