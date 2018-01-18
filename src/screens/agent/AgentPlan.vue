@@ -15,7 +15,7 @@ export default {
   },
   created () {
     fetchArticle().then(data => {
-      this.article = data.description.replace(/\r\n/g, '<br/>')
+      this.article = data.description.replace(/(\r\n|\r|\n)/g, '<br/>')
     })
   }
 }
