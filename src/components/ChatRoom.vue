@@ -413,7 +413,6 @@ export default {
   right: 0;
   top: 0;
   width: 380px;
-  height: 100%;
 }
 .chat-box {
   position: fixed;
