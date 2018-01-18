@@ -141,7 +141,7 @@
         </div>
         <div class="typing">
           <div class="txtinput el-textarea">
-            <textarea :placeholder="sendMsgCondition"  type="textarea" rows="2" autocomplete="off" validateevent="true" class="el-textarea-inner" v-model="msgCnt"></textarea>
+            <textarea @keyup.enter="sendMsg" :placeholder="sendMsgCondition"  type="textarea" rows="2" autocomplete="off" validateevent="true" class="el-textarea-inner" v-model="msgCnt"></textarea>
           </div>
           <div class="sendbtn fr">
             <a href="javascript:void(0)" class="u-btn" @click="sendMsg">发送</a>
@@ -149,7 +149,7 @@
         </div>
       </el-footer>
     </el-container>
-    <el-dialog title="修改昵称" :visible.sync="showNickNameBox" width="400px" custom-class="changeNickNameBox">
+    <el-dialog title="修改昵称" :visible.sync="showNickNameBox" width="400px" custom-class="changeNickNameBox" append-to-body>
       <el-form>
         <el-form-item label="请输入昵称, 昵称设置后将无法更改">
           <el-input auto-complete="off" v-model="nickname"></el-input>
@@ -379,7 +379,7 @@ export default {
       })
     },
     sendMsg () {
-      if (!this.msgCnt) { return false }
+      if (!this.msgCnt.trim()) { return false }
       this.$socket.sendObj({
         'command': 'send',
         'receivers': [RECEIVER],
@@ -449,6 +449,7 @@ export default {
     font-size: 14px;
     .icon-user {
       margin: 8px 10px;
+      cursor: pointer;
     }
   }
 }
@@ -720,6 +721,7 @@ export default {
         color: #bbb;
         cursor: not-allowed;
         height: 54px;
+        resize: none;
       }
     }
     .el-textarea-inner {
