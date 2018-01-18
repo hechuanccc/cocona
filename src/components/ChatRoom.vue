@@ -168,11 +168,11 @@
     </el-dialog>
     <div v-if="isLogin" class="chat-guide text-center" @click="joinChatRoom">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
-      <p class="text-center">
-        <span>聊</span>
-        <span>天</span>
-        <span>室</span>
-      </p>
+      <ul class="text-center">
+        <li>聊</li>
+        <li>天</li>
+        <li>室</li>
+      </ul>
     </div>
   </div>
  
@@ -853,11 +853,11 @@ export default {
     .font-wechat {
       color: #d1e6fe;
     }
-    p {
+    ul {
       font-size: 18px;
       color: #fff;
-      span {
-        display: inline-block;
+      li {
+        text-align: center;
         padding: 4px 0;
       }
     }
