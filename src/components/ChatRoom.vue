@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-chat">
     <el-container 
       class="chat-box" 
       v-loading="loading"
@@ -79,13 +79,12 @@
             <div class="lay-block clearfix" v-if="item.type >= 0">
               <div class="avatar">
                 <icon name="cog" class="font-cog" v-if="item.type == 4" scale="3"></icon>
-                <img :src="computeAvatar(item)" v-else>
+                <img :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')" v-else>
               </div>
               <div class="lay-content">
                 <div class="msg-header">
                   <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
                   <span class="common-member" v-if="item.type !== 4">
-                    <!-- <img src="../assets/icon_member01.gif" alt="普通会员"> -->
                     普通会员
                   </span>
                   <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
@@ -123,7 +122,7 @@
             width="260"
             trigger="click">
             <div class="emoji-container">
-              <a href="javascript:void(0)" v-for="(item, index) in emojis.people" class="emoji" @click="msgCnt = msgCnt + item.emoji">
+              <a href="javascript:void(0)" v-for="(item, index) in emojis.people.slice(0, 42)" class="emoji" @click="msgCnt = msgCnt + item.emoji + ' '">
                 {{item.emoji}}
               </a>
             </div>
@@ -295,18 +294,20 @@ export default {
               } else {
                 switch (data.type) {
                   case 2:
-                    if (data.command === 'banned') {
-                      this.errMsg = true
-                      this.errMsgCnt = data.content
-                    } else {
-                      this.$notify({
-                        message: data.content,
-                        offset: 100,
-                        type: 'success',
-                        duration: 1200,
-                        customClass: 'top-right-msg',
-                        showClose: false
-                      })
+                    if (this.showChatRoom && this.isLogin) {
+                      if (data.command === 'banned') {
+                        this.errMsg = true
+                        this.errMsgCnt = data.content
+                      } else {
+                        this.$notify({
+                          message: data.content,
+                          offset: 100,
+                          type: 'success',
+                          duration: 2200,
+                          customClass: 'top-right-msg',
+                          showClose: false
+                        })
+                      }
                     }
                     return
                   case 3:
@@ -356,6 +357,7 @@ export default {
         this.$store.commit('SET_USER', {
           user: data
         })
+        this.messages = this.messages.filter((item) => item.type !== -3)
       }, errorMsg => {
         this.$message({
           showClose: true,
@@ -393,6 +395,7 @@ export default {
           user: data
         })
         this.showNickNameBox = false
+        this.messages = this.messages.filter((item) => item.type !== -2)
       }, errorMsg => {
         this.$message({
           showClose: true,
@@ -400,21 +403,19 @@ export default {
           type: 'error'
         })
       })
-    },
-    computeAvatar (item) {
-      if (item.sender && ((item.sender.nickname && item.sender.nickname === this.user.nickname) || this.user.username === item.sender.username)) {
-        return this.user.avatar
-      } else if (item.sender && item.sender.avatar_url) {
-        return item.sender.avatar_url
-      } else {
-        return require('../assets/avatar.png')
-      }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import '../style/vars.scss';
+.container-chat {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 380px;
+  height: 100%;
+}
 .chat-box {
   position: fixed;
   right: 0;
@@ -422,8 +423,6 @@ export default {
   width: 380px;
   overflow-x: hidden;
   height: 100%;
-  background: url('../assets/chatbg.jpg') no-repeat right bottom;
-  background-attachment: fixed;
   border-left: 3px solid #006bb3;
   border-bottom: 1px solid #006bb3;
   z-index: 1;
@@ -454,9 +453,14 @@ export default {
     }
   }
 }
+
 .content {
+  background: url('../assets/chatbg.jpg') no-repeat right bottom;
+  background-attachment: fixed;
   padding: 4px;
+  background-size: cover;
 }
+
 .chat-announce {
   position: absolute;
   top: 43px;
@@ -857,7 +861,6 @@ export default {
   }
 
   .emoji-container {
-    height: 400px;
     overflow-y: scroll;
     .emoji {
       display: inline-block;
