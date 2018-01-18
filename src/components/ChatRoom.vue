@@ -67,11 +67,11 @@
         <div class="controls">
           <a class="list-ctrl clearfix" href="javascript:void(0)">
             <icon class="fl"  name="unsorted"></icon>
-            <span class="fl" @click="$refs.msgEnd.scrollIntoView()">滚屏</span>
+            <span class="fl" @click="$refs.msgEnd.scrollIntoView()">&nbsp;滚屏</span>
           </a>
           <a class="list-ctrl clearfix" href="javascript:void(0)">
             <icon class="fl"  name="trash"></icon>
-            <span class="fl" @click="messages = []">清屏</span>
+            <span class="fl" @click="messages = []">&nbsp;清屏</span>
           </a>
         </div>
         <ul class="lay-scroll">
@@ -114,7 +114,7 @@
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
         </ul>
       </el-main>
-      <el-footer class="footer">
+      <el-footer class="footer" height="100">
         <div class="control-bar">
           <el-popover
             ref="popover4"
@@ -522,6 +522,7 @@ export default {
     text-align: center;
     margin-top: 0px;
     .inner {
+      color: #999;
       display: inline-block;
       background: #efefef;
       border-radius: 8px;
@@ -679,6 +680,7 @@ export default {
   margin-top: -7px;
 }
 .footer {
+  background: #f5f5f5;
   padding: 0;
   .control-bar {
     height: 32px;
@@ -748,6 +750,7 @@ export default {
     color: #666;
     cursor: pointer;
     .el-icon-picture {
+      cursor: pointer;
       font-size: 20px;
     }
   }
@@ -863,17 +866,13 @@ export default {
   .emoji-container {
     overflow-y: scroll;
     .emoji {
+      padding: 2px 6px 0 4px; 
       display: inline-block;
-      width: 30px;
-      height: 30px;
       cursor: pointer;
-      margin-bottom: 5px;
-      margin-right: 5px;
       position: relative;
       font-size: 18px;
       text-align: center;
-      line-height: 30px;
-      border: 3px solid transparent;
+      border: 2px solid transparent;
     }
     .emoji:hover {
       border-color: #ff5a00;
