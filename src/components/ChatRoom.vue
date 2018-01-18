@@ -186,7 +186,7 @@ import urls from '../api/urls'
 import { msgFormatter } from '../utils'
 import { updateUser, fetchChatEmoji, sendImgToChat } from '../api'
 import config from '../../config'
-const WSHOST = 'ws://' + config.chatHost + ''
+const WSHOST = config.chatHost
 const RECEIVER = 1
 
 export default {
@@ -317,13 +317,15 @@ export default {
                 }
 
                 let chatBox = document.getElementById('chatBox')
-                let h = chatBox.clientHeight
-                let sh = chatBox.scrollHeight
-                let st = chatBox.scrollTop
-                if (h + st >= sh) {
-                  this.$nextTick(() => {
-                    this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
-                  })
+                if (chatBox) {
+                  let h = chatBox.clientHeight
+                  let sh = chatBox.scrollHeight
+                  let st = chatBox.scrollTop
+                  if (h + st >= sh) {
+                    this.$nextTick(() => {
+                      this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+                    })
+                  }
                 }
               }
             } else {
