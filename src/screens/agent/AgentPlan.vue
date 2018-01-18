@@ -1,6 +1,6 @@
 <template>
   <div class="box-card">
-    <div v-if="article" v-html="article"></div>
+    <p v-if="article" v-html="article"></p>
   </div>
 </template>
 
