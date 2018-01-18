@@ -39,7 +39,7 @@
               </el-upload>
             </div>
            
-            <p class="avatar-upload-tip">(您还未设置头像, 请点击头像上传)</p>
+            <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : (您还未设置头像, 请点击头像上传)}}</p>
             <p>
               <span class="txt-nick">{{user.nickname || user.username}}</span>
               <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
@@ -102,7 +102,6 @@
             </div>
             <div v-else-if="item.type === -2 || item.type === -3" class="inner type-warning">
               <p>
-                <span></span>
                 <span v-if="item.type === -2">您尚未设置昵称, 点击</span>
                 <span v-else>您可以上传自己的头像啦, 点击</span>
                 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>
