@@ -117,6 +117,11 @@ export default {
   beforeDestroy () {
     clearTimeout(this.timer)
     window.clearInterval(this.getMessageInterval)
+  },
+  watch: {
+    '$store.state.systemConfig.homePageLogo': function (homePageLogo) {
+      document.getElementById('favicon').href = homePageLogo
+    }
   }
 }
 </script>

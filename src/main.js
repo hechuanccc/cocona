@@ -146,6 +146,7 @@ gethomePage().then(
         openAccountConsultingQQ: response.global_preferences.open_account_consulting_qq,
         siteName: response.name
       })
+    document.title = store.state.systemConfig.siteName
   }
 )
 
