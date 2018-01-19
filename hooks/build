@@ -10,6 +10,8 @@ docker build --build-arg AZURE_STORAGE_ACCOUNT=$AZURE_STORAGE_ACCOUNT \
              --build-arg CDN_ENDPOINT=$CDN_ENDPOINT \
              --build-arg CDN_PROFILE=$CDN_PROFILE \
              --build-arg HOST=$HOST \
+             --build-arg chatHost=$chatHost \
+             --build-arg chatApi=$chatApi \
              --build-arg MAX_AGE=$MAX_AGE \
              -t $IMAGE_NAME .
 

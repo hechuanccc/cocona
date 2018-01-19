@@ -151,7 +151,10 @@ export function createStore () {
         customerServiceUrl: '',
         agentDashboardUrl: '',
         homePageLogo: '',
-        siteName: ''
+        siteName: '',
+        global_preferences: {
+          send_chat_conditions: '{}'
+        }
       }
     },
     actions,

@@ -578,6 +578,64 @@ export default {
           ]
         }
       ]
+    const fc3dTable = [
+      {
+        displayName: '时间',
+        key: 'schedule_result'
+      },
+      {
+        displayName: '期数',
+        key: 'issue_number'
+      },
+      {
+        displayName: '开奖号码',
+        key: 'result_str'
+      },
+      {
+        displayName: '佰拾个和數',
+        key: 'three_balls_sum'
+      },
+      {
+        displayName: '跨度',
+        key: 'ball_max_min_diff'
+      },
+      {
+        displayName: '佰大小',
+        key: 'ball_than_size_1'
+      },
+      {
+        displayName: '佰单双',
+        key: 'ball_odd_even_1'
+      },
+      {
+        displayName: '佰质合',
+        key: 'ball_prime_composite_1'
+      },
+      {
+        displayName: '拾大小',
+        key: 'ball_than_size_2'
+      },
+      {
+        displayName: '拾单双',
+        key: 'ball_odd_even_2'
+      },
+      {
+        displayName: '拾质合',
+        key: 'ball_prime_composite_2'
+      },
+      {
+        displayName: '个大小',
+        key: 'ball_than_size_3'
+      },
+      {
+        displayName: '个单双',
+        key: 'ball_odd_even_3'
+      },
+      {
+        displayName: '个质合',
+        key: 'ball_prime_composite_3'
+      }
+    ]
 
     const gameTable = [
       {
@@ -647,6 +705,10 @@ export default {
       {
         code: 'auluck8',
         table: auluck8Table
+      },
+      {
+        code: 'fc3d',
+        table: fc3dTable
       }
     ]
 
@@ -721,6 +783,10 @@ export default {
           return '单多'
         case 'even_more':
           return '双多'
+        case 'prime':
+          return '质'
+        case 'composite':
+          return '合'
         default:
           return val
       }
@@ -843,7 +909,8 @@ export default {
 
 .bigger,
 .even,
-.dragon {
+.dragon,
+.composite {
   color: $red;
   padding: 0 5px;
 }

@@ -2,8 +2,10 @@
 // Template version: 1.1.3
 // see http://vuejs-templates.github.io/webpack for documentation.
 var path = require('path')
+var config = process.env.NODE_ENV !== 'production' ? require('./dev.env.js') : require('./prod.env.js')
 
 module.exports = {
+  chatHost: config.chatHost.replace(/"/g, ''),
   build: {
     env: require('./prod.env'),
     index: path.resolve(__dirname, '../dist/index.html'),

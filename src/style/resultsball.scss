@@ -48,7 +48,7 @@ $racing_length: length($results_racing);
 }
 
 /*specific: guandong region games, common: ball_1.png*/
-$results_gd: gd11x5, gdklsf;
+$results_gd: gd11x5, gdklsf, fc3d;
 $gd_length: length($results_gd);
 
 @for $index from 1 through $gd_length {
