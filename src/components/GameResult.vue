@@ -84,7 +84,7 @@ export default {
       if (code === 'hkl') {
         this.showZodiac = true
       }
-      if (code === 'pcdd') {
+      if (code === 'pcdd' || code === 'jnd28') {
         this.showSum = true
       }
     }
