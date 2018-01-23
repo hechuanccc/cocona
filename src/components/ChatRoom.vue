@@ -3,7 +3,6 @@
     <el-container 
       class="chat-box" 
       v-loading="loading"
-      id="chatBox"
       element-loading-text="正在登陆"
       v-if="isLogin && showChatRoom">
       <el-header class="title clearfix" height="40px">
@@ -12,8 +11,9 @@
           <h3 class="fl m-l">聊天室</h3>
         </div>
         <div class="right fr clearfix">
+          <icon v-if="personal_setting.manager" class="icon-user fl" name="cog" scale="1.4"></icon>
           <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="showEditProfile = true"></icon>
-          <i class="el-icon-close close fl" title="关闭聊天室" @click="showChatRoom = false"></i>
+          <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
         <transition
           enter-class="profileFadeInEnter"
@@ -53,8 +53,29 @@
             </div>
           </div>
         </transition>
+        <transition
+          enter-class="profileFadeInEnter"
+          leave-active-class="animated fadeOutUp"
+          enter-active-class="animated fadeInDown">
+          <div class="edit-profile" v-if="showCheckUser">
+            <div
+              class="avatar"
+              style="overflow-y: hidden;">
+              <img :src="checkUser.avatar_url || '../assets/avatar.png'" class="avatar">
+              <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
+                <span class="el-icon-upload"></span>
+              </label>
+            </div>
+            <p class="avatar-upload-tip">{{checkUser.nickname || checkUser.username}}({{checkUser.level_name}})</p>
+            <div>
+              <p>
+                <a href="javascript:void(0)" class="u-btn" @click="showCheckUser = false">关闭</a>
+              </p>
+            </div>
+          </div>
+        </transition>
       </el-header>
-      <el-main class="content">
+      <el-main class="content" id="chatBox">
         <div class="chat-announce" v-if="announcement">
           <div class="ttl clearfix">
             <icon class="fl volume-up" name="volume-up"></icon>
@@ -79,7 +100,7 @@
             <div class="lay-block clearfix" v-if="item.type >= 0">
               <div class="avatar">
                 <icon name="cog" class="font-cog" v-if="item.type == 4" scale="3"></icon>
-                <img :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')" v-else>
+                <img @click="handleCheckUser(item)" :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')" v-else>
               </div>
               <div class="lay-content">
                 <div class="msg-header">
@@ -102,12 +123,9 @@
             </div>
             <div v-else-if="item.type === -2 || item.type === -3" class="inner type-warning">
               <p>
-                <span v-if="item.type === -2">您尚未设置昵称, 点击</span>
-                <span v-else>您可以上传自己的头像啦, 点击</span>
-                <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>
-                设置
+                <span v-if="item.type === -2">您可以设置昵称啦, 点击 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>设置昵称</span>
+                <span v-else>您可以上传自己的头像啦, 点击 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>设置</span>
               </p>
-              <p v-if="item.type === -2">昵称设置过后将无法再次更改哦</p>
             </div>
           </li>
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
@@ -121,7 +139,7 @@
             width="260"
             trigger="click">
             <div class="emoji-container">
-              <a href="javascript:void(0)" v-for="(item, index) in emojis.people.slice(0, 42)" class="emoji" @click="msgCnt = msgCnt + item.emoji + ' '">
+              <a href="javascript:void(0)" v-for="(item, index) in emojis.people.slice(0, 42)" class="emoji" @click="personal_setting.chat.status ? chatmsgCnt = msgCnt + item.emoji + ' ' : ''">
                 {{item.emoji}}
               </a>
             </div>
@@ -140,8 +158,8 @@
           </a>
         </div>
         <div class="typing">
-          <div class="txtinput el-textarea">
-            <textarea @keyup.enter="sendMsg" :placeholder="sendMsgCondition"  type="textarea" rows="2" autocomplete="off" validateevent="true" class="el-textarea-inner" v-model="msgCnt"></textarea>
+          <div :class="['txtinput', 'el-textarea', !personal_setting.chat.status ? 'is-disabled' : '']">
+            <textarea  @keyup.enter="sendMsg" :placeholder="sendMsgCondition"  type="textarea" rows="2" autocomplete="off" validateevent="true" class="el-textarea-inner" v-model="msgCnt"></textarea>
           </div>
           <div class="sendbtn fr">
             <a href="javascript:void(0)" class="u-btn" @click="sendMsg">发送</a>
@@ -151,7 +169,7 @@
     </el-container>
     <el-dialog title="修改昵称" :visible.sync="showNickNameBox" width="400px" custom-class="changeNickNameBox" append-to-body>
       <el-form>
-        <el-form-item label="请输入昵称, 昵称设置后将无法更改">
+        <el-form-item label="请输入昵称">
           <el-input auto-complete="off" v-model="nickname"></el-input>
         </el-form-item>
       </el-form>
@@ -160,10 +178,10 @@
         <el-button type="primary" @click="submitNickName">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog :visible.sync="showImageMsg" width="640px" custom-class="show-image-msg text-center">
+    <el-dialog :visible.sync="showImageMsg" width="640px" custom-class="show-image-msg text-center" append-to-body>
       <img :src="showImageMsgUrl">
     </el-dialog>
-    <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg">
+    <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg" append-to-body>
       <p>{{errMsgCnt}}</p>
     </el-dialog>
     <div v-if="isLogin" class="chat-guide text-center" @click="joinChatRoom">
@@ -184,7 +202,7 @@ import VueNativeSock from 'vue-native-websocket'
 import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
 import { msgFormatter } from '../utils'
-import { updateUser, fetchChatEmoji, sendImgToChat } from '../api'
+import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser } from '../api'
 import config from '../../config'
 const WSHOST = config.chatHost
 const RECEIVER = 1
@@ -208,7 +226,13 @@ export default {
       emojis: {
         people: []
       },
-      announcement: ''
+      announcement: '',
+      personal_setting: {
+        chat: {}
+      },
+      showCheckUser: false,
+      checkUser: {},
+      chatLoading: true
     }
   },
   components: {
@@ -223,8 +247,8 @@ export default {
     },
     sendMsgCondition () {
       let condition = JSON.parse(this.$store.state.systemConfig.global_preferences.send_chat_conditions)
-      if (Object.keys(condition).length) {
-        return `发言条件：前${condition['days']}天充值不少于${condition['deposit_threshold']}元；投注打码量不少于${condition['bet_threshold']}元`
+      if (condition.length) {
+        return `发言条件：前${condition[0]['value']}天充值不少于${condition[1]['value']}元；投注打码量不少于${condition[2]['value']}元`
       }
       return ''
     }
@@ -290,6 +314,8 @@ export default {
                   this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
                 })
                 return
+              } else if (data.personal_setting) {
+                this.personal_setting = data.personal_setting
               } else {
                 switch (data.type) {
                   case 2:
@@ -319,9 +345,9 @@ export default {
                 let chatBox = document.getElementById('chatBox')
                 if (chatBox) {
                   let h = chatBox.clientHeight
-                  let sh = chatBox.scrollHeight
-                  let st = chatBox.scrollTop
-                  if (h + st >= sh) {
+                  let sh = chatBox.scrollHeight || chatBox.offsetHeigth
+                  let st = chatBox.scrollTop || document.documentElement.scrollTop || document.body.scrollTop
+                  if (h + st + 100 >= sh || (data.sender && data.sender.username === this.user.username)) {
                     this.$nextTick(() => {
                       this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
                     })
@@ -368,7 +394,13 @@ export default {
       })
     },
     sendMsgImg (e) {
-      let file = this.$refs.fileImgSend.files[0]
+      let fileInp = this.$refs.fileImgSend
+      let file = fileInp.files[0]
+      if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(fileInp.value) || !this.personal_setting.chat.status) {
+        this.errMsgCnt = '文件格式不正确或您目前尚不符合发言条件'
+        this.errMsg = true
+        return false
+      }
       if (file.size > 1024 * 1024) {
         this.errMsg = true
         this.errMsgCnt = '图片尺寸太大，请选择较小尺寸的图片。'
@@ -378,6 +410,7 @@ export default {
       formData.append('receivers', RECEIVER)
       formData.append('image', file)
       sendImgToChat(formData).then((data) => {
+        fileInp.value = ''
       })
     },
     sendMsg () {
@@ -404,6 +437,37 @@ export default {
           type: 'error'
         })
       })
+    },
+    leaveRoom () {
+      this.showChatRoom = false
+      this.messages = []
+      this.$socket.sendObj({
+        'command': 'leave',
+        'receivers': [RECEIVER]
+      })
+    },
+    handleCheckUser (data) {
+      if (!this.personal_setting.manager || data.sender.level_name.indexOf('管理员') !== -1) {
+        return false
+      }
+      this.checkUser = data.sender
+      this.showCheckUser = true
+    },
+    banUser (time) {
+      banChatUser(RECEIVER, {
+        action: 'banned',
+        user: this.checkUser.username,
+        banned_time: time
+      }).then((data) => {
+      }, errorMsg => {
+        this.$message({
+          showClose: true,
+          message: errorMsg,
+          type: 'error'
+        })
+      })
+    },
+    blockUser () {
     }
   }
 }
@@ -460,6 +524,7 @@ export default {
   background-attachment: fixed;
   padding: 4px;
   background-size: cover;
+  padding-bottom: 60px;
 }
 
 .chat-announce {
@@ -648,6 +713,9 @@ export default {
   padding: 5px 8px;
   font-size: 13px;
   display: inline-block;
+  p {
+    width: 100%;
+  }
   &.bubble1 {
     width: 55%;
   }
@@ -683,6 +751,7 @@ export default {
 .footer {
   background: #f5f5f5;
   padding: 0;
+  width: 380px;
   .control-bar {
     height: 32px;
     background: #f5f5f5;

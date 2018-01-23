@@ -3,6 +3,7 @@ import qs from 'qs'
 import urls from './urls'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+let axiosChat = axios.create()
 
 export function login (user) {
   return axios.post(urls.login, qs.stringify(user))
@@ -199,10 +200,13 @@ export function fetchArticle () {
 }
 
 export function fetchChatEmoji () {
-  let instance = axios.create()
-  return instance.get(`${urls.chatEmoji}`)
+  return axiosChat.get(`${urls.chatEmoji}`)
 }
 
 export function sendImgToChat (data) {
   return axios.post(`${urls.sendImgToChat}`, data)
+}
+
+export function banChatUser (id, data) {
+  return axiosChat.put(`${urls.banUser}${id}/`, data)
 }
