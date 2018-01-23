@@ -11,6 +11,7 @@
           <h3 class="fl m-l">聊天室</h3>
         </div>
         <div class="right fr clearfix">
+          <icon v-if="personal_setting.manager" class="icon-user fl" name="cog" scale="1.4"></icon>
           <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="showEditProfile = true"></icon>
           <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
@@ -52,6 +53,27 @@
             </div>
           </div>
         </transition>
+        <transition
+          enter-class="profileFadeInEnter"
+          leave-active-class="animated fadeOutUp"
+          enter-active-class="animated fadeInDown">
+          <div class="edit-profile" v-if="showCheckUser">
+            <div
+              class="avatar"
+              style="overflow-y: hidden;">
+              <img :src="checkUser.avatar_url || '../assets/avatar.png'" class="avatar">
+              <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
+                <span class="el-icon-upload"></span>
+              </label>
+            </div>
+            <p class="avatar-upload-tip">{{checkUser.nickname || checkUser.username}}({{checkUser.level_name}})</p>
+            <div>
+              <p>
+                <a href="javascript:void(0)" class="u-btn" @click="showCheckUser = false">关闭</a>
+              </p>
+            </div>
+          </div>
+        </transition>
       </el-header>
       <el-main class="content" id="chatBox">
         <div class="chat-announce" v-if="announcement">
@@ -78,7 +100,7 @@
             <div class="lay-block clearfix" v-if="item.type >= 0">
               <div class="avatar">
                 <icon name="cog" class="font-cog" v-if="item.type == 4" scale="3"></icon>
-                <img :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')" v-else>
+                <img @click="handleCheckUser(item)" :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')" v-else>
               </div>
               <div class="lay-content">
                 <div class="msg-header">
@@ -425,7 +447,7 @@ export default {
       })
     },
     handleCheckUser (data) {
-      if (!this.personal_setting.manager || data.sender.level_name === '管理员') {
+      if (!this.personal_setting.manager || data.sender.level_name.indexOf('管理员') !== -1) {
         return false
       }
       this.checkUser = data.sender
