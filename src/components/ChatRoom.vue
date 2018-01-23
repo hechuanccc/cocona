@@ -372,9 +372,13 @@ export default {
       })
     },
     sendMsgImg (e) {
-      if (!this.personal_setting.chat.status) { return false }
       let fileInp = this.$refs.fileImgSend
       let file = fileInp.files[0]
+      if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(fileInp.value) || !this.personal_setting.chat.status) {
+        this.errMsgCnt = '文件格式不正确或您目前尚不符合发言条件'
+        this.errMsg = true
+        return false
+      }
       if (file.size > 1024 * 1024) {
         this.errMsg = true
         this.errMsgCnt = '图片尺寸太大，请选择较小尺寸的图片。'
