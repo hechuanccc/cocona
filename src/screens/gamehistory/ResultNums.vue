@@ -112,7 +112,7 @@ export default {
 }
 @include hkl-num;
 
-$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd, jnd28;
+$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd, jnd28, fc3d;
 
 %sscball{
   background: url("../../assets/ball_2.png") no-repeat;
