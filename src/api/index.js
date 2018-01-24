@@ -208,5 +208,39 @@ export function sendImgToChat (data) {
 }
 
 export function banChatUser (id, data) {
-  return axiosChat.put(`${urls.banUser}${id}/`, data)
+  return axiosChat.put(`${urls.apiRoom}/${id}/`,
+    {
+      action: 'banned',
+      user: data.user,
+      banned_time: data.banned_time
+    })
+}
+
+export function unbanChatUser (id, data) {
+  return axiosChat.put(`${urls.apiRoom}/${id}/`,
+    {
+      action: 'unbanned',
+      user: data.user,
+      banned_time: data.banned_time
+    })
+}
+
+export function blockChatUser (id, data) {
+  return axiosChat.put(`${urls.apiRoom}/${id}/`,
+    {
+      action: 'block',
+      user: data.user,
+      block_time: 60
+    })
+}
+export function unblockChatUser (id, data) {
+  return axiosChat.put(`${urls.apiRoom}/${id}/`,
+    {
+      action: 'unblock',
+      user: data.user
+    })
+}
+
+export function getChatUser (id) {
+  return axiosChat.get(`${urls.apiRoom}/${id}/`)
 }

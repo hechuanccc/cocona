@@ -21,7 +21,7 @@
             @mouseover="dropdownActive = true"
             @mouseleave="dropdownActive = false"
             v-if="allGames.length > exposedCount">
-            <span v-if="currentGame.rank > exposedCount">{{currentGame.display_name}}</span>
+            <span v-if="currentGame.rank > exposedCount + 1">{{currentGame.display_name}}</span>
             <span v-else>更多</span>
             <i class="el-icon-arrow-up icon" v-if="dropdownActive"/>
             <i class="el-icon-arrow-down icon" v-else/>
