@@ -15,7 +15,6 @@
           <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="showEditProfile = true"></icon>
           <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
-
         <transition
           enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
@@ -54,7 +53,6 @@
             </div>
           </div>
         </transition>
-
         <transition
           enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
@@ -82,7 +80,6 @@
           </div>
         </transition>
       </el-header>
-
       <el-main class="content" id="chatBox">
         <div class="chat-announce" v-if="announcement">
           <div class="ttl clearfix">
@@ -103,9 +100,6 @@
             <span class="fl" @click="messages = []">&nbsp;清屏</span>
           </a>
         </div>
-
-
-
         <ul class="lay-scroll">
           <li v-for="(item, index) in messages"
             :key="index"
@@ -130,12 +124,11 @@
                 <div :class="['bubble', 'bubble' + item.type]">
                   <p>
                     <span v-if="item.type === 0 || item.type === 4" v-html="item.content"></span>
-                    <img @click="showImageMsg = true; showImageMsgUrl = item.content" :src="item.content">
+                    <img @click="showImageMsg = true; showImageMsgUrl = item.content" v-else-if="item.type === 1" :src="item.content">
                   </p>
                 </div>
               </div>
             </div>
-
             <div class="inner" v-else-if="item.type === -1">
               <p>以上是历史消息</p>
             </div>
@@ -149,7 +142,6 @@
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
         </ul>
       </el-main>
-
       <el-footer class="footer" height="100">
         <div class="control-bar">
           <el-popover
@@ -166,6 +158,7 @@
                 {{item.emoji}}
               </a>
             </div>
+
           </el-popover>
           <a v-popover:popover4 href="javascript:void(0)" title="发送表情" class="btn-control btn-smile">
             <icon scale="1.3" name="smile-o"></icon>
@@ -196,7 +189,6 @@
         </div>
       </el-footer>
     </el-container>
-
     <el-dialog title="修改昵称"
       :visible.sync="showNickNameBox"
       width="400px"
@@ -212,14 +204,12 @@
         <el-button type="primary" @click="submitNickName">确 定</el-button>
       </div>
     </el-dialog>
-
     <el-dialog :visible.sync="showImageMsg"
       width="640px"
       custom-class="show-image-msg text-center"
       append-to-body>
       <img :src="showImageMsgUrl">
     </el-dialog>
-
     <div v-if="isLogin"
       class="chat-guide text-center"
       @click="joinChatRoom">
@@ -255,18 +245,18 @@
         style="width: 100%">
         <el-table-column
           prop="username"
-          label="帳號"
-          width="215">
+          label="帐号"
+          :width="nowRestraintTab === '0' ? 322 : 215">
         </el-table-column>
         <el-table-column
           v-if="nowRestraintTab === '1'"
           prop="banned_time"
-          label="時間(min)"
+          label="时间(min)"
           width="215">
         </el-table-column>
         <el-table-column
           label="操作"
-          width="215">
+          :width="nowRestraintTab === '0' ? 322 : 215">
           <template slot-scope="scope">
             <el-button v-if="nowRestraintTab === '1'" size="mini" type="danger" @click.native="unban(scope.row.username)">解除</el-button>
             <el-button v-else size="mini" type="danger" @click.native="unblock(scope.row.username)">解除</el-button>
