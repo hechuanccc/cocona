@@ -73,6 +73,8 @@ axios.interceptors.response.use(res => {
   } else {
     if (responseData.code === 9007) {
       toHomeAndLogin(router)
+    } else if (responseData.code === 9011) { // for login fail: "Invalid username or password"
+      Vue.cookie.set('sessionid', res.data.data.sessionid)
     }
     return Promise.reject(responseData.msg)
   }
