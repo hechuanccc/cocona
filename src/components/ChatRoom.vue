@@ -12,7 +12,7 @@
         </div>
         <div class="right fr clearfix">
           <icon v-if="personal_setting.manager" class="icon-user fl" name="cog" scale="1.4" @click.native="handleBlockPopupShow"></icon>
-          <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="showEditProfile = true"></icon>
+          <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="personal_setting.block ? '' : showEditProfile = true"></icon>
           <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
         <transition
@@ -117,7 +117,7 @@
                 <div class="msg-header">
                   <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
                   <span class="common-member" v-if="item.type !== 4">
-                    普通会员
+                    {{item.sender && item.sender.level_name.indexOf('管理员') !== -1 ? '管理员' : '普通会员'}}
                   </span>
                   <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
                 </div>
@@ -139,6 +139,7 @@
               </p>
             </div>
           </li>
+          <li v-if="personal_setting.block" class="block-user-info">您已被管理员拉黑，请联系客服。<li>
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
         </ul>
       </el-main>
@@ -180,7 +181,8 @@
               autocomplete="off"
               validateevent="true"
               class="el-textarea-inner"
-              v-model="msgCnt">
+              v-model="msgCnt"
+              :disabled="personal_setting.chat.status ? false : true">
             </textarea>
           </div>
           <div class="sendbtn fr">
@@ -210,7 +212,11 @@
       append-to-body>
       <img :src="showImageMsgUrl">
     </el-dialog>
-    <div v-if="isLogin"
+    <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg" append-to-body>
+      <p>{{errMsgCnt}}</p>
+    </el-dialog>
+    <div 
+      v-if="isLogin && showEntry" 
       class="chat-guide text-center"
       @click="joinChatRoom">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -273,13 +279,19 @@ import Vue from 'vue'
 import VueNativeSock from 'vue-native-websocket'
 import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
-import { msgFormatter } from '../utils'
+import { msgFormatter, getCookie } from '../utils'
 import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser } from '../api'
 import config from '../../config'
 const WSHOST = config.chatHost
 const RECEIVER = 1
 
 export default {
+  props: {
+    showEntry: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       showChatRoom: false,
@@ -323,6 +335,13 @@ export default {
   components: {
     MarqueeTips
   },
+  watch: {
+    'showEntry': function (val, oldVal) {
+      if (!val && this.showChatRoom && this.isLogin) {
+        this.leaveRoom()
+      }
+    }
+  },
   computed: {
     isLogin () {
       return this.$store.state.user.logined && this.$route.name !== 'Home'
@@ -353,7 +372,7 @@ export default {
   methods: {
     joinChatRoom () {
       this.showChatRoom = true
-      let token = Vue.cookie.get('access_token')
+      let token = getCookie('access_token')
       if (this.$socket && this.$socket.readyState === 1) {
         this.handleMsg()
       } else {
@@ -389,11 +408,12 @@ export default {
         'receivers': [RECEIVER]
       })
       this.$socket.onmessage = (resData) => {
+        if (!this.showChatRoom || !this.showEntry) { return }
         let data
         if (typeof resData.data === 'string') {
           try {
             data = JSON.parse(resData.data)
-            if (!data.error) {
+            if (!data.error_type) {
               if (data.latest_message) {
                 if (data.latest_message[data.latest_message.length - 1].type === 3) {
                   let annouce = data.latest_message.pop()
@@ -452,9 +472,21 @@ export default {
                 }
               }
             } else {
-              if (data.error.indexOf('存款') !== -1) {
-                this.errMsg = true
-                this.errMsgCnt = data.error
+              this.errMsg = true
+              switch (data.error_type) {
+                case 4:
+                  this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
+                  this.personal_setting.banned = true
+                  this.personal_setting.chat.status = 0
+                  break
+                case 5:
+                  this.messages = []
+                  this.personal_setting.block = true
+                  this.personal_setting.chat.status = 0
+                  this.errMsgCnt = data.msg
+                  break
+                default:
+                  this.errMsgCnt = data.msg
               }
             }
           } catch (e) {
@@ -743,6 +775,12 @@ export default {
 }
 .lay-scroll {
   padding-top: 36px;
+  .block-user-info {
+    text-align: center;
+    padding-top: 100px;
+    font-size: 16px;
+    color: red;
+  }
 }
 .item {
   margin-top: 15px;
