@@ -241,6 +241,7 @@
           @click.native="switchBlockTab(index)">{{tab.display}}</el-menu-item>
       </el-menu>
       <el-table
+        class="admin-table"
         :data="nowRestraintTab === '1' ? formattedBannedUsers : blockedUsers"
         style="width: 100%">
         <el-table-column
@@ -343,7 +344,7 @@ export default {
         this.bannedUsers.forEach((item) => {
           result.push({
             username: item.username,
-            banned_time: this.$moment(item.banned_time).format('mm')
+            banned_time: this.$moment(item.banned_time).format('mm') + ' min'
           })
         })
         return result
@@ -1113,4 +1114,12 @@ export default {
     }
   }
 
+  .admin-table {
+    font-size: 14px;
+    color: #4a4a4a;
+    .el-button {
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
 </style>
