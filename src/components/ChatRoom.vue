@@ -3,7 +3,8 @@
     <el-container
       class="chat-box"
       v-loading="loading"
-      element-loading-text="正在登陆"
+      id="chatBox"
+      element-loading-text="正在登录"
       v-if="isLogin && showChatRoom">
       <el-header class="title clearfix" height="40px">
         <div class="left fl clearfix">
@@ -385,7 +386,6 @@ export default {
       setTimeout(() => {
         if (!this.ws || (this.ws && this.ws.readyState !== 1)) {
           this.joinChatRoom()
-          return
         } else {
           if (!this.emojis.people.length) {
             fetchChatEmoji().then((resData) => {
@@ -682,7 +682,7 @@ export default {
   position: fixed;
   right: 0;
   top: 0;
-  width: 380px;
+  width: 340px;
   overflow-x: hidden;
   height: 100%;
   border-left: 3px solid #006bb3;
@@ -711,6 +711,7 @@ export default {
   .right {
     font-size: 14px;
     .icon-user {
+      cursor: pointer;
       margin: 8px 10px;
       cursor: pointer;
     }
@@ -720,9 +721,8 @@ export default {
 .content {
   background: url('../assets/chatbg.jpg') no-repeat right bottom;
   background-attachment: fixed;
-  padding: 4px;
   background-size: cover;
-  padding-bottom: 60px;
+  padding: 4px 0;
 }
 
 .chat-announce {
@@ -955,7 +955,7 @@ export default {
 .footer {
   background: #f5f5f5;
   padding: 0;
-  width: 380px;
+  width: 100%;
   .control-bar {
     height: 32px;
     background: #f5f5f5;
@@ -1094,6 +1094,7 @@ export default {
     line-height: 20px;
   }
   .el-icon-edit-outline {
+    color: $primary;
     font-size: 20px;
   }
 }
