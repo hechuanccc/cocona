@@ -344,9 +344,10 @@ export default {
         this.bannedUsers.forEach((item) => {
           result.push({
             username: item.username,
-            banned_time: this.$moment(item.banned_time).format('mm') + ' min'
+            banned_time: this.$moment(item.banned_time).fromNow(true)
           })
         })
+
         return result
       }
     }
