@@ -79,8 +79,9 @@ export function formatPlayGroup (raw, formatting) {
   return sections
 }
 
-export function msgFormatter (msgs) {
+export function msgFormatter (error) {
   let formatMsg
+  let msgs = error.msg
   if (Array.isArray(msgs)) {
     let arr = []
     msgs.forEach(msg => {
