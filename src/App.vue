@@ -22,7 +22,7 @@
       center>
       <BetRecord v-if="showBetRecordDialog" :lazyFetch="!showBetRecordDialog"/>
     </el-dialog>
-    <chat-room></chat-room>
+    <chat-room :showEntry="showEntry"></chat-room>
   </div>
 </template>
 
@@ -98,6 +98,10 @@ export default {
     },
     showBetRecordDialog () {
       return this.$store.state.betRecordDialogVisible
+    },
+    showEntry () {
+      let name = this.$route.name
+      return name === 'Gameintro' || name === 'GameDetail' || name === 'GameHistory' || name === 'Game' || name === 'Schedules'
     }
   },
   created () {

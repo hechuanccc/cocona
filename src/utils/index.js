@@ -163,3 +163,14 @@ export function filtAmount (evt) {
 export function statisticTranslator (code) {
   return gameTranslator[code]
 }
+
+export function getCookie (name) {
+  let arr = document.cookie.split('; ')
+  for (let i = 0; i < arr.length; i++) {
+    let arr2 = arr[i].split('=')
+    if (arr2[0] === name) {
+      return arr2[1]
+    }
+  }
+  return ''
+}
