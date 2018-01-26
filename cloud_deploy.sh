@@ -3,7 +3,6 @@ set -e  # to stop script when error occurs
 
 # NPM commands and Azure cli scripts to deploy our static VueJS in a CDN
 
-# export ENV_CONTAINER=staging
 export root_container=\$root  # is '\' is to escape the special character
 export static_container=static
 
