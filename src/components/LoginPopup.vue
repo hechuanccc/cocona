@@ -112,17 +112,16 @@ export default {
           verification_code_1: this.user.verification_code_1
         }
       }).then(result => {
-        this.fetchCaptcha()
         this.$store.commit('CLOSE_LOGINDIALOG')
         this.illegalTriedLogin = false
         const next = this.$route.query.next
         this.$router.push(next || 'game')
       }, errorMsg => {
         if (errorMsg.data.auth_req === 1) {
+          this.fetchCaptcha()
           this.illegalTriedLogin = true
         }
         this.errorMsg = errorMsg.msg
-        this.fetchCaptcha()
       })
     },
     tryplay () {
