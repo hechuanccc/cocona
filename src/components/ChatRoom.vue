@@ -385,7 +385,7 @@ export default {
         this.ws = null
       }
       setTimeout(() => {
-        if (!this.ws || (this.ws && this.ws.readyState !== 1)) {
+        if ((!this.ws || (this.ws && this.ws.readyState !== 1)) && this.showChatRoom) {
           this.joinChatRoom()
         } else {
           if (!this.emojis.people.length) {
