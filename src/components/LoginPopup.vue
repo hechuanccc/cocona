@@ -114,6 +114,7 @@ export default {
       }).then(result => {
         this.fetchCaptcha()
         this.$store.commit('CLOSE_LOGINDIALOG')
+        this.illegalTriedLogin = false
         const next = this.$route.query.next
         this.$router.push(next || 'game')
       }, errorMsg => {
