@@ -177,7 +177,7 @@ import Vue from 'vue'
 import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
-import { formatPlayGroup, filtAmount } from '../../utils'
+import { msgFormatter, formatPlayGroup, filtAmount } from '../../utils'
 import { zodiacs, zodiacMap, colorWave } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
@@ -393,7 +393,7 @@ export default {
         },
         errRes => {
           this.submitting = false
-          this.errors = errRes.join()
+          this.errors = msgFormatter(errRes)
           setTimeout(() => {
             this.dialogVisible = false
           }, 3000)
