@@ -36,6 +36,9 @@ export default {
       commit('END_LOADING')
       return Promise.resolve(res)
     }, error => {
+      if (error.code === 9011) {
+        Vue.cookie.set('sessionid', error.data.sessionid)
+      }
       commit('END_LOADING')
       return Promise.reject(error)
     })
