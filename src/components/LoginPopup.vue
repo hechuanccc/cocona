@@ -34,7 +34,7 @@
               </el-input>
             </el-form-item>
 
-            <el-form-item v-if="illegalTriedLogin" :label="'驗證碼'" label-width="55px"  prop="verification_code_1">
+            <el-form-item v-if="illegalTriedLogin" :label="'验证码'" label-width="55px"  prop="verification_code_1">
               <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off"></el-input>
               <div class="m-t">
                 <el-col :span="12" :pull="2">
