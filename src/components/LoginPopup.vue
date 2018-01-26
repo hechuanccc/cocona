@@ -120,7 +120,7 @@ export default {
         if (errorMsg.data.auth_req === 1) {
           this.illegalTriedLogin = true
         }
-        this.errorMsg = msgFormatter(errorMsg.msg)
+        this.errorMsg = errorMsg.msg
         this.fetchCaptcha()
       })
     },
