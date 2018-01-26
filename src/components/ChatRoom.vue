@@ -216,8 +216,8 @@
     <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg" append-to-body>
       <p>{{errMsgCnt}}</p>
     </el-dialog>
-    <div 
-      v-if="isLogin && showEntry" 
+    <div
+      v-if="isLogin && showEntry"
       class="chat-guide text-center"
       @click="joinChatRoom">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -248,7 +248,6 @@
           @click.native="switchBlockTab(index)">{{tab.display}}</el-menu-item>
       </el-menu>
       <el-table
-        class="admin-table"
         :data="nowRestraintTab === '1' ? formattedBannedUsers : blockedUsers"
         style="width: 100%">
         <el-table-column
@@ -1154,15 +1153,6 @@ export default {
     }
     .emoji:hover {
       border-color: #ff5a00;
-    }
-  }
-
-  .admin-table {
-    font-size: 14px;
-    color: #4a4a4a;
-    .el-button {
-      font-size: 14px;
-      font-weight: 400;
     }
   }
 </style>
