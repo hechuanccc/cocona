@@ -208,10 +208,10 @@ export default {
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
 .gain {
-  color: $green;
+  color: $red;
 }
 .loss {
-  color: $red;
+  color: $green;
 }
 .unsettle {
   color: $primary;
