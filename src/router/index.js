@@ -186,7 +186,8 @@ export default new Router({
           children: [
             {
               path: ':categoryId',
-              component: GameCategory
+              component: GameCategory,
+              name: 'GameDetail'
             }
           ]
         }

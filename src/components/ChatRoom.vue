@@ -3,7 +3,8 @@
     <el-container
       class="chat-box"
       v-loading="loading"
-      element-loading-text="正在登陆"
+      id="chatBox"
+      element-loading-text="正在登录"
       v-if="isLogin && showChatRoom">
       <el-header class="title clearfix" height="40px">
         <div class="left fl clearfix">
@@ -12,7 +13,7 @@
         </div>
         <div class="right fr clearfix">
           <icon v-if="personal_setting.manager" class="icon-user fl" name="cog" scale="1.4" @click.native="handleBlockPopupShow"></icon>
-          <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="showEditProfile = true"></icon>
+          <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="personal_setting.blocked && !user.account_type ? '' : showEditProfile = true"></icon>
           <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
         <transition
@@ -39,7 +40,7 @@
               </el-upload>
             </div>
 
-            <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : (您还未设置头像, 请点击头像上传)}}</p>
+            <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
             <p>
               <span class="txt-nick">{{user.nickname || user.username}}</span>
               <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
@@ -117,7 +118,7 @@
                 <div class="msg-header">
                   <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
                   <span class="common-member" v-if="item.type !== 4">
-                    普通会员
+                    {{item.sender && item.sender.level_name && item.sender.level_name.indexOf('管理员') !== -1 ? '管理员' : '普通会员'}}
                   </span>
                   <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
                 </div>
@@ -132,13 +133,14 @@
             <div class="inner" v-else-if="item.type === -1">
               <p>以上是历史消息</p>
             </div>
-            <div v-else-if="item.type === -2 || item.type === -3" class="inner type-warning">
+            <div v-else-if="user.account_type && (item.type === -2 || item.type === -3)" class="inner type-warning">
               <p>
                 <span v-if="item.type === -2">您可以设置昵称啦, 点击 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>设置昵称</span>
                 <span v-else>您可以上传自己的头像啦, 点击 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>设置</span>
               </p>
             </div>
           </li>
+          <li v-if="personal_setting.block" class="block-user-info">您已被管理员拉黑，请联系客服。<li>
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
         </ul>
       </el-main>
@@ -154,7 +156,7 @@
                 v-for="(item, index) in emojis.people.slice(0, 42)"
                 :key="index"
                 class="emoji"
-                @click="personal_setting.chat.status ? chatmsgCnt = msgCnt + item.emoji + ' ' : ''">
+                @click="personal_setting.chat.status ? msgCnt = msgCnt + item.emoji + ' ' : ''">
                 {{item.emoji}}
               </a>
             </div>
@@ -175,12 +177,13 @@
         <div class="typing">
           <div :class="['txtinput', 'el-textarea', !personal_setting.chat.status ? 'is-disabled' : '']">
             <textarea  @keyup.enter="sendMsg"
-              :placeholder="sendMsgCondition"
+              :placeholder="personal_setting.chat.status ? '' : sendMsgCondition"
               type="textarea" rows="2"
               autocomplete="off"
               validateevent="true"
               class="el-textarea-inner"
-              v-model="msgCnt">
+              v-model="msgCnt"
+              :disabled="personal_setting.chat.status ? false : true">
             </textarea>
           </div>
           <div class="sendbtn fr">
@@ -210,7 +213,11 @@
       append-to-body>
       <img :src="showImageMsgUrl">
     </el-dialog>
-    <div v-if="isLogin"
+    <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg" append-to-body>
+      <p>{{errMsgCnt}}</p>
+    </el-dialog>
+    <div 
+      v-if="isLogin && showEntry" 
       class="chat-guide text-center"
       @click="joinChatRoom">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -270,19 +277,24 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueNativeSock from 'vue-native-websocket'
 import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
-import { msgFormatter } from '../utils'
+import { msgFormatter, getCookie } from '../utils'
 import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser } from '../api'
 import config from '../../config'
 const WSHOST = config.chatHost
 const RECEIVER = 1
 
 export default {
+  props: {
+    showEntry: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
+      ws: null,
       showChatRoom: false,
       messages: [],
       showEditProfile: false,
@@ -301,7 +313,9 @@ export default {
       },
       announcement: '',
       personal_setting: {
-        chat: {}
+        chat: {
+          reasons: []
+        }
       },
       showCheckUser: false,
       checkUser: {},
@@ -323,6 +337,13 @@ export default {
   },
   components: {
     MarqueeTips
+  },
+  watch: {
+    'showEntry': function (val, oldVal) {
+      if (!val && this.showChatRoom && this.isLogin) {
+        this.leaveRoom()
+      }
+    }
   },
   computed: {
     isLogin () {
@@ -355,47 +376,40 @@ export default {
   methods: {
     joinChatRoom () {
       this.showChatRoom = true
-      let token = Vue.cookie.get('access_token')
-      if (this.$socket && this.$socket.readyState === 1) {
+      let token = getCookie('access_token')
+      this.loading = true
+      this.ws = new WebSocket(`${WSHOST}/chat/stream?username=${this.$store.state.user.username}&token=${token}`)
+      this.ws.onopen = () => {
         this.handleMsg()
-      } else {
-        this.loading = true
-        Vue.use(VueNativeSock, `${WSHOST}/chat/stream?username=${this.$store.state.user.username}&token=${token}`, {
-          format: 'json',
-          reconnection: true,
-          reconnectionDelay: 3000
-        })
-        setTimeout(() => {
-          if (!this.$socket) {
-            this.joinChatRoom()
-            return
-          }
-          if (this.$socket && this.$socket.readyState !== 1) {
-            this.joinChatRoom()
-            return
-          } else {
-            this.handleMsg()
-          }
+      }
+      this.ws.onclose = () => {
+        this.ws = null
+      }
+      setTimeout(() => {
+        if (!this.ws || (this.ws && this.ws.readyState !== 1)) {
+          this.joinChatRoom()
+        } else {
           if (!this.emojis.people.length) {
             fetchChatEmoji().then((resData) => {
               this.emojis = resData.data
             }).catch(err => console.log(err))
           }
-        }, 2000)
-      }
+        }
+      }, 2000)
     },
     handleMsg () {
       this.loading = false
-      this.$socket.sendObj({
+      this.ws.send(JSON.stringify({
         'command': 'join',
         'receivers': [RECEIVER]
-      })
-      this.$socket.onmessage = (resData) => {
+      }))
+      this.ws.onmessage = (resData) => {
+        if (!this.showChatRoom || !this.showEntry) { return }
         let data
         if (typeof resData.data === 'string') {
           try {
             data = JSON.parse(resData.data)
-            if (!data.error) {
+            if (!data.error_type) {
               if (data.latest_message) {
                 if (data.latest_message[data.latest_message.length - 1].type === 3) {
                   let annouce = data.latest_message.pop()
@@ -422,16 +436,20 @@ export default {
                       if (data.command === 'banned') {
                         this.errMsg = true
                         this.errMsgCnt = data.content
-                      } else {
-                        this.$notify({
-                          message: data.content,
-                          offset: 100,
-                          type: 'success',
-                          duration: 2200,
-                          customClass: 'top-right-msg',
-                          showClose: false
-                        })
+                      } else if (data.command === 'unblock') {
+                        this.personal_setting.blocked = false
+                        this.joinChatRoom()
+                      } else if (data.command === 'unbanned') {
+                        this.personal_setting.chat.status = 1
                       }
+                      this.$notify({
+                        message: data.content,
+                        offset: 100,
+                        type: 'success',
+                        duration: 2200,
+                        customClass: 'top-right-msg',
+                        showClose: false
+                      })
                     }
                     return
                   case 3:
@@ -454,9 +472,23 @@ export default {
                 }
               }
             } else {
-              if (data.error.indexOf('存款') !== -1) {
+              if (data.error_type !== 2 && data.error_type !== 3) {
                 this.errMsg = true
-                this.errMsgCnt = data.error
+                switch (data.error_type) {
+                  case 4:
+                    this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
+                    this.personal_setting.banned = true
+                    this.personal_setting.chat.status = 0
+                    break
+                  case 5:
+                    this.messages = []
+                    this.personal_setting.block = true
+                    this.personal_setting.chat.status = 0
+                    this.errMsgCnt = data.msg
+                    break
+                  default:
+                    this.errMsgCnt = data.msg
+                }
               }
             }
           } catch (e) {
@@ -513,12 +545,12 @@ export default {
     },
     sendMsg () {
       if (!this.msgCnt.trim()) { return false }
-      this.$socket.sendObj({
+      this.ws.send(JSON.stringify({
         'command': 'send',
         'receivers': [RECEIVER],
         'type': 0,
         'content': this.msgCnt
-      })
+      }))
       this.msgCnt = ''
     },
     submitNickName () {
@@ -539,10 +571,13 @@ export default {
     leaveRoom () {
       this.showChatRoom = false
       this.messages = []
-      this.$socket.sendObj({
+      this.ws.send(JSON.stringify({
         'command': 'leave',
         'receivers': [RECEIVER]
-      })
+      }))
+      if (this.ws) {
+        this.ws.close()
+      }
     },
     handleCheckUser (data) {
       if (!this.personal_setting.manager || data.sender.level_name.indexOf('管理员') !== -1) {
@@ -649,7 +684,7 @@ export default {
   position: fixed;
   right: 0;
   top: 0;
-  width: 380px;
+  width: 340px;
   overflow-x: hidden;
   height: 100%;
   border-left: 3px solid #006bb3;
@@ -678,6 +713,7 @@ export default {
   .right {
     font-size: 14px;
     .icon-user {
+      cursor: pointer;
       margin: 8px 10px;
       cursor: pointer;
     }
@@ -687,9 +723,8 @@ export default {
 .content {
   background: url('../assets/chatbg.jpg') no-repeat right bottom;
   background-attachment: fixed;
-  padding: 4px;
   background-size: cover;
-  padding-bottom: 60px;
+  padding: 4px 0;
 }
 
 .chat-announce {
@@ -745,6 +780,12 @@ export default {
 }
 .lay-scroll {
   padding-top: 36px;
+  .block-user-info {
+    text-align: center;
+    padding-top: 100px;
+    font-size: 16px;
+    color: red;
+  }
 }
 .item {
   margin-top: 15px;
@@ -916,7 +957,7 @@ export default {
 .footer {
   background: #f5f5f5;
   padding: 0;
-  width: 380px;
+  width: 100%;
   .control-bar {
     height: 32px;
     background: #f5f5f5;
@@ -1055,6 +1096,7 @@ export default {
     line-height: 20px;
   }
   .el-icon-edit-outline {
+    color: $primary;
     font-size: 20px;
   }
 }
