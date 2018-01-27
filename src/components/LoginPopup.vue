@@ -1,63 +1,82 @@
 <template>
-  <el-row :gutter="40" class="pop-content">
-    <el-col :span="12">
-      <div class="register">
-        <span>{{$t('navMenu.guest')}}</span>
-        <div class="m-t">
-          <el-button type="primary" @click="toRegister">
-            <span>{{$t('navMenu.user_register')}}</span>
-          </el-button>
-        </div>
-        <div>
-          <el-button @click="tryplay">{{$t('navMenu.try_play')}}</el-button>
-        </div>
-      </div>
-    </el-col>
-    <el-col :span="12" class="login">
-      <div class="login">
-        <div class="login-title">
-          <span class="please-login">{{$t('navMenu.user')}} </span>
-        </div>
-        <el-form :model="user" status-icon :rules="rules" ref="user">
-          <el-form-item prop="username" :label="$t('user.username')" label-width="50px">
-            <el-input v-model="user.username"
-              class="m-t-sm"
-              @keyup.enter.native="login"
-              :autofocus="true"
-              ref="username"/>
-          </el-form-item>
-          <el-form-item prop="password" :label="$t('user.password')" label-width="50px">
-            <el-input v-model="user.password"
-              type="password"
-              @keyup.enter.native="login">
-            </el-input>
-          </el-form-item>
-          <transition name="el-fade-in">
-            <span class="error" v-if="errorMsg">{{errorMsg}}</span>
-          </transition>
-          <div class="login-actions">
-            <el-form-item>
-              <el-button type="primary" @click="login">{{$t('navMenu.login')}}</el-button>
-            </el-form-item>
-            <div class="forgot-password">
-              <a :href="$store.state.systemConfig && $store.state.systemConfig.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
-            </div>
+  <div>
+    <el-row :gutter="40" class="pop-content">
+      <el-col :span="12">
+        <div class="register">
+          <span>{{$t('navMenu.guest')}}</span>
+          <div class="m-t">
+            <el-button type="primary" @click="toRegister">
+              <span>{{$t('navMenu.user_register')}}</span>
+            </el-button>
           </div>
-        </el-form>
-      </div>
-    </el-col>
-  </el-row>
+          <div>
+            <el-button @click="tryplay">{{$t('navMenu.try_play')}}</el-button>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="12" class="login">
+        <div class="login">
+          <div class="login-title">
+            <span class="please-login">{{$t('navMenu.user')}} </span>
+          </div>
+          <el-form :model="user" status-icon :rules="rules" ref="user">
+            <el-form-item prop="username" :label="$t('user.username')" label-width="55px">
+              <el-input v-model="user.username"
+                class="m-t-sm"
+                @keyup.enter.native="login"
+                :autofocus="true"
+                ref="username"/>
+            </el-form-item>
+            <el-form-item prop="password" :label="$t('user.password')" label-width="55px">
+              <el-input v-model="user.password"
+                type="password"
+                @keyup.enter.native="login">
+              </el-input>
+            </el-form-item>
+
+            <el-form-item v-if="illegalTriedLogin" :label="'验证码'" label-width="55px"  prop="verification_code_1">
+              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off"></el-input>
+              <div class="m-t">
+                <el-col :span="12" :pull="2">
+                  <img class="captcha" :src="captcha_src" height="32">
+                </el-col>
+                <el-col :span="12" class="text-right">
+                  <el-button type="info" icon="el-icon-refresh" class="captcha-getter" @click="fetchCaptcha"></el-button>
+                </el-col>
+              </div>
+            </el-form-item>
+
+            <div class="login-actions">
+              <transition name="el-fade-in">
+                <div class="error text-center" v-if="errorMsg">
+                  <span>{{errorMsg}}</span>
+                </div>
+              </transition>
+              <el-form-item>
+                <el-button class="login-btn" type="primary" @click="login">{{$t('navMenu.login')}}</el-button>
+              </el-form-item>
+              <div class="forgot-password">
+                <a :href="$store.state.systemConfig && $store.state.systemConfig.customerServiceUrl" target="_blank" @click="closeLoginDialog()">{{$t('navMenu.forget_password')}}?</a>
+              </div>
+            </div>
+          </el-form>
+        </div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
-import { register } from '../api'
+import { register, fetchCaptcha } from '../api'
 import { msgFormatter } from '../utils'
 export default {
   data () {
     return {
       user: {
         username: '',
-        password: ''
+        password: '',
+        verification_code_0: '',
+        verification_code_1: ''
       },
       rules: {
         username: [
@@ -67,7 +86,9 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' }
         ]
       },
-      errorMsg: ''
+      errorMsg: '',
+      captcha_src: '',
+      illegalTriedLogin: false
     }
   },
   methods: {
@@ -86,14 +107,21 @@ export default {
       this.$store.dispatch('login', {
         user: {
           username: this.user.username,
-          password: this.user.password
+          password: this.user.password,
+          verification_code_0: this.user.verification_code_0,
+          verification_code_1: this.user.verification_code_1
         }
       }).then(result => {
         this.$store.commit('CLOSE_LOGINDIALOG')
+        this.illegalTriedLogin = false
         const next = this.$route.query.next
         this.$router.push(next || 'game')
       }, errorMsg => {
-        this.errorMsg = msgFormatter(errorMsg)
+        if (errorMsg.data.auth_req === 1) {
+          this.fetchCaptcha()
+          this.illegalTriedLogin = true
+        }
+        this.errorMsg = errorMsg.msg
       })
     },
     tryplay () {
@@ -104,6 +132,12 @@ export default {
         this.$router.push({ name: 'Game' })
       }, errorMsg => {
         this.errorMsg = msgFormatter(errorMsg)
+      })
+    },
+    fetchCaptcha () {
+      fetchCaptcha().then(res => {
+        this.captcha_src = res.captcha_src
+        this.user.verification_code_0 = res.captcha_val
       })
     }
   },
@@ -130,7 +164,7 @@ export default {
 }
 .register {
   text-align: center;
-  
+
   &:after {
     content: " ";
     display: inline-block;
@@ -157,16 +191,23 @@ export default {
     display: inline-block;
     text-align: left;
   }
-  .el-button {
+  .login-btn {
     width: 220px;
   }
 }
-.login-title {
-  padding-left: 50px;
+
+.login-title, .login-actions {
+  padding-left: 55px;
 }
+
+.login-actions {
+  position: relative;
+}
+
 .el-input {
   width: $form_width;
 }
+
 .forgot-password {
   display: inline-block;
   width: $form_width;
@@ -180,14 +221,23 @@ export default {
   }
 }
 
-.login-actions {
-  padding-left: 50px;
-}
 .error {
   position: absolute;
+  width: 220px;
   font-size: 13px;
   color: $red;
-  top: 150px;
-  right: 75px;
+  top: -25px;
+}
+
+.captcha {
+  width: 70px;
+}
+
+.verification-container {
+  display: inline-block;
+  width: 300px;
+  .continue {
+    width: 220px;
+  }
 }
 </style>

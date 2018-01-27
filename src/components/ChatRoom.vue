@@ -216,8 +216,8 @@
     <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg" append-to-body>
       <p>{{errMsgCnt}}</p>
     </el-dialog>
-    <div 
-      v-if="isLogin && showEntry" 
+    <div
+      v-if="isLogin && showEntry"
       class="chat-guide text-center"
       @click="joinChatRoom">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -369,9 +369,10 @@ export default {
         this.bannedUsers.forEach((item) => {
           result.push({
             username: item.username,
-            banned_time: this.$moment(item.banned_time).format('mm')
+            banned_time: this.$moment(item.banned_time).fromNow(true)
           })
         })
+
         return result
       }
     }
@@ -1159,5 +1160,4 @@ export default {
       border-color: #ff5a00;
     }
   }
-
 </style>

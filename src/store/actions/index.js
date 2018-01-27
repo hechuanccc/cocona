@@ -36,7 +36,8 @@ export default {
       commit('END_LOADING')
       return Promise.resolve(res)
     }, error => {
-      if (error.code === 9011) {
+      if (error.code === 9011 || error.code === 9013) {
+        axios.defaults.withCredentials = true
         Vue.cookie.set('sessionid', error.data.sessionid)
       }
       commit('END_LOADING')
