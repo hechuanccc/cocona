@@ -10,7 +10,8 @@ export function createStore () {
   return new Vuex.Store({
     state: {
       user: {
-        logined: ''
+        logined: '',
+        showChatRoom: true
       },
       loginDialogVisible: false,
       betRecordDialogVisible: false,
