@@ -169,7 +169,7 @@
             <label for="imgUploadInput">
               <span title="上传图片">
                 <i class="el-icon-picture"></i>
-                <input @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
+                <input disabled="personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
@@ -340,6 +340,11 @@ export default {
   watch: {
     'showEntry': function (val, oldVal) {
       if (!val && this.showChatRoom && this.isLogin) {
+        this.leaveRoom()
+      }
+    },
+    'user.showChatRoom' (val, oldVal) {
+      if (!val) {
         this.leaveRoom()
       }
     }
