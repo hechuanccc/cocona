@@ -169,7 +169,7 @@
             <label for="imgUploadInput">
               <span title="上传图片">
                 <i class="el-icon-picture"></i>
-                <input disabled="personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
+                <input :disabled="!personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
@@ -344,9 +344,7 @@ export default {
       }
     },
     'user.showChatRoom' (val, oldVal) {
-      if (!val) {
-        this.leaveRoom()
-      }
+      this.leaveRoom()
     }
   },
   computed: {
@@ -403,6 +401,7 @@ export default {
     },
     handleMsg () {
       this.loading = false
+      if (!this.ws) { return false }
       this.ws.send(JSON.stringify({
         'command': 'join',
         'receivers': [RECEIVER]
@@ -572,10 +571,10 @@ export default {
         })
       })
     },
-    leaveRoom () {
+    leaveRoom (n) {
       this.showChatRoom = false
       this.messages = []
-      this.ws.send(JSON.stringify({
+      this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
         'receivers': [RECEIVER]
       }))
