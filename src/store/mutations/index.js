@@ -12,7 +12,7 @@ export default {
   [types.RESET_USER]: (state) => {
     state.user = {
       logined: false,
-      showChatRoom: false
+      showChatRoom: !state.user.showChatRoom
     }
     Vue.cookie.delete('access_token')
     Vue.cookie.delete('refresh_token')
