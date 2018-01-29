@@ -117,7 +117,6 @@ router.beforeEach((to, from, next) => {
         })
         .catch(error => {
           // can't get user info
-          console.log(error)
           toHomeAndLogin(router)
           return Promise.resolve(error)
         })
