@@ -65,18 +65,14 @@
       :title="$t('announcement.speaker')"
       :visible.sync="announcementDialogVisible"
       :width="'600px'"
-      @close="showCurrentAnnouncementInPopup = true"
       center>
       <el-carousel :height="'200px'"
-        @change="showCurrentAnnouncementInPopup = false"
+        v-if="announcementDialogVisible"
         class="announcement-popup"
         :initial-index="currentAnnouncementIndex">
         <el-carousel-item v-for="item in announcements"
           :key="item.rank">
-          <p v-if="showCurrentAnnouncementInPopup && announcements[currentAnnouncementIndex]" class="text-center" key="announcement">
-            {{announcements[currentAnnouncementIndex].announcement || ''}}
-          </p>
-          <p class="text-center" key="announcement" v-else>
+          <p class="text-center" key="announcement">
             {{ item.announcement }}
           </p>
         </el-carousel-item>
@@ -102,8 +98,7 @@ export default {
         translateY: 0
       },
       currentAnnouncementIndex: 0,
-      announcementDialogVisible: false,
-      showCurrentAnnouncementInPopup: true
+      announcementDialogVisible: false
     }
   },
   computed: {
