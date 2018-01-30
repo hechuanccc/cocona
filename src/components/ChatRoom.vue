@@ -419,13 +419,12 @@ export default {
                   this.announcement = annouce.content
                 }
                 this.messages = this.messages.concat(data.latest_message.reverse())
-                this.messages = this.messages.concat([{
+                let oSupplyData = [{
                   type: -1
-                }, {
-                  type: -2
-                }, {
-                  type: -3
-                }])
+                }]
+                !this.personal_setting.user.avatar_url && oSupplyData.push({type: -2})
+                !this.personal_setting.user.nickname && oSupplyData.push({type: -3})
+                this.messages = this.messages.concat(oSupplyData)
                 this.$nextTick(() => {
                   this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
                 })
