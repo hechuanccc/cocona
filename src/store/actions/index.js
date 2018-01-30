@@ -120,5 +120,11 @@ export default {
   },
   setSystemConfig: ({ commit }, data) => {
     commit(types.SET_SYSTEM_CONFIG, data)
+  },
+  openTrialVerifyDialog: ({ commit, state }) => {
+    commit(types.OPEN_VERIFICATION_DIALOG)
+  },
+  closeTrialVerifyDialog: ({ commit, state }) => {
+    commit(types.CLOSE_VERIFICATION_DIALOG)
   }
 }

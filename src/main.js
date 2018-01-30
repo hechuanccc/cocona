@@ -69,6 +69,10 @@ if (token) {
 axios.interceptors.response.use(res => {
   let responseData = res.data
   if (responseData.code === 2000) {
+    if (responseData.data && responseData.data.trial_auth_req === 1) {
+      store.dispatch('openTrialVerifyDialog')
+      return
+    }
     return responseData.data
   } else {
     if (responseData.code === 9007) {

@@ -49,5 +49,11 @@ export default {
   },
   [types.RESET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = 0
+  },
+  [types.OPEN_VERIFICATION_DIALOG]: (state) => {
+    state.showTrialVerifyDialog = true
+  },
+  [types.CLOSE_VERIFICATION_DIALOG]: (state) => {
+    state.showTrialVerifyDialog = false
   }
 }
