@@ -1,7 +1,7 @@
 <template>
   <section class="rule-details">
     <p>官网：
-      <a href="https://www.speedlottery.com/lo1_detail.html">75SecRacing</a>
+      <a href="https://www.speedlottery.com/lo1_detail.html" target="_blank">75SecRacing</a>
     </p>
     <p>“秒速赛车”是引进欧洲博彩公司开奖设备，由菲律宾博彩执照公司审核监控，联合开发的彩票游戏，保证公平公正；由于该彩种并不属于某单一地区彩种，所以暂时还未对外开放官方网站，但是这类彩种在欧洲当地是非常火爆的，您可以放心投注、开奖时间，北京时间（GMT+8）每天白天从早上07:25:00开到凌晨04:00:00，每75秒开一次奖,每天开奖985期。</p>
     <h3>

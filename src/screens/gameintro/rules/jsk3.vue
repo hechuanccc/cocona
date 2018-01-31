@@ -8,10 +8,10 @@
       <li>如开奖时间异动以中国福利彩票管理中心公告为准。</li>
     </ul>
     <p>官方网站：
-      <a href="http://www.jslottery.com">http://www.jslottery.com/</a>
+      <a href="http://www.jslottery.com" target="_blank">http://www.jslottery.com/</a>
     </p>
     <p>即时开奖：
-      <a href="http://www.shishicai.cn/jsk3/touzhu/">http://www.shishicai.cn/jsk3/touzhu/</a>
+      <a href="http://www.shishicai.cn/jsk3/touzhu/" target="_blank">http://www.shishicai.cn/jsk3/touzhu/</a>
     </p>
     <h3>
       <span class="warn">和值</span>

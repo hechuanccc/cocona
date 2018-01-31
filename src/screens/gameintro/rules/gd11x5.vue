@@ -7,7 +7,7 @@
       </li>
       <li>开奖时间：早上 9 点至晚上 11 点。如开奖时间异动以国家体育总局体育彩票管理中心公告为准。
       </li>
-      <li>官方网站：<a href="http://www.gdlottery.cn/">http://www.gdlottery.cn//</a>
+      <li>官方网站：<a href="http://www.gdlottery.cn/" target="_blank">http://www.gdlottery.cn//</a>
       </li>
     </ul>
     <h3>
