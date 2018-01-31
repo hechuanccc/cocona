@@ -14,6 +14,7 @@ export function createStore () {
         showChatRoom: true
       },
       loginDialogVisible: false,
+      showTrialVerifyDialog: false,
       betRecordDialogVisible: false,
       games: [],
       categories: [],
