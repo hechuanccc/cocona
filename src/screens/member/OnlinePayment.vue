@@ -155,7 +155,7 @@ export default {
     fetchPaymentType().then(datas => {
       datas.forEach((data, index) => {
         this.paymentTypes[data.name] = data.detail[0] || {}
-        this.paymentTypes[data.name].id = data.id
+        this.paymentTypes[data.name].id = data.detail[0].payment_type
         if (index === 0) {
           this.select(data.name)
         }
