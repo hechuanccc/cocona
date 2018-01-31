@@ -31,7 +31,7 @@ export default {
   check_username: apiv1 + '/username/',
   check_agentname: host + '/v1/checkagent/',
   payment: apiv1 + '/payment/',
-  paymentType: apiv1 + '/paymenttype/?opt_expand=1&platform=0',
+  paymentType: apiv1 + '/paymenttype/?opt_expand=1&platform=pc',
   betrecord: apiv1 + '/betrecord/',
   transaction_record: apiv1 + '/transaction/',
   result: '/result/',
