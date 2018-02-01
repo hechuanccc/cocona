@@ -59,6 +59,7 @@ export default {
   methods: {
     navigateToMobile () {
       this.$cookie.set('desktop', 0)
+      window.location.reload()
     }
   },
   computed: {
