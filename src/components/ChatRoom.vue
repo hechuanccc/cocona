@@ -626,9 +626,10 @@ export default {
       }).then((data) => {
         this.showCheckUser = false
       }, errorMsg => {
+        this.showCheckUser = false
         this.$message({
           showClose: true,
-          message: errorMsg,
+          message: errorMsg.response.data.error,
           type: 'error'
         })
       })
