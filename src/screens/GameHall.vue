@@ -200,6 +200,8 @@ export default {
               createElement('p', { 'class': { 'text-center': true, 'm-t-sm': true, 'm-b-sm': true } }, `${result.game} 第${result.issue_number}期`),
               createElement('ul',
                 result.wins.map(function (win, index) {
+                  let settlement = parseFloat(win.settlement_amount)
+
                   return createElement('li',
                     [
                       createElement('span', `${index + 1}. ${win.playgroup} `),
@@ -212,7 +214,7 @@ export default {
                             lineHeight: '28px'
                           }
                         },
-                        `中奖金额：${win.settlement_amount}`
+                        `中奖金额：${settlement.toFixed(3)}`
                       )
                     ]
                   )
