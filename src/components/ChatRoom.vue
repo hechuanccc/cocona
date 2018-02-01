@@ -42,7 +42,7 @@
 
             <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
             <p>
-              <span class="txt-nick">{{user.nickname || user.username}}</span>
+              <span class="txt-nick">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
               <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
                 <span class="el-icon-edit-outline"></span>
               </a>
