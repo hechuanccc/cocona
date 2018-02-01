@@ -6,7 +6,7 @@
           v-for="(item, index) in subMenu"
           :key="index"
           :to="item.route">{{item.option}}</router-link>
-          <a href="/" class="link" @click="navigateToMobile()">手机版</a>
+          <a href="#" class="link" @click="navigateToMobile()">手机版</a>
       </div>
       <div class="advice block-center">
         <div :class="[{'container': notHomePage}]">
