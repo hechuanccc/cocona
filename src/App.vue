@@ -165,7 +165,10 @@ export default {
   },
   created () {
     const version = this.$route.query.desktop
-    if (version === '0' && !this.$cookie.desktop) {
+    if (version === '0' && this.$cookie.desktop !== '0') {
+      this.$cookie.set('desktop', version)
+      window.location.reload()
+    } else if (version === '1' && this.$cookie.desktop !== '1') {
       this.$cookie.set('desktop', version)
       window.location.reload()
     }
