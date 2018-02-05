@@ -164,6 +164,12 @@ export default {
     }
   },
   created () {
+    const version = this.$route.query.desktop
+    if (version === '0' && this.$cookie.desktop !== '0') {
+      this.$cookie.set('desktop', version)
+      window.location.reload()
+    }
+
     if (this.$cookie.get('access_token')) {
       this.$store.dispatch('fetchUser').then(() => {
         this.getMessageCount()
