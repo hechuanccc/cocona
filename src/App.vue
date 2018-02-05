@@ -164,9 +164,9 @@ export default {
     }
   },
   created () {
-    const bison = '/?desktop=0'
-    if (this.$route.fullPath === bison) {
-      this.$cookie.set('desktop', 0)
+    const version = this.$route.query.desktop
+    if (version === '0' && !this.$cookie.desktop) {
+      this.$cookie.set('desktop', version)
       window.location.reload()
     }
 
