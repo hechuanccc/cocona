@@ -164,6 +164,12 @@ export default {
     }
   },
   created () {
+    const bison = '/?desktop=0'
+    if (this.$route.fullPath === bison) {
+      this.$cookie.set('desktop', 0)
+      window.location.reload()
+    }
+
     if (this.$cookie.get('access_token')) {
       this.$store.dispatch('fetchUser').then(() => {
         this.getMessageCount()
