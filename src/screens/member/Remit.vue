@@ -222,11 +222,11 @@ export default {
     },
     filtAmount,
     chooseRemitWay (tab, e) {
-      this.remitData.remit_info.remit_payee = tab.name || tab.id
-      this.successPayeeId = ''
       for (let key in this.$refs) {
         this.$refs[key] instanceof Array && this.$refs[key][0] && this.$refs[key][0].resetFields && this.$refs[key][0].resetFields()
       }
+      this.remitData.remit_info.remit_payee = tab.name || tab.id
+      this.successPayeeId = ''
     }
   }
 }
