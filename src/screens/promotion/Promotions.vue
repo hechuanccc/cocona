@@ -28,8 +28,25 @@ export default {
   },
   created () {
     getPromotions().then(result => {
-      this.promotions = result
+      let data = new Date()
+      let year = data.getFullYear()
+      let month = data.getMonth() + 1
+      let day = data.getDate()
+      let nowDate = year + this.getdate(month) + this.getdate(day)
+      result.forEach((item) => {
+        let deadLineDate = item.end_date.split('-').join('') * 1
+        if (deadLineDate > nowDate) {
+          this.promotions.push(item)
+        }
+      })
     })
+  },
+  methods: {
+    getdate (time) {
+      if (time < 10) {
+        return '0' + time
+      }
+    }
   },
   computed: {
     startedPromotions () {
