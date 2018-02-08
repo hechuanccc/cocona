@@ -118,7 +118,7 @@
                 <div class="msg-header">
                   <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
                   <span class="common-member" v-if="item.type !== 4">
-                    {{item.sender && item.sender.level_name && item.sender.level_name.indexOf('管理员') !== -1 ? '管理员' : '普通会员'}}
+                    {{roomManagers.indexOf(item.sender.id) !== -1 ? '管理员' : '普通会员'}}
                   </span>
                   <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
                 </div>
@@ -301,6 +301,7 @@ export default {
       msgCnt: '',
       showNickNameBox: false,
       errMsg: false,
+      roomManagers: [],
       errMsgCnt: '',
       uploadUrl: urls.user,
       nickname: this.$store.state.user.nickname,
@@ -656,6 +657,7 @@ export default {
       this.loading = true
       getChatUser(1).then(response => {
         let data = response.data
+        this.roomManagers = response.data.managers
         this.bannedUsers = data.banned_users
         this.blockedUsers = data.block_users
         this.loading = false
