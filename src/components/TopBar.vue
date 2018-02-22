@@ -108,18 +108,21 @@ export default {
       register({ account_type: 0 }).then(user => {
         if (user.trial_auth_req === 1) {
           this.$store.dispatch('openTrialVerifyDialog')
-          throw new Error()
+          let msg = ''
+          return Promise.reject(msg)
         }
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
       }, errorMsg => {
-        this.$message({
-          showClose: true,
-          message: msgFormatter(errorMsg),
-          type: 'error'
-        })
-      }).catch(() => {})
+        if (errorMsg) {
+          this.$message({
+            showClose: true,
+            message: msgFormatter(errorMsg),
+            type: 'error'
+          })
+        }
+      })
     },
     openBetRecordDialog () {
       this.$store.dispatch('openBetRecordDialog')
