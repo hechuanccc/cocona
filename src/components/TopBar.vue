@@ -106,6 +106,10 @@ export default {
     },
     tryplay () {
       register({ account_type: 0 }).then(user => {
+        if (user.trial_auth_req === 1) {
+          this.$store.dispatch('openTrialVerifyDialog')
+          throw new Error()
+        }
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
@@ -115,7 +119,7 @@ export default {
           message: msgFormatter(errorMsg),
           type: 'error'
         })
-      })
+      }).catch(() => {})
     },
     openBetRecordDialog () {
       this.$store.dispatch('openBetRecordDialog')
