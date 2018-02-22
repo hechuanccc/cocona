@@ -14,15 +14,13 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Icon from 'vue-awesome/components/Icon'
 import Vue2Filters from 'vue2-filters'
-import { gethomePage } from './api'
+import { gethomePage, setCookie } from './api'
 import qs from 'qs'
 
 let url = window.location.href
 let params = qs.parse(url.slice(url.indexOf('?') + 1, url.length))
 if (params.r) {
-  let expires = new Date()
-  expires.setMonth(expires.getMonth() + 1)
-  VueCookie.set('r', params.r, {expires: expires})
+  setCookie('r=' + params.r).catch(() => {})
 }
 
 Vue.component('icon', Icon)
@@ -69,10 +67,6 @@ if (token) {
 axios.interceptors.response.use(res => {
   let responseData = res.data
   if (responseData.code === 2000) {
-    if (responseData.data && responseData.data.trial_auth_req === 1) {
-      store.dispatch('openTrialVerifyDialog')
-      return
-    }
     return responseData.data
   } else {
     if (responseData.code === 9007) {
