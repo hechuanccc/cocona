@@ -204,6 +204,7 @@ export default {
       document.getElementById('favicon').href = homePageLogo
     },
     '$store.state.showTrialVerifyDialog': function () {
+      this.user.verification_code_1 = ''
       this.fetchCaptcha()
     }
   }
