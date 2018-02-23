@@ -48,5 +48,6 @@ export default {
   article: apiv1 + '/website/franchising-program-page',
   chatEmoji: apiChat + '/v1/emoji/',
   sendImgToChat: host + '/v1/manage/attachment/',
-  apiRoom
+  apiRoom,
+  setCookie: host + '/set_cookie/'
 }

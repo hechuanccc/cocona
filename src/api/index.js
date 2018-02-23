@@ -40,7 +40,7 @@ export function getPromotions () {
 }
 
 export function register (user) {
-  return axios.post(urls.register, qs.stringify(user))
+  return axios.post(urls.register, qs.stringify(user), {withCredentials: true})
 }
 
 export function checkUserName (username) {
@@ -243,4 +243,8 @@ export function unblockChatUser (id, data) {
 
 export function getChatUser (id) {
   return axiosChat.get(`${urls.apiRoom}/${id}/`)
+}
+
+export function setCookie (cookie) {
+  return axios.post(urls.setCookie, {cookie}, { 'Content-Type': 'application/json', withCredentials: true })
 }

@@ -97,7 +97,14 @@ export default {
       this.$store.commit('CLOSE_LOGINDIALOG')
     },
     tryplay () {
-      register({ account_type: 0, verification_code_0: this.user.verification_code_0, verification_code_1: this.user.verification_code_1 }).then(user => {
+      register({
+        account_type: 0,
+        verification_code_0: this.user.verification_code_0,
+        verification_code_1: this.user.verification_code_1
+      }).then(user => {
+        if (user.trial_auth_req === 1) {
+          return Promise.reject(user)
+        }
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
@@ -197,6 +204,7 @@ export default {
       document.getElementById('favicon').href = homePageLogo
     },
     '$store.state.showTrialVerifyDialog': function () {
+      this.user.verification_code_1 = ''
       this.fetchCaptcha()
     }
   }

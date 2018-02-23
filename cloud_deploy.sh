@@ -17,10 +17,11 @@ npm run build
 # Upload the changes
 /root/bin/az storage blob delete-batch --source $ENV_CONTAINER --pattern "$static_container/*"
 /root/bin/az storage blob upload-batch --content-cache-control "public, max-age=$MAX_AGE" --destination $ENV_CONTAINER/$static_container --source dist/static
-/root/bin/az storage blob upload --file dist/index.html --container-name $ENV_CONTAINER --name index.html
+/root/bin/az storage blob upload --content-cache-control "public, max-age=$MAX_AGE" --file dist/index.html --container-name $ENV_CONTAINER --name index.html
 
 
 # To start purging the CDN
 # CDN is cached and will not reflect any change until purged
 # '/*' value in the content path indicates a 'Purge all'
-/root/bin/az cdn endpoint purge --resource-group dockercloud-bd6da6d7 --name $CDN_ENDPOINT --profile-name $CDN_PROFILE --content-paths '/*'
+# "index.html" is purged as purge all("/*") is ineffective if there are many files and may take even up to 10 hours
+/root/bin/az cdn endpoint purge --resource-group dockercloud-bd6da6d7 --name $CDN_ENDPOINT --profile-name $CDN_PROFILE --content-paths "/index.html"
