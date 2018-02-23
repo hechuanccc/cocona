@@ -1,36 +1,36 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/screens/Home'
-import GameHall from '@/screens/GameHall'
-import Game from '@/screens/games/Game'
-import GameCategory from '@/screens/games/GameCategory'
-import AgentRegister from '@/screens/agent/AgentRegister'
-import Agent from '@/screens/agent/Agent'
-import Register from '@/screens/member/Register'
-import Account from '@/screens/member/Account'
-import Withdraw from '@/screens/member/Withdraw'
-import OnlinePayment from '@/screens/member/OnlinePayment'
-import OnlinePaymentSuccess from '@/screens/member/OnlinePaymentSuccess'
-import Remit from '@/screens/member/Remit'
+const GameHall = (resolve) => require(['@/screens/GameHall'], resolve)
+const Game = (resolve) => require(['@/screens/games/Game'], resolve)
+const GameCategory = (resolve) => require(['@/screens/games/GameCategory'], resolve)
+const AgentRegister = (resolve) => require(['@/screens/agent/AgentRegister'], resolve)
+const Agent = (resolve) => require(['@/screens/agent/Agent'], resolve)
+const Register = (resolve) => require(['@/screens/member/Register'], resolve)
+const Account = (resolve) => require(['@/screens/member/Account'], resolve)
+const Withdraw = (resolve) => require(['@/screens/member/Withdraw'], resolve)
+const OnlinePayment = (resolve) => require(['@/screens/member/OnlinePayment'], resolve)
+const OnlinePaymentSuccess = (resolve) => require(['@/screens/member/OnlinePaymentSuccess'], resolve)
+const Remit = (resolve) => require(['@/screens/member/Remit'], resolve)
 
-import MyAccount from '@/screens/member/MyAccount'
-import PrimaryInfo from '@/screens/member/PrimaryInfo'
-import PasswordSetting from '@/screens/member/PasswordSetting'
-import WithdrawPassword from '@/screens/member/WithdrawPassword'
-import BankInfo from '@/screens/member/BankInfo'
+const MyAccount = (resolve) => require(['@/screens/member/MyAccount'], resolve)
+const PrimaryInfo = (resolve) => require(['@/screens/member/PrimaryInfo'], resolve)
+const PasswordSetting = (resolve) => require(['@/screens/member/PasswordSetting'], resolve)
+const WithdrawPassword = (resolve) => require(['@/screens/member/WithdrawPassword'], resolve)
+const BankInfo = (resolve) => require(['@/screens/member/BankInfo'], resolve)
 
-import Finance from '@/screens/member/Finance'
-import TransactionRecord from '@/screens/member/TransactionRecord'
-import BetRecord from '@/screens/member/BetRecord'
+const Finance = (resolve) => require(['@/screens/member/Finance'], resolve)
+const TransactionRecord = (resolve) => require(['@/screens/member/TransactionRecord'], resolve)
+const BetRecord = (resolve) => require(['@/screens/member/BetRecord'], resolve)
 
-import Message from '@/screens/member/Message'
-import Announcement from '@/screens/member/Announcement'
+const Message = (resolve) => require(['@/screens/member/Message'], resolve)
+const Announcement = (resolve) => require(['@/screens/member/Announcement'], resolve)
 
-import Promotions from '@/screens/promotion/Promotions'
-import Faq from '@/screens/faq/FaqsHome'
-import Gameintro from '@/screens/gameintro/Gameintros'
-import GameHistory from '@/screens/gamehistory/GameHistory'
-import SchedulesTable from '@/screens/gamehistory/SchedulesTable'
+const Promotions = (resolve) => require(['@/screens/promotion/Promotions'], resolve)
+const Faq = (resolve) => require(['@/screens/faq/FaqsHome'], resolve)
+const Gameintro = (resolve) => require(['@/screens/gameintro/Gameintros'], resolve)
+const GameHistory = (resolve) => require(['@/screens/gamehistory/GameHistory'], resolve)
+const SchedulesTable = (resolve) => require(['@/screens/gamehistory/SchedulesTable'], resolve)
 
 Vue.use(Router)
 
