@@ -9,7 +9,7 @@
         <div class="aside">
           <AsideMenu @clicked="onClickChild" :items="games ? games : []" :defaultActive="active"/>
         </div>
-        <router-view @load="load"></router-view>
+        <router-view @load="load" :key="refresh"></router-view>
       </div>
     </div>
   </el-row>
@@ -41,6 +41,9 @@ export default {
   computed: {
     active () {
       return this.$route.params.gameCode ? this.$route.path : '/gamehistory/' + this.$store.getters.allGames[0].code
+    },
+    refresh () {
+      return this.$route.params.gameCode === 'hkl'
     }
   },
   created () {
