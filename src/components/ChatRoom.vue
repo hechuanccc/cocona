@@ -33,7 +33,7 @@
                 :before-upload="beforeAvatarUpload">
 
                 <img v-if="user.avatar && !swichAvatar" :src="user.avatar" class="avatar">
-                <img v-else-if="!swichAvatar" src="../assets/avatar.png">
+                <img v-else-if="!swichAvatar" :src="require('../assets/avatar.png')">
                 <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
                   <span class="el-icon-upload"></span>
                 </label>
@@ -62,7 +62,7 @@
             <div
               class="avatar"
               style="overflow-y: hidden;">
-              <img :src="checkUser.avatar_url || '../assets/avatar.png'" class="avatar">
+              <img :src="checkUser.avatar_url || require('../assets/avatar.png')" class="avatar">
               <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
                 <span class="el-icon-upload"></span>
               </label>
