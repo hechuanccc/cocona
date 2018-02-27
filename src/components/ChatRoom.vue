@@ -643,7 +643,7 @@ export default {
         this.$message({
           showClose: true,
           message: data.data.status,
-          type: 'error'
+          type: 'success'
         })
       }, errorMsg => {
         this.$message({
