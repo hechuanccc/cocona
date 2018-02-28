@@ -9,7 +9,7 @@
       :key="menu.icon">
       <span>{{menu.name}}</span>
     </router-link>
-    <a v-if="$store.state.systemConfig.customerServiceUrl"
+    <a
       class="online-service m-r"
       target="_blank"
       :href="$store.state.systemConfig.customerServiceUrl ? $store.state.systemConfig.customerServiceUrl : '#'">
@@ -51,7 +51,7 @@ export default {
 .nav-link
   line-height: 60px
   display: inline-block
-  padding: 0 20px
+  padding: 0 15px
   cursor: pointer
   text-align: center
   color: #666
