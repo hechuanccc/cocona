@@ -51,7 +51,7 @@ export default {
 .nav-link
   line-height: 60px
   display: inline-block
-  padding: 0 20px
+  padding: 0 15px
   cursor: pointer
   text-align: center
   color: #666
