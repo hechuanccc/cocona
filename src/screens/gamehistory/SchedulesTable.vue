@@ -3,7 +3,22 @@
     <div class="user-actions">
       <div class="filters">
         <div class="input">
-          <el-date-picker type="date"
+          <el-date-picker
+            v-if="currentGame === 'hkl'"
+            id="date"
+            type="daterange"
+            v-model="selectedDate"
+            value-format="yyyy-MM-dd"
+            format="yyyy-MM-dd"
+            range-separator="~"
+            unlink-panels
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
+          <el-date-picker
+            v-else
+            id="date"
+            type="date"
             v-model="selectedDate"
             placeholder="选择日期"
             value-format="yyyy-MM-dd"
@@ -712,6 +727,13 @@ export default {
       }
     ]
 
+    const today = this.$moment().format('YYYY-MM-DD')
+    let selectedDate
+    if (this.$route.params.gameCode === 'hkl') {
+      selectedDate = [this.$moment().startOf('month').format('YYYY-MM-DD'), today]
+    } else {
+      selectedDate = today
+    }
     return {
       schedules: '',
       nowDate: this.$moment().format('YYYY-MM-DD'),
@@ -720,7 +742,7 @@ export default {
       gameTable,
       nowGameTable: '',
       inputPeriod: '',
-      selectedDate: this.$moment().format('YYYY-MM-DD'),
+      selectedDate: selectedDate,
       currentPage: 1,
       pageSize: 30,
       totalCount: 0
@@ -857,10 +879,20 @@ export default {
     },
     getLatest () {
       let currentDate = this.$moment().format('YYYY-MM-DD')
-      if (this.selectedDate === currentDate) {
-        this.initFetchHistory()
+      if (!Array.isArray(this.selectedDate)) {
+        if (this.selectedDate === currentDate) {
+          this.initFetchHistory()
+        } else {
+          this.selectedDate = this.$moment().format('YYYY-MM-DD')
+        }
       } else {
-        this.selectedDate = this.$moment().format('YYYY-MM-DD')
+        const startOfMonth = this.$moment().startOf('month').format('YYYY-MM-DD')
+        if (this.selectedDate[0] === startOfMonth && this.selectedDate[1] === currentDate) {
+          this.initFetchHistory()
+        } else {
+          this.$set(this.selectedDate, 0, startOfMonth)
+          this.$set(this.selectedDate, 1, currentDate)
+        }
       }
     },
     changeIssueNumber: _.debounce(function (value) {
@@ -869,8 +901,16 @@ export default {
   },
   computed: {
     conditions () {
+      if (!Array.isArray(this.selectedDate)) {
+        return {
+          created_at_0: this.selectedDate,
+          created_at_1: this.selectedDate,
+          issue_number_q: this.inputPeriod
+        }
+      }
       return {
-        date: this.selectedDate,
+        created_at_0: this.selectedDate[0],
+        created_at_1: this.selectedDate[1],
         issue_number_q: this.inputPeriod
       }
     },
@@ -891,7 +931,7 @@ export default {
     clearInterval(this.interval)
   },
   watch: {
-    'currentGame': function () {
+    'currentGame': function (currentGame, oldGame) {
       this.nowGameTable = _.find(this.gameTable, item => {
         return item.code === this.$route.params.gameCode
       })

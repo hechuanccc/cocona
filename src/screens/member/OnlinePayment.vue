@@ -148,18 +148,25 @@ export default {
           return this.$t('user.alipay')
         case 'bank':
           return this.$t('user.bankcard')
+        default:
+          return this.$t('user.online_payment')
       }
     }
   },
   created () {
     fetchPaymentType().then(datas => {
-      datas.forEach((data, index) => {
-        this.paymentTypes[data.name] = data.detail[0] || {}
-        this.paymentTypes[data.name].id = data.id
-        if (index === 0) {
-          this.select(data.name)
-        }
-      })
+      if (datas.length === 0) {
+        this.payment.gateway_id = undefined
+        this.activeType = 'none'
+      } else {
+        datas.forEach((data, index) => {
+          this.paymentTypes[data.name] = data.detail[0] || {}
+          this.paymentTypes[data.name].id = data.detail[0].payment_type
+          if (index === 0) {
+            this.select(data.name)
+          }
+        })
+      }
     }, errorMsg => {
       this.$message({
         showClose: true,
@@ -178,12 +185,17 @@ export default {
       })
     },
     select (type) {
+      if (this.activeType === 'none') {
+        return
+      }
       this.activeType = type
       let paymentType = this.paymentTypes[type]
       if (paymentType) {
         this.payment.payway = paymentType.id
         this.payment.payee_id = paymentType.payee_id
         this.payment.gateway_id = paymentType.gateway_id
+      } else {
+        this.payment.gateway_id = undefined
       }
     },
     filtAmount,

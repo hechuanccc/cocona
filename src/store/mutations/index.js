@@ -12,7 +12,7 @@ export default {
   [types.RESET_USER]: (state) => {
     state.user = {
       logined: false,
-      showChatRoom: false
+      showChatRoom: !state.user.showChatRoom
     }
     Vue.cookie.delete('access_token')
     Vue.cookie.delete('refresh_token')
@@ -49,5 +49,11 @@ export default {
   },
   [types.RESET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = 0
+  },
+  [types.OPEN_VERIFICATION_DIALOG]: (state) => {
+    state.showTrialVerifyDialog = true
+  },
+  [types.CLOSE_VERIFICATION_DIALOG]: (state) => {
+    state.showTrialVerifyDialog = false
   }
 }

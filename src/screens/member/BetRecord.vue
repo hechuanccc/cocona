@@ -138,7 +138,7 @@ export default {
   },
   created () {
     if (!this.lazyFetch) {
-      this.initFetchBetHistory({status: 'win,lose,tie'})
+      this.initFetchBetHistory({status: 'win,lose,tie,ongoing,cancelled,no_draw'})
       this.allGames = this.$store.state.state
       if (!this.allGames || this.allGames.length === 0) {
         this.$store.dispatch('fetchGames').then(games => {
@@ -152,7 +152,7 @@ export default {
       return {
         game: this.selectedGame,
         bet_date: this.selectedDate,
-        status: this.isUnsettled ? 'ongoing,cancelled,no_draw' : 'win,lose,tie'
+        status: this.isUnsettled ? 'ongoing,cancelled,no_draw' : 'win,lose,tie,ongoing,cancelled,no_draw'
       }
     }
   },

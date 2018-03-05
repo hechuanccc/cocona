@@ -33,7 +33,7 @@
                 :before-upload="beforeAvatarUpload">
 
                 <img v-if="user.avatar && !swichAvatar" :src="user.avatar" class="avatar">
-                <img v-else-if="!swichAvatar" src="../assets/avatar.png">
+                <img v-else-if="!swichAvatar" :src="require('../assets/avatar.png')">
                 <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
                   <span class="el-icon-upload"></span>
                 </label>
@@ -42,7 +42,7 @@
 
             <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
             <p>
-              <span class="txt-nick">{{user.nickname || user.username}}</span>
+              <span class="txt-nick">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
               <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
                 <span class="el-icon-edit-outline"></span>
               </a>
@@ -62,7 +62,7 @@
             <div
               class="avatar"
               style="overflow-y: hidden;">
-              <img :src="checkUser.avatar_url || '../assets/avatar.png'" class="avatar">
+              <img :src="checkUser.avatar_url || require('../assets/avatar.png')" class="avatar">
               <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
                 <span class="el-icon-upload"></span>
               </label>
@@ -118,7 +118,7 @@
                 <div class="msg-header">
                   <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
                   <span class="common-member" v-if="item.type !== 4">
-                    {{item.sender && item.sender.level_name && item.sender.level_name.indexOf('管理员') !== -1 ? '管理员' : '普通会员'}}
+                    {{roomManagers.indexOf(item.sender.id) !== -1 ? '管理员' : '普通会员'}}
                   </span>
                   <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
                 </div>
@@ -169,7 +169,7 @@
             <label for="imgUploadInput">
               <span title="上传图片">
                 <i class="el-icon-picture"></i>
-                <input disabled="personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
+                <input :disabled="!personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
@@ -301,6 +301,7 @@ export default {
       msgCnt: '',
       showNickNameBox: false,
       errMsg: false,
+      roomManagers: [],
       errMsgCnt: '',
       uploadUrl: urls.user,
       nickname: this.$store.state.user.nickname,
@@ -344,9 +345,7 @@ export default {
       }
     },
     'user.showChatRoom' (val, oldVal) {
-      if (!val) {
-        this.leaveRoom()
-      }
+      this.leaveRoom()
     }
   },
   computed: {
@@ -403,6 +402,7 @@ export default {
     },
     handleMsg () {
       this.loading = false
+      if (!this.ws) { return false }
       this.ws.send(JSON.stringify({
         'command': 'join',
         'receivers': [RECEIVER]
@@ -420,13 +420,12 @@ export default {
                   this.announcement = annouce.content
                 }
                 this.messages = this.messages.concat(data.latest_message.reverse())
-                this.messages = this.messages.concat([{
+                let oSupplyData = [{
                   type: -1
-                }, {
-                  type: -2
-                }, {
-                  type: -3
-                }])
+                }]
+                !this.personal_setting.user.avatar_url && oSupplyData.push({type: -2})
+                !this.personal_setting.user.nickname && oSupplyData.push({type: -3})
+                this.messages = this.messages.concat(oSupplyData)
                 this.$nextTick(() => {
                   this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
                 })
@@ -572,10 +571,10 @@ export default {
         })
       })
     },
-    leaveRoom () {
+    leaveRoom (n) {
       this.showChatRoom = false
       this.messages = []
-      this.ws.send(JSON.stringify({
+      this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
         'receivers': [RECEIVER]
       }))
@@ -628,9 +627,10 @@ export default {
       }).then((data) => {
         this.showCheckUser = false
       }, errorMsg => {
+        this.showCheckUser = false
         this.$message({
           showClose: true,
-          message: errorMsg,
+          message: errorMsg.response.data.error,
           type: 'error'
         })
       })
@@ -643,7 +643,7 @@ export default {
         this.$message({
           showClose: true,
           message: data.data.status,
-          type: 'error'
+          type: 'success'
         })
       }, errorMsg => {
         this.$message({
@@ -657,6 +657,7 @@ export default {
       this.loading = true
       getChatUser(1).then(response => {
         let data = response.data
+        this.roomManagers = response.data.managers
         this.bannedUsers = data.banned_users
         this.blockedUsers = data.block_users
         this.loading = false
