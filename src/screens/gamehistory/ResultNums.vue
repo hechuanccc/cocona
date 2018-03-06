@@ -79,6 +79,7 @@ export default {
   background-position: -58px -5px;
 }
 
+$hklgames: hkl, luckl;
 %hklball{
   background: url("../../assets/ball_hk6.png") no-repeat;
   display: inline-block;
@@ -88,31 +89,33 @@ export default {
 }
 
 @mixin hkl-num{
-  .hkl {
-    &:last-child {
-      &:before {
-        content: '＋';
-        color: black;
-        position: relative;
+  @each $game in $hklgames {
+    .#{$game} {
+      &:last-child {
+        &:before {
+          content: '＋';
+          color: black;
+          position: relative;
+        }
       }
     }
-  }
-  @for $i from 1 through 49 {
-    @if $i < 10 {
-      .hkl-0#{$i}{
+    @for $i from 1 through 49 {
+      @if $i < 10 {
+        .#{$game}-0#{$i}{
+          @extend %hklball;
+          background-position: 0 (-27px * ($i - 1));
+        }
+      }
+      .#{$game}-#{$i}{
         @extend %hklball;
         background-position: 0 (-27px * ($i - 1));
       }
     }
-    .hkl-#{$i}{
-      @extend %hklball;
-      background-position: 0 (-27px * ($i - 1));
-    }
-}
+  }
 }
 @include hkl-num;
 
-$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd, jnd28, fc3d;
+$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd, jnd28, fc3d, luckdd;
 
 %sscball{
   background: url("../../assets/ball_2.png") no-repeat;

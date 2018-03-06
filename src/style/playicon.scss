@@ -129,30 +129,36 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 @mixin hkl-num{
   @each $playgroup in $hk6_playgroups{
     @each $play in $hk6_plays{
+      .luckl_pg_#{$playgroup},
       .hkl_pg_#{$playgroup}{
         @extend %hklball;
       }
       @for $i from 1 through 49 {
+        .luckl_pl_#{$play}_#{$i},
         .hkl_pl_#{$play}_#{$i}{
           background-position: 0 (-27px * ($i - 1));
         }
         @if $playgroup == shxiao_spczdc{
           @if $i < 10 {
+            .luckl_pg_#{$playgroup}-zodiacnums-0#{$i},
             .hkl_pg_#{$playgroup}-zodiacnums-0#{$i} {
               background-position: 0 (-27px * ($i - 1));
             }
           }
+          .luckl_pg_#{$playgroup}-zodiacnums-#{$i},
           .hkl_pg_#{$playgroup}-zodiacnums-#{$i} {
             background-position: 0 (-27px * ($i - 1));
           }
         }
         @if $playgroup == withcode, ntinfvr_num, 5elmnts, clrwvs_color, txiao_spczdc, shawzdc, pxxmzdc, exl {
+          .luckl_pg_#{$playgroup}_#{$i},
           .hkl_pg_#{$playgroup}_#{$i} {
             background-position: 0 (-27px * ($i - 1));
           }
         }
 
         @if $playgroup == poscnum{
+          .luckl_pl_posc#{$i},
           .hkl_pl_posc#{$i}{
             background-position: 0 (-27px * ($i - 1));
           }
@@ -160,6 +166,7 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 
         @if str-slice($playgroup, 0, 7) == poscspc {
           @for $j from 1 through 6 {
+            .luckl_pl_poscspcnum#{$i}p#{$j},
             .hkl_pl_poscspcnum#{$i}p#{$j} {
               background-position: 0 (-27px * ($i - 1));
             }

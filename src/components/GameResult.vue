@@ -81,7 +81,7 @@ export default {
       this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
     },
     'gameLatestResult.game_code': function (code) {
-      if (code === 'hkl') {
+      if (code === 'hkl' || code === 'luckl') {
         this.showZodiac = true
       }
       if (code === 'pcdd' || code === 'jnd28') {

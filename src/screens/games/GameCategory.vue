@@ -407,10 +407,16 @@ export default {
           item.plays.forEach(play => {
             plays[play.id] = play
             plays[play.id]['group'] = item['display_name']
-            if (item.code === 'hkl_pg_clrwvs_color') {
+            if (item.code === 'hkl_pg_clrwvs_color' || item.code === 'luckl_pg_clrwvs_color') {
               plays[play.id]['value'] = colorWave[play.code]
             }
-            if (item.code === 'hkl_pg_txiao_spczdc' || item.code === 'hkl_pg_shawzdc' || item.code === 'hkl_pg_pxxmzdc') {
+            if (
+                item.code === 'hkl_pg_txiao_spczdc' ||
+                item.code === 'hkl_pg_shawzdc' ||
+                item.code === 'hkl_pg_pxxmzdc' ||
+                item.code === 'luckl_pg_txiao_spczdc' ||
+                item.code === 'luckl_pg_shawzdc' ||
+                item.code === 'luckl_pg_pxxmzdc') {
               plays[play.id]['value'] = this.zodiacMap[play.display_name]
             }
           })
