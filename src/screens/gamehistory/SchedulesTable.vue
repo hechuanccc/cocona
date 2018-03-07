@@ -4,7 +4,7 @@
       <div class="filters">
         <div class="input">
           <el-date-picker
-            v-if="currentGame === 'hkl'"
+            v-if="currentGame === 'hkl' || currentGame === 'luckl'"
             id="date"
             type="daterange"
             v-model="selectedDate"
@@ -714,7 +714,15 @@ export default {
         table: hklTable
       },
       {
+        code: 'luckl',
+        table: hklTable
+      },
+      {
         code: 'jnd28',
+        table: pcddTable
+      },
+      {
+        code: 'luckdd',
         table: pcddTable
       },
       {
@@ -729,7 +737,8 @@ export default {
 
     const today = this.$moment().format('YYYY-MM-DD')
     let selectedDate
-    if (this.$route.params.gameCode === 'hkl') {
+    let gameCode = this.$route.params.gameCode
+    if (gameCode === 'hkl' || gameCode === 'luckl') {
       selectedDate = [this.$moment().startOf('month').format('YYYY-MM-DD'), today]
     } else {
       selectedDate = today

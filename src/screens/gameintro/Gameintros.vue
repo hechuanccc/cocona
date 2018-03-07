@@ -59,12 +59,14 @@
   import cqssc from './rules/cqssc'
   import pcdd from './rules/pcdd'
   import hkl from './rules/hkl'
+  import luckl from './rules/luckl'
   import xjssc from './rules/xjssc'
   import tjssc from './rules/tjssc'
   import bjkl8 from './rules/bjkl8'
   import er75ft from './rules/er75ft'
   import auluck8 from './rules/auluck8'
   import jnd28 from './rules/jnd28'
+  import luckdd from './rules/luckdd'
   import fc3d from './rules/fc3d'
   import AsideMenu from '../../components/AsideMenu'
   import _ from 'lodash'
@@ -84,12 +86,14 @@
       cqssc,
       pcdd,
       hkl,
+      luckl,
       xjssc,
       tjssc,
       bjkl8,
       er75ft,
       auluck8,
       jnd28,
+      luckdd,
       fc3d
     },
     data () {

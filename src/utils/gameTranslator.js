@@ -250,7 +250,9 @@ export default {
   'auluck8Statistic': auluck8StatisticTranslator,
   'pcdd': pcddTranslator,
   'jnd28': pcddTranslator,
+  'luckdd': pcddTranslator,
   'hkl': hklTranslator,
+  'luckl': hklTranslator,
   'jsk3': jsk3Translator,
   'fc3d': fc3dTranslator
 }
