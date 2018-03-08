@@ -43,7 +43,12 @@ export default {
       return this.$route.params.gameCode ? this.$route.path : '/gamehistory/' + this.$store.getters.allGames[0].code
     },
     refresh () {
-      return this.$route.params.gameCode === 'hkl'
+      const gameCode = this.$route.params.gameCode
+      if (gameCode !== 'hkl' && gameCode !== 'luckl') {
+        return 'other'
+      } else {
+        return gameCode
+      }
     }
   },
   created () {
