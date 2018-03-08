@@ -3,7 +3,14 @@
   <el-row class="m-t-lg">
     <el-col :offset="7" :span="10">
       <el-alert
-        v-if="payeeError"
+        v-if="activeType === 'none'"
+        title="目前暂无可用支付方式"
+        :type="'error'"
+        :closable="false"
+        center>
+      </el-alert>
+      <el-alert
+        v-else-if="payeeError"
         :title="`${payeeErrorMessage}异常，请联系客服`"
         :type="'error'"
         :closable="false"
@@ -148,8 +155,6 @@ export default {
           return this.$t('user.alipay')
         case 'bank':
           return this.$t('user.bankcard')
-        default:
-          return this.$t('user.online_payment')
       }
     }
   },
@@ -160,10 +165,14 @@ export default {
         this.activeType = 'none'
       } else {
         datas.forEach((data, index) => {
-          this.paymentTypes[data.name] = data.detail[0] || {}
-          this.paymentTypes[data.name].id = data.detail[0].payment_type
-          if (index === 0) {
-            this.select(data.name)
+          let payment = data.detail[0]
+          if (payment) {
+            this.paymentTypes[data.name] = payment
+            if (!this.payment.gateway_id) {
+              this.select(data.name)
+            }
+          } else {
+            this.paymentTypes[data.name] = {}
           }
         })
       }
@@ -191,7 +200,7 @@ export default {
       this.activeType = type
       let paymentType = this.paymentTypes[type]
       if (paymentType) {
-        this.payment.payway = paymentType.id
+        this.payment.payway = paymentType.payment_type
         this.payment.payee_id = paymentType.payee_id
         this.payment.gateway_id = paymentType.gateway_id
       } else {
