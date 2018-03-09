@@ -73,7 +73,7 @@
             </span>
             <span v-else :class="schedule.result_category[fieldsObject.key]">{{schedule.result_category[fieldsObject.key] |resultFilter}}</span>
             <div>
-              <span v-if="fieldsObject.subHeads"
+              <span v-if="fieldsObject.subHeads && schedule.result_category"
                 v-for="subHead in fieldsObject.subHeads"
                 :key="'centent-'+currentGame+'-subHead-'+subHead.key"
                 :style="{'display': 'inline-block',
@@ -82,13 +82,15 @@
                   {{schedule.result_category[subHead.key] |resultFilter}}
                 </b>
               </span>
+              <span v-else>-</span>
             </div>
           </td>
           <td v-else>
-            <div :style="{
-                    'width': currentGame === 'bjkl8' || currentGame === 'auluck8' ? '340px' : 'auto',
-                    'margin': '0 auto'
-                    }">
+            <div v-if="schedule.result_status === 'valid'"
+              :style="{
+                'width': currentGame === 'bjkl8' || currentGame === 'auluck8' ? '340px' : 'auto',
+                'margin': '0 auto'
+              }">
               <ResultNums v-for="result in classifiyResults (schedule)"
                 :key="currentGame + 'result-number' + result.num"
                 :result="result"
@@ -96,6 +98,7 @@
                 :game="currentGame">
               </ResultNums>
             </div>
+            <div v-else>官方开奖无效</div>
           </td>
         </tr>
       </table>

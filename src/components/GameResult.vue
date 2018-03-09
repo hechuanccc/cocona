@@ -5,22 +5,25 @@
       <p class="issue">{{gameLatestResult.issue_number}}{{$t('navMenu.result_period')}}</p>
     </div>
     <AudioButton class="audio-button"/>
-    <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult">
-      <span
-        v-for="(num, index) in resultNums"
-        :key="gameLatestResult.issue_number + index"
-        :class="getResultClass(num)">
-        <b> {{num}} </b>
-        <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]}} </p>
-      </span>
-      <div class="ball-sum" v-if="showSum">
-        {{$t('navMenu.total')}}
-        <span>
-          <b>{{resultsSum}}</b>
+    <div class="invalid" v-if="invalid">
+      官方开奖无效
+    </div>
+     <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult && !invalid">
+        <span
+          v-for="(num, index) in resultNums"
+          :key="gameLatestResult.issue_number + index"
+          :class="getResultClass(num)">
+          <b> {{num}} </b>
+          <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]}} </p>
         </span>
+        <div class="ball-sum" v-if="showSum">
+          {{$t('navMenu.total')}}
+          <span>
+            <b>{{resultsSum}}</b>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -43,7 +46,8 @@ export default {
       drawTimeGap: '',
       zodiacs: '',
       showZodiac: false,
-      showSum: false
+      showSum: false,
+      invalid: false
     }
   },
   created () {
@@ -84,8 +88,13 @@ export default {
       if (code === 'hkl' || code === 'luckl') {
         this.showZodiac = true
       }
-      if (code === 'pcdd' || code === 'jnd28') {
+      if (code === 'pcdd' || code === 'jnd28' || code === 'luckdd') {
         this.showSum = true
+      }
+      if (code === 'luckl') {
+        if (this.gameLatestResult.status && this.gameLatestResult.status !== 'valid') {
+          this.invalid = true
+        }
       }
     }
   },
@@ -195,6 +204,16 @@ export default {
   .wrapper-hkl span{
     margin-bottom: 10px;
   }
+}
+
+.invalid {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: bold;
+  color: $watermelon;
 }
 </style>
 

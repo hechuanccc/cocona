@@ -117,7 +117,7 @@ export default {
         const next = this.$route.query.next
         this.$router.push(next || 'game')
       }, errorMsg => {
-        if (errorMsg.data.auth_req === 1) {
+        if (errorMsg.data && errorMsg.data.auth_req === 1) {
           this.fetchCaptcha()
           this.illegalTriedLogin = true
         }
