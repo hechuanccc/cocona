@@ -91,10 +91,10 @@ export default {
       if (code === 'pcdd' || code === 'jnd28' || code === 'luckdd') {
         this.showSum = true
       }
-      if (code === 'luckl') {
-        if (this.gameLatestResult.status && this.gameLatestResult.status !== 'valid') {
-          this.invalid = true
-        }
+    },
+    'gameLatestResult.status': function (val) {
+      if (val) {
+        this.invalid = val !== 'valid'
       }
     }
   },
