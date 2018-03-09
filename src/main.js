@@ -79,6 +79,7 @@ axios.interceptors.response.use(res => {
         message: responseData.msg,
         type: 'error'
       })
+      return
     }
     return Promise.reject(responseData)
   }
