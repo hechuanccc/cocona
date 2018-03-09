@@ -93,8 +93,8 @@ export default {
       }
     },
     'gameLatestResult.status': function (val) {
-      if (val && val !== 'valid') {
-        this.invalid = true
+      if (val) {
+        this.invalid = val !== 'valid'
       }
     }
   },
