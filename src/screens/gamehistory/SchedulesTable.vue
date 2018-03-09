@@ -71,7 +71,10 @@
             <span v-if="schedule[fieldsObject.key]">
               {{schedule[fieldsObject.key]}}
             </span>
-            <span v-else :class="schedule.result_category[fieldsObject.key]">{{schedule.result_category[fieldsObject.key] |resultFilter}}</span>
+            <span v-else-if="schedule.result_category"
+              :class="schedule.result_category[fieldsObject.key]">
+                {{schedule.result_category[fieldsObject.key] |resultFilter}}
+            </span>
             <div>
               <span v-if="fieldsObject.subHeads && schedule.result_category"
                 v-for="subHead in fieldsObject.subHeads"
