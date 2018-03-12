@@ -22,8 +22,8 @@
           <el-form-item :label="$t('user.phone')" prop="phone">
             <el-input class="input-width" v-model="user.phone"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('user.email')" prop="email">
-            <el-input class="input-width" v-model="user.email"></el-input>
+          <el-form-item :label="$t('user.qq')" prop="qq">
+            <el-input class="input-width" v-model="user.qq"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
             <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password"></el-input>
@@ -76,7 +76,7 @@
 
 <script>
 import { fetchCaptcha, checkUserName, register } from '../../api'
-import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword } from '../../validate'
+import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword, validateQQ } from '../../validate'
 import { msgFormatter } from '../../utils'
 export default {
   name: 'register',
@@ -140,6 +140,14 @@ export default {
       }
     }
 
+    const qqValidator = (rule, value, callback) => {
+      if (!validateQQ(value)) {
+        callback(new Error(this.$t('validate.qq_validate')))
+      } else {
+        callback()
+      }
+    }
+
     const withdrawPasswordValidator = (rule, value, callback) => {
       if (!validateWithdrawPassword(value)) {
         callback(new Error(this.$t('validate.withdraw_password_validate')))
@@ -180,9 +188,9 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
           { validator: phoneValidator, trigger: 'blur,change' }
         ],
-        email: [
+        qq: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { type: 'email', message: this.$t('validate.email_validate'), trigger: 'blur,change' }
+          { validator: qqValidator, trigger: 'blur,change' }
         ],
         withdraw_password: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
