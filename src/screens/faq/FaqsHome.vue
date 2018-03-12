@@ -50,9 +50,9 @@ export default {
       faqs: [
         { display_name: '如何存款', code: 'FaqDeposit' },
         { display_name: '如何提款', code: 'FaqWithdraw' },
-        { display_name: '常見問題', code: 'FaqFaqs' },
-        { display_name: '關於我們', code: 'FaqAbout' },
-        { display_name: '聯繫我們', code: 'FaqContact' }
+        { display_name: '常见问题', code: 'FaqFaqs' },
+        { display_name: '关于我们', code: 'FaqAbout' },
+        { display_name: '联系我们', code: 'FaqContact' }
       ]
     }
   },
