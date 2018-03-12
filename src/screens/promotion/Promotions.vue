@@ -28,17 +28,7 @@ export default {
   },
   created () {
     getPromotions().then(result => {
-      let data = new Date()
-      let year = data.getFullYear()
-      let month = data.getMonth() + 1
-      let day = data.getDate()
-      let nowDate = year + this.getdate(month) + this.getdate(day)
-      result.forEach((item) => {
-        let deadLineDate = item.end_date.split('-').join('') * 1
-        if (deadLineDate > nowDate) {
-          this.promotions.push(item)
-        }
-      })
+      this.promotions = result
     })
   },
   methods: {
@@ -51,7 +41,9 @@ export default {
   computed: {
     startedPromotions () {
       return this.promotions.filter(promo => {
-        return !this.today.isBefore(this.$moment(promo.start_date))
+        let isBefore = this.today.isBefore(this.$moment(promo.start_date), 'day')
+        let isAfter = this.today.isAfter(this.$moment(promo.end_date), 'day')
+        return !isBefore && !isAfter
       })
     }
   }
