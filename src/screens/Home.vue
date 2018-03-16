@@ -1,17 +1,13 @@
 <template>
   <div id="app">
       <el-main v-if="isHome">
-        <el-carousel indicator-position="inside" height="500px">
+        <el-carousel indicator-position="inside" height="400px">
           <el-carousel-item v-for="banner in banners" :key="banner.id">
             <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
           </el-carousel-item>
         </el-carousel>
         <el-row class="announcement-wp">
           <div class="announcement container" @click="announcementDialogVisible = true">
-            <div class="title">
-              <icon class="speaker" color="#666" scale="1" name="bullhorn"></icon>
-              <span class="text">{{$t('announcement.speaker')}}</span>
-            </div>
             <div class="content">
               <span class="text"
                 :style="{
@@ -24,15 +20,12 @@
           </div>
         </el-row>
         <el-row class="game-area container">
-          <h2>热门游戏</h2>
+          <p>热门游戏</p>
           <ul class="clearfix">
-            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 8" @click="navigate(game)" class="game-bg" :style="
-                {
-                  backgroundImage: game.bg_icon ? `url('${game.bg_icon}')` :''
-                }
-              ">
+            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 15" @click="navigate(game)">
               <div class="game-icon">
                 <img :src="game.icon" :alt="game.id">
+                <p>{{game.display_name}}</p>
               </div>
             </li>
           </ul>
@@ -40,7 +33,7 @@
             <el-button round type="primary" size="large" @click.native="$router.push('/game/')">更多游戏 &raquo;</el-button>
           </div>
         </el-row>
-       <el-row class="ads container">
+        <el-row class="ads container">
           <el-col
             v-for="(item, index) in descriptions"
             class="ad"
@@ -200,6 +193,9 @@ export default {
 
 <style lang="scss" scoped>
 /* banner */
+#app {
+  background: white;
+}
 .el-carousel__item .banner-img {
   width: 100%;
   height: 100%;
@@ -208,30 +204,28 @@ export default {
 }
 
 .announcement-wp {
-  background: #fff;
+  background: #fafafa;
 }
 .announcement {
   margin: auto;
   overflow: hidden;
-  height: 36px;
-  line-height: 36px;
+  height: 40px;
+  line-height: 40px;
   font-size: 14px;
-  color: #4a4a4a;
+  background-color: #fafafa;
+  color: #9b9b9b;
   cursor: pointer;
+  text-align: center;
   .title {
     display: inline-block;
-    float: left;
     .text {
-      color: #666;
       display: inline-block;
       margin-left: 5px;
-      font-size: 13px;
     }
   }
   .content {
     display: inline-block;
     .text {
-      padding-left: 20px;
       width: 100%;
       overflow: hidden;
     }
@@ -267,25 +261,29 @@ export default {
 
 .game-area {
   margin: 0 auto;
-  h2 {
+  p {
     text-align: center;
-    font-size: 16px;
-    color: #333;
-    padding: 20px 0;
+    font-size: 24px;
+    line-height: 33px;
+    margin: 30px auto;
+    margin-top: 40px;
+    color: #4a4a4a;
   }
   li {
     cursor: pointer;
     float: left;
     overflow: hidden;
-    width: 25%;
-    height: 320px;
-    line-height: 320px;
+    width: 256px;
+    height: 250px;
     position: relative;
     text-align: center;
   }
   .action {
     text-align: center;
     padding: 20px 0 0;
+    button {
+      font-weight: 300;
+    }
   }
 }
 
@@ -305,20 +303,53 @@ export default {
   background-color: rgba(39, 40, 34, 0.5);
 }
 
+.game-icon {
+  height: 100%;
+  transition: all .3s ease;
+  &:hover {
+    background-color: #f8fbff;
+    p {
+      color: #156fd8;
+    }
+    img {
+      box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
 .game-icon img {
-  top: 50%;
-  transform: translateY(50%);
-  line-height: 150px;
-  width: 150px;
-  height: 150px;
+  top: 39px;
+  transform: translateY(33%);
+  transition: all .3s ease;
+  line-height: 125px;
+  width: 125px;
+  height: 125px;
+  border-radius: 20px;
+}
+
+.game-icon p {
+  position: absolute;
+  margin: 0 auto;
+  bottom: 38px;
+  font-size: 20px;
+  font-weight: 300;
+  text-transform: uppercase;
+  width: 100%;
+  height: 28px;
+  line-height: 28px;
+  letter-spacing: 1.7px;
+  color: #4a4a4a;
+  transition: all .3s ease;
 }
 
 .ads {
   text-align: center;
-  margin: 80px auto;
+  margin: 0 auto;
+  padding: 50px 24px;
 }
 .ad {
-  padding: 0 10px;
+  margin-top: 57px;
+  padding-top: 5px auto;
 }
 .ad-title {
   width: 250px;
@@ -329,11 +360,11 @@ export default {
 }
 
 .content-text {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 2;
+  line-height: 1.71;
   text-align: left;
-  color: #878787;
+  color: #9b9b9b;
   height: 100%;
   overflow: hidden;
 }
