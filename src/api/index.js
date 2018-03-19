@@ -21,7 +21,7 @@ export function getCaptcha () {
 }
 
 export function getBanner () {
-  return axios.get(urls.banner)
+  return axios.get(`${urls.banner}?platform=mobile`)
 }
 
 export function getAnnouncements () {
