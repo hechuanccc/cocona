@@ -49,9 +49,9 @@ export default {
       faqs: [
         { display_name: '如何存款', route: '/faq/deposit' },
         { display_name: '如何提款', route: '/faq/withdraw' },
-        { display_name: '常見問題', route: '/faq/faqs' },
-        { display_name: '關於我們', route: '/faq/about' },
-        { display_name: '聯繫我們', route: '/faq/contact' }
+        { display_name: '常见问题', route: '/faq/faqs' },
+        { display_name: '关于我们', route: '/faq/about' },
+        { display_name: '联系我们', route: '/faq/contact' }
       ]
     }
   },

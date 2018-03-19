@@ -18,6 +18,10 @@
       </el-alert>
     </el-col>
   </el-row>
+  <el-tabs v-model="activeType" class="indented-tab" type="card" @tab-click="choosePaymentType">
+    <el-tab-pane :label="item.display_name" :name="item.name" v-for="(item, index) in paymentTypes" :key="index">
+    </el-tab-pane>
+  </el-tabs>
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
       <div>
@@ -34,22 +38,6 @@
           <input name="token" type="hidden" :value="token" />
           <input name="notify_page" type="hidden" :value="notify_page" />
         </el-form-item>
-      </div>
-      <div class="payment text-center m-b-lg">
-        <ul class="payment-types">
-          <li :class="['payment-type', activeType === 'wechat' ? 'active' : '']" @click="select('wechat')">
-            <i class="icon weixin-icon"></i>
-            <span class="name">{{$t('user.weixin')}}</span>
-          </li>
-          <li :class="['payment-type', activeType === 'alipay' ? 'active' : '']" @click="select('alipay')">
-            <i class="icon alipay-icon"></i>
-            <span class="name">{{$t('user.alipay')}}</span>
-          </li>
-          <li :class="['payment-type', activeType === 'bank' ? 'active' : '']" @click="select('bank')">
-            <i class="icon bankcard-icon"></i>
-            <span class="name">{{$t('user.bankcard')}}</span>
-          </li>
-        </ul>
       </div>
       <div class="submit-button text-center">
         <el-button class="input-width" type="primary" :disabled="payeeError" @click="submit($event)">{{$t('action.submit')}}</el-button>
@@ -96,14 +84,18 @@ export default {
   name: 'Payment',
   data () {
     let limitPass = (rule, value, callback) => {
-      const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
-      const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
-      if (lower && value < lower) {
-        callback(new Error(this.$t('validate.min_amount_validate')))
-      } else if (upper && value > upper) {
-        callback(new Error(this.$t('validate.max_amount_validate')))
+      if (!value) {
+        callback(new Error(this.$t('validate.required')))
       } else {
-        callback()
+        const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
+        const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
+        if (lower && value < lower) {
+          callback(new Error(this.$t('validate.min_amount_validate')))
+        } else if (upper && value > upper) {
+          callback(new Error(this.$t('validate.max_amount_validate')))
+        } else {
+          callback()
+        }
       }
     }
     return {
@@ -115,12 +107,12 @@ export default {
       },
       rule: {
         amount: [
-          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
-          { validator: limitPass, trigger: 'blur,change' }
+          { required: true, type: 'number', validator: limitPass, trigger: 'blur' }
         ]
       },
       activeType: '',
-      paymentTypes: {},
+      payee: {},
+      paymentTypes: [],
       token: Vue.cookie.get('access_token'),
       paymentUrl: urls.payment,
       notify_page: `${window.location.origin}/#/account/online_payment_success/`,
@@ -164,15 +156,16 @@ export default {
         this.payment.gateway_id = undefined
         this.activeType = 'none'
       } else {
+        this.paymentTypes = datas
         datas.forEach((data, index) => {
           let payment = data.detail[0]
           if (payment) {
-            this.paymentTypes[data.name] = payment
+            this.payee[data.name] = payment
             if (!this.payment.gateway_id) {
               this.select(data.name)
             }
           } else {
-            this.paymentTypes[data.name] = {}
+            this.payee[data.name] = {}
           }
         })
       }
@@ -198,7 +191,7 @@ export default {
         return
       }
       this.activeType = type
-      let paymentType = this.paymentTypes[type]
+      let paymentType = this.payee[type]
       if (paymentType) {
         this.payment.payway = paymentType.payment_type
         this.payment.payee_id = paymentType.payee_id
@@ -210,6 +203,9 @@ export default {
     filtAmount,
     closeDetailDialog () {
       this.isSubmit = false
+    },
+    choosePaymentType (tab, e) {
+      this.select(tab.name)
     }
   }
 }
