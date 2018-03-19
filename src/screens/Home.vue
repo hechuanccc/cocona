@@ -157,7 +157,7 @@ export default {
           return a.rank - b.rank
         })
       }
-    )
+    ).catch(() => {})
     getAnnouncements().then(
       result => {
         result.forEach((item) => {
