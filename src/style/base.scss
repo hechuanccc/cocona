@@ -40,6 +40,11 @@ body {
   text-align: left;
 }
 
+#app {
+  min-width: $container_width;
+  width: 100%;
+}
+
 .container {
   width: $container_width;
 }

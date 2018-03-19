@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="home">
       <el-main v-if="isHome">
         <el-carousel indicator-position="inside" height="400px">
           <el-carousel-item v-for="banner in banners" :key="banner.id">
@@ -193,7 +193,7 @@ export default {
 
 <style lang="scss" scoped>
 /* banner */
-#app {
+#home {
   background: white;
 }
 .el-carousel__item .banner-img {
