@@ -19,14 +19,14 @@
     </el-col>
   </el-row>
   <el-tabs v-model="activeType" class="indented-tab" type="card" @tab-click="choosePaymentType">
-    <el-tab-pane :label="item.display_name" :name="item.name" v-for="(item, index) in paymentTypes" :key="index">
-      <el-radio-group v-if="item.detail.length>1" v-model="selectedPayment.gateway_id">
-        <el-radio v-for="(payment, index) in item.detail" :key="index" :label="payment.gateway_id">{{`${item.display_name}${index+1}`}}</el-radio>
+    <el-tab-pane class="text-center" :label="item.display_name" :name="item.name" v-for="(item, index) in paymentTypes" :key="index">
+      <el-radio-group v-if="item.detail.length>1" v-model="selectedPayment.payee_id">
+        <el-radio v-for="(payment, index) in item.detail" :key="index" :label="payment.payee_id" @change="selectPayment($event, payment.gateway_id)">{{`${item.display_name}${index+1}`}}</el-radio>
       </el-radio-group>
     </el-tab-pane>
   </el-tabs>
   <div class="form-wp">
-    <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="selectedPayment" ref="payment" status-icon :rules="rule" label-width="100px">
+    <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="selectedPayment" ref="payment" status-icon :rules="rule" label-width="90px">
       <div>
         <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
           <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
@@ -199,6 +199,9 @@ export default {
       } else {
         this.selectedPayment.gateway_id = undefined
       }
+    },
+    selectPayment (payeeId, gatewayId) {
+      this.selectedPayment.gateway_id = gatewayId
     },
     filtAmount,
     closeDetailDialog () {
