@@ -1,5 +1,5 @@
 <template>
-  <div v-loading.fullscreen="$store.state.loading" element-loading-text="加载中...">
+  <div v-loading.fullscreen="$store.state.loading" element-loading-text="加载中..." class="block-center" id="app">
     <Top />
     <div :style="{minHeight: bodyHeight + 'px'}">
       <router-view/>
