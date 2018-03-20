@@ -20,21 +20,24 @@
   </el-row>
   <el-tabs v-model="activeType" class="indented-tab" type="card" @tab-click="choosePaymentType">
     <el-tab-pane :label="item.display_name" :name="item.name" v-for="(item, index) in paymentTypes" :key="index">
+      <el-radio-group v-if="item.detail.length>1" v-model="selectedPayment.gateway_id">
+        <el-radio v-for="(payment, index) in item.detail" :key="index" :label="payment.gateway_id">{{`${item.display_name}${index+1}`}}</el-radio>
+      </el-radio-group>
     </el-tab-pane>
   </el-tabs>
   <div class="form-wp">
-    <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="payment" ref="payment" status-icon :rules="rule" label-width="100px">
+    <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="selectedPayment" ref="payment" status-icon :rules="rule" label-width="100px">
       <div>
         <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
-          <el-input class="input-width" name="amount" type="number" v-model.number="payment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+          <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
           <div class="min-amount">
             <span class="text">{{$t('user.min_amount')}}:</span>
             <icon scale="0.75" name="jpy"></icon>
             <span class="amount">{{limit.lower}}</span>
           </div>
-          <input name="payee" type="hidden" :value="payment.payee_id" />
-          <input name="payment_type" type="hidden" :value="payment.payway" />
-          <input name="payment_gateway" type="hidden" :value="payment.gateway_id" />
+          <input name="payee" type="hidden" :value="selectedPayment.payee_id" />
+          <input name="payment_type" type="hidden" :value="selectedPayment.payway" />
+          <input name="payment_gateway" type="hidden" :value="selectedPayment.gateway_id" />
           <input name="token" type="hidden" :value="token" />
           <input name="notify_page" type="hidden" :value="notify_page" />
         </el-form-item>
@@ -51,7 +54,7 @@
       center>
       <div>
         <p>支付方式：在线支付</p>
-        <p>支付金额：{{this.payment.amount|currency('￥')}}</p>
+        <p>支付金额：{{selectedPayment.amount|currency('￥')}}</p>
         <p>1. 成功付款后将会自动到帐，并弹出到帐提示。</p>
         <p>2. 长时间无反应，请联系客服。</p>
       </div>
@@ -81,7 +84,7 @@ import urls from '../../api/urls'
 import Vue from 'vue'
 import 'vue-awesome/icons/jpy'
 export default {
-  name: 'Payment',
+  name: 'OnlinePayment',
   data () {
     let limitPass = (rule, value, callback) => {
       if (!value) {
@@ -99,7 +102,7 @@ export default {
       }
     }
     return {
-      payment: {
+      selectedPayment: {
         amount: '',
         payway: '',
         payee_id: '',
@@ -137,23 +140,20 @@ export default {
       return alerts.join(', ')
     },
     payeeError () {
-      return this.payment.gateway_id === undefined
+      return this.selectedPayment.gateway_id === undefined
     },
     payeeErrorMessage () {
-      switch (this.activeType) {
-        case 'wechat':
-          return this.$t('user.weixin')
-        case 'alipay':
-          return this.$t('user.alipay')
-        case 'bank':
-          return this.$t('user.bankcard')
+      const currentPayment = this.paymentTypes.find(payment => payment.name === this.activeType)
+      if (currentPayment) {
+        return currentPayment.display_name
       }
+      return ''
     }
   },
   created () {
     fetchPaymentType().then(datas => {
       if (datas.length === 0) {
-        this.payment.gateway_id = undefined
+        this.selectedPayment.gateway_id = undefined
         this.activeType = 'none'
       } else {
         this.paymentTypes = datas
@@ -161,7 +161,7 @@ export default {
           let payment = data.detail[0]
           if (payment) {
             this.payee[data.name] = payment
-            if (!this.payment.gateway_id) {
+            if (!this.selectedPayment.gateway_id) {
               this.select(data.name)
             }
           } else {
@@ -193,11 +193,11 @@ export default {
       this.activeType = type
       let paymentType = this.payee[type]
       if (paymentType) {
-        this.payment.payway = paymentType.payment_type
-        this.payment.payee_id = paymentType.payee_id
-        this.payment.gateway_id = paymentType.gateway_id
+        this.selectedPayment.payway = paymentType.payment_type
+        this.selectedPayment.payee_id = paymentType.payee_id
+        this.selectedPayment.gateway_id = paymentType.gateway_id
       } else {
-        this.payment.gateway_id = undefined
+        this.selectedPayment.gateway_id = undefined
       }
     },
     filtAmount,
