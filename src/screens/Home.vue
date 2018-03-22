@@ -38,7 +38,7 @@
               </li>
               <router-link :to="'/game/'" tag="li" class="action">
                 <div class="game-icon">
-                  <img src="../assets/more-game.png" id="more-game">
+                  <img src="../assets/more-game.png" id="more-game"/>
                   <p>更多游戏 &raquo;</p>
                 </div>
               </router-link>
