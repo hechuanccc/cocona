@@ -138,17 +138,19 @@ Vue.mixin({
 
 gethomePage().then(
   response => {
+    let pref = response.global_preferences
     store.dispatch('setSystemConfig',
       {
         homePageLogo: response.icon,
-        customerServiceUrl: response.global_preferences.customer_service_url,
-        agentDashboardUrl: response.global_preferences.agent_dashboard_url,
-        global_preferences: response.global_preferences,
-        agentBusinessConsultingQQ: response.global_preferences.agent_business_consulting_qq,
-        contactEmail: response.global_preferences.contact_email,
-        contactPhoneNumber: response.global_preferences.contact_phone_number,
-        openAccountConsultingQQ: response.global_preferences.open_account_consulting_qq,
-        siteName: response.name
+        customerServiceUrl: pref.customer_service_url,
+        agentDashboardUrl: pref.agent_dashboard_url,
+        global_preferences: pref,
+        agentBusinessConsultingQQ: pref.agent_business_consulting_qq,
+        contactEmail: pref.contact_email,
+        contactPhoneNumber: pref.contact_phone_number,
+        openAccountConsultingQQ: pref.open_account_consulting_qq,
+        siteName: response.name,
+        chatroomEnabled: pref.chatroom_enabled
       })
     document.title = store.state.systemConfig.siteName
   }

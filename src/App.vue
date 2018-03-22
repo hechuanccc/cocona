@@ -46,7 +46,7 @@
         </el-form>
       </div>
     </el-dialog>
-    <chat-room :showEntry="showEntry"></chat-room>
+    <chat-room v-if="$store.state.systemConfig.chatroomEnabled === 'true'" :showEntry="showEntry"></chat-room>
   </div>
 </template>
 
