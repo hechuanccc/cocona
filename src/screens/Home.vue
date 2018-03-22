@@ -19,19 +19,34 @@
             </div>
           </div>
         </el-row>
-        <el-row class="game-area container">
+        <div class="popular-game container">
+          <img src="../assets/popular.png"/>
           <p>热门游戏</p>
-          <ul class="clearfix">
-            <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 15" @click="navigate(game)">
-              <div class="game-icon">
-                <img :src="game.icon" :alt="game.id">
-                <p>{{game.display_name}}</p>
-              </div>
-            </li>
-          </ul>
-          <div class="action">
-            <el-button round type="primary" size="large" @click.native="$router.push('/game/')">更多游戏 &raquo;</el-button>
+        </div>
+        <el-row class="game-area container">
+          <div class="games">
+            <ul class="clearfix">
+              <router-link :to="'/game/'" tag="li" class="game-ad">
+                <img src="../assets/game-ad.png"/>
+                <p>超过 20 款游戏</p>
+              </router-link>
+              <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
+                <div class="game-icon">
+                  <img :src="game.icon" :alt="game.id"/>
+                  <p>{{game.display_name}}</p>
+                </div>
+              </li>
+              <router-link :to="'/game/'" tag="li" class="action">
+                <div class="game-icon">
+                  <img src="../assets/more-game.png" id="more-game" alt="More Games"/>
+                  <p>更多游戏 &raquo;</p>
+                </div>
+              </router-link>
+            </ul>
           </div>
+        </el-row>
+        <el-row class="payments">
+          <img src="../assets/payment.png"/>
         </el-row>
         <el-row class="ads container">
           <el-col
@@ -258,31 +273,69 @@ export default {
   font-weight: 500;
   color: #ffffff;
 }
+.popular-game {
+  width: 120px;
+  height: 50px;
+  margin: 40px auto;
+  position: relative;
+  p {
+    left: 0;
+    bottom: 0;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 1.7px;
+    color: #4a4a4a;
+    z-index: 1;
+    position: absolute;
+  }
+  img {
+    top: 0;
+    right: 0;
+    height: 50px;
+    z-index: 2;
+    position: absolute;
+  }
+}
 
 .game-area {
-  margin: 0 auto;
-  p {
-    text-align: center;
-    font-size: 24px;
-    line-height: 33px;
-    margin: 30px auto;
-    margin-top: 40px;
-    color: #4a4a4a;
+  margin: 40px auto;
+  width: 1190px;
+  
+  li.game-ad {
+    height: 339px;
+    width: 339px;
+    img {
+      height: 260px;
+      width: 100%;
+    }
+    p {
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 55px;
+      text-align: center;
+      color: #4a4a4a;
+    }
   }
+
   li {
     cursor: pointer;
     float: left;
     overflow: hidden;
-    width: 256px;
-    height: 250px;
+    width: 169px;
+    height: 169px;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    border: solid 1px #bfbfbf;
     position: relative;
     text-align: center;
   }
-  .action {
-    text-align: center;
-    padding: 20px 0 0;
-    button {
-      font-weight: 300;
+
+  li.action {
+    p {
+      color: #4a90e2;
+    }
+    img#more-game {
+      border-radius: 0%;
     }
   }
 }
@@ -314,25 +367,28 @@ export default {
     img {
       box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
     }
+    img#more-game {
+      box-shadow: none;
+    }
   }
 }
 
 .game-icon img {
-  top: 39px;
-  transform: translateY(33%);
+  top: 22px;
+  transform: translateY(20%);
   transition: all .3s ease;
-  line-height: 125px;
-  width: 125px;
-  height: 125px;
-  border-radius: 20px;
+  line-height: 100px;
+  width: 100px;
+  height: 100px;
+  border-radius: 100%;
 }
 
 .game-icon p {
   position: absolute;
   margin: 0 auto;
-  bottom: 38px;
-  font-size: 20px;
-  font-weight: 300;
+  bottom: 11px;
+  font-size: 14px;
+  font-weight: 400;
   text-transform: uppercase;
   width: 100%;
   height: 28px;
@@ -342,10 +398,22 @@ export default {
   transition: all .3s ease;
 }
 
+.payments {
+  text-align: center;
+  margin: 0 auto;
+  background-color: #f6f6f6;
+  img {
+    margin: 30px auto;
+    width: 469px;
+    height: 60px;
+  } 
+}
+
 .ads {
   text-align: center;
   margin: 0 auto;
-  padding: 50px 24px;
+  margin-bottom: 50px;
+  padding: 0 24px;
 }
 .ad {
   margin-top: 57px;
