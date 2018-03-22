@@ -32,13 +32,13 @@
               </router-link>
               <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
                 <div class="game-icon">
-                  <img :src="game.icon" :alt="game.id">
+                  <img :src="game.icon" :alt="game.id"/>
                   <p>{{game.display_name}}</p>
                 </div>
               </li>
               <router-link :to="'/game/'" tag="li" class="action">
                 <div class="game-icon">
-                  <img src="../assets/more-game.png" id="more-game"/>
+                  <img src="../assets/more-game.png" id="more-game" alt="More Games"/>
                   <p>更多游戏 &raquo;</p>
                 </div>
               </router-link>
