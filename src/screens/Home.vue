@@ -390,7 +390,6 @@ export default {
   width: 100%;
   height: 28px;
   line-height: 28px;
-  letter-spacing: 1.7px;
   color: #4a4a4a;
   transition: all .3s ease;
 }
@@ -403,7 +402,7 @@ export default {
     margin: 30px auto;
     width: 469px * 0.8;
     height: 60px * 0.8;
-  } 
+  }
 }
 
 .ads {

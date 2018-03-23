@@ -200,9 +200,9 @@ export default {
     window.clearInterval(this.getMessageInterval)
   },
   watch: {
-    '$store.state.systemConfig.homePageLogo': function (homePageLogo) {
-      document.getElementById('favicon').href = homePageLogo
-    },
+    // '$store.state.systemConfig.homePageLogo': function (homePageLogo) {
+    //   document.getElementById('favicon').href = homePageLogo
+    // },
     '$store.state.showTrialVerifyDialog': function () {
       this.user.verification_code_1 = ''
       this.fetchCaptcha()
