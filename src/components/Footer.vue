@@ -39,7 +39,7 @@ export default {
         },
         {
           option: '常见问题',
-          route: '/faq'
+          route: '/faq/faqs'
         },
         {
           option: '规则说明',
@@ -51,7 +51,7 @@ export default {
         },
         {
           option: '关于我们',
-          route: '/faq'
+          route: '/faq/about'
         },
         {
           option: '最新优惠',

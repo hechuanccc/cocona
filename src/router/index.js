@@ -28,6 +28,11 @@ const Announcement = (resolve) => require(['@/screens/member/Announcement'], res
 
 const Promotions = (resolve) => require(['@/screens/promotion/Promotions'], resolve)
 const Faq = (resolve) => require(['@/screens/faq/FaqsHome'], resolve)
+const FaqWithdraw = (resolve) => require(['@/screens/faq/FaqWithdraw'], resolve)
+const FaqDeposit = (resolve) => require(['@/screens/faq/FaqDeposit'], resolve)
+const FaqAbout = (resolve) => require(['@/screens/faq/FaqAbout'], resolve)
+const FaqContact = (resolve) => require(['@/screens/faq/FaqContact'], resolve)
+const FaqFaqs = (resolve) => require(['@/screens/faq/FaqFaqs'], resolve)
 const Gameintro = (resolve) => require(['@/screens/gameintro/Gameintros'], resolve)
 const GameHistory = (resolve) => require(['@/screens/gamehistory/GameHistory'], resolve)
 const SchedulesTable = (resolve) => require(['@/screens/gamehistory/SchedulesTable'], resolve)
@@ -35,6 +40,13 @@ const SchedulesTable = (resolve) => require(['@/screens/gamehistory/SchedulesTab
 Vue.use(Router)
 
 export default new Router({
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  },
   routes: [
     {
       path: '/',
@@ -152,8 +164,30 @@ export default new Router({
     }, {
       path: '/faq',
       name: 'Faq',
-      component: Faq
-
+      component: Faq,
+      children: [
+        {
+          path: '/faq/deposit',
+          name: 'FaqDeposit',
+          component: FaqDeposit
+        }, {
+          path: '/faq/withdraw',
+          name: 'FaqWithdraw',
+          component: FaqWithdraw
+        }, {
+          path: '/faq/faqs',
+          name: 'FaqFaqs',
+          component: FaqFaqs
+        }, {
+          path: '/faq/about',
+          name: 'FaqAbout',
+          component: FaqAbout
+        }, {
+          path: '/faq/contact',
+          name: 'FaqContact',
+          component: FaqContact
+        }
+      ]
     }, {
       path: '/gameintro',
       name: 'Gameintro',
@@ -192,6 +226,10 @@ export default new Router({
           ]
         }
       ]
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })

@@ -6,10 +6,10 @@
         <el-breadcrumb-item>{{$t('navMenu.qa')}}</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="aside">
-        <AsideMenu @clicked="onClickChild" :items="faqs"/>
+        <AsideMenu @clicked="onClickChild" :items="faqs" :defaultActive="$route.path"/>
       </div>
       <div class="main m-b-xlg">
-        <component :is="nowfaq"></component>
+        <router-view />
       </div>
     </div>
   </el-row>
@@ -46,19 +46,23 @@ import AsideMenu from '../../components/AsideMenu'
 export default {
   data () {
     return {
-      nowfaq: 'FaqDeposit',
       faqs: [
-        { display_name: '如何存款', code: 'FaqDeposit' },
-        { display_name: '如何提款', code: 'FaqWithdraw' },
-        { display_name: '常见问题', code: 'FaqFaqs' },
-        { display_name: '关于我们', code: 'FaqAbout' },
-        { display_name: '联系我们', code: 'FaqContact' }
+        { display_name: '如何存款', route: '/faq/deposit' },
+        { display_name: '如何提款', route: '/faq/withdraw' },
+        { display_name: '常见问题', route: '/faq/faqs' },
+        { display_name: '关于我们', route: '/faq/about' },
+        { display_name: '联系我们', route: '/faq/contact' }
       ]
+    }
+  },
+  created () {
+    if (this.$route.path === '/faq') {
+      this.$router.replace('/faq/deposit')
     }
   },
   methods: {
     onClickChild (e) {
-      this.nowfaq = e
+      this.$router.push(e.route)
     }
   },
   components: {
