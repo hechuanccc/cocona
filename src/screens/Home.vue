@@ -28,7 +28,7 @@
             <ul class="clearfix">
               <router-link :to="'/game/'" tag="li" class="game-ad">
                 <img src="../assets/game-ad.png"/>
-                <p>超过 20 款游戏</p>
+                <p>20 多款游戏，数百种创新玩法</p>
               </router-link>
               <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
                 <div class="game-icon">
@@ -282,8 +282,6 @@ export default {
     left: 0;
     bottom: 0;
     font-size: 20px;
-    font-weight: 600;
-    letter-spacing: 1.7px;
     color: #4a4a4a;
     z-index: 1;
     position: absolute;
@@ -309,8 +307,7 @@ export default {
       width: 100%;
     }
     p {
-      font-size: 24px;
-      font-weight: 500;
+      font-size: 18px;
       line-height: 55px;
       text-align: center;
       color: #4a4a4a;
@@ -325,7 +322,7 @@ export default {
     height: 169px;
     margin-right: -1px;
     margin-bottom: -1px;
-    border: solid 1px #bfbfbf;
+    border: solid 1px #dedede;
     position: relative;
     text-align: center;
   }
@@ -393,7 +390,6 @@ export default {
   width: 100%;
   height: 28px;
   line-height: 28px;
-  letter-spacing: 1.7px;
   color: #4a4a4a;
   transition: all .3s ease;
 }
@@ -404,8 +400,8 @@ export default {
   background-color: #f6f6f6;
   img {
     margin: 30px auto;
-    width: 469px;
-    height: 60px;
+    width: 469px * 0.8;
+    height: 60px * 0.8;
   } 
 }
 
