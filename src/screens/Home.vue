@@ -27,7 +27,7 @@
           <div class="games">
             <ul class="clearfix">
               <router-link :to="'/game/'" tag="li" class="game-ad">
-                <img src="../assets/game-ad.png"/>
+                <img src="../assets/game-ad.png" alt="More Games"/>
                 <p>20 多款游戏，数百种创新玩法</p>
               </router-link>
               <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
@@ -172,7 +172,7 @@ export default {
           return a.rank - b.rank
         })
       }
-    ).catch(() => {})
+    )
     getAnnouncements().then(
       result => {
         result.forEach((item) => {
@@ -402,7 +402,7 @@ export default {
     margin: 30px auto;
     width: 469px * 0.8;
     height: 60px * 0.8;
-  } 
+  }
 }
 
 .ads {
