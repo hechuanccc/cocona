@@ -9,10 +9,15 @@
           <a href="#" class="link" @click="navigateToMobile()">手机版</a>
       </div>
       <div class="advice block-center">
-        <div :class="[{'container': notHomePage}]">
-          <p>理性购彩，未满 18 周岁未成年人禁止购彩及兑奖</p>
-          <p>健康游戏忠告：抵制黑平台不良游戏，拒绝盗版小平台游戏。注意自我保护，谨防受骗上当。</p>
-          <p>温馨提示您适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
+        <div :class="[{'container': notHomePage}, 'inline']">
+          <div class="footer-icon">
+            <img src="../assets/footer.png">
+          </div>
+          <div class="footer-text">
+            <p>理性购彩，未满 18 周岁未成年人禁止购彩及兑奖</p>
+            <p>健康游戏忠告：抵制黑平台不良游戏，拒绝盗版小平台游戏。注意自我保护，谨防受骗上当。</p>
+            <p>温馨提示您适度游戏益脑，沉迷游戏伤身。合理安排时间，享受健康生活。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -102,6 +107,21 @@ export default {
 
 .advice {
   @include text(1.8, #999, 12px);
+  height: 60px;
+  width: 580px;
+  text-align: center;
+  .footer-icon {
+    float: left;
+    margin-right: 20px;
+    height: 60px;
+    img {
+      height: 100%;
+    }
+  }
+  .footer-text {
+    float: left;
+    text-align: left;
+  }
 }
 
 .copyright {
