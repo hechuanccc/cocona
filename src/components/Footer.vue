@@ -8,8 +8,8 @@
           :to="item.route">{{item.option}}</router-link>
           <a href="#" class="link" @click="navigateToMobile()">手机版</a>
       </div>
-      <div class="advice block-center">
-        <div :class="[{'container': notHomePage}, 'inline']">
+      <div :class="{'container': notHomePage}">
+        <div class="advice block-center">
           <div class="footer-icon">
             <img src="../assets/footer.png">
           </div>
