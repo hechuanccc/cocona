@@ -5,6 +5,9 @@ export default {
     return state.user
   },
   allGames: (state, getters) => {
+    state.games.forEach((game, index) => {
+      game.index = index + 1
+    })
     return state.games
   },
   gameById: (state, getters) => id => {
