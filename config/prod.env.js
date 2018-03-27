@@ -3,5 +3,6 @@ module.exports = {
   NODE_ENV: '"production"',
   HOST: '"' + process.env.HOST + '"',
   chatHost: '"' + process.env.chatHost + '"',
-  chatApi: '"' + process.env.chatApi + '"'
+  chatApi: '"' + process.env.chatApi + '"',
+  SITE_TITLE: '""'
 }
