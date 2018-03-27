@@ -1,7 +1,7 @@
 const pattern = {
   username: /^[a-zA-Z0-9]{6,15}$/,
   password: /^[a-zA-Z0-9]{6,15}$/,
-  qq: /^[1-9]{4,8}$/,
+  qq: /^[1-9]{4,}$/,
   phone: /^1[0-9]{10}$/,
   bankAccount: /^[0-9]{10,}$/,
   withdrawPassword: /^[0-9]{6}$/

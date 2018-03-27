@@ -126,6 +126,13 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+router.afterEach(function (to) {
+  const gaTrackingId = store.state.systemConfig.gaTrackingId
+  if (gaTrackingId) {
+    window.gtag('config', store.state.systemConfig.gaTrackingId, {page_path: to.path})
+  }
+})
+
 sync(store, router)
 
 Vue.mixin({
@@ -150,9 +157,17 @@ gethomePage().then(
         contactPhoneNumber: pref.contact_phone_number,
         openAccountConsultingQQ: pref.open_account_consulting_qq,
         siteName: response.name,
-        chatroomEnabled: pref.chatroom_enabled
+        chatroomEnabled: pref.chatroom_enabled,
+        gaTrackingId: pref.ga_tracking_id
       })
-    document.title = store.state.systemConfig.siteName
+    if (pref.ga_tracking_id) {
+      const ga = document.createElement('script')
+      ga.type = 'text/javascript'
+      ga.async = true
+      ga.src = `https://www.googletagmanager.com/gtag/js?id=${pref.ga_tracking_id}`
+      const s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore(ga, s)
+    }
   }
 )
 
