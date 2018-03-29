@@ -120,6 +120,7 @@ export default {
         tjssc: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         xjssc: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         cqssc: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        csffc: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         gd11x5: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
         cqlf: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'],
         gdklsf: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
@@ -172,7 +173,7 @@ export default {
         const historyStatistic = resultStatistic.historyStatistic
         let dragonTigerSpecial
         // if game in ssc series the dragon_tiger would become dragon_tiger_equal
-        if (this.gameCode.includes('ssc')) {
+        if (this.gameCode.includes('ssc') || this.gameCode === 'csffc') {
           dragonTigerSpecial = '龙虎和'
         } else {
           dragonTigerSpecial = '龙虎'
