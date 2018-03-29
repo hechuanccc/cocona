@@ -242,6 +242,7 @@ export default {
   'jsssc': ssTranslator,
   'xjssc': ssTranslator,
   'tjssc': ssTranslator,
+  'csffc': ssTranslator,
   'cqlf': cqlfTranslator,
   'gdklsf': cqlfTranslator,
   'gd11x5': gd11x5Translator,

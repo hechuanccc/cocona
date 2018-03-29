@@ -115,7 +115,7 @@ $hklgames: hkl, luckl;
 }
 @include hkl-num;
 
-$sscgames: tjssc, xjssc, cqssc, jsssc, pcdd, jnd28, fc3d, luckdd;
+$sscgames: tjssc, xjssc, cqssc, jsssc, csffc, pcdd, jnd28, fc3d, luckdd;
 
 %sscball{
   background: url("../../assets/ball_2.png") no-repeat;

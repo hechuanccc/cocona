@@ -692,6 +692,10 @@ export default {
         table: sscTable
       },
       {
+        code: 'csffc',
+        table: sscTable
+      },
+      {
         code: 'cqlf',
         table: cqlfTable
       },
