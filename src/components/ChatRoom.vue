@@ -13,7 +13,7 @@
         </div>
         <div class="right fr clearfix">
           <icon v-if="personal_setting.manager" class="icon-user fl" name="cog" scale="1.4" @click.native="handleBlockPopupShow"></icon>
-          <icon class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="personal_setting.blocked && !user.account_type ? '' : showEditProfile = true"></icon>
+          <icon v-if="user.account_type !== 0" class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="personal_setting.blocked ? '' : showEditProfile = true"></icon>
           <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
         <transition
@@ -574,6 +574,7 @@ export default {
     leaveRoom (n) {
       this.showChatRoom = false
       this.messages = []
+      this.showEditProfile = false
       this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
         'receivers': [RECEIVER]
