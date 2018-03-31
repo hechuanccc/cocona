@@ -126,8 +126,8 @@ export default {
         this.$store.dispatch('setMessageCount', this.$store.state.messageCount - 1)
       }
       this.$alert(row.content, row.title, {
-        showConfirmButton: false,
-        showCancelButton: true,
+        showConfirmButton: true,
+        showCancelButton: false,
         closeOnClickModal: true
       }).catch(() => { })
     },
