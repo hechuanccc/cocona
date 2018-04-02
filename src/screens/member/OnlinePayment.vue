@@ -34,6 +34,12 @@
             <span class="text">{{$t('user.min_amount')}}:</span>
             <icon scale="0.75" name="jpy"></icon>
             <span class="amount">{{lower}}</span>
+            <template v-if="upper">
+              &nbsp;
+              <span class="text">{{$t('user.max_amount')}}:</span>
+              <icon scale="0.75" name="jpy"></icon>
+              <span class="amount">{{upper}}</span>
+            </template>
           </div>
           <input name="payee" type="hidden" :value="selectedPayment.payee_id" />
           <input name="payment_type" type="hidden" :value="selectedPayment.payway" />
@@ -269,8 +275,11 @@ export default {
   width: 150px;
 }
 .min-amount {
-  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 230px;
   height: 12px;
+  width: 200px;
   line-height: 12px;
   font-size: 10px;
   color: #9b9b9b;
