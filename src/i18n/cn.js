@@ -182,7 +182,7 @@ export default {
     email_validate: 'email格式无效',
     not_set_bank_info: '尚未设定银行信息',
     max_amount_validate: '必须小于最大充值金额',
-    min_amount_validate: '必须大于最充值金额',
+    min_amount_validate: '必须大于最小充值金额',
     max_withdraw_amount_validate: '必须小于最大取款金额',
     min_withdraw_amount_validate: '必须大于最小取款金额',
     date_range_validate: '起日不得晚于迄日',
