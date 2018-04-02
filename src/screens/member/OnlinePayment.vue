@@ -21,7 +21,7 @@
   <el-tabs v-model="activeType" class="indented-tab" type="card" @tab-click="choosePaymentType">
     <el-tab-pane class="text-center" :label="item.display_name" :name="item.name" v-for="(item, index) in paymentTypes" :key="index">
       <el-radio-group v-if="item.detail.length>1" v-model="selectedPayment.payee_id">
-        <el-radio v-for="(payment, index) in item.detail" :key="index" :label="payment.payee_id" @change="selectPayment($event, payment.gateway_id)">{{`${item.display_name}${index+1}`}}</el-radio>
+        <el-radio v-for="(payment, index) in item.detail" :key="index" :label="payment.payee_id" @change="selectPayment(payment)">{{`${item.display_name}${index+1}`}}</el-radio>
       </el-radio-group>
     </el-tab-pane>
   </el-tabs>
@@ -29,11 +29,11 @@
     <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="selectedPayment" ref="payment" status-icon :rules="rule" label-width="90px">
       <div>
         <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
-          <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+          <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="lower" :max="upper"></el-input>
           <div class="min-amount">
             <span class="text">{{$t('user.min_amount')}}:</span>
             <icon scale="0.75" name="jpy"></icon>
-            <span class="amount">{{limit.lower}}</span>
+            <span class="amount">{{lower}}</span>
           </div>
           <input name="payee" type="hidden" :value="selectedPayment.payee_id" />
           <input name="payment_type" type="hidden" :value="selectedPayment.payway" />
@@ -90,8 +90,8 @@ export default {
       if (!value) {
         callback(new Error(this.$t('validate.required')))
       } else {
-        const lower = this.limit.lower ? parseFloat(this.limit.lower) : null
-        const upper = this.limit.upper ? parseFloat(this.limit.upper) : null
+        const lower = this.lower ? parseFloat(this.lower) : null
+        const upper = this.upper ? parseFloat(this.upper) : null
         if (lower && value < lower) {
           callback(new Error(this.$t('validate.min_amount_validate')))
         } else if (upper && value > upper) {
@@ -106,7 +106,8 @@ export default {
         amount: '',
         payway: '',
         payee_id: '',
-        gateway_id: ''
+        gateway_id: '',
+        online_limit: {}
       },
       rule: {
         amount: [
@@ -123,21 +124,11 @@ export default {
     }
   },
   computed: {
-    limit () {
-      const level = this.$store.state.user.level
-      return level ? level.online_limit : {}
+    upper () {
+      return this.selectedPayment.online_limit.upper || undefined
     },
-    limitAlert () {
-      let alerts = []
-      const lowerAlert = this.limit.lower ? `${this.$t('user.min_amount')}: ￥${this.limit.lower}` : null
-      const upperAlert = this.limit.upper ? `${this.$t('user.max_amount')}: ￥${this.limit.upper}` : null
-      if (lowerAlert) {
-        alerts.push(lowerAlert)
-      }
-      if (upperAlert) {
-        alerts.push(upperAlert)
-      }
-      return alerts.join(', ')
+    lower () {
+      return this.selectedPayment.online_limit.lower || 0
     },
     payeeError () {
       return this.selectedPayment.gateway_id === undefined
@@ -196,12 +187,20 @@ export default {
         this.selectedPayment.payway = paymentType.payment_type
         this.selectedPayment.payee_id = paymentType.payee_id
         this.selectedPayment.gateway_id = paymentType.gateway_id
+        this.selectedPayment.online_limit = paymentType.online_limit
       } else {
         this.selectedPayment.gateway_id = undefined
       }
+      if (this.selectedPayment.amount !== '') {
+        this.$refs.payment.validate(() => {})
+      }
     },
-    selectPayment (payeeId, gatewayId) {
-      this.selectedPayment.gateway_id = gatewayId
+    selectPayment (payment) {
+      this.selectedPayment.gateway_id = payment.gateway_id
+      this.selectedPayment.online_limit = payment.online_limit
+      if (this.selectedPayment.amount !== '') {
+        this.$refs.payment.validate(() => {})
+      }
     },
     filtAmount,
     closeDetailDialog () {
