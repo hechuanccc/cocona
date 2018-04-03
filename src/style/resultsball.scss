@@ -1,7 +1,7 @@
 /*game latest result balls*/
 
 /*specific: ssc type games, common: ball_2.png*/
-$results_ssc: tjssc, xjssc, cqssc, jsssc;
+$results_ssc: tjssc, xjssc, cqssc, jsssc, csffc;
 $ssc_length: length($results_ssc);
 
 @for $index from 1 through $ssc_length {
