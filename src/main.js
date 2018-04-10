@@ -18,7 +18,8 @@ import { gethomePage, setCookie } from './api'
 import qs from 'qs'
 
 let url = window.location.href
-if (process.env.HTTPS && process.env.HTTPS.replace(/"/g, '') === '1') {
+const HTTPS = process.env.HTTPS
+if (HTTPS && HTTPS.replace(/"/g, '') === '1') {
   if (window.location.protocol === 'http:') {
     window.location.replace(url.replace(/http:/, 'https:'))
   }
