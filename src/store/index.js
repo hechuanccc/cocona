@@ -224,7 +224,7 @@ export function createStore () {
         homePageLogo: '',
         siteName: '',
         global_preferences: {
-          send_chat_conditions: '{}'
+          chat_condition_message: ''
         },
         chatroomEnabled: 'false'
       }
