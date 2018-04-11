@@ -151,7 +151,7 @@ Vue.mixin({
 
 gethomePage().then(
   response => {
-    let pref = response.global_preferences
+    let pref = response.global_preferences || {}
     store.dispatch('setSystemConfig',
       {
         homePageLogo: response.icon,
