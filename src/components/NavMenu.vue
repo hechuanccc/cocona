@@ -44,31 +44,37 @@ export default {
 </script>
 
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import "../style/vars.scss";
-.main-navs
-  float: right
-.nav-link
-  line-height: 60px
-  display: inline-block
-  padding: 0 15px
-  cursor: pointer
-  text-align: center
-  color: #666
-  font-size: 16px
-  &.active
-    color: $primary
-
-.online-service
-  display: inline-block
-  text-align: center
-  text-decoration: none
-  width: 90px
-  height: 40px
-  line-height: 40px
-  border-radius: 3px
-  font-size: 14px
-  font-weight: normal
-  color: #ffffff
-  background-color: $azul
+.main-navs {
+  float: right;
+}
+.nav-link {
+  line-height: 80px;
+  display: inline-block;
+  padding: 0 15px;
+  cursor: pointer;
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  &.active, &:hover {
+    color: $primary;
+  }
+}
+.lower .nav-link {
+  line-height: 60px;
+}
+.online-service {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  width: 90px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #fff;
+  background-color: $azul;
+}
 </style>
