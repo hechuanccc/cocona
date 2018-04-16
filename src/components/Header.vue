@@ -3,7 +3,7 @@
     <div class="topbar">
       <TopBar/>
     </div>
-    <div class="bottomnavs">
+    <div :class="['bottomnavs', isUserPage ? 'lower' : '']">
       <div :class="
         ['navs',
           'container',
@@ -90,26 +90,30 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-
-.header
-  width: 100%
-  height: 96px
-.topbar
-  display: inline-block
-  background-color: #f9f9f9
-  height: 36px
-  width: 100%
-.bottomnavs
-  display: inline-block
-  width: 100%
-  height: 60px
-  background-color: #ffffff
-  text-align: justify
-  .navs
-    text-align: justify
-    &:after
-      display: inline-block
-      content: ''
-      width: 100%
+<style lang="scss" scoped>
+.header {
+  width: 100%;
+}
+.topbar {
+  display: inline-block;
+  background-color: #f9f9f9;
+  height: 36px;
+  width: 100%;
+}
+.bottomnavs {
+  width: 100%;
+  height: 80px;
+  background-color: #fff;
+  .navs {
+    height: 100%;
+    &:after {
+      content: '';
+      display: block;
+      height: 20px;
+    }
+  }
+  &.lower {
+    height: 60px;
+  }
+}
 </style>

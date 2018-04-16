@@ -164,7 +164,7 @@ export default {
   display: table;
   max-width: 425px;
   height: 60px;
-  margin-left: 40px;
+  margin-left: 20px;
   float: left;
   .balls-text {
     font-size: 13px;
