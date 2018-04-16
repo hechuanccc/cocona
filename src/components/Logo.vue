@@ -16,15 +16,22 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
-.logo
-  float: left
-  width: 225px
-  height: 50px
-  margin: 5px 0
-  vertical-align: middle
-  img
-    width: 100%
-    height: 100%
+<style lang="scss" scoped>
+.logo {
+  float: left;
+  height: 100%;
+  vertical-align: middle;
+  a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  img {
+    max-height: 100%;
+    max-width: 300px;
+    display: block;
+    margin: auto;
+  }
+}
 </style>
 
