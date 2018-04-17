@@ -408,7 +408,7 @@ export default {
           const categories = this.$store.getters.categoriesByGameId(gameId)
           if (!categories.length) {
             this.$store.dispatch('fetchCategories', gameId).then((res) => {
-              this.$router.replace(`/game/${gameId}/${categories[0].id}`)
+              this.$router.replace(`/game/${gameId}/${res[0].id}`)
             })
           } else {
             this.$router.replace(`/game/${gameId}/${categories[0].id}`)
