@@ -28,7 +28,6 @@ export default {
   }
   img {
     max-height: 100%;
-    max-width: 300px;
     display: block;
     margin: auto;
   }
