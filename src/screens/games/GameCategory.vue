@@ -403,6 +403,18 @@ export default {
       const categoryId = this.$route.params.categoryId
       fetchPlaygroup(categoryId).then(res => {
         let plays = {}
+        if (res.length === 0) {
+          let gameId = this.$route.params.gameId
+          const categories = this.$store.getters.categoriesByGameId(gameId)
+          if (!categories.length) {
+            this.$store.dispatch('fetchCategories', gameId).then((res) => {
+              this.$router.replace(`/game/${gameId}/${categories[0].id}`)
+            })
+          } else {
+            this.$router.replace(`/game/${gameId}/${categories[0].id}`)
+          }
+          return
+        }
         res.forEach(item => {
           item.plays.forEach(play => {
             plays[play.id] = play
