@@ -33,7 +33,7 @@
         <router-link to="/register" class="link">{{$t('navMenu.register_now')}}</router-link>
       </li>
     </ul>
-    <ul v-else-if="user.account_type === 1" class="account-links" >
+    <ul v-else-if="user.account_type === 1 || user.account_type === 2" class="account-links" >
       <li>
         <router-link to="/account/online_payment" class="link">立即存款</router-link>
       </li>
