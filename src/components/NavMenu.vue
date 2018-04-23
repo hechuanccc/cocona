@@ -50,7 +50,7 @@ export default {
   float: right;
 }
 .nav-link {
-  line-height: 80px;
+  line-height: 100px;
   display: inline-block;
   padding: 0 15px;
   cursor: pointer;
@@ -61,9 +61,11 @@ export default {
     color: $primary;
   }
 }
+
 .lower .nav-link {
   line-height: 60px;
 }
+
 .online-service {
   display: inline-block;
   text-align: center;
