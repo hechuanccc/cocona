@@ -102,7 +102,7 @@ export default {
 }
 .bottomnavs {
   width: 100%;
-  height: 80px;
+  height: 100px;
   background-color: #fff;
   .navs {
     height: 100%;

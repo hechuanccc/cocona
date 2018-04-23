@@ -1,0 +1,74 @@
+<template>
+  <div class="float-ad" :style="{
+     position: 'fixed',
+     right: offsetX + scrollWidth + 'px',
+     top: positionY,
+     marginTop: `-150px`,
+     width: width,
+     height: '315px',
+     'z-index': 2
+    }">
+    <transition name="slide-fade">
+      <div v-show="floatAdVisible">
+        <img class="ad-img" :src="content" alt="float-ad"/>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    floatAdVisible: {
+      type: Boolean,
+      default: false
+    },
+    offsetX: {
+      type: String,
+      default: '0'
+    },
+    width: {
+      type: String,
+      default: '150px'
+    },
+    content: {
+      type: String,
+      require: true
+    }
+  },
+  methods: {
+    switchFloatAd () {
+      this.$emit('switchFloatAd', !this.isVisible)
+    }
+  },
+  computed: {
+    scrollWidth () {
+      return window.innerWidth - document.body.clientWidth
+    },
+    positionY () {
+      return document.body.clientHeight / 2 + 'px'
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.ad-trigger {
+  display: block;
+  color: #000;
+}
+
+.ad-img {
+  width: 100%;
+  height: 100%;
+}
+
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all .7s ease;
+}
+
+.slide-fade-enter, .slide-fade-leave-to{
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>

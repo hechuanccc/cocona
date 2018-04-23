@@ -226,7 +226,8 @@ export function createStore () {
         global_preferences: {
           chat_condition_message: ''
         },
-        chatroomEnabled: 'false'
+        chatroomEnabled: 'false',
+        floatAd: null
       }
     },
     actions,
