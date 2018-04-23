@@ -69,6 +69,7 @@
       <el-main v-else>
         <router-view/>
       </el-main>
+      <FloatAd :content="$store.state.systemConfig.floatAd" :floatAdVisible="floatAdVisible" @switchFloatAd="switchFloatAd"/>
     <el-dialog
       :title="$t('announcement.speaker')"
       :visible.sync="announcementDialogVisible"
@@ -92,8 +93,12 @@
 <script>
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
 import 'vue-awesome/icons/bullhorn'
+import FloatAd from '../components/FloatAd'
 
 export default {
+  components: {
+    FloatAd
+  },
   name: 'home',
   data () {
     return {
@@ -106,7 +111,8 @@ export default {
         translateY: 0
       },
       currentAnnouncementIndex: 0,
-      announcementDialogVisible: false
+      announcementDialogVisible: false,
+      floatAdVisible: false
     }
   },
   computed: {
@@ -130,6 +136,9 @@ export default {
     }
   },
   methods: {
+    switchFloatAd () {
+      this.floatAdVisible = !this.floatAdVisible
+    },
     animate () {
       setTimeout(() => {
         if (this.announcementStyle.opacity <= 0) {
@@ -202,6 +211,9 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.interval)
+  },
+  mounted () {
+    this.floatAdVisible = true
   }
 }
 </script>
@@ -298,7 +310,7 @@ export default {
 .game-area {
   margin: 40px auto;
   width: 1190px;
-  
+
   li.game-ad {
     height: 339px;
     width: 339px;

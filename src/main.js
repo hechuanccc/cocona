@@ -163,9 +163,12 @@ gethomePage().then(
         contactPhoneNumber: pref.contact_phone_number,
         openAccountConsultingQQ: pref.open_account_consulting_qq,
         siteName: response.name,
+        floatAd: response.right_float_img,
         chatroomEnabled: pref.chatroom_enabled,
-        gaTrackingId: pref.ga_tracking_id
+        gaTrackingId: pref.ga_tracking_id,
+        favicon: response.favicon
       })
+
     if (pref.ga_tracking_id) {
       const ga = document.createElement('script')
       ga.type = 'text/javascript'
