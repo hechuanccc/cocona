@@ -69,7 +69,7 @@
       <el-main v-else>
         <router-view/>
       </el-main>
-      <FloatAd :content="$store.state.systemConfig.floatAd" :floatAdVisible="floatAdVisible" @switchFloatAd="switchFloatAd"/>
+      <FloatAd v-if="$store.state.systemConfig.floatAd" :content="$store.state.systemConfig.floatAd" :floatAdVisible="floatAdVisible" @switchFloatAd="switchFloatAd"/>
     <el-dialog
       :title="$t('announcement.speaker')"
       :visible.sync="announcementDialogVisible"
