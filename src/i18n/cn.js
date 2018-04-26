@@ -98,6 +98,7 @@ export default {
     transaction_way: '交易方式',
     transaction_record: '交易纪录',
     payment_record: '充值纪录',
+    discount_record: '优惠与红包',
     withdraw_record: '取款纪录',
     remit_record: '公司入款纪录',
     remit_account: '帐户',

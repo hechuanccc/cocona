@@ -166,7 +166,8 @@ gethomePage().then(
         floatAd: response.right_float_img,
         chatroomEnabled: pref.chatroom_enabled,
         gaTrackingId: pref.ga_tracking_id,
-        favicon: response.favicon
+        favicon: response.favicon,
+        regPresentAmount: response.reg_present_amount
       })
 
     if (pref.ga_tracking_id) {
