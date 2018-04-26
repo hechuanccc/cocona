@@ -64,6 +64,8 @@ export default {
     transactionType () {
       if (this.$route.name === 'PaymentRecord') {
         return 'online_pay,remit'
+      } else if (this.$route.name === 'DiscountRecord') {
+        return 'discount'
       } else {
         return 'withdraw'
       }

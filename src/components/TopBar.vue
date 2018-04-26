@@ -8,32 +8,37 @@
     <div class="clock p-l">
       {{nowTime}}
     </div>
-    <ul class="account-links" v-if="!isLogin">
+
+    <ul class="account-links" v-if="!$store.state.user.account_type">
+      <span class="greet-money" v-if="parseInt(regPresentAmount)">
+        现在注册立领 {{ regPresentAmount | currency('￥') }} 红包
+      </span>
       <li>
+        <router-link to="/register" class="link">
+          <span class="register-btn">
+            {{$t('navMenu.register_now')}}
+          </span>
+        </router-link>
+      </li>
+
+      <li v-if="!isLogin">
         <a @click="login" class="link">{{$t('navMenu.user_login')}}</a>
       </li>
-      <li>
-        <router-link to="/register" class="link">{{$t('navMenu.user_register')}}</router-link>
-      </li>
-      <li>
+      <li v-if="!isLogin">
         <a class="red link" @click="tryplay">{{$t('navMenu.try_play')}}</a>
       </li>
-    </ul>
-    <ul v-else-if="user.account_type === 0" class="account-links" >
-      <li>
+      <li v-if="isLogin">
         欢迎, {{$t('user.visitor')}}
       </li>
-      <li>
+      <li v-if="isLogin">
         <a class="link" @click="logout()">退出试玩</a>
       </li>
-      <li>
+      <li v-if="isLogin">
         <a class="link" @click="openBetRecordDialog">我的注单</a>
       </li>
-      <li>
-        <router-link to="/register" class="link">{{$t('navMenu.register_now')}}</router-link>
-      </li>
     </ul>
-    <ul v-else-if="user.account_type === 1 || user.account_type === 2" class="account-links" >
+
+    <ul v-else class="account-links">
       <li>
         <router-link to="/account/online_payment" class="link">立即存款</router-link>
       </li>
@@ -84,6 +89,9 @@ export default {
     messageCount () {
       let count = this.$store.state.messageCount
       return count > 99 ? count + '+' : count
+    },
+    regPresentAmount () {
+      return this.$store.state.systemConfig.regPresentAmount
     }
   },
   name: 'TopBar',
@@ -149,6 +157,7 @@ export default {
 </script>
 <style scoped lang='sass'>
 @import '../style/vars.scss';
+
 .top-bar
   position: relative
   height: 36px
@@ -234,6 +243,23 @@ export default {
   text-align: center
   background: $red
   color: #fff
+
+
+.greet-money
+  color: $red
+
+.register-btn
+  border-radius: 3px
+  padding-left: 10px
+  padding-right: 10px
+  padding-top: 7px
+  padding-bottom: 7px
+  text-align: center
+  font-size: 12px
+  color: #fff
+  background-color: $primary
+  &:hover
+    background-color: darken($primary, 5%)
 </style>
 
 

@@ -11,7 +11,8 @@ export function createStore () {
     state: {
       user: {
         logined: '',
-        showChatRoom: true
+        showChatRoom: true,
+        account_type: undefined
       },
       loginDialogVisible: false,
       showTrialVerifyDialog: false,

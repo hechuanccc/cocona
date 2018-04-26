@@ -142,6 +142,11 @@ export default new Router({
               path: 'betrecord',
               name: 'BetRecord',
               component: BetRecord
+            },
+            {
+              path: 'discount_record',
+              name: 'DiscountRecord',
+              component: TransactionRecord
             }
           ]
         },

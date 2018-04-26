@@ -99,6 +99,7 @@ export default {
     transaction_way: 'Transaction Way',
     transaction_record: 'Transaction Record',
     payment_record: 'Payment Record',
+    discount_record: 'Discount Record',
     withdraw_record: 'Withdraw Record',
     remit_record: 'Remit Record',
     remit_account: 'Remit Account',

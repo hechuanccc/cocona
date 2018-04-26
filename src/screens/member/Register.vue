@@ -5,6 +5,11 @@
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item>注册会员</el-breadcrumb-item>
       </el-breadcrumb>
+      <div class="greetmoney-box" v-if="parseInt(regPresentAmount)">
+        <span class="greet-money">
+          现在注册立领 {{ regPresentAmount | currency('￥')}} 红包
+        </span>
+      </div>
       <div class="register-container">
         <el-form :model="user" status-icon :rules="rules" ref="user" label-width="120px">
           <el-form-item :label="$t('user.username')" prop="username">
@@ -244,6 +249,11 @@ export default {
         this.user.verification_code_0 = res.captcha_val
       })
     }
+  },
+  computed: {
+    regPresentAmount () {
+      return this.$store.state.systemConfig.regPresentAmount
+    }
   }
 }
 </script>
@@ -251,6 +261,23 @@ export default {
 <style scoped lang="scss">
 @import '../../style/vars.scss';
 @import '../../style/base.scss';
+
+.greetmoney-box{
+  box-sizing: border-box;
+  width: 600px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: 0 auto 10px auto;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  text-align: center;
+  .greet-money {
+    color: $red;
+    font-size: 14px;
+  }
+}
 
 .register-container{
   box-sizing: border-box;
@@ -261,6 +288,7 @@ export default {
   background-color: #ffffff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
 }
+
 .el-input /deep/ .el-input__suffix {
   right: 0
 }

@@ -2,6 +2,7 @@
 <el-row>
   <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('user.payment_record')" name="PaymentRecord"></el-tab-pane>
+    <el-tab-pane :label="$t('user.discount_record')" name="DiscountRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.withdraw_record')" name="WithdrawRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.betrecord')" name="BetRecord"></el-tab-pane>
   </el-tabs>
