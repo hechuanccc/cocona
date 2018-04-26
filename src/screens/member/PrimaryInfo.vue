@@ -12,6 +12,9 @@
       <el-form-item :label="$t('user.username')">
         {{userInfo.username}}
       </el-form-item>
+      <el-form-item :label="$t('user.balance')">
+        {{userInfo.balance | currency('￥') }}
+      </el-form-item>
       <el-form-item :label="$t('user.realname')">
         {{userInfo.real_name}}
       </el-form-item>
