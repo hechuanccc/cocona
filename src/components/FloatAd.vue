@@ -2,7 +2,7 @@
   <div class="float-ad" :style="{
      position: 'fixed',
      right: offsetX + scrollWidth + 'px',
-     top: positionY,
+     top: '50%',
      marginTop: `-150px`,
      width: width,
      height: '315px',
@@ -44,9 +44,6 @@ export default {
   computed: {
     scrollWidth () {
       return window.innerWidth - document.body.clientWidth
-    },
-    positionY () {
-      return document.body.clientHeight / 2 + 'px'
     }
   }
 }

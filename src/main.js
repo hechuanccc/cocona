@@ -178,6 +178,14 @@ gethomePage().then(
       const s = document.getElementsByTagName('script')[0]
       s.parentNode.insertBefore(ga, s)
     }
+    if (pref.script_content) {
+      const dynamicScript = document.createElement('script')
+      dynamicScript.type = 'text/javascript'
+      dynamicScript.async = true
+      dynamicScript.text = `try{${pref.script_content}}catch(e){console.log(e)}`
+      const s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore(dynamicScript, s)
+    }
   }
 )
 

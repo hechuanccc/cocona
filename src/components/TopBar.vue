@@ -11,7 +11,7 @@
 
     <ul class="account-links" v-if="!$store.state.user.account_type">
       <span class="greet-money" v-if="parseInt(regPresentAmount)">
-        现在注册立领 {{ regPresentAmount | currency('￥') }} 红包
+        现在注册立领{{regPresentAmount | currency('￥', 0)}}红包
       </span>
       <li>
         <router-link to="/register" class="link">
