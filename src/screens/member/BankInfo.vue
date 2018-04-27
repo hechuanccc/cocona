@@ -5,8 +5,7 @@
       :title="message"
       :type="updateStatus === 1 ? 'success' : 'error'"
       :closable="false"
-      center>
-    </el-alert>
+      center />
     <el-col :offset="8" :span="16">
       <el-form :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
         <el-form-item :label="$t('user.bank')" prop="bank">
@@ -29,7 +28,7 @@
           <el-input :disabled="!!user.bank" class="input-width" type="text" v-model="bankInfo.account"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="!!user.bank" class="input-width" type="primary" @click="submitBankInfo">{{$t('action.submit')}}</el-button>
+          <el-button :disabled="!!user.bank" :loading="loading" class="input-width" type="primary" @click="submitBankInfo">{{$t('action.submit')}}</el-button>
           <div class="tips" v-if="user.bank">您的银行卡信息已提交，如需修改请联系客服</div>
           <div v-else>银行卡信息提交之后需联系客服方可修改，请谨慎填写。</div>
         </el-form-item>
@@ -60,6 +59,7 @@ export default {
         province: '',
         account: ''
       },
+      loading: false,
       updateStatus: 0,
       message: '',
       bankInfoRules: {
@@ -106,22 +106,25 @@ export default {
     submitBankInfo () {
       this.$refs['bankInfo'].validate((valid) => {
         if (valid) {
+          this.loading = true
           updateUser({
             id: this.$store.state.user.id,
             bank: {
               ...this.bankInfo
             }
           }).then(data => {
+            this.loading = false
             this.$store.commit('SET_USER', {
               user: data
             })
-            this.updated = 1
+            this.updateStatus = 1
             this.$refs.bankInfo.clearValidate()
             this.message = '银行信息已更新'
             setTimeout(() => {
               this.updateStatus = 0
-            }, 3000)
+            }, 5000)
           }, errorMsg => {
+            this.loading = false
             this.updateStatus = -1
             this.message = msgFormatter(errorMsg)
           })
