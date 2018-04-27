@@ -80,6 +80,7 @@ module.exports = {
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|cn/),
     new FaviconsWebpackPlugin({
       logo: './src/assets/favicon.png',
+      prefix: 'static/icons-[hash]/',
       icons: {
         android: false,
         appleIcon: false,
