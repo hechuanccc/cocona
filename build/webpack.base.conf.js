@@ -4,6 +4,7 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const webpack = require('webpack')
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -76,6 +77,19 @@ module.exports = {
   },
   plugins: [
     // replace useless locale
-    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|cn/)
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|cn/),
+    new FaviconsWebpackPlugin({
+      logo: './src/assets/favicon.png',
+      icons: {
+        android: false,
+        appleIcon: false,
+        appleStartup: false,
+        coast: false,
+        favicons: true,
+        firefox: false,
+        windows: false,
+        yandex: false
+      }
+    })
   ]
 }

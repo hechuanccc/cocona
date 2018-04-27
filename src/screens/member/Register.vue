@@ -7,7 +7,7 @@
       </el-breadcrumb>
       <div class="greetmoney-box" v-if="parseInt(regPresentAmount)">
         <span class="greet-money">
-          现在注册立领 {{ regPresentAmount | currency('￥')}} 红包
+          现在注册立领 ￥{{ regPresentAmount }} 红包
         </span>
       </div>
       <div class="register-container">
