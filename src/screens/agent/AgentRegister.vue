@@ -5,6 +5,7 @@
       status-icon
       :rules="rules"
       ref="user"
+      v-if="!successMsg"
       label-width="120px">
       <el-form-item :label="$t('user.username')" prop="username">
         <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
@@ -37,16 +38,21 @@
         </el-col>
       </el-form-item>
       <el-form-item>
-        <div class="success" v-if="successMsg">{{successMsg}}</div>
-        <el-button type="primary" size="medium" class="input-width submit" @click="submitForm">{{$t('action.submit')}}</el-button>
+        <el-button :loading="loading" type="primary" size="medium" class="input-width submit" @click="submitForm">{{$t('action.submit')}}</el-button>
       </el-form-item>
     </el-form>
+    <el-alert
+      v-else
+      title="代理申请已经成功提交，审核通过后将会发送确认消息至您的注册邮箱，请注意查收。"
+      type="success"
+      :closable="false"
+      center />
   </div>
 </el-row>
 </template>
 
 <script>
-  import {agentRegister, fetchCaptcha, checkAgentName} from '../../api'
+  import { agentRegister, fetchCaptcha, checkAgentName } from '../../api'
   import { validateUserName, validatePassword, validatePhone } from '../../validate'
   import { msgFormatter } from '../../utils'
 
@@ -123,6 +129,7 @@
           captcha_0: '',
           captcha_1: ''
         },
+        loading: false,
         captcha_src: '',
         rules: {
           username: [
@@ -160,9 +167,12 @@
       submitForm () {
         this.$refs['user'].validate((valid) => {
           if (valid) {
+            this.loading = true
             agentRegister(this.user).then(result => {
+              this.loading = false
               this.successMsg = this.$t('message.submit_success')
             }, errorMsg => {
+              this.loading = false
               this.fetchCaptcha()
               this.$message({
                 showClose: true,
@@ -193,7 +203,7 @@
 .register-container{
   box-sizing: border-box;
   width: 600px;
-  height: auto;
+  min-height: 530px;  
   padding: 30px 80px 20px 80px;
   margin: 0 auto 40px auto;
 }
@@ -205,9 +215,8 @@
   position: absolute;
   right: 0;
 }
-.success {
-  position: absolute;
-  bottom: 35px;
-  color: $green;
+.register-container /deep/ .el-alert__content {
+  line-height: 1.5;
+  font-size: 16px;
 }
 </style>
