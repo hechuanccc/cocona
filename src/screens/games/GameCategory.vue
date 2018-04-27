@@ -3,23 +3,25 @@
   <div>
     <el-row class="bet-area m-b-lg">
       <el-row type="flex" class="actions m-b" justify="center">
-      <el-col :span="1" class="amount">金额</el-col>
-      <el-col :span="3">
-        <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount" />
-      </el-col>
-      <el-col class="m-l-lg" :span="4">
-        <el-button class="place-order-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
-        <el-button size="small" @click="reset">重置</el-button>
-      </el-col>
-    </el-row>
+        <el-col :span="1" class="amount text-bold">金额</el-col>
+        <el-col :span="3">
+          <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount" />
+        </el-col>
+        <el-col class="m-l-lg" :span="4">
+          <el-button class="place-order-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
+          <el-button size="small" @click="reset">重置</el-button>
+        </el-col>
+      </el-row>
       <div
         v-for="(playSection, index) in playSections"
         class="clearfix"
         :key="playSection.id + 'playSection' + index"
         v-if="playSections.length">
-        <ul v-if="getAliases(playSection).length" class="alias-tab">
+        <ul v-if="getAliases(playSection).length" class="m-b-sm">
           <li
-            :class="playSection.playgroups[tabIndex].active ? 'active' : ''"
+            :class="[{
+              'active': playSection.playgroups[tabIndex].active
+            }, 'alias-tabitem', 'clickable']"
             v-for="(alias, tabIndex) in getAliases(playSection)"
             :key="index + game.id + 'tab' + tabIndex"
             @click="selectAlias(playSection, tabIndex)">
@@ -27,7 +29,7 @@
           </li>
         </ul>
         <div
-          :style="{width: getWidthForGroup(playSection)}"
+          :style="{ width: getWidthForGroup(playSection) }"
           v-for="(playgroup, playgroupIndex) in playSection.playgroups"
           :class="['group-table', {'last': (playgroupIndex + 1) % playSection.groupCol === 0}]"
           :key="'playgroup' + playgroup.id"
@@ -89,7 +91,7 @@
         </div>
       </div>
        <el-row type="flex" class="actions" justify="center" v-if="!loading">
-        <el-col :span="1" class="amount">金额</el-col>
+        <el-col :span="1" class="amount text-bold">金额</el-col>
         <el-col :span="3">
           <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount"/>
         </el-col>
@@ -112,32 +114,31 @@
       <el-table :data="activePlays" stripe max-height="350">
         <el-table-column property="display_name" label="内容" >
           <template slot-scope="scope">
-            <span class="play-name">{{scope.row.display_name}}</span>
+            <span class="p-l">{{scope.row.display_name}}</span>
             <span v-if="scope.row.isCustom" class="combinations-count">共 {{scope.row.combinations.length}} 组</span>
-            <div v-if="scope.row.optionDisplayNames" class="optionDisplayNames"> 已选号码：{{scope.row.optionDisplayNames}} </div>
+            <div v-if="scope.row.optionDisplayNames" class="text-bold p-l"> 已选号码：{{scope.row.optionDisplayNames}} </div>
             <div v-if="scope.row.isCustom && showCombinationDetails">
               <el-popover
                 ref="popover4"
                 placement="bottom"
                 title="已选組合"
                 trigger="hover">
-                <div
-                    :style="{
+                <div :style="{
                       'width': scope.row.combinations.length * 100 + '%',
                       'max-width' : '480px'
-                      }" >
-                    <span v-for="(detail, serial) in formattedCombinations" class="combination-detail">
+                      }">
+                    <span v-for="(detail, serial) in formattedCombinations" class="text-bold">
                       <el-tag type="info">{{Number(serial)+1}}: {{detail}}</el-tag>
                     </span>
                   </div>
               </el-popover>
-              <el-button type="text" class="combination-detail" v-popover:popover4>[查看明細]</el-button>
+              <el-button type="text" class="text-bold" v-popover:popover4>[查看明細]</el-button>
             </div>
           </template>
         </el-table-column>
         <el-table-column property="odds" label="赔率" width="100">
           <template slot-scope="scope">
-            <span class="red bet-amount">{{scope.row.odds}}</span>
+            <span class="red bet-amount text-bold">{{scope.row.odds}}</span>
           </template>
         </el-table-column>
         <el-table-column property="bet_amount" label="金额" width="150">
@@ -151,17 +152,17 @@
           </template>
         </el-table-column>
       </el-table>
-      <div v-if="activePlays.length && activePlays[0].isCustom" class="summary">
+      <div v-if="activePlays.length && activePlays[0].isCustom" class="summary text-center p-t p-b">
         共 {{ activePlays[0].combinations.length}} 组 总金额:
-        <span class="red bet-amount">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
+        <span class="red bet-amount text-bold">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
       </div>
-      <div class="summary" v-else>
+      <div class="summary text-center p-t p-b" v-else>
         共 {{ playsForSubmit.length}} 组 总金额:
-        <span class="red bet-amount">{{totalAmount}}</span>
+        <span class="red bet-amount text-bold">{{totalAmount}}</span>
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
       </el-alert>
-      <div class="popup-actions" v-if="!submitted">
+      <div class="text-center m-t-lg" v-if="!submitted">
         <el-button size="medium" :loading="submitting" type="primary" :disabled="!playsForSubmit.length" @click="placeOrder">确认</el-button>
         <el-button size="medium" @click="dialogVisible = false" :disabled="submitting">取消</el-button>
       </div>
@@ -546,63 +547,39 @@ export default {
 <style scoped lang='scss'>
 @import "../../style/vars.scss";
 @import "../../style/gameplay.scss";
-.alias-tab {
-  li {
-    display: inline-block;
-    cursor: pointer;
-    float: left;
-    padding: 6px 15px;
-    margin: 0 -1px 2px 0;
-    background: #fff;
-    color: #666;
-    border: 1px solid #dedede;
-    &.active {
-      border: 1px solid $primary;
-      background: $primary;
-      color: #fff;
-      margin-bottom: 5px;
-    }
+
+.alias-tabitem {
+  display: inline-block;
+  padding: 5px 15px;
+  background: #fff;
+  color: #666;
+  border: 1px solid #dedede;
+  &.active {
+    border: 1px solid $primary;
+    background: $primary;
+    color: #fff;
   }
 }
 
-.clickable {
-  cursor: pointer;
-}
 .amount {
   line-height: $cell-height;
-  font-weight: 700;
 }
+
 .bet-amount {
   font-size: 14px;
-  font-weight: 700;
 }
-.play-name {
-  padding-left: 10px;
-  font-weight: 700;
-}
+
 .bet-area {
   background: #fff;
   padding: 10px;
 }
+
 .summary {
   font-size: 12px;
   padding: 5px;
-  margin: 10px 0;
   background: #f3f4f5;
-  text-align: center;
 }
-.popup-actions {
-  margin-top: 20px;
-  text-align: center;
-}
-.optionDisplayNames {
-  padding-left: 10px;
-  font-weight: 700;
-}
-.combination-detail {
-  padding-left: 10px;
-  font-weight: 700;
-}
+
 .el-input /deep/ .el-input__inner{
   height: 30px;
   border: solid 1px #c8c8c8;

@@ -16,26 +16,31 @@
 </template>
 
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import "../../style/vars.scss";
 @import "../../style/base.scss";
 
-.aside
-  display: inline-block
-  vertical-align: top
-.main
-  box-sizing: border-box
-  display: inline-block
+.aside {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.main {
+  box-sizing: border-box;
+  display: inline-block;
   width: $main_width;
-  height: auto
-  padding: 40px
-  background-color: #ffffff
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1)
-  .box-card
-    min-height: 300px
+  height: auto;
+  padding: 40px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+  .box-card {
+    min-height: 300px;
     @extend %text;
+  }
+}
 
 </style>
+
 <script>
 import FaqDeposit from './FaqDeposit'
 import FaqWithdraw from './FaqWithdraw'
