@@ -28,6 +28,16 @@
   <div class="form-wp">
     <el-form class="m-t-lg" method="post" target="_blank" :action="paymentUrl" :model="selectedPayment" ref="payment" status-icon :rules="rule" label-width="90px">
       <div>
+        <el-form-item class="p-b" label="选择银行" v-if="selectedPayment.banks.length">
+          <el-select class="input-width" :default-first-option="true" v-model="bank" >
+            <el-option
+              v-for="item in selectedPayment.banks"
+              :key="item.code"
+              :label="item.name"
+              :value="item.code">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
           <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="lower" :max="upper"></el-input>
           <div class="min-amount">
@@ -42,6 +52,7 @@
             </template>
           </div>
           <input name="payee" type="hidden" :value="selectedPayment.payee_id" />
+          <input name="bank" type="hidden" :value="bank" v-if="bank!==''"/>
           <input name="payment_type" type="hidden" :value="selectedPayment.payway" />
           <input name="payment_gateway" type="hidden" :value="selectedPayment.gateway_id" />
           <input name="token" type="hidden" :value="token" />
@@ -113,13 +124,15 @@ export default {
         payway: '',
         payee_id: '',
         gateway_id: '',
-        online_limit: {}
+        online_limit: {},
+        banks: []
       },
       rule: {
         amount: [
           { required: true, type: 'number', validator: limitPass, trigger: 'blur' }
         ]
       },
+      bank: '',
       activeType: '',
       payee: {},
       paymentTypes: [],
@@ -127,6 +140,11 @@ export default {
       paymentUrl: urls.payment,
       notify_page: `${window.location.origin}/#/account/online_payment_success/`,
       isSubmit: false
+    }
+  },
+  watch: {
+    'selectedPayment.banks': function (newBanks) {
+      this.bank = newBanks.length ? newBanks[0].code : ''
     }
   },
   computed: {
@@ -194,6 +212,9 @@ export default {
         this.selectedPayment.payee_id = paymentType.payee_id
         this.selectedPayment.gateway_id = paymentType.gateway_id
         this.selectedPayment.online_limit = paymentType.online_limit
+        if (paymentType.banks) {
+          this.selectedPayment.banks = paymentType.banks
+        }
       } else {
         this.selectedPayment.gateway_id = undefined
       }
@@ -204,6 +225,9 @@ export default {
     selectPayment (payment) {
       this.selectedPayment.gateway_id = payment.gateway_id
       this.selectedPayment.online_limit = payment.online_limit
+      if (payment.banks) {
+        this.selectedPayment.banks = payment.banks
+      }
       if (this.selectedPayment.amount !== '') {
         this.$refs.payment.validate(() => {})
       }
