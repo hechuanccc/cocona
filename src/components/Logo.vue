@@ -27,7 +27,8 @@ export default {
     align-items: center;
   }
   img {
-    max-height: 100%;
+    max-height: 90px;
+    margin: 5px 0;
     display: block;
     margin: auto;
   }

@@ -72,6 +72,12 @@ import _ from 'lodash'
 
 let bus = new Vue()
 
+function keyEnterListener (event) {
+  if (event.keyCode === 13) {
+    this.$root.bus.$emit('openBetDialog')
+  }
+}
+
 export default {
   name: 'gamehall',
   filters: {
@@ -261,10 +267,12 @@ export default {
       })
     })
     this.pollWinNotify()
+    window.addEventListener('keypress', keyEnterListener.bind(this))
   },
   beforeDestroy () {
     clearInterval(this.interval)
     this.$root.bus.$off('new-betrecords')
+    window.removeEventListener('keypress', keyEnterListener)
   }
 }
 </script>

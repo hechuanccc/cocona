@@ -22,7 +22,7 @@
               <el-col class="text-left p-l" :span="12">{{limit.upper | currency('￥')}}</el-col>
             </div>
           </el-row>
-          <h3 class="m-t">你的取款银行信息如下，如需修改请联系客服</h3>
+          <h3 class="m-t">您的取款银行信息如下，如需修改请联系客服</h3>
           <div>
             <el-col class="text-right p-r" :span="12">
               <label>银行</label>
@@ -173,6 +173,7 @@ export default {
   margin: 0 auto;
   h3 {
     color: #999;
+    text-align: center;
   }
   label {
     color: #999;
