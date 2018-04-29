@@ -104,7 +104,7 @@
       </el-row>
     </el-row>
     <el-dialog title="确认注单"
-      width="40%"
+      width="45%"
       @close="beforeClose"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
@@ -287,6 +287,9 @@ export default {
   },
   created () {
     this.initPlaygroups()
+    this.$root.bus.$on('openBetDialog', (gameData) => {
+      this.openDialog()
+    })
   },
   methods: {
     filtAmount,

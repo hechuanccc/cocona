@@ -35,11 +35,6 @@
       :label="$t('user.title')"
       prop="title">
     </el-table-column>
-    <el-table-column
-      width="200"
-      :label="$t('user.sender')"
-      prop="sender_displayname">
-    </el-table-column>
 
     <el-table-column
       width="150"

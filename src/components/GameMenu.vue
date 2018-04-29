@@ -7,7 +7,7 @@
             :class="['game-menu-item', activeGame === game.id ? 'active' : '']"
             v-for="(game, index) in allGames"
             :key="game.id" v-if="index < exposedCount"
-            @click="switchGame(game.id+'')">{{game.display_name}}</li>
+            @click="switchGame(game)">{{game.display_name}}</li>
           <li
             :class="[
               'game-menu-item',
@@ -32,7 +32,7 @@
                   v-for="(game, index) in allGames" :key="game.id"
                   :index="game.id + ''"
                   v-if="index >= exposedCount"
-                  @click="switchGame(game.id+'')">{{game.display_name}}</li>
+                  @click="switchGame(game)">{{game.display_name}}</li>
               </ul>
             </div>
           </li>
@@ -114,7 +114,8 @@ export default {
   },
   name: 'gamemenu',
   methods: {
-    switchGame (key) {
+    switchGame (game) {
+      const key = game.id
       if (key === '-1') {
         return false
       }
@@ -123,6 +124,7 @@ export default {
       }
       this.isBusy = true
       localStorage.setItem('lastGame', key)
+      localStorage.setItem('lastGameCode', game.code)
       this.categories = this.$store.getters.categoriesByGameId(key)
       if (!this.categories.length) {
         this.$store.dispatch('fetchCategories', key)
