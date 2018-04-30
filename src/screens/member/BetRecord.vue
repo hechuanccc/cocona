@@ -86,6 +86,39 @@
         prop="odds">
       </el-table-column>
     </el-table>
+    <el-table v-if="betRecordTotal.length>0" :data="betRecordTotal" :show-header="false">
+      <el-table-column
+        :width="130">
+      </el-table-column>
+      <el-table-column
+        :width="135">
+      </el-table-column>
+      <el-table-column
+        :width="130">
+      </el-table-column>
+      <el-table-column
+        :min-width="150"
+        prop="text">
+      </el-table-column>
+      <el-table-column
+        :width="135">
+        <template slot-scope="scope">
+          <span>{{ scope.row.amount | currency('￥')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :width="100">
+      </el-table-column>
+      <el-table-column
+        :width="135">
+        <template slot-scope="scope">
+          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :width="65">
+      </el-table-column>
+    </el-table>
     <el-pagination
       v-if="totalCount > pageSize"
       :current-page.sync="currentPage"
@@ -99,7 +132,7 @@
 
 </template>
 <script>
-import { fetchBetHistory } from '../../api'
+import { fetchBetHistory, fetchBetTotal } from '../../api'
 import { msgFormatter } from '../../utils'
 import Vue from 'vue'
 export default {
@@ -121,9 +154,11 @@ export default {
     }
   },
   data () {
+    const today = this.$moment().format('YYYY-MM-DD')
     return {
       betRecords: [],
-      selectedDate: '',
+      betRecordTotal: [],
+      selectedDate: today,
       selectedGame: '',
       currentPage: 1,
       pageSize: 20,
@@ -178,7 +213,8 @@ export default {
     },
     initFetchBetHistory (option) {
       this.loading = true
-      fetchBetHistory({ ...option, offset: 0 })
+      this.getSummary()
+      fetchBetHistory({ bet_date: this.selectedDate, ...option, offset: 0 })
         .then(data => {
           this.totalCount = data.count
           this.betRecords = data.results
@@ -195,11 +231,32 @@ export default {
     },
     handlePageChange (currentPage) {
       this.loading = true
+      this.getSummary()
       fetchBetHistory({ ...this.conditions, offset: (currentPage - 1) * this.pageSize }).then(data => {
         this.betRecords = data.results
         this.loading = false
       }, () => {
         this.loading = false
+      })
+    },
+    getSummary () {
+      fetchBetTotal(this.selectedDate).then(res => {
+        const total = res.results[0]
+        if (total) {
+          this.betRecordTotal = [{
+            text: '总计',
+            amount: total.amount,
+            profit: total.profit
+          }]
+        } else {
+          this.betRecordTotal = []
+        }
+      }).catch(errorMsg => {
+        this.$message({
+          showClose: true,
+          message: msgFormatter(errorMsg),
+          type: 'error'
+        })
       })
     }
   }
