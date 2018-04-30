@@ -210,6 +210,7 @@ export default {
     this.updateSchedule()
     const currentGame = this.$store.getters.gameById(this.$route.params.gameId)
     if (currentGame) {
+      localStorage.setItem('lastGameCode', currentGame.code)
       this.fetchStatistic()
     }
   },

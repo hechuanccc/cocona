@@ -62,7 +62,8 @@ export default {
         })
         this.games = games
         if (!this.$route.params.gameCode) {
-          this.$router.push('/gamehistory/' + games[0].code)
+          const gameCode = localStorage.getItem('lastGameCode') || games[0].code
+          this.$router.push('/gamehistory/' + gameCode)
         }
       }
     )
