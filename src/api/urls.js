@@ -33,6 +33,7 @@ export default {
   payment: apiv1 + '/payment/',
   paymentType: apiv1 + '/paymenttype/?opt_expand=1&platform=pc',
   betrecord: apiv1 + '/betrecord/',
+  betrecordByDay: apiv1 + '/betrecord_dates/',
   transaction_record: apiv1 + '/transaction/',
   result: '/result/',
   bank: apiv1 + '/bank/',
