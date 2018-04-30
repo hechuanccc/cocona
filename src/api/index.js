@@ -120,6 +120,10 @@ export function fetchBetHistory (option) {
   return axios.get(url)
 }
 
+export function fetchBetTotal (date) {
+  return axios.get(`${urls.betrecordByDay}?bet_date=${date}&status=win,lose,tie,ongoing`)
+}
+
 export function getToken (oldToken) {
   if (!oldToken) {
     return

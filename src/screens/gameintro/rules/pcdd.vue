@@ -29,8 +29,4 @@
     </ul>
   </section>
 </template>
-<style lang="sass">
-
-
-</style>
 

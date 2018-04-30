@@ -27,7 +27,6 @@ import GameResult from '../components/GameResult'
 
 export default {
   data () {
-    const lastGameCode = localStorage.getItem('lastGameCode')
     return {
       menus: [{
         name: this.$t('navMenu.game_center'),
@@ -52,7 +51,7 @@ export default {
           path: '/gameintro'
         }, {
           name: this.$t('navMenu.draw_history'),
-          path: lastGameCode ? `/gamehistory/${lastGameCode}` : '/gamehistory'
+          path: '/gamehistory'
         }, {
           name: this.$t('navMenu.promotion'),
           path: '/promotions'

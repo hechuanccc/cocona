@@ -5,7 +5,7 @@
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <el-breadcrumb-item> {{$t('navMenu.promotion')}} </el-breadcrumb-item>
       </el-breadcrumb>
-      <promoBanner v-for="promo in startedPromotions" :key="promo.id" :promo="promo" />
+      <promoBanner v-for="promo in promotions" :key="promo.id" :promo="promo" />
     </div>
   </el-row>
 </template>
@@ -36,15 +36,6 @@ export default {
       if (time < 10) {
         return '0' + time
       }
-    }
-  },
-  computed: {
-    startedPromotions () {
-      return this.promotions.filter(promo => {
-        let isBefore = this.today.isBefore(this.$moment(promo.start_date), 'day')
-        let isAfter = this.today.isAfter(this.$moment(promo.end_date), 'day')
-        return !isBefore && !isAfter
-      })
     }
   }
 }
