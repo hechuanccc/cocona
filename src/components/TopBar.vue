@@ -155,111 +155,139 @@ export default {
   }
 }
 </script>
-<style scoped lang='sass'>
+<style scoped lang='scss'>
 @import '../style/vars.scss';
 
-.top-bar
-  position: relative
-  height: 36px
-  line-height: 36px
-.clock
-  display: inline-block
-  font-size: 14px
-  font-weight: 500
-  color: #666
+.top-bar {
+  position: relative;
+  height: 36px;
+  line-height: 36px;
+}
 
-.account-links
-  float: right
-  font-size: 14px
-  display: inline-block
-  color: #999
-  li
+.clock {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.account-links {
+  float: right;
+  font-size: 14px;
+  color: #999;
+  .link {
+    padding: 0 10px;
+  }
+
+  li {
+    display: inline-block;
     cursor: pointer
-    display: inline-block
-  a
-    text-decoration: none
-    color: #999
-    &:hover
-      color: $primary
-    &.red
-      font-size: 14px
-      color: $azul
-  .link
-    padding: 0 10px
+  }
 
-.username
-  color: #4a4a4a
-  font-weight: 500
-.account-trigger
-  border-left: 1px solid #f2f2f2
-  border-width: 2px 0
-  &.active
-    padding-bottom: 1px
-  display: block
+  a {
+    text-decoration: none;
+    color: #999;
+    &:hover {
+      color: $primary;
+    }
 
-.dropdown
-  box-shadow: 0 2px 2px rgba(0,0,0, .3)
-  padding: 5px 0
-  text-align: left
-  position: absolute
-  top: 30px
-  right: 0
-  border-top: none
-  border-radius: 2px
-  background: #fff
-  width: 160px
-  z-index: 10
-  li
-    display: block
-    position: relative
-    cursor: pointer
-    line-height: 36px
-    padding: 0 10px
-    a
-      display: block
-    &:hover
-      background: $primary
-      a
-        color: #fff
-.msg-tooltip
-  display: inline-block
-  width: 20px
-  height: 20px
-  line-height: 20px
-  text-align: center
-  background: $red
-  color: #fff
-  font-size: 11px
-  border-radius: 4px
-.msg-tooltip-right
-  font-size: 11px
-  border-radius: 4px
-  position: absolute
-  top: 8px
-  right: 5px
-  width: 20px
-  height: 20px
-  line-height: 20px
-  text-align: center
-  background: $red
-  color: #fff
+    &.red {
+      font-size: 14px;
+      color: $azul;
+    }
+  }
+}
+
+.username {
+  color: #4a4a4a;
+  font-weight: 500;
+}
 
 
-.greet-money
-  color: $red
+.account-trigger {
+  display: block;
+  border-left: 1px solid #f2f2f2;
+  border-width: 2px 0;
+  &.active {
+    padding-bottom: 1px;
+  }
+}
 
-.register-btn
-  border-radius: 3px
-  padding-left: 10px
-  padding-right: 10px
-  padding-top: 7px
-  padding-bottom: 7px
-  text-align: center
-  font-size: 12px
-  color: #fff
-  background-color: $primary
-  &:hover
-    background-color: darken($primary, 5%)
+.dropdown {
+  box-shadow: 0 2px 2px rgba(0,0,0, .3);
+  padding: 5px 0;
+  text-align: left;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  border-top: none;
+  border-radius: 2px;
+  background: #fff;
+  width: 160px;
+  z-index: 10;
+  li {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    line-height: 36px;
+    padding: 0 10px;
+    a {
+      display: block;
+    }
+
+    &:hover {
+      background: $primary;
+      a {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.msg-tooltip {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  background: $red;
+  color: #fff;
+  font-size: 11px;
+  border-radius: 4px;
+}
+
+.msg-tooltip-right {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  background: $red;
+  top: 8px;
+  right: 5px;
+  font-size: 11px;
+  border-radius: 4px;
+  text-align: center;
+  color: #fff;
+}
+
+.greet-money {
+  color: $red;
+}
+
+.register-btn {
+  border-radius: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  background-color: $primary;
+  &:hover {
+    background-color: darken($primary, 5%);
+  }
+}
 </style>
 
 
