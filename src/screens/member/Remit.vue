@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row class="m-t">
     <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
       <el-tab-pane  v-if="item.payee_name||item.nickname" :label="item.payee_name||item.nickname" :name="String(item.id)" v-for="(item, index) in remitPayees" :key="index">
         <el-alert

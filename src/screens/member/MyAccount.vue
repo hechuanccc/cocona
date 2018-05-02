@@ -1,5 +1,5 @@
 <template>
-<el-row>
+<el-row class="m-t">
   <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('user.primary_info')" name="PrimaryInfo"></el-tab-pane>
     <el-tab-pane :label="$t('user.password_setting')" name="PasswordSetting"></el-tab-pane>

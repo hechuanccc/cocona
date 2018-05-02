@@ -30,16 +30,20 @@ export default {
     return {
       menus: [{
         name: this.$t('navMenu.game_center'),
-        path: '/game'
+        path: '/game',
+        eng: 'LOBBY'
       }, {
         name: this.$t('navMenu.promotion'),
-        path: '/promotions'
+        path: '/promotions',
+        eng: 'PROMOTION'
       }, {
         name: this.$t('navMenu.qa'),
-        path: '/faq'
+        path: '/faq',
+        eng: 'FAQ'
       }, {
         name: this.$t('navMenu.affliate'),
-        path: '/agent'
+        path: '/agent',
+        eng: 'AGENT'
       }],
       userMenus: [
         {
@@ -97,7 +101,7 @@ export default {
 .topbar {
   display: inline-block;
   background-color: #f9f9f9;
-  height: 36px;
+  height: 40px;
   width: 100%;
 }
 .bottomnavs {
