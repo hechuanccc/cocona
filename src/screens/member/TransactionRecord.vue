@@ -20,9 +20,9 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      v-if="totalCount > pageSize"
+      v-if="totalCount > limit"
       :current-page.sync="currentPage"
-      :page-size="pageSize"
+      :page-size="limit"
       layout="total, prev, pager, next"
       :total="totalCount"
       @current-change="handlePageChange">
@@ -55,7 +55,7 @@ export default {
     return {
       transactionRecords: [],
       currentPage: 1,
-      pageSize: 10,
+      limit: 20,
       totalCount: 0,
       loading: false
     }
@@ -91,7 +91,11 @@ export default {
     },
     initFetchTransactionRecord () {
       this.loading = true
-      fetchTransactionRecord({ transaction_type: this.transactionType, offset: 0 }).then(data => {
+      fetchTransactionRecord({
+        transaction_type: this.transactionType,
+        offset: 0,
+        limit: this.limit
+      }).then(data => {
         this.totalCount = data.count
         this.transactionRecords = data.results
         this.loading = false
@@ -106,7 +110,11 @@ export default {
     },
     handlePageChange (currentPage) {
       this.loading = true
-      fetchTransactionRecord({ transaction_type: this.transactionType, offset: (currentPage - 1) * this.pageSize }).then(data => {
+      fetchTransactionRecord({
+        transaction_type: this.transactionType,
+        offset: (currentPage - 1) * this.limit,
+        limit: this.limit
+      }).then(data => {
         this.transactionRecords = data.results
         this.loading = false
       }, () => {
