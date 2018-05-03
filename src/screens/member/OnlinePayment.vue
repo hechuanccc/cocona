@@ -38,6 +38,9 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item class="balance" :label="$t('user.balance')">
+          {{$store.state.user.balance | currency('￥') }}
+        </el-form-item>
         <el-form-item class="p-b" :label="$t('user.amount')" prop="amount">
           <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="lower" :max="upper"></el-input>
           <div class="min-amount">
