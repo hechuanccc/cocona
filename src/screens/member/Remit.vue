@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row class="m-t">
     <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="chooseRemitWay">
       <el-tab-pane  v-if="item.payee_name||item.nickname" :label="item.payee_name||item.nickname" :name="String(item.id)" v-for="(item, index) in remitPayees" :key="index">
         <el-alert
@@ -36,6 +36,9 @@
           </el-col>
           <el-col :push="2" class="m-l-xlg" :span="14">
             <el-form class="m-t-lg" :model="remitData" status-icon :ref="item.id" :rules="remitDataRules" label-width="128px">
+              <el-form-item :label="$t('user.balance')">
+                {{$store.state.user.balance | currency('￥') }}
+              </el-form-item>
               <el-form-item :label="$t('user.remit_name')" prop="remit_info.remit_payee">
                 <el-input :key="item.id" clearable class="input-width" v-model="remitData.remit_info.depositor" :placeholder="$t('user.remit_please_name')"></el-input>
               </el-form-item>
@@ -69,6 +72,9 @@
           </el-col>
           <el-col :push="2" class="m-l-lg" :span="14">
             <el-form class="m-t-lg" :model="remitData" status-icon :ref="item.id" :rules="remitDataRules" label-width="128px">
+              <el-form-item :label="$t('user.balance')">
+                {{$store.state.user.balance | currency('￥') }}
+              </el-form-item>
               <el-form-item :label="$t('user.remit_despositor')" prop="remit_info.depositor">
                 <el-input class="input-width" v-model="remitData.remit_info.depositor"></el-input>
               </el-form-item>
@@ -233,44 +239,45 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .text-info {
-    color: #31708f;
+.text-info {
+  color: #31708f;
+}
+.text-muted {
+  color: #777;
+}
+.bank-tip {
+  font-size: 14px;
+  font-weight: bold;
+}
+.list-group {
+  padding-left: 0;
+  margin-bottom: 20px;
+  .list-group-item:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
   }
-  .text-muted {
-    color: #777;
+  .list-group-item:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
   }
-  .bank-tip {
-    font-size: 14px;
-    font-weight: bold;
-  }
-  .list-group {
-    padding-left: 0;
-    margin-bottom: 20px;
-    .list-group-item:first-child {
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
+  .list-group-item {
+    position: relative;
+    display: block;
+    padding: 5px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    span {
+      font-size: 14px;
     }
-    .list-group-item:last-child {
-      border-bottom-left-radius: 4px;
-      border-bottom-right-radius: 4px;
-    }
-    .list-group-item {
-      position: relative;
-      display: block;
-      padding: 5px 15px;
-      margin-bottom: -1px;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      span {
-        font-size: 14px;
-      }
-      .bank-account {
-        font-size: 16px;
-        font-weight: bold;
-      }
+    .bank-account {
+      font-size: 16px;
+      font-weight: bold;
     }
   }
-  .info-tips {
-    color: #999;
-  }
+}
+.info-tips {
+  color: #999;
+}
+
 </style>

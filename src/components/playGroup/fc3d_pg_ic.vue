@@ -22,13 +22,13 @@
           <div v-else>封盘</div>
         </td>
       </tr>
-      <tr v-for="row in optionGroup" :key="row+'optionGroup'" align="center">
+      <tr v-for="(row, rowIndex) in optionGroup" :key="rowIndex" align="center">
         <td
           @click="selectOption(option, $event)"
           @mouseover="option.hover = true"
           @mouseleave="option.hover = false"
-          v-for="option in row"
-          :key="option+'in_row'"
+          v-for="(option, optionIndex) in row"
+          :key="optionIndex"
           :width="(1 / customPlayGroup.cols) * 100 + '%'" align="center" :class="['option-td',
             {
               hover: option.hover,

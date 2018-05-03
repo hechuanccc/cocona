@@ -99,7 +99,7 @@ export function placeBet (data) {
 }
 
 export function fetchTransactionRecord (option) {
-  return axios.get(`${urls.transaction_record}?transaction_type=${option.transaction_type}&limit=10&offset=${option.offset}`)
+  return axios.get(`${urls.transaction_record}?transaction_type=${option.transaction_type}&limit=${option.limit || 10}&offset=${option.offset}`)
 }
 
 export function fetchBet (gameData) {

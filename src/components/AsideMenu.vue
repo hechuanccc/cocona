@@ -1,5 +1,5 @@
 <template>
-  <el-aside class="m-l m-r" width="200px">
+  <el-aside class="m-l m-r aside-menu" width="200px">
     <el-menu :default-active="active"
       text-color="#4a4a4a"
       active-text-color="#fff"
@@ -43,8 +43,11 @@ export default {
 }
 </script>
 
-<style lang="scss" scopex>
+<style lang="scss" scoped>
 @import '../style/vars';
+.aside-menu {
+  overflow: hidden;
+}
 .aside-item {
   height: 40px;
   line-height: 40px;
@@ -54,6 +57,9 @@ export default {
 }
 .aside .el-menu {
   border: none;
+  .fa-icon {
+    width: 20px;
+  }
 }
 .el-menu .el-menu-item {
   &.is-active {

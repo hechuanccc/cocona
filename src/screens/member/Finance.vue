@@ -1,5 +1,5 @@
 <template>
-<el-row>
+<el-row class="m-t">
   <el-tabs v-model="activeName" class="indented-tab" type="card" @tab-click="handleClick">
     <el-tab-pane :label="$t('user.payment_record')" name="PaymentRecord"></el-tab-pane>
     <el-tab-pane :label="$t('user.discount_record')" name="DiscountRecord"></el-tab-pane>

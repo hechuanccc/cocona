@@ -552,6 +552,7 @@ export default {
 @import "../../style/gameplay.scss";
 
 .alias-tabitem {
+  margin-right: -1px;
   display: inline-block;
   padding: 5px 15px;
   background: #fff;

@@ -8,7 +8,8 @@
     <div class="invalid" v-if="invalid">
       官方开奖无效
     </div>
-     <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult && !invalid">
+    <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult && !invalid">
+      <div v-if="ready">
         <span
           v-for="(num, index) in resultNums"
           :key="gameLatestResult.issue_number + index"
@@ -23,12 +24,20 @@
           </span>
         </div>
       </div>
+      <ResultAnimation v-for="(q, index) in resultNums.length"
+        v-else
+        :key="index"
+        :gameCode="gameLatestResult.game_code"
+        :duration="(index % 3) + 1"/>
+    </div>
     </div>
 </template>
 
 <script>
 import AudioButton from '../components/AudioButton'
+import ResultAnimation from '../components/ResultAnimation'
 import {fetchGameResult} from '../api'
+
 import _ from 'lodash'
 
 export default {
@@ -38,7 +47,8 @@ export default {
     }
   },
   components: {
-    AudioButton
+    AudioButton,
+    ResultAnimation
   },
   data () {
     return {
@@ -47,7 +57,8 @@ export default {
       zodiacs: '',
       showZodiac: false,
       showSum: false,
-      invalid: false
+      invalid: false,
+      ready: true
     }
   },
   created () {
@@ -80,6 +91,8 @@ export default {
     'gameid': function (gameid) {
       this.showZodiac = false
       this.showSum = false
+      this.ready = true
+
       clearInterval(this.interval)
       clearTimeout(this.timer)
       this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
@@ -135,6 +148,10 @@ export default {
 
             let newIssue = result[0].issue_number
             if (newIssue !== oldIssue) {
+              this.ready = false
+              setTimeout(() => {
+                this.ready = true
+              }, 3000)
               clearInterval(this.interval)
               clearInterval(this.timer)
               setTimeout(() => {
@@ -152,6 +169,7 @@ export default {
   beforeDestroy () {
     clearTimeout(this.timer)
     clearInterval(this.interval)
+    this.ready = true
   }
 }
 </script>
