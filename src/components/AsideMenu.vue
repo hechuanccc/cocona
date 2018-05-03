@@ -43,7 +43,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scopex>
+<style lang="scss" scoped>
 @import '../style/vars';
 .aside-item {
   height: 40px;
@@ -54,6 +54,9 @@ export default {
 }
 .aside .el-menu {
   border: none;
+  .fa-icon {
+    width: 20px;
+  }
 }
 .el-menu .el-menu-item {
   &.is-active {

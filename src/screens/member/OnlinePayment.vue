@@ -1,6 +1,6 @@
 <template>
 <el-row>
-  <el-row class="m-t-lg">
+  <el-row class="m-t">
     <el-col :offset="7" :span="10">
       <el-alert
         v-if="activeType === 'none'"

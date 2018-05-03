@@ -40,13 +40,16 @@
 
     <ul v-else class="account-links">
       <li>
-        <router-link to="/account/online_payment" class="link">立即存款</router-link>
+        <router-link to="/account/online_payment" class="link">
+          <icon name="credit-card"></icon>
+          立即存款
+        </router-link>
       </li>
       <li>
-        <router-link to="/account/withdraw" class="link">申请取款</router-link>
-      </li>
-      <li>
-        <router-link to="/account/finance/betrecord" class="link">我的注单</router-link>
+        <router-link to="/account/finance/betrecord" class="link">
+          <icon name="list-ul"></icon>
+          我的注单
+        </router-link>
       </li>
       <li>
         <span :class="['account-trigger', 'link', {
@@ -61,13 +64,41 @@
           <i class="el-icon-caret-bottom" v-if="!showDropdown" />
           <i class="el-icon-caret-top" v-else />
           <ul v-show="showDropdown" class="dropdown" >
-            <li><router-link to="/account/my/primary_info">{{$t('user.my_account')}}</router-link></li>
-            <li><router-link to="/account/online_payment">{{$t('user.online_payment')}}</router-link></li>
-            <li><router-link to="/account/remit">{{$t('user.remit')}}</router-link></li>
-            <li><router-link to="/account/withdraw">{{$t('user.withdraw')}}</router-link></li>
-            <li><router-link to="/account/finance/payment_record">{{$t('user.finance')}}</router-link></li>
-            <li><router-link to="/account/message">{{$t('user.message')}}<span v-if="messageCount" class="msg-tooltip-right">{{messageCount}}</span></router-link></li>
-            <li @click="logout()"><a>{{$t('navMenu.logout')}}</a></li>
+            <li>
+              <router-link to="/account/my/primary_info">
+                <icon name="user"></icon>{{$t('user.my_account')}}
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/account/online_payment">
+                <icon name="credit-card"></icon>{{$t('user.online_payment')}}
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/account/remit">
+              <icon name="credit-card-alt"></icon>{{$t('user.remit')}}
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/account/withdraw">
+                <icon name="file-text-o"></icon>{{$t('user.withdraw')}}
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/account/finance/payment_record">
+                <icon name="list-ul"></icon>{{$t('user.finance')}}
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/account/message">
+                <icon name="envelope-o"></icon>{{$t('user.message')}}<span v-if="messageCount" class="msg-tooltip-right">{{messageCount}}</span>
+              </router-link>
+            </li>
+            <li @click="logout()">
+              <a>
+                <icon name="sign-out"></icon>{{$t('navMenu.logout')}}
+              </a>
+            </li>
           </ul>
         </span>
       </li>
@@ -76,6 +107,14 @@
 </template>
 
 <script>
+import 'vue-awesome/icons/credit-card'
+import 'vue-awesome/icons/list-ul'
+import 'vue-awesome/icons/credit-card-alt'
+import 'vue-awesome/icons/file-text-o'
+import 'vue-awesome/icons/user'
+import 'vue-awesome/icons/envelope-o'
+import 'vue-awesome/icons/sign-out'
+
 import { register } from '../api'
 import { msgFormatter } from '../utils'
 export default {
@@ -160,8 +199,13 @@ export default {
 
 .top-bar {
   position: relative;
-  height: 36px;
-  line-height: 36px;
+  height: 40px;
+  line-height: 40px;
+  .fa-icon {
+    vertical-align: middle;
+    margin: 0 3px 3px 0;
+    color: #999;
+  }
 }
 
 .clock {
@@ -181,14 +225,16 @@ export default {
 
   li {
     display: inline-block;
-    cursor: pointer
+    cursor: pointer;
   }
-
-  a {
+   a {
     text-decoration: none;
     color: #999;
     &:hover {
       color: $primary;
+      .fa-icon {
+        color: $primary;
+      }
     }
 
     &.red {
@@ -206,25 +252,30 @@ export default {
 
 .account-trigger {
   display: block;
-  border-left: 1px solid #f2f2f2;
-  border-width: 2px 0;
+  border: 1px solid #f9f9f9;
+  border-width: 0 1px;
   &.active {
+    border-color: #f2f2f2;
     padding-bottom: 1px;
+    background: #fff;
   }
 }
 
 .dropdown {
-  box-shadow: 0 2px 2px rgba(0,0,0, .3);
+  border: 1px solid #f2f2f2;
   padding: 5px 0;
   text-align: left;
   position: absolute;
-  top: 30px;
+  top: 39px;
   right: 0;
   border-top: none;
-  border-radius: 2px;
   background: #fff;
   width: 160px;
   z-index: 10;
+  .fa-icon {
+    width: 20px;
+    margin-right: 5px;
+  }
   li {
     display: block;
     position: relative;
@@ -239,6 +290,9 @@ export default {
       background: $primary;
       a {
         color: #fff;
+        .fa-icon {
+          color: #fff;
+        }
       }
     }
   }
@@ -276,12 +330,12 @@ export default {
 
 .register-btn {
   border-radius: 3px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   color: #fff;
   background-color: $primary;
   &:hover {
