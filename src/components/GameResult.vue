@@ -92,6 +92,7 @@ export default {
       this.showZodiac = false
       this.showSum = false
       this.ready = true
+
       clearInterval(this.interval)
       clearTimeout(this.timer)
       this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
@@ -140,7 +141,6 @@ export default {
       this.timer = setTimeout(() => {
         clearInterval(this.interval)
         this.interval = setInterval(() => {
-          this.ready = false
           this.fetchResult(gameid).then(result => {
             if (!result || !result[0]) {
               clearInterval(this.interval)
@@ -148,7 +148,10 @@ export default {
 
             let newIssue = result[0].issue_number
             if (newIssue !== oldIssue) {
-              this.ready = true
+              this.ready = false
+              setTimeout(() => {
+                this.ready = true
+              }, 3000)
               clearInterval(this.interval)
               clearInterval(this.timer)
               setTimeout(() => {
