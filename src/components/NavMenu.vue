@@ -7,14 +7,18 @@
       :class="getMenuClass(menu)"
       v-for="menu in menus"
       :key="menu.icon">
-      <span>{{menu.name}}</span>
+      <span :class="menu.eng ? 'big' : ''">{{menu.name}}</span>
+      <span v-if="menu.eng" class="eng">{{menu.eng}}</span>
     </router-link>
-    <a v-if="$store.state.systemConfig.customerServiceUrl"
-      class="online-service m-r"
-      target="_blank"
-      :href="$store.state.systemConfig.customerServiceUrl ? $store.state.systemConfig.customerServiceUrl : '#'">
-      {{$t('navMenu.online_service')}}
-    </a>
+    <li class="nav-link">
+      <a v-if="$store.state.systemConfig.customerServiceUrl"
+        class="online-service m-r"
+        target="_blank"
+        :href="$store.state.systemConfig.customerServiceUrl ? $store.state.systemConfig.customerServiceUrl : '#'">
+        <span :class="menus[0].eng ? 'big' : ''">{{$t('navMenu.online_service')}}</span>
+        <span v-if="menus[0].eng" class="eng">SERVICES</span>
+      </a>
+    </li>
   </ul>
 </template>
 
@@ -48,35 +52,44 @@ export default {
 @import "../style/vars.scss";
 .main-navs {
   float: right;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 .nav-link {
-  line-height: 100px;
   display: inline-block;
-  padding: 0 15px;
+  padding: 10px 15px;
+  border-right: 1px solid #efefef;
   cursor: pointer;
   text-align: center;
   color: #666;
   font-size: 16px;
-  &.active, &:hover {
+  &:active, &:hover {
     color: $primary;
+    .eng {
+      color: $primary;
+    }
+  }
+  &:last-child {
+    border: none;
   }
 }
-
-.lower .nav-link {
-  line-height: 60px;
+.big {
+  font-size: 16px;
 }
-
-.online-service {
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  width: 90px;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 3px;
+.eng {
+  display: block;
   font-size: 14px;
-  font-weight: normal;
-  color: #fff;
-  background-color: $azul;
+  line-height: 1.5;
+  color: #999;
+}
+.online-service {
+  display: block;
+  &:visited {
+    color: #666;
+  }
+  &:active, &:hover {
+    color: $primary;
+  }
 }
 </style>
