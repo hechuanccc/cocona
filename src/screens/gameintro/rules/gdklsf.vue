@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.gdfc.org.cn/play_list_game_9.html" target="_blank">广东福彩网</a>
+    </p>
     <p>每期广东快乐十分开奖球数共八粒。每粒球除了总和玩法，其它都有单独的投注页面。广东快乐十分每天开84期，每期间隔10分钟。投注时间为8分钟，等待开奖时间为2分钟，北京时间（GMT+8）每天白天从上午09：00开到晚上23：00。</p>
     <h3>
       <span class="warn">1.两面：</span>指单、双；大、小、尾大、尾小。</h3>

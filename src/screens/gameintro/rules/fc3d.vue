@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.fulicaipiao.cn/beijing/3D_beijing/" target="_blank">北京福彩网</a>
+    </p>
     <p>3D彩是依照中国福利彩票管理中心发行的3D的开奖结果为派彩依据，每天开奖一次。假设3D开奖结果为123，那么佰位是1，拾位是2，个位是3。（每个位数在开奖时从0-9中摇出一个结果）选号玩法。</p>
     <h3>
       <span class="warn">1.一字盘势</span>

@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.tjflcpw.com/report/SSCReportMain.aspx?op=jiben&gd=800" target="_blank">天津福彩网</a>
+    </p>
     <p>该游戏的投注时间、开奖时间和开奖号码与新疆时时彩完全同步，天津时时彩全天84期，每天09:10—23:00,十分钟一期。</p>
     <h3>
       <span class="warn">1.第一球~第五球</span>

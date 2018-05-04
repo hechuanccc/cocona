@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="https://www.lotterymart.com/detail_0.html" target="_blank">lotterymart.com</a>
+    </p>
     <h2 class="warn">以下所有投注皆含本金。</h2>
     <ul>
       <li>「幸运蛋蛋」按幸运快乐8的开奖结果为基础</li>
