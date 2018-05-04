@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.fulicaipiao.cn/beijing/index.html" target="_blank">北京福彩网</a>
+    </p>
     <p>该游戏投注、开奖时间和开奖号码与“北京快乐8”完全同步，北京时间（GMT+8）每天白天从早上09:00开到晚上23:55，每5分钟开一次奖，每天开奖179期。</p>
     <h3>
       <span class="warn">1.正码</span>

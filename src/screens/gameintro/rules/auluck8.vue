@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="https://www.lotterymart.com/detail_0.html" target="_blank">lotterymart.com</a>
+    </p>
     <p>该游戏投注、开奖时间和开奖号码与“幸运快乐8”完全同步，北京时间（GMT+8）每天白天从早上08:00开到次日凌晨4:00，每5分钟开一次奖，每天开奖240期。</p>
     <p>第一期 8:03开再来是8:08…..以此类推，最后一期隔天3:58分，每期封盘30秒游戏类似北京快乐8，多了两面玩法、少了前后和、单双和</p>
     <h3>

@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.cqcp.net/game/ssc/" target="_blank">重庆彩票网</a>
+    </p>
     <p>该游戏的投注时间、开奖时间和开奖号码与重庆时时彩完全同步，北京时间（GMT+8）每天白天从上午10：00开到晚上22：00，夜场从22:00至凌晨2点,每10分钟开一次奖，夜场每5分钟开一次奖,每天开奖120期(白天72期,夜间48期)。</p>
     <h3>
       <span class="warn">1.第一球~第五球</span>

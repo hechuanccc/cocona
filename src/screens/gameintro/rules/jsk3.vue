@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.jslottery.com/Lottery/LotteryInfo_Fast3?PlayType=7" target="_blank">江苏福彩网</a>
+    </p>
     <ul>
       <li>「江苏快3」由中国福利彩票发行管理中心组织销售、江苏省福利彩票发行中心承销。
       </li>

@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.fulicaipiao.cn/beijing/index.html" target="_blank">北京福彩网</a>
+    </p>
     <p>该游戏的投注时间、开奖时间和开奖号码与“北京PK拾”完全同步（官方网）），北京时间（GMT+8）每天白天从上午09:02开到晚上23:57，每5分钟开一次奖,每天开奖179期。</p>
     <h3>
       <span class="warn">1～10 两面：</span>指 单、双；大、小。</h3>
