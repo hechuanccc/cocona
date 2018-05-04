@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.fulicaipiao.cn/beijing/index.html" target="_blank">北京福彩网</a>
+    </p>
     <h2 class="warn">以下所有投注皆含本金。</h2>
     <ul>
       <li>「PC蛋蛋（幸运28）」按北京快乐8的开奖结果为基础</li>

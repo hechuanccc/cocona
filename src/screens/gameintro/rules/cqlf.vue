@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.cqcp.net/trend/lucky/xynczh_chart.aspx" target="_blank">重庆彩票网</a>
+    </p>
     <p>每期重庆幸运农场开奖球数共八粒。每粒球除了总和玩法，其它都有单独的投注页面。重庆幸运农场每天开97期，每期间隔10分钟。投注时间为8分钟，等待开奖时间为2分钟，北京时间（GMT+8）每天白天从上午10：00开到次日凌晨02：00。</p>
     <h3>
       <span class="warn">1.两面：</span>指单、双；大、小、尾大、尾小、合数单双</h3>

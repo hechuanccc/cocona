@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://bet.hkjc.com/marksix/" target="_blank">香港赛马会</a>
+    </p>
     <h3>
       <span class="warn">1.特码</span>
     </h3>

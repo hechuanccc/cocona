@@ -1,5 +1,8 @@
 <template>
   <section class="rule-details">
+    <p>官网：
+      <a href="http://www.gdlottery.cn/odata/zst11xuan5.jspx" target="_blank">广东体彩网</a>
+    </p>
     <ul>
       <li>「广东11选5」是由国家体育总局发行，体育彩票管理中心承销。
       </li>

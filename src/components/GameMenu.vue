@@ -125,7 +125,7 @@ export default {
       this.isBusy = true
       localStorage.setItem('lastGame', key)
       localStorage.setItem('lastGameCode', game.code)
-      this.categories = this.$store.getters.categoriesByGameId(key)
+      this.categories = this.$store.getters.categoriesByGameId(key + '')
       if (!this.categories.length) {
         this.$store.dispatch('fetchCategories', key)
           .then((res) => {
