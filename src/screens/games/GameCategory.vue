@@ -23,7 +23,7 @@
               'active': playSection.playgroups[tabIndex].active
             }, 'alias-tabitem', 'clickable']"
             v-for="(alias, tabIndex) in getAliases(playSection)"
-            :key="index + game.id + 'tab' + tabIndex"
+            :key="tabIndex"
             @click="selectAlias(playSection, tabIndex)">
             {{alias}}
           </li>
@@ -57,18 +57,18 @@
                 @mouseleave="toggleHover(play, false)"
                 @click="toggleActive(plays[play.id], $event)"
                 v-if="play.code">
-                <el-col :span="play.value ? 2 : 6" class="name">
+                <el-col :span="play.value||needZodiac ? 2 : 6" class="name">
                   <span>
-                    <span :class="play.value?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
+                    <span :class="play.value||needZodiac?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
                   </span>
                 </el-col>
-                <el-col v-if="play.value" :span="15" class="number">
-                  <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value" :key="index">{{num}}</span>
+                <el-col v-if="play.value||needZodiac" :span="15" class="number">
+                  <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value||zodiacMap&&zodiacMap[play.display_name]" :key="index">{{num}}</span>
                 </el-col>
-                <el-col :span="play.value ? 2 : 6" class="odds">
+                <el-col :span="play.value||needZodiac ? 2 : 6" class="odds">
                   <span>{{ !gameClosed ? play.odds : '-'}}</span>
                 </el-col>
-                <el-col :span="play.value ? 5 : 12" class="input">
+                <el-col :span="play.value||needZodiac ? 5 : 12" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
@@ -86,7 +86,7 @@
             :playgroup="playgroup"
             :plays="plays"
             :gameClosed="gameClosed"
-            :zodiacs = "zodiacs"
+            :zodiacMap = "zodiacMap"
             v-else />
         </div>
       </div>
@@ -179,7 +179,7 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { msgFormatter, formatPlayGroup, filtAmount } from '../../utils'
-import { zodiacs, zodiacMap, colorWave } from '../../utils/hk6'
+import { colorWave } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
@@ -187,6 +187,22 @@ const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'],
 const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
 const fc3dPg2df = (resolve) => require(['../../components/playGroup/fc3d_pg_2df'], resolve)
 const fc3dPgIc = (resolve) => require(['../../components/playGroup/fc3d_pg_ic'], resolve)
+
+const setActive = (play, amount) => {
+  Vue.set(play, 'active', true)
+  play.amount = amount
+}
+const reverseActive = (play, amount) => {
+  if (play.active) {
+    cancelActive(play)
+  } else {
+    setActive(play, amount)
+  }
+}
+const cancelActive = (play) => {
+  Vue.set(play, 'amount', '')
+  Vue.set(play, 'active', false)
+}
 
 export default {
   props: {
@@ -198,6 +214,9 @@ export default {
       type: Number
     },
     game: {
+      type: Object
+    },
+    zodiacMap: {
       type: Object
     }
   },
@@ -216,7 +235,7 @@ export default {
       playSections: [],
       loading: true,
       plays: {},
-      amount: localStorage.getItem('amount') || '',
+      amount: localStorage.getItem('amount') || '10',
       // raw data in play group from API for generating playSections
       raw: [],
       dialogVisible: false,
@@ -226,11 +245,8 @@ export default {
       submitting: false,
       errors: '',
       playReset: false,
-      hasZodiacs: false,
       showCombinationDetails: false,
       showCombinationsTips: false,
-      zodiacs,
-      zodiacMap,
       colorWave
     }
   },
@@ -261,6 +277,24 @@ export default {
         })
       })
       return formattedDetails
+    },
+    currentAlias () {
+      for (const section of this.playSections) {
+        for (const group of section.playgroups) {
+          if (group.active) {
+            return group.alias
+          }
+        }
+      }
+      return ''
+    },
+    currentCategory () {
+      return this.$store.getters.categoriesById(this.$route.params.categoryId)
+    },
+    needZodiac () {
+      const code = this.currentCategory.code
+      // 正肖 合肖 特肖 连肖连尾
+      return code.endsWith('txiao') || code.endsWith('shxia') || code.endsWith('ishaw') || code.endsWith('exl')
     }
   },
   watch: {
@@ -305,6 +339,7 @@ export default {
       _.map(playSection.playgroups, (playgroup, index) => {
         this.$set(playgroup, 'active', index === tabIndex)
       })
+      this.$emit('clearShortCut')
     },
     getAliases (section) {
       let aliases = _.map(section.playgroups, playgroup => playgroup.alias)
@@ -426,15 +461,6 @@ export default {
             if (item.code === 'hkl_pg_clrwvs_color' || item.code === 'luckl_pg_clrwvs_color') {
               plays[play.id]['value'] = colorWave[play.code]
             }
-            if (
-                item.code === 'hkl_pg_txiao_spczdc' ||
-                item.code === 'hkl_pg_shawzdc' ||
-                item.code === 'hkl_pg_pxxmzdc' ||
-                item.code === 'luckl_pg_txiao_spczdc' ||
-                item.code === 'luckl_pg_shawzdc' ||
-                item.code === 'luckl_pg_pxxmzdc') {
-              plays[play.id]['value'] = this.zodiacMap[play.display_name]
-            }
           })
         })
         this.raw = res
@@ -542,6 +568,39 @@ export default {
       })
 
       Vue.set(this, 'playReset', !this.playReset)
+      this.$emit('clearShortCut')
+    },
+    triggerShortcut (option) {
+      const command = option.command
+      const amount = parseFloat(this.amount)
+      let handleplay
+      switch (command) {
+        case 'all':
+          handleplay = setActive
+          break
+        case 'reverse':
+          handleplay = reverseActive
+          break
+        case 'cancel':
+          handleplay = cancelActive
+          this.$emit('clearShortCut')
+          break
+        default:
+          handleplay = (play) => {
+            if (option.num.includes(play.display_name)) {
+              Vue.set(play, 'active', true)
+              play.amount = amount
+            } else {
+              Vue.set(play, 'amount', '')
+              Vue.set(play, 'active', false)
+            }
+          }
+      }
+      _.each(this.plays, play => {
+        if ((!this.currentAlias && play.group === '号码') || play.alias === this.currentAlias) {
+          handleplay(play, amount)
+        }
+      })
     }
   }
 }
