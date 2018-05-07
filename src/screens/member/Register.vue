@@ -13,29 +13,29 @@
       <div class="register-container">
         <el-form :model="user" status-icon :rules="rules" ref="user" label-width="120px">
           <el-form-item :label="$t('user.username')" prop="username">
-            <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
+            <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off" @blur="clearSpace(user, 'username')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.password')" prop="password">
-            <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
+            <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off" @blur="clearSpace(user, 'password')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.confirm_password')" prop="confirmation_password">
-            <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" auto-complete="off"></el-input>
+            <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirmation_password" @blur="clearSpace(user, 'confirmation_password')" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.realname')" prop="real_name">
             <el-input class="input-width" v-model="user.real_name"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.phone')" prop="phone">
-            <el-input class="input-width" v-model="user.phone"></el-input>
+            <el-input class="input-width" v-model="user.phone" @blur="clearSpace(user, 'phone')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.qq')" prop="qq">
-            <el-input class="input-width" v-model="user.qq"></el-input>
+            <el-input class="input-width" v-model="user.qq" @blur="clearSpace(user, 'qq')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
-            <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password"></el-input>
+            <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password" @blur="clearSpace(user, 'withdraw_password')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.captcha')" prop="verification_code_1">
             <el-col :span="7">
-              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off">
+              <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off" @blur="clearSpace(user, 'verification_code_1')">
                 <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
               </el-input>
             </el-col>

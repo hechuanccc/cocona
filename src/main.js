@@ -145,6 +145,9 @@ Vue.mixin({
   methods: {
     performLogin () {
       toHomeAndLogin(this.$router)
+    },
+    clearSpace (form, key) {
+      form[key] = form[key].replace(/\s+/g, '')
     }
   }
 })

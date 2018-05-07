@@ -177,6 +177,8 @@
         <div class="typing">
           <div :class="['txtinput', 'el-textarea', !personal_setting.chat.status ? 'is-disabled' : '']">
             <textarea  @keyup.enter="sendMsg"
+              @focus="$store.dispatch('updateIsChatting', true)"
+              @blur="$store.dispatch('updateIsChatting', false)"
               :placeholder="personal_setting.chat.status ? '' : chatConditionMessage"
               type="textarea" rows="2"
               autocomplete="off"
