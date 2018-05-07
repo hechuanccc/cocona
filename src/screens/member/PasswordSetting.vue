@@ -15,13 +15,13 @@
       <el-col :offset="8" :span="16">
         <el-form :model="password" status-icon :rules="passwordRule" ref="password" label-width="120px">
           <el-form-item :label="$t('user.prev_password')" prop="prev_password">
-            <el-input class="input-width" type="password" v-model="password.prev_password" :maxlength="15" auto-complete="off"></el-input>
+            <el-input class="input-width" type="password" v-model="password.prev_password" @blur="clearSpace(password, 'prev_password')" :maxlength="15" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.new_password')" prop="new_password">
-            <el-input class="input-width" type="password" v-model="password.new_password" :maxlength="15" auto-complete="off"></el-input>
+            <el-input class="input-width" type="password" v-model="password.new_password" @blur="clearSpace(password, 'new_password')" :maxlength="15" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.confirm_password')" prop="repeat_password">
-            <el-input class="input-width" type="password" v-model="password.repeat_password" :maxlength="15" auto-complete="off"></el-input>
+            <el-input class="input-width" type="password" v-model="password.repeat_password" @blur="clearSpace(password, 'repeat_password')" :maxlength="15" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" class="input-width" :disabled="updateStatus===1" @click="submitPasswordForm">{{$t('action.submit')}}</el-button>
