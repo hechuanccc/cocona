@@ -65,7 +65,7 @@
 
 <script>
 import Vue from 'vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { fetchBet, fetchWinBet } from '../api'
 import GameMenu from '../components/GameMenu'
 import _ from 'lodash'
@@ -73,7 +73,7 @@ import _ from 'lodash'
 let bus = new Vue()
 
 function keyEnterListener (event) {
-  if (event.keyCode === 13) {
+  if (event.keyCode === 13 && !this.isChatting) {
     this.$root.bus.$emit('openBetDialog')
   }
 }
@@ -99,6 +99,9 @@ export default {
   computed: {
     ...mapGetters([
       'user'
+    ]),
+    ...mapState([
+      'isChatting'
     ]),
     currentGame () {
       return this.$store.getters.gameById(this.$route.params.gameId)

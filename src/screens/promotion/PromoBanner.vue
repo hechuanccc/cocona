@@ -4,7 +4,7 @@
     <el-dialog :title="promo.name"
       :visible.sync="showContent"
       :width="'700px'">
-      <div v-html="promo.description"></div>
+      <div class="custom-content" v-html="promo.description"></div>
     </el-dialog>
   </div>
 </template>
@@ -28,10 +28,20 @@ export default {
 .promo-banners {
   width: 1000px;
   margin: 0 auto;
+
   .banner-img {
     width: 100%;
     height: 144px
   }
 }
 </style>
+
+<style>
+.custom-content img{
+  max-width: 660px;
+  height: auto;
+}
+/*dialog width 700px - padding 20px * 2*/
+</style>
+
 
