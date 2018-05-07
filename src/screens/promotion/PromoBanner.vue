@@ -39,6 +39,7 @@ export default {
 <style>
 .custom-content img{
   max-width: 660px;
+  height: auto;
 }
 /*dialog width 700px - padding 20px * 2*/
 </style>
