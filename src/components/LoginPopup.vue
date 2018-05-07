@@ -24,12 +24,14 @@
               <el-input v-model="user.username"
                 class="m-t-sm"
                 @keyup.enter.native="login"
+                @blur="clearSpace(user, 'username')"
                 :autofocus="true"
                 ref="username"/>
             </el-form-item>
             <el-form-item prop="password" :label="$t('user.password')" label-width="55px">
               <el-input v-model="user.password"
                 type="password"
+                @blur="clearSpace(user, 'password')"
                 @keyup.enter.native="login">
               </el-input>
             </el-form-item>

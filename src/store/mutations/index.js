@@ -55,5 +55,8 @@ export default {
   },
   [types.CLOSE_VERIFICATION_DIALOG]: (state) => {
     state.showTrialVerifyDialog = false
+  },
+  [types.UPDATE_ISCHATTING]: (state, signal) => {
+    state.isChatting = signal
   }
 }

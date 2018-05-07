@@ -8,27 +8,27 @@
       v-if="!successMsg"
       label-width="120px">
       <el-form-item :label="$t('user.username')" prop="username">
-        <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off"></el-input>
+        <el-input class="input-width" :maxlength="15" v-model="user.username" auto-complete="off" @blur="clearSpace(user, 'username')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.password')" prop="password">
-        <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off"></el-input>
+        <el-input class="input-width" :maxlength="15" type="password" v-model="user.password" auto-complete="off" @blur="clearSpace(user, 'password')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.confirm_password')" prop="confirm_password">
-        <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirm_password" auto-complete="off"></el-input>
+        <el-input class="input-width" :maxlength="15" type="password" v-model="user.confirm_password" auto-complete="off" @blur="clearSpace(user, 'confirm_password')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.realname')" prop="real_name">
         <el-input class="input-width" v-model="user.real_name"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.phone')" prop="phone">
-        <el-input class="input-width" v-model="user.phone"></el-input>
+        <el-input class="input-width" v-model="user.phone" @blur="clearSpace(user, 'phone')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.email')" prop="email">
-        <el-input class="input-width" v-model="user.email"></el-input>
+        <el-input class="input-width" v-model="user.email" @blur="clearSpace(user, 'email')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('user.captcha')" required>
         <el-col :span="7">
           <el-form-item  prop="captcha_1">
-            <el-input class="input-width" :maxlength="4" v-model="user.captcha_1" auto-complete="off">
+            <el-input class="input-width" :maxlength="4" v-model="user.captcha_1" auto-complete="off" @blur="clearSpace(user, 'captcha_1')">
               <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
             </el-input>
           </el-form-item>
@@ -203,7 +203,7 @@
 .register-container{
   box-sizing: border-box;
   width: 600px;
-  min-height: 530px;  
+  min-height: 530px;
   padding: 30px 80px 20px 80px;
   margin: 0 auto 40px auto;
 }

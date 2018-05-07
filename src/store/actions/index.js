@@ -126,5 +126,8 @@ export default {
   },
   closeTrialVerifyDialog: ({ commit, state }) => {
     commit(types.CLOSE_VERIFICATION_DIALOG)
+  },
+  updateIsChatting: ({ commit, state }, signal) => {
+    commit(types.UPDATE_ISCHATTING, signal)
   }
 }
