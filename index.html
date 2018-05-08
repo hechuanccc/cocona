@@ -9,6 +9,112 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
     </script>
+    <!--[if lte IE 9]>
+    <style>
+      #blocker-container {
+        display: none;
+        position: fixed;
+        font-family: Arial, Helvetica, sans-serif;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 99999;
+        color: #4a4a4a;
+      }
+
+      .blocker-dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 480px;
+        padding: 20px;
+        border-left: 8px solid #4fc1e9;
+        background: #fff;
+        margin-left: -240px;
+        margin-top: -200px;
+        z-index: 99999;
+      }
+
+      .blocker-dialog .title {
+        height: 80px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .blocker-dialog .title h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .blocker-dialog .title p {
+        margin: 20px 0 0 0;
+        font-size: 18px;
+      }
+
+      .blocker-dialog .link {
+        display: block;
+        height: 285px;
+        border: none;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      .blocker-dialog .img {
+        width: 256px;
+        height: 256px;
+      }
+
+      .blocker-dialog .link:hover .download {
+        text-decoration: underline;
+      }
+
+      .blocker-dialog .download {
+        margin-top: 5px;
+        font-size: 16px;
+      }
+
+      .blocker-mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: rgb(0, 0, 0);
+        opacity: 0.8;
+        z-index: 99998;
+      }
+    </style>
+
+    <script>
+      (function () {
+        var blocker;
+        var html;
+
+        blocker = document.createElement('div');
+        blocker.setAttribute('id', 'blocker-container');
+
+        html += '<div class="blocker-dialog">';
+        html += '  <div class="title">';
+        html += '    <h1>为了保护您的资讯安全以及获得更好的体验,<\/h1>';
+        html += '    <p>请点击图示免费下载最新版本的谷哥浏览器 <\/p>';
+        html += '  <\/div>';
+        html += '  <a class="link" href="http:\/\/www.google.com\/chrome\/browser\/desktop\/index.html">';
+        html += '    <img class="img" src="http://icons.iconarchive.com/icons/cornmanthe3rd/plex/256/Internet-chrome-icon.png"/>';
+        html += '    <div class="download">免费下载<\/div>';
+        html += '  <\/a>';
+        html += '<\/div>';
+        html += '<div class="blocker-mask"><\/div>';
+
+        blocker.innerHTML = html;
+
+        window.onload = function () {
+          document.body.appendChild(blocker);
+          blocker.style.display = 'block';
+        };
+      })();
+    </script>
+    <![endif]-->
   </head>
   <body>
     <div id="app"></div>
