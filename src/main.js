@@ -55,23 +55,15 @@ const token = Vue.cookie.get('access_token')
 
 Vue.config.productionTip = false
 
-let navLang = navigator.language || navigator.userLanguage
-if (navLang === 'zh-CN' || navLang === 'zh-cn') {
-  Vue.config.lang = 'cn'
-} else if (navLang === 'en-US' || navLang === 'en-us') {
-  Vue.config.lang = 'en'
-} else {
-  Vue.config.lang = 'cn'
-}
-
 Object.keys(locales).forEach(lang => {
-  Vue.locale(lang, locales[lang])
+  Vue.locale(lang, locales['cn'])
 })
 
 if (token) {
   axios.defaults.withCredentials = true
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
+
 axios.interceptors.response.use(res => {
   let responseData = res.data
   if (responseData.code === 2000) {
