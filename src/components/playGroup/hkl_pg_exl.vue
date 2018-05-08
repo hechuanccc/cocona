@@ -25,7 +25,7 @@
           <span>{{option.display_name}}</span>
         </el-col>
         <el-col :span="15" class="number p-l">
-          <span :class="['hkl_pg_exl', `hkl_pg_exl_${num}`]" v-for="(num,index) in option.value" :key="index">{{num}}</span>
+          <span :class="['hkl_pg_exl', `hkl_pg_exl_${num}`]" v-for="(num,index) in  zodiacMap&&zodiacMap[option.display_name]||tailMap[option.display_name]" :key="index">{{num}}</span>
         </el-col>
         <el-col :span="4" class="odds">
           {{ !gameClosed ? option.odds : '-'}}
@@ -42,7 +42,7 @@
 <script>
 import _ from 'lodash'
 import Combinatorics from 'js-combinatorics'
-import { zodiacMap, tailMap } from '../../utils/hk6'
+import { tailMap } from '../../utils/hk6'
 export default {
   name: 'hklPgExl',
   props: {
@@ -60,6 +60,9 @@ export default {
     },
     playReset: {
       type: Boolean
+    },
+    zodiacMap: {
+      type: Object
     }
   },
   data () {
@@ -68,7 +71,8 @@ export default {
       optionGroupsView: [],
       specialOption: '',
       combinedOptions: [],
-      valid: false
+      valid: false,
+      tailMap
     }
   },
   created () {
@@ -163,7 +167,6 @@ export default {
             id: play.id,
             odds: play.odds,
             display_name: play.display_name,
-            value: zodiacMap[play.display_name] || tailMap[play.display_name],
             selected: false,
             hover: false
           }

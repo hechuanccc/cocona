@@ -6,7 +6,10 @@
           :key="$route.name + ($route.params.categoryId || '')"
           :game="currentGame"
           :scheduleId="schedule ? schedule.id : null"
-          :gameClosed="gameClosed" />
+          :gameClosed="gameClosed"
+          @clearShortCut="clearShortCut"
+          :zodiacMap="zodiacMap"
+          ref="gameCategory"/>
         <Countdown
           :schedule="schedule"
           v-if="schedule.id"
@@ -22,7 +25,25 @@
           :resultStatistic="resultStatistic"/>
       </el-row>
     </div>
-    <div class="leader-board">
+    <el-tabs class="tabs" v-model="activeTab" v-if="isShowShortcut" type="card">
+      <el-tab-pane label="长龙统计" name="statistic">
+        <ul class="menu">
+          <li class="menu-item" v-for="(item,index) in sortedStatistic" :key="index">
+            <span class="text">{{item.title}} - {{item.type | typeFilter}}</span>
+            <span class="period">{{item.num}}期</span>
+          </li>
+          <li v-if="sortedStatistic.length === 0" class="menu-empty">暂无排行榜</li>
+        </ul>
+      </el-tab-pane>
+      <el-tab-pane label="快捷投注" name="shortcut">
+        <span
+          :class="['shortcut-play', {actived: group.actived}]"
+          v-for="(group, index) in shortcutPlayGroups"
+          :key="index"
+          @click="selectShortcutPlayGroup(group)">{{group.display_name}}</span>
+      </el-tab-pane>
+    </el-tabs>
+    <div v-else class="leader-board">
       <div class="title">
         长龙排行榜
       </div>
@@ -43,7 +64,8 @@ import gameTranslator from '../../utils/gameTranslator'
 import GameStatistic from '../../components/GameStatistic'
 import Countdown from '../../components/Countdown'
 import _ from 'lodash'
-
+import { shortcutPlayGroups } from '../../utils/hk6'
+const categoryNeedShortcut = ['正码', '特码', '正码特']
 export default {
   name: 'game',
   components: {
@@ -155,6 +177,9 @@ export default {
     }
   },
   data () {
+    shortcutPlayGroups.forEach(group => {
+      group.actived = false
+    })
     return {
       gameId: this.$route.params.gameId,
       schedule: {
@@ -174,7 +199,11 @@ export default {
         seconds: 0
       },
       statistic: [],
-      resultStatistic: {}
+      resultStatistic: {},
+      activeTab: 'statistic',
+      selectedShortcutPlayGroup: {},
+      zodiacMap: null,
+      shortcutPlayGroups: shortcutPlayGroups
     }
   },
   computed: {
@@ -189,6 +218,19 @@ export default {
       return this.statistic.sort((a, b) => {
         return b.num - a.num
       })
+    },
+    currentCategoryId () {
+      return this.$route.params.categoryId
+    },
+    currentCategory () {
+      const currentCategory = this.$store.getters.categoriesById(this.currentCategoryId)
+      return currentCategory
+    },
+    isShowShortcut () {
+      if (this.currentCategory) {
+        return categoryNeedShortcut.includes(this.currentCategory.display_name)
+      }
+      return false
     }
   },
   watch: {
@@ -202,17 +244,29 @@ export default {
     },
     'currentGame.code': function () {
       this.fetchStatistic()
+    },
+    'currentCategoryId': function () {
+      this.clearShortCut()
+    },
+    'currentCategory': function (currentCategory) {
+      this.setZodiacMap(currentCategory)
+    },
+    'zodiacMap': function (zodiacMap) {
+      for (let i = 27; i < 39; i++) {
+        const group = this.shortcutPlayGroups[i]
+        group.num = zodiacMap[group.display_name].map(num => num < 10 ? '0' + num : '' + num)
+      }
     }
   },
   created () {
     this.$root.bus.$on('refreshResult', this.fetchStatistic)
-
     this.updateSchedule()
     const currentGame = this.$store.getters.gameById(this.$route.params.gameId)
     if (currentGame) {
       localStorage.setItem('lastGameCode', currentGame.code)
       this.fetchStatistic()
     }
+    this.setZodiacMap(this.currentCategory)
   },
   beforeDestroy () {
     this.$root.bus.$off('refreshResult', this.fetchStatistic)
@@ -299,6 +353,21 @@ export default {
         })
         this.statistic = statistic
       }).catch(() => {})
+    },
+    selectShortcutPlayGroup (group) {
+      this.selectedShortcutPlayGroup.actived = false
+      this.selectedShortcutPlayGroup = group
+      group.actived = true
+      this.$refs.gameCategory.triggerShortcut(group)
+    },
+    clearShortCut () {
+      this.selectedShortcutPlayGroup.actived = false
+      this.selectedShortcutPlayGroup = {}
+    },
+    setZodiacMap (currentCategory) {
+      if (!this.zodiacMap && currentCategory && currentCategory.extra_info) {
+        this.zodiacMap = this.currentCategory.extra_info.shaw
+      }
     }
   }
 }
@@ -306,7 +375,51 @@ export default {
 
 <style scoped lang="scss">
 @import "../../style/vars.scss";
-.leader-board {
+ .tabs.el-tabs--top{
+  /deep/ .el-tabs__header {
+    margin: 0;
+  }
+  /deep/ .el-tabs__nav-wrap.is-scrollable {
+    padding: 0;
+  }
+  /deep/ .el-tabs__nav-prev {
+    display: none;
+  }
+  /deep/ .el-tabs__nav-next {
+    display: none;
+  }
+  /deep/ .el-tabs__nav-scroll{
+    padding-left: 0;
+  }
+  /deep/ .el-tabs__item {
+    padding: 0 10px;
+    width: 90px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+}
+.shortcut-play {
+  display: inline-block;
+  box-sizing: border-box;
+  border-right: 1px solid $pinkish-grey;
+  border-top: 1px solid $pinkish-grey;
+  color: #35406d;
+  width: 60px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  cursor: pointer;
+  &:nth-child(1),&:nth-child(2),&:nth-child(3){
+    border-top: none;
+  }
+  &:nth-child(3n){
+    border-right: none;
+  }
+  &.actived {
+    background: #f3dab2;
+  }
+}
+.leader-board, .tabs {
   float: right;
   width: 180px;
   background: #fff;

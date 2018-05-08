@@ -102,13 +102,15 @@ export default {
           .then((res) => {
             if (res) {
               this.categories = res
-              this.$router.push(`/${this.path}/${currentGameId}/${this.categories[0].id}`)
+              let categoryId = this.$route.params.categoryId || this.categories[0].id
+              this.$router.push(`/${this.path}/${currentGameId}/${categoryId}`)
             } else {
               this.performLogin()
             }
           })
       } else {
-        this.$router.push(`/${this.path}/${currentGameId}/${this.categories[0].id}`)
+        let categoryId = this.$route.params.categoryId || this.categories[0].id
+        this.$router.push(`/${this.path}/${currentGameId}/${categoryId}`)
       }
     }
   },
