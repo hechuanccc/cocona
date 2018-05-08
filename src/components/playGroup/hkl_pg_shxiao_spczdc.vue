@@ -37,11 +37,11 @@
           ]">
           <el-col :span="3" class="name">
             <span>
-              <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacs[option.num - 1].xiao}}</span>
+              <span :class="[playgroup.code + '-xiao-' + option.num]">{{zodiacList[option.num - 1]}}</span>
             </span>
           </el-col>
           <el-col :span="17" class="number" align="center">
-            <span v-for="(zodiacNum, index) in formattedZodiacNums[option.num - 1]"
+            <span v-for="(zodiacNum, index) in formattedZodiacNums&&formattedZodiacNums[option.num - 1]"
               :class="['m-r-sm',playgroup.code , playgroup.code + '-zodiacnums-' + zodiacNum]"
               :key="index">
                 {{zodiacNum}}
@@ -59,7 +59,7 @@
 
 <script>
 import _ from 'lodash'
-
+export const zodiacList = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪']
 export default {
   props: {
     playgroup: {
@@ -74,8 +74,8 @@ export default {
     playReset: {
       type: Boolean
     },
-    zodiacs: {
-      typr: Array
+    zodiacMap: {
+      type: Object
     }
   },
   name: 'hklPgShxiaoSpczdc',
@@ -97,8 +97,7 @@ export default {
           num: num,
           selected: false,
           hover: false,
-          xiao: this.zodiacs[num - 1].xiao,
-          englishName: this.zodiacs[num - 1].englishName
+          zodiac: zodiacList[num - 1]
         })
         index++
       }
@@ -114,7 +113,8 @@ export default {
         id: '',
         display_name: '',
         odds: ''
-      }
+      },
+      zodiacList: zodiacList
     }
   },
   computed: {
@@ -130,7 +130,13 @@ export default {
       return this.activePlay.odds
     },
     formattedZodiacNums () {
-      return _.map(this.zodiacs, zodiac => zodiac.nums.split(','))
+      if (this.zodiacMap) {
+        return _.map(zodiacList, zodiac => {
+          return this.zodiacMap[zodiac].map(num => num < 10 ? '0' + num : '' + num)
+        })
+      } else {
+        return undefined
+      }
     }
   },
   watch: {
@@ -163,7 +169,7 @@ export default {
         activePlayId: this.activePlay.id,
         selectedOptions: this.selectedOptions.map(option => {
           return {
-            num: option.xiao
+            num: option.zodiac
           }
         }),
         combinations: ['1'], // rules for ho_xiao is always 1 combination
