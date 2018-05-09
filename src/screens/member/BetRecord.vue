@@ -69,7 +69,7 @@
         :width="100"
         :label="$t('gameIntro.return_rate')">
         <template slot-scope="scope">
-          <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${scope.row.play.return_rate*100}%)`: '0' }}</span>
+          <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${Math.floor(scope.row.play.return_rate*10000)/100}%)`: '0' }}</span>
         </template>
       </el-table-column>
       <el-table-column

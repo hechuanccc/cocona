@@ -179,7 +179,7 @@ import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
 import { msgFormatter, formatPlayGroup, filtAmount } from '../../utils'
-import { colorWave } from '../../utils/hk6'
+import { colorWave, tailMap } from '../../utils/hk6'
 const common = (resolve) => require(['../../components/playGroup/common'], resolve)
 const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
 const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
@@ -246,8 +246,7 @@ export default {
       errors: '',
       playReset: false,
       showCombinationDetails: false,
-      showCombinationsTips: false,
-      colorWave
+      showCombinationsTips: false
     }
   },
   computed: {
@@ -294,7 +293,7 @@ export default {
     needZodiac () {
       const code = this.currentCategory.code
       // 正肖 合肖 特肖 连肖连尾
-      return code.endsWith('txiao') || code.endsWith('shxia') || code.endsWith('ishaw') || code.endsWith('exl')
+      return code.endsWith('txiao') || code.endsWith('shxia') || code.endsWith('ishaw') || code.endsWith('exl') || code.endsWith('pxxm')
     }
   },
   watch: {
@@ -460,6 +459,8 @@ export default {
             plays[play.id]['group'] = item['display_name']
             if (item.code === 'hkl_pg_clrwvs_color' || item.code === 'luckl_pg_clrwvs_color') {
               plays[play.id]['value'] = colorWave[play.code]
+            } else if (item.code === 'hkl_pg_pxxmtail' || item.code === 'luckl_pg_pxxmtail') {
+              plays[play.id]['value'] = tailMap[play.display_name]
             }
           })
         })

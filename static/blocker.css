@@ -1,0 +1,98 @@
+@charset "utf-8";
+
+#blocker-container {
+  display: none;
+  position: fixed;
+  font-family: Arial, Helvetica, sans-serif;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 99999;
+  color: #4a4a4a;
+}
+
+.blocker-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 750px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background: #fff;
+  margin-left: -375px;
+  margin-top: -200px;
+  z-index: 99999;
+}
+
+.blocker-dialog .title {
+  height: 80px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.blocker-dialog .title h1 {
+  margin: 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+.blocker-dialog .title p {
+  margin: 20px 0 0 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.browsers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.browsers li {
+  float: left;
+  position: relative;
+  width: 130px;
+  height: 120px;
+  list-style: none;
+  margin: 10px;
+}
+
+.browsers .link {
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.blocker-dialog .img {
+  width: 80px;
+  height: 80px;
+  border-style: none
+}
+
+.blocker-dialog .download {
+  margin-top: 5px;
+  font-size: 16px;
+}
+
+.blocker-dialog .recommend {
+  color: red;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.blocker-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgb(0, 0, 0);
+  opacity: 0.8;
+  z-index: 99998;
+}
