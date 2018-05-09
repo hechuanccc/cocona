@@ -60,7 +60,7 @@
             <el-input class="input-width" name="withdraw_password" type="password" v-model="withdrawInfo.withdraw_password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="input-width" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
+            <el-button :loading="loading" class="input-width" type="primary" @click="submitWithdraw">{{$t('action.submit')}}</el-button>
           </el-form-item>
         </el-form>
         </div>
@@ -113,7 +113,8 @@ export default {
         ]
       },
       displayMode: true,
-      bankOptions: []
+      bankOptions: [],
+      loading: false
     }
   },
   computed: {
@@ -129,7 +130,9 @@ export default {
     submitWithdraw () {
       this.$refs['withdrawInfo'].validate((valid) => {
         if (valid) {
+          this.loading = true
           withdraw(this.withdrawInfo).then(data => {
+            this.loading = false
             this.updateStatus = 1
             this.message = '取款信息已提交'
             this.withdrawInfo.withdraw_password = ''
@@ -139,6 +142,7 @@ export default {
               this.$store.dispatch('fetchUser')
             }, 3000)
           }, errorMsg => {
+            this.loading = false
             this.withdrawInfo.withdraw_password = ''
             this.updateStatus = -1
             this.message = msgFormatter(errorMsg)
