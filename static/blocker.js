@@ -24,7 +24,7 @@
   html += '      <\/a>'
   html += '    <\/li>'
   html += '    <li>'
-  html += '      <a class="link" href="https:\/\/moztw.org\/firefox\/">'
+  html += '      <a class="link" href="https:\/\/www.mozilla.org\/zh-CN\/firefox\/new\/">'
   html += '        <img class="img" src="https://ep01.epimg.net/tecnologia/imagenes/2009/11/02/actualidad/1257156064_850215_0000000000_sumario_normal.jpg"/>'
   html += '        <div class="download">火狐浏览器<\/div>'
   html += '      <\/a>'
