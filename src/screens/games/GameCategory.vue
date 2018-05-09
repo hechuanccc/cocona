@@ -459,8 +459,7 @@ export default {
             plays[play.id]['group'] = item['display_name']
             if (item.code === 'hkl_pg_clrwvs_color' || item.code === 'luckl_pg_clrwvs_color') {
               plays[play.id]['value'] = colorWave[play.code]
-            }
-            if (item.code === 'hkl_pg_pxxmtail' || item.code === 'luckl_pg_pxxmtail') {
+            } else if (item.code === 'hkl_pg_pxxmtail' || item.code === 'luckl_pg_pxxmtail') {
               plays[play.id]['value'] = tailMap[play.display_name]
             }
           })
