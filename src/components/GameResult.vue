@@ -8,28 +8,22 @@
     <div class="invalid" v-if="invalid">
       官方开奖无效
     </div>
-    <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult && !invalid">
-      <div v-if="ready">
-        <span
-          v-for="(num, index) in resultNums"
-          :key="gameLatestResult.issue_number + index"
-          :class="getResultClass(num)">
-          <b> {{num}} </b>
-          <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]}} </p>
+    <div :class="['balls-number', 'wrapper-' + gameLatestResult.game_code]" v-if="gameLatestResult && !invalid && ready">
+      <span
+        v-for="(num, index) in resultNums"
+        :key="gameLatestResult.issue_number + index"
+        :class="getResultClass(num)">
+        <b> {{num}} </b>
+        <p class="ball-zodiac" v-if="showZodiac"> {{zodiacs[index]}} </p>
+      </span>
+      <div class="ball-sum" v-if="showSum">
+        {{$t('navMenu.total')}}
+        <span>
+          <b>{{resultsSum}}</b>
         </span>
-        <div class="ball-sum" v-if="showSum">
-          {{$t('navMenu.total')}}
-          <span>
-            <b>{{resultsSum}}</b>
-          </span>
-        </div>
       </div>
-      <ResultAnimation v-for="(q, index) in resultNums.length"
-        v-else
-        :key="index"
-        :gameCode="gameLatestResult.game_code"
-        :duration="(index % 3) + 1"/>
     </div>
+    <result-animation v-else-if="gameLatestResult && !invalid" :gameCode="gameLatestResult.game_code" :resultNums="resultNums" />
     </div>
 </template>
 
