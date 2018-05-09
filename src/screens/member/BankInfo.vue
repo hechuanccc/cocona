@@ -1,11 +1,32 @@
 <template>
   <el-row>
+    
     <el-alert
       v-if="updateStatus !== 0"
       :title="message"
       :type="updateStatus === 1 ? 'success' : 'error'"
       :closable="false"
       center />
+
+    <el-alert
+      v-if="user && !user.bank && systemConfig.needBankinfo && parseInt(systemConfig.regPresentAmount)"
+      type="success"
+      :closable="false"
+      :title="'添加银行卡信息即可领取注册彩金 ￥' + systemConfig.regPresentAmount"
+      center >
+      <el-popover
+        placement="bottom-start"
+        title="注意"
+        width="300"
+        trigger="hover">
+        <ul style="list-style: square inside; color: #999;">
+          <li>同一银行卡信息最多仅可领取一次</li>
+          <li>同一 IP 最多仅可领取一次，请勿重复注册</li>
+          <li>本平台保留对本次活动的全部解释权</li>
+        </ul>
+        <i class="el-icon-info" slot="reference"></i>
+      </el-popover>
+    </el-alert>
     <el-col :offset="8" :span="16">
       <el-form :model="bankInfo" class="m-t-lg" status-icon ref="bankInfo" :rules="bankInfoRules" label-width="120px">
         <el-form-item :label="$t('user.bank')" prop="bank">
@@ -84,6 +105,9 @@ export default {
     originBankInfo () {
       return this.$store.state.user.bank
     },
+    systemConfig () {
+      return this.$store.state.systemConfig
+    },
     ...mapGetters([
       'user'
     ])
@@ -132,6 +156,9 @@ export default {
       })
     },
     setBankInfo (info) {
+      if (!info) {
+        return
+      }
       Object.keys(this.bankInfo).forEach(key => {
         this.bankInfo[key] = info[key]
       })
@@ -140,8 +167,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .tips {
-    color: #999;
-    font-size: 12px;
-  }
+.tips {
+  color: #999;
+  font-size: 12px;
+}
+.el-row /deep/ .el-icon-info {
+  margin-left: 5px;
+}
 </style>
