@@ -162,7 +162,8 @@ gethomePage().then(
         chatroomEnabled: pref.chatroom_enabled,
         gaTrackingId: pref.ga_tracking_id,
         favicon: response.favicon,
-        regPresentAmount: response.reg_present_amount
+        regPresentAmount: response.reg_present_amount,
+        needBankinfo: response.need_bankinfo
       })
 
     if (pref.ga_tracking_id) {
