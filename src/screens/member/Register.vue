@@ -6,9 +6,26 @@
         <el-breadcrumb-item>注册会员</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="greetmoney-box" v-if="parseInt(regPresentAmount)">
-        <span class="greet-money">
-          现在注册立领{{regPresentAmount | currency('￥', 0)}}红包
+        <span class="greet-money" v-if="!needBankinfo">
+          现在注册立领{{regPresentAmount | currency('￥', 0)}} 红包
         </span>
+        <div class="greet-money" v-else>
+          注册账号并填写银行信息即可领取 {{regPresentAmount | currency('￥', 0)}} 红包
+          <el-popover
+            placement="bottom-start"
+            title="注意"
+            width="300"
+            trigger="hover">
+            <ul style="list-style: square inside; color: #999;">
+              <li>登录后请到「我的账号」> 「银行信息」填写</li>
+              <li>同一银行卡信息最多仅可领取一次</li>
+              <li>同一 IP 最多仅可领取一次，请勿重复注册</li>
+              <li>本平台保留对本次活动的全部解释权</li>
+            </ul>
+
+            <i class="el-icon-info" slot="reference"></i>
+          </el-popover>
+        </div>
       </div>
       <div class="register-container">
         <el-form :model="user" status-icon :rules="rules" ref="user" label-width="120px">
@@ -253,6 +270,9 @@ export default {
   computed: {
     regPresentAmount () {
       return this.$store.state.systemConfig.regPresentAmount
+    },
+    needBankinfo () {
+      return this.$store.state.systemConfig.needBankinfo
     }
   }
 }
@@ -270,11 +290,11 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
   margin: 0 auto 10px auto;
-  background-color: #ffffff;
+  background-color: #f0f9eb;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
   text-align: center;
   .greet-money {
-    color: $red;
+    color: $green;
     font-size: 14px;
   }
 }
