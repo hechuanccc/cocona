@@ -434,7 +434,7 @@ export default {
           this.errors = msgFormatter(errRes)
           setTimeout(() => {
             this.dialogVisible = false
-          }, 3000)
+          }, this.errors && this.errors.length > 20 ? 5000 : 3000)
         })
     },
     initPlaygroups () {
