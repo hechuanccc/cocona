@@ -7,23 +7,25 @@
       element-loading-text="正在登录"
       v-if="isLogin && showChatRoom">
       <el-header class="title clearfix" height="40px">
+
         <div class="left fl clearfix">
           <icon class="font-home fl" name="home" scale="1.4"></icon>
           <h3 class="fl m-l">聊天室</h3>
         </div>
+
         <div class="right fr clearfix">
           <icon v-if="personal_setting.manager" class="icon-user fl" name="cog" scale="1.4" @click.native="handleBlockPopupShow"></icon>
           <icon v-if="user.account_type !== 0" class="icon-user fl" title="修改昵称" name="user" scale="1.4" @click.native="personal_setting.blocked ? '' : showEditProfile = true"></icon>
           <i class="el-icon-close close fl" title="关闭聊天室" @click="leaveRoom"></i>
         </div>
+
         <transition
           enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
           enter-active-class="animated fadeInDown">
           <div class="edit-profile" v-if="showEditProfile">
-            <div
-              v-on:mouseover="swichAvatar = true"
-              v-on:mouseout="swichAvatar = false">
+            <div @mouseover="swichAvatar = true"
+              @mouseout="swichAvatar = false">
               <el-upload
                 class="avatar"
                 style="overflow-y: hidden;"
@@ -54,6 +56,7 @@
             </div>
           </div>
         </transition>
+
         <transition
           enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
@@ -80,7 +83,9 @@
             </div>
           </div>
         </transition>
+
       </el-header>
+
       <el-main class="content" id="chatBox">
         <div class="chat-announce" v-if="announcement">
           <div class="ttl clearfix">
@@ -125,7 +130,13 @@
                 <div :class="['bubble', 'bubble' + item.type]">
                   <p>
                     <span v-if="item.type === 0 || item.type === 4" v-html="item.content"></span>
-                    <img @click="showImageMsg = true; showImageMsgUrl = item.content" v-else-if="item.type === 1" :src="item.content">
+                    <img @click="showImageMsg = true; showImageMsgUrl = item.content"
+                      v-else-if="item.type === 1"
+                      :src="item.content">
+                    <img class="sticker-message"
+                      v-else-if="item.type === 7"
+                      :src="item.content"
+                      alt="sticker"/>
                   </p>
                 </div>
               </div>
@@ -144,27 +155,38 @@
           <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
         </ul>
       </el-main>
+
       <el-footer class="footer" height="100">
         <div class="control-bar">
-          <el-popover
-            ref="popover4"
+          <el-popover :popper-class="'emoji-popover'"
+            ref="sticker-popover"
+            v-model="stickerPopoverVisible"
             placement="top-start"
-            width="260"
+            :width="stickerTab === 'stickers' ? 350 : 300"
+            :offset="50"
             trigger="click">
-            <div class="emoji-container">
-              <a href="javascript:void(0)"
-                v-for="(item, index) in emojis.people.slice(0, 42)"
-                :key="index"
-                class="emoji"
-                @click="personal_setting.chat.status ? msgCnt = msgCnt + item.emoji + ' ' : ''">
-                {{item.emoji}}
-              </a>
-            </div>
-
+            <el-tabs type="border-card" class="stickers-tab" v-model="stickerTab">
+              <el-tab-pane label="表情符号" name="emojis">
+                <div class="emoji-container">
+                  <Emojis :emojis="emojis.people.slice(0, 42)" @emojiClick="handleEmojiClick"/>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="表情包" name="stickers" v-if="stickerGroups.length">
+                <div class="stickers-container">
+                  <Stickers :stickerGroups="stickerGroups"
+                    :stickers="stickers"
+                    :ws="ws"
+                    @closeStickerPopover="closeStickerPopover"
+                    v-if="stickerTab === 'stickers'"/>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
           </el-popover>
-          <a v-popover:popover4 href="javascript:void(0)" title="发送表情" class="btn-control btn-smile">
+
+          <a v-popover:sticker-popover href="javascript:void(0)" title="发送表情" class="btn-control btn-smile">
             <icon scale="1.3" name="smile-o"></icon>
           </a>
+
           <a href="javascript:void(0)" class="btn-control btn-smile">
             <label for="imgUploadInput">
               <span title="上传图片">
@@ -174,7 +196,9 @@
             </label>
           </a>
         </div>
+
         <div class="typing">
+
           <div :class="['txtinput', 'el-textarea', !personal_setting.chat.status ? 'is-disabled' : '']">
             <textarea  @keyup.enter="sendMsg"
               @focus="$store.dispatch('updateIsChatting', true)"
@@ -188,12 +212,15 @@
               :disabled="personal_setting.chat.status ? false : true">
             </textarea>
           </div>
+
           <div class="sendbtn fr">
             <a href="javascript:void(0)" class="u-btn" @click="sendMsg">发送</a>
           </div>
         </div>
+
       </el-footer>
     </el-container>
+
     <el-dialog title="修改昵称"
       :visible.sync="showNickNameBox"
       width="400px"
@@ -209,15 +236,14 @@
         <el-button type="primary" @click="submitNickName">确 定</el-button>
       </div>
     </el-dialog>
+
     <el-dialog :visible.sync="showImageMsg"
       width="640px"
       custom-class="show-image-msg text-center"
       append-to-body>
       <img :src="showImageMsgUrl">
     </el-dialog>
-    <el-dialog :visible.sync="errMsg" width="400px" custom-class="showImageMsg" append-to-body>
-      <p>{{errMsgCnt}}</p>
-    </el-dialog>
+
     <div
       v-if="isLogin && showEntry"
       class="chat-guide text-center"
@@ -273,6 +299,7 @@
         </el-table-column>
       </el-table>
     </el-dialog>
+
   </div>
 
 </template>
@@ -281,8 +308,11 @@
 import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
 import { msgFormatter, getCookie } from '../utils'
-import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser } from '../api'
+import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser, fetchStickers } from '../api'
 import config from '../../config'
+import Stickers from './Stickers'
+import Emojis from './Emojis'
+
 const WSHOST = config.chatHost
 const RECEIVER = 1
 
@@ -334,11 +364,17 @@ export default {
         {
           display: '禁言'
         }
-      ]
+      ],
+      stickerPopoverVisible: false,
+      stickerTab: 'emojis',
+      stickerGroups: [],
+      stickers: {}
     }
   },
   components: {
-    MarqueeTips
+    MarqueeTips,
+    Stickers,
+    Emojis
   },
   watch: {
     'showEntry': function (val, oldVal) {
@@ -348,6 +384,11 @@ export default {
     },
     'user.showChatRoom' (val, oldVal) {
       this.leaveRoom()
+    },
+    'stickerPopoverVisible': function (visible) {
+      if (visible) {
+        this.getStickers()
+      }
     }
   },
   computed: {
@@ -375,6 +416,29 @@ export default {
     }
   },
   methods: {
+    closeStickerPopover () {
+      this.stickerPopoverVisible = false
+    },
+    getStickers () {
+      if (!this.stickerGroups.length) {
+        fetchStickers().then((res) => {
+          if (!res) {
+            return
+          }
+          this.stickerGroups = res.map(sticker => {
+            this.stickers[sticker.display_name] = sticker.stickers
+            return {
+              display_name: sticker.display_name,
+              logo: sticker.logo,
+              name: sticker.display_name // maybe the name field is required
+            }
+          })
+        }).catch(() => {})
+      }
+    },
+    handleEmojiClick (emoji) {
+      this.msgCnt = this.msgCnt + emoji.emoji + ' '
+    },
     joinChatRoom () {
       this.showChatRoom = true
       let token = getCookie('access_token')
@@ -936,6 +1000,19 @@ export default {
     border-left-color: #5169de;
     border-right-color: #ab47bc;
   }
+  &.bubble7 {
+    background: transparent;
+    border: none;
+    padding: 0;
+    .sticker-message {
+      width: 100px;
+      height: 100px;
+    }
+    &:after {
+      content: none;
+    }
+  }
+
   p {
     display: inline-block;
     span {
@@ -1145,20 +1222,23 @@ export default {
       }
     }
   }
+</style>
 
-  .emoji-container {
-    overflow-y: scroll;
-    .emoji {
-      padding: 2px 6px 0 4px;
-      display: inline-block;
-      cursor: pointer;
-      position: relative;
-      font-size: 18px;
-      text-align: center;
-      border: 2px solid transparent;
-    }
-    .emoji:hover {
-      border-color: #ff5a00;
-    }
+<style lang="scss">
+.emoji-popover {
+  &.el-popover {
+    padding: 0;
   }
+  .el-tabs--border-card {
+    padding: 0;
+    border: 0;
+  }
+  .el-tabs__nav-scroll {
+    padding-left: 0;
+  }
+}
+
+.stickers-tab .el-tabs__content {
+  padding: 0;
+}
 </style>
