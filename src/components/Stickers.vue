@@ -34,12 +34,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-
-Vue.filter('truncate', function (text, stop) {
-  return text.slice(0, stop) + (stop < text.length ? '...' : '')
-})
-
 const roomId = 1
 
 export default {
