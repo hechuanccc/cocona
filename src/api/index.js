@@ -252,3 +252,7 @@ export function getChatUser (id) {
 export function setCookie (cookie) {
   return axios.post(urls.setCookie, {cookie}, { 'Content-Type': 'application/json', withCredentials: true })
 }
+
+export function fetchStickers () {
+  return axiosChat.get(`${urls.stickers}`).then(res => res.data)
+}

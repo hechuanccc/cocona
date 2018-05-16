@@ -50,5 +50,6 @@ export default {
   chatEmoji: apiChat + '/v1/emoji/',
   sendImgToChat: host + '/v1/manage/attachment/',
   apiRoom,
-  setCookie: host + '/set_cookie/'
+  setCookie: host + '/set_cookie/',
+  stickers: apiChat + '/v1/stickers/'
 }
