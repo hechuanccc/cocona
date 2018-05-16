@@ -387,7 +387,7 @@ export default {
     },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
-        this.getStickers()
+        // this.getStickers()
       }
     }
   },
