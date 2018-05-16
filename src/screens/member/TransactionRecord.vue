@@ -48,6 +48,10 @@ export default {
           return Vue.t('user.cancelled')
         case 5:
           return Vue.t('user.declined')
+        case 6:
+          return Vue.t('user.ongoing')
+        default:
+          return ''
       }
     }
   },
