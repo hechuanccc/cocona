@@ -12,7 +12,8 @@ export function createStore () {
       user: {
         logined: '',
         showChatRoom: true,
-        account_type: undefined
+        account_type: undefined,
+        unsettled: 0
       },
       isChatting: false,
       loginDialogVisible: false,
