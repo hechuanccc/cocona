@@ -9,6 +9,9 @@ export default {
       ...user
     })
   },
+  [types.UPDATE_UNSETTLED]: (state, data) => {
+    state.user.unsettled = data
+  },
   [types.RESET_USER]: (state) => {
     state.user = {
       logined: false,

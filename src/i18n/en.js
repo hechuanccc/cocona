@@ -173,6 +173,7 @@ export default {
     password_validate: 'Password must be 6-15 digit or character',
     withdraw_password_validate: 'Withdraw Password shold be 6 digit',
     qq_validate: 'This QQ number is invalid',
+    realname_validate: 'Please enter Chinese name',
     phone_validate: 'This phone number is invalid',
     account_validate: 'This Account number is invalid',
     password_again: 'Please enter password again',

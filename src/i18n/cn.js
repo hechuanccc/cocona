@@ -173,6 +173,7 @@ export default {
     password_validate: '请输入6~15位数字或字母',
     withdraw_password_validate: '请输入6位纯数字',
     qq_validate: 'qq号码格式无效',
+    realname_validate: '请输入中文姓名',
     phone_validate: '手机号码格式无效',
     account_validate: '该帐号格式无效',
     password_again: '请再次输入密码',
