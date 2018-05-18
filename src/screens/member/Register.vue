@@ -243,6 +243,13 @@ export default {
       this.$refs['user'].validate((valid) => {
         if (valid) {
           register(this.user).then(result => {
+            if (result.code === 9001) {
+              this.$message({
+                showClose: true,
+                message: result.msg,
+                type: 'warning'
+              })
+            }
             return this.$store.dispatch('login', {
               user: {
                 username: this.user.username,
@@ -253,6 +260,7 @@ export default {
             this.$router.push({ name: 'Game' })
           }, errorMsg => {
             this.fetchCaptcha()
+
             this.$message({
               showClose: true,
               message: msgFormatter(errorMsg),
