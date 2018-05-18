@@ -129,5 +129,8 @@ export default {
   },
   updateIsChatting: ({ commit, state }, signal) => {
     commit(types.UPDATE_ISCHATTING, signal)
+  },
+  collectEnvelope: ({ commit, state }, data) => {
+    commit(types.COLLECT_ENVELOPE, data)
   }
 }

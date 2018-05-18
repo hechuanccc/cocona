@@ -256,3 +256,19 @@ export function setCookie (cookie) {
 export function fetchStickers () {
   return axiosChat.get(`${urls.stickers}`).then(res => res.data)
 }
+
+export function sendEnvelope (data) {
+  console.log(data)
+  return axios.post(urls.envelope, {
+    pack_amount: data.pack_amount,
+    pack_nums: data.pack_nums,
+    content: data.content,
+    room: data.room
+  })
+}
+
+export function takeEnvelope (data) {
+  return axios.put(`${urls.envelope}${data.envelope_id}/`, {
+    receiver_id: data.receiver_id
+  })
+}

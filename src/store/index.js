@@ -22,6 +22,7 @@ export function createStore () {
       categories: [],
       loading: false,
       messageCount: 0,
+      envelopes: {},
       customPlayGroups: [
         {
           // 重庆幸运农场 连码

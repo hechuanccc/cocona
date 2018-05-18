@@ -58,5 +58,8 @@ export default {
   },
   [types.UPDATE_ISCHATTING]: (state, signal) => {
     state.isChatting = signal
+  },
+  [types.COLLECT_ENVELOPE]: (state, data) => {
+    Vue.set(state.envelopes, data.envelope_status.id, data)
   }
 }
