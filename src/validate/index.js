@@ -4,7 +4,8 @@ const pattern = {
   qq: /^[0-9]{4,}$/,
   phone: /^1[0-9]{10}$/,
   bankAccount: /^[0-9]{10,}$/,
-  withdrawPassword: /^[0-9]{6}$/
+  withdrawPassword: /^[0-9]{6}$/,
+  real_name: /[\u4E00-\u9FA5]/
 }
 
 export function validateUserName (value) {
@@ -17,6 +18,10 @@ export function validatePassword (value) {
 
 export function validateQQ (value) {
   return pattern.qq.test(value)
+}
+
+export function validateRealName (value) {
+  return pattern.real_name.test(value)
 }
 
 export function validatePhone (value) {

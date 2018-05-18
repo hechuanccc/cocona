@@ -129,5 +129,8 @@ export default {
   },
   updateIsChatting: ({ commit, state }, signal) => {
     commit(types.UPDATE_ISCHATTING, signal)
+  },
+  updateUnsettled: ({ commit, state }, value) => {
+    commit(types.UPDATE_UNSETTLED, value)
   }
 }

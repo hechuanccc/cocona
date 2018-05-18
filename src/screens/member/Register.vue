@@ -98,7 +98,7 @@
 
 <script>
 import { fetchCaptcha, checkUserName, register } from '../../api'
-import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword, validateQQ } from '../../validate'
+import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword, validateQQ, validateRealName } from '../../validate'
 import { msgFormatter } from '../../utils'
 export default {
   name: 'register',
@@ -170,6 +170,14 @@ export default {
       }
     }
 
+    const realNameValidator = (rule, value, callback) => {
+      if (!validateRealName(value)) {
+        callback(new Error(this.$t('validate.realname_validate')))
+      } else {
+        callback()
+      }
+    }
+
     const withdrawPasswordValidator = (rule, value, callback) => {
       if (!validateWithdrawPassword(value)) {
         callback(new Error(this.$t('validate.withdraw_password_validate')))
@@ -204,7 +212,7 @@ export default {
           { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
         ],
         real_name: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur' }
+          { required: true, validator: realNameValidator, trigger: 'blur' }
         ],
         phone: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
@@ -235,6 +243,13 @@ export default {
       this.$refs['user'].validate((valid) => {
         if (valid) {
           register(this.user).then(result => {
+            if (result.code === 9001) {
+              this.$message({
+                showClose: true,
+                message: result.msg,
+                type: 'warning'
+              })
+            }
             return this.$store.dispatch('login', {
               user: {
                 username: this.user.username,
@@ -245,6 +260,7 @@ export default {
             this.$router.push({ name: 'Game' })
           }, errorMsg => {
             this.fetchCaptcha()
+
             this.$message({
               showClose: true,
               message: msgFormatter(errorMsg),

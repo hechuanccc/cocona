@@ -119,6 +119,19 @@ export default {
           }
         })
       }
+    },
+    'user.unsettled': function (value) {
+      clearInterval(this.interval)
+
+      if (value) {
+        fetchWinBet().then(results => {
+          _.each(this.formattedWinRecords(results.win_bets), (result) => {
+            this.notifyIssueNumber[result.game] = result.issue_number
+            this.generateWinMessage(results.win_bets)
+          })
+        })
+        this.pollWinNotify()
+      }
     }
   },
   components: {
@@ -126,10 +139,9 @@ export default {
   },
   methods: {
     fetchOngoingBet (gameData) {
-      fetchBet(gameData)
-        .then(res => {
-          this.betrecords = res
-        })
+      fetchBet(gameData).then(res => {
+        this.betrecords = res
+      })
     },
     linkTo (path) {
       this.$router.push({ path: path })
@@ -155,7 +167,6 @@ export default {
 
       let last = []
       let hash = {}
-
       _.each(formatted, (result) => {
         let tempObj
         if (hash[result.game]) {
@@ -174,12 +185,17 @@ export default {
     },
     pollWinNotify () {
       this.interval = setInterval(() => {
+        if (!this.user.unsettled) {
+          clearInterval(this.interval)
+          return
+        }
         this.getWinNotify()
       }, 5000)
     },
     getWinNotify () {
       fetchWinBet().then(results => {
-        this.generateWinMessage(results)
+        this.$store.dispatch('updateUnsettled', results.unsettled)
+        this.generateWinMessage(results.win_bets)
       }).catch(() => {})
     },
     generateWinMessage (results) {
@@ -232,7 +248,6 @@ export default {
             ])
         }
       }
-
       _.each(this.formattedWinRecords(results), (result) => {
         if (this.notifyIssueNumber[result.game] !== result.issue_number) {
           setTimeout(() => {
@@ -263,13 +278,17 @@ export default {
     this.$root.bus.$on('new-betrecords', (gameData) => {
       this.fetchOngoingBet(gameData)
     })
-    fetchWinBet().then(results => {
-      _.each(this.formattedWinRecords(results), (result) => {
-        this.notifyIssueNumber[result.game] = result.issue_number
-        this.generateWinMessage(results)
+
+    if (this.user.unsettled) {
+      fetchWinBet().then(results => {
+        _.each(this.formattedWinRecords(results.win_bets), (result) => {
+          this.notifyIssueNumber[result.game] = result.issue_number
+          this.generateWinMessage(results.win_bets)
+        })
       })
-    })
-    this.pollWinNotify()
+      this.pollWinNotify()
+    }
+
     window.addEventListener('keypress', keyEnterListener.bind(this))
   },
   beforeDestroy () {
