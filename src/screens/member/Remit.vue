@@ -53,7 +53,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                <el-input clearable class="input-width" placeHolder="请输入存款金额" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+                <el-input clearable class="input-width" placeHolder="请输入存款金额" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount($event, true)" :min="limit.lower" :max="limit.upper"></el-input>
               </el-form-item>
               <el-form-item :label="$t('common.memo')" prop="memo">
                 <el-input clearable class="input-width" v-model="remitData.memo"></el-input>
@@ -90,7 +90,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                <el-input class="input-width" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount" :min="limit.lower" :max="limit.upper"></el-input>
+                <el-input class="input-width" v-model.number="remitData.amount" type="number" @keypress.native="filtAmount($event, true)" :min="limit.lower" :max="limit.upper"></el-input>
               </el-form-item>
               <el-form-item :label="$t('common.memo')" prop="memo">
                 <el-input class="input-width" v-model="remitData.memo"></el-input>
@@ -144,7 +144,7 @@ export default {
           { required: true, message: this.$t('validate.required'), trigger: 'change' }
         ],
         amount: [
-          { required: true, type: 'integer', message: this.$t('validate.required_num'), trigger: 'blur' },
+          { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
           { validator: limitPass, trigger: 'blur,change' }
         ]
       },

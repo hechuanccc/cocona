@@ -167,7 +167,6 @@ export default {
 
       let last = []
       let hash = {}
-
       _.each(formatted, (result) => {
         let tempObj
         if (hash[result.game]) {
@@ -249,8 +248,7 @@ export default {
             ])
         }
       }
-
-      _.each(this.formattedWinRecords(results.win_bets), (result) => {
+      _.each(this.formattedWinRecords(results), (result) => {
         if (this.notifyIssueNumber[result.game] !== result.issue_number) {
           setTimeout(() => {
             this.$notify({
