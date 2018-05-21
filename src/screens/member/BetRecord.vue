@@ -216,8 +216,8 @@ export default {
       this.getSummary()
       fetchBetHistory({ bet_date: this.selectedDate, ...option, offset: 0 })
         .then(data => {
-          this.totalCount = data.count
-          this.betRecords = data.results
+          this.totalCount = data.length
+          this.betRecords = data
           this.currentPage = 1
           this.loading = false
         }, errorMsg => {
@@ -233,7 +233,7 @@ export default {
       this.loading = true
       this.getSummary()
       fetchBetHistory({ ...this.conditions, offset: (currentPage - 1) * this.pageSize }).then(data => {
-        this.betRecords = data.results
+        this.betRecords = data
         this.loading = false
       }, () => {
         this.loading = false
