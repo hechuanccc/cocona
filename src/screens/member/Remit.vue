@@ -53,7 +53,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                <el-input clearable
+                 <el-input clearable
                   @blur="remitData.amount = Math.floor(remitData.amount * 100)/100"
                   class="input-width"
                   placeHolder="请输入存款金额"
