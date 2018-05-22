@@ -129,7 +129,7 @@
                 </div>
                 <div :class="['bubble', 'bubble' + item.type]">
                   <p>
-                    <span v-if="item.type === 0 || item.type === 4" v-html="item.content"></span>
+                    <span v-if="item.type === 4" v-html="item.content"></span>
                     <img @click="showImageMsg = true; showImageMsgUrl = item.content"
                       v-else-if="item.type === 1"
                       :src="item.content">
