@@ -223,6 +223,7 @@ export default {
             this.totalCount = data.length
             this.betRecords = data
           }
+
           this.currentPage = 1
           this.loading = false
         }, errorMsg => {
@@ -239,6 +240,7 @@ export default {
       this.getSummary()
       fetchBetHistory({ ...this.conditions, offset: (currentPage - 1) * this.pageSize }).then(data => {
         this.betRecords = data.results || data
+
         this.loading = false
       }, () => {
         this.loading = false

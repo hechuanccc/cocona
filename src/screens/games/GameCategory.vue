@@ -406,6 +406,9 @@ export default {
       this.submitted = false
     },
     placeOrder () {
+      if (this.submitting) {
+        return
+      }
       this.submitting = true
       this.errors = ''
       placeBet(this.playsForSubmit)

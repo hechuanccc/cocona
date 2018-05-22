@@ -8,15 +8,7 @@
         </el-carousel>
         <el-row class="announcement-wp">
           <div class="announcement container" @click="announcementDialogVisible = true">
-            <div class="content">
-              <span class="text"
-                :style="{
-                  'opacity': announcementStyle.opacity,
-                  'transform': `translateY(${announcementStyle.translateY}px)`
-                }">
-                {{currentAnnouncement}}
-              </span>
-            </div>
+            <span :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
           </div>
         </el-row>
         <div class="popular-game container">
@@ -79,10 +71,10 @@
         v-if="announcementDialogVisible"
         class="announcement-popup"
         :initial-index="currentAnnouncementIndex">
-        <el-carousel-item v-for="item in announcements"
-          :key="item.rank">
+        <el-carousel-item v-for="(announcement, index) in announcements"
+          :key="index">
           <p class="text-center" key="announcement">
-            {{ item.announcement }}
+            {{ announcement }}
           </p>
         </el-carousel-item>
       </el-carousel>
@@ -106,10 +98,8 @@ export default {
       announcements: [],
       games: '',
       descriptions: '',
-      announcementStyle: {
-        opacity: 1,
-        translateY: 0
-      },
+      announcementWidth: 0,
+      leftOffset: 0,
       currentAnnouncementIndex: 0,
       announcementDialogVisible: false,
       floatAdVisible: false
@@ -126,34 +116,11 @@ export default {
       } else {
         return 24 / length
       }
-    },
-    currentAnnouncement () {
-      if (this.announcements[this.currentAnnouncementIndex]) {
-        return this.announcements[this.currentAnnouncementIndex].announcement
-      } else {
-        return ''
-      }
     }
   },
   methods: {
     switchFloatAd () {
       this.floatAdVisible = !this.floatAdVisible
-    },
-    animate () {
-      setTimeout(() => {
-        if (this.announcementStyle.opacity <= 0) {
-          this.currentAnnouncementIndex = (this.currentAnnouncementIndex + 1) % this.announcements.length
-          this.announcementStyle.opacity = 1
-          this.announcementStyle.translateY = 0
-          setTimeout(() => {
-            this.animate()
-          }, 5000)
-        } else {
-          this.announcementStyle.opacity -= 0.05
-          this.announcementStyle.translateY -= 1
-          this.animate()
-        }
-      }, 100)
     },
     navigate (game) {
       if (this.$store.state.user.logined) {
@@ -164,6 +131,32 @@ export default {
     },
     formattedText (texts) {
       return texts.split('\r\n\r\n').join('<br/>')
+    },
+    setAnnouncement () {
+      this.$nextTick(() => {
+        this.announcementWidth = this.$refs.announcement.getBoundingClientRect().width
+        setTimeout(() => {
+          this.scrollAnnouncement()
+        }, 1000)
+      })
+    },
+    scrollAnnouncement () {
+      setTimeout(() => {
+        this.leftOffset += 1
+        if (this.leftOffset > this.announcementWidth) {
+          let idx = this.currentAnnouncementIndex + 1
+          if (idx >= this.announcements.length) {
+            idx = idx % this.announcements.length
+          }
+          setTimeout(() => {
+            this.currentAnnouncementIndex = idx
+            this.leftOffset = 0
+            this.setAnnouncement()
+          }, 1000)
+        } else {
+          this.scrollAnnouncement()
+        }
+      }, 17)
     }
   },
   created () {
@@ -184,20 +177,20 @@ export default {
     )
     getAnnouncements().then(
       result => {
+        const datas = []
         result.forEach((item) => {
           if (item.platform !== 0) {
-            this.announcements.push(item)
+            datas.push(item)
           }
         })
 
-        if (this.announcements.length > 0) {
-          this.announcements.sort((a, b) => {
+        if (datas.length > 0) {
+          datas.sort((a, b) => {
             return a.rank - b.rank
           })
-          setTimeout(() => {
-            this.animate()
-          }, 5000)
         }
+        this.announcements = datas.map(data => data.announcement)
+        this.setAnnouncement()
       }
     )
     fetchGames().then(
@@ -242,19 +235,12 @@ export default {
   background-color: #fafafa;
   color: #9b9b9b;
   cursor: pointer;
-  text-align: center;
+  text-align: left;
   .title {
     display: inline-block;
     .text {
       display: inline-block;
       margin-left: 5px;
-    }
-  }
-  .content {
-    display: inline-block;
-    .text {
-      width: 100%;
-      overflow: hidden;
     }
   }
   .speaker {
@@ -455,5 +441,6 @@ export default {
   border-radius: 50%;
   background-color: black;
 }
+
 
 </style>
