@@ -76,7 +76,7 @@ export default {
     payment: '充值',
     payway: '支付方式',
     online_payment: '线上存款',
-    remit: '轉帳充值',
+    remit: '转账充值',
     remit_bank: '入款银行',
     withdraw: '申请取款',
     betrecord: '下注纪录',
