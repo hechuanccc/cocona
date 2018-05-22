@@ -8,15 +8,7 @@
         </el-carousel>
         <el-row class="announcement-wp">
           <div class="announcement container" @click="announcementDialogVisible = true">
-            <div class="content">
-              <span class="text"
-                :style="{
-                  'opacity': announcementStyle.opacity,
-                  'transform': `translateY(${announcementStyle.translateY}px)`
-                }">
-                {{currentAnnouncement}}
-              </span>
-            </div>
+            <MarqueeTips :content="announcements[currentAnnouncementIndex]" :speed="15"></MarqueeTips>
           </div>
         </el-row>
         <div class="popular-game container">
@@ -79,10 +71,10 @@
         v-if="announcementDialogVisible"
         class="announcement-popup"
         :initial-index="currentAnnouncementIndex">
-        <el-carousel-item v-for="item in announcements"
-          :key="item.rank">
+        <el-carousel-item v-for="(announcement, index) in announcements"
+          :key="index">
           <p class="text-center" key="announcement">
-            {{ item.announcement }}
+            {{ announcement }}
           </p>
         </el-carousel-item>
       </el-carousel>
@@ -94,10 +86,12 @@
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
 import 'vue-awesome/icons/bullhorn'
 import FloatAd from '../components/FloatAd'
+import MarqueeTips from 'vue-marquee-tips'
 
 export default {
   components: {
-    FloatAd
+    FloatAd,
+    MarqueeTips
   },
   name: 'home',
   data () {
@@ -106,6 +100,7 @@ export default {
       announcements: [],
       games: '',
       descriptions: '',
+      marqueeInterval: null,
       announcementStyle: {
         opacity: 1,
         translateY: 0
@@ -126,34 +121,11 @@ export default {
       } else {
         return 24 / length
       }
-    },
-    currentAnnouncement () {
-      if (this.announcements[this.currentAnnouncementIndex]) {
-        return this.announcements[this.currentAnnouncementIndex].announcement
-      } else {
-        return ''
-      }
     }
   },
   methods: {
     switchFloatAd () {
       this.floatAdVisible = !this.floatAdVisible
-    },
-    animate () {
-      setTimeout(() => {
-        if (this.announcementStyle.opacity <= 0) {
-          this.currentAnnouncementIndex = (this.currentAnnouncementIndex + 1) % this.announcements.length
-          this.announcementStyle.opacity = 1
-          this.announcementStyle.translateY = 0
-          setTimeout(() => {
-            this.animate()
-          }, 5000)
-        } else {
-          this.announcementStyle.opacity -= 0.05
-          this.announcementStyle.translateY -= 1
-          this.animate()
-        }
-      }, 100)
     },
     navigate (game) {
       if (this.$store.state.user.logined) {
@@ -184,20 +156,24 @@ export default {
     )
     getAnnouncements().then(
       result => {
+        const datas = []
         result.forEach((item) => {
           if (item.platform !== 0) {
-            this.announcements.push(item)
+            datas.push(item)
           }
         })
 
-        if (this.announcements.length > 0) {
-          this.announcements.sort((a, b) => {
+        if (datas.length > 0) {
+          datas.sort((a, b) => {
             return a.rank - b.rank
           })
-          setTimeout(() => {
-            this.animate()
-          }, 5000)
         }
+
+        this.announcements = datas.map(data => data.announcement)
+
+        this.marqueeInterval = setInterval(() => {
+          this.currentAnnouncementIndex = (this.currentAnnouncementIndex + 1) % this.announcements.length
+        }, 15000)
       }
     )
     fetchGames().then(
@@ -210,6 +186,7 @@ export default {
     })
   },
   beforeDestroy () {
+    clearInterval(this.marqueeInterval)
     clearInterval(this.interval)
   },
   mounted () {
