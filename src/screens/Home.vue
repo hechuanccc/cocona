@@ -8,7 +8,7 @@
         </el-carousel>
         <el-row class="announcement-wp">
           <div class="announcement container" @click="announcementDialogVisible = true">
-            <MarqueeTips :content="announcements[currentAnnouncementIndex]" :speed="15"></MarqueeTips>
+            <span :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
           </div>
         </el-row>
         <div class="popular-game container">
@@ -86,12 +86,10 @@
 import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
 import 'vue-awesome/icons/bullhorn'
 import FloatAd from '../components/FloatAd'
-import MarqueeTips from 'vue-marquee-tips'
 
 export default {
   components: {
-    FloatAd,
-    MarqueeTips
+    FloatAd
   },
   name: 'home',
   data () {
@@ -100,11 +98,8 @@ export default {
       announcements: [],
       games: '',
       descriptions: '',
-      marqueeInterval: null,
-      announcementStyle: {
-        opacity: 1,
-        translateY: 0
-      },
+      announcementWidth: 0,
+      leftOffset: 0,
       currentAnnouncementIndex: 0,
       announcementDialogVisible: false,
       floatAdVisible: false
@@ -136,6 +131,32 @@ export default {
     },
     formattedText (texts) {
       return texts.split('\r\n\r\n').join('<br/>')
+    },
+    setAnnouncement () {
+      this.$nextTick(() => {
+        this.announcementWidth = this.$refs.announcement.getBoundingClientRect().width
+        setTimeout(() => {
+          this.scrollAnnouncement()
+        }, 1000)
+      })
+    },
+    scrollAnnouncement () {
+      setTimeout(() => {
+        this.leftOffset += 1
+        if (this.leftOffset > this.announcementWidth) {
+          let idx = this.currentAnnouncementIndex + 1
+          if (idx >= this.announcements.length) {
+            idx = idx % this.announcements.length
+          }
+          setTimeout(() => {
+            this.currentAnnouncementIndex = idx
+            this.leftOffset = 0
+            this.setAnnouncement()
+          }, 1000)
+        } else {
+          this.scrollAnnouncement()
+        }
+      }, 17)
     }
   },
   created () {
@@ -168,12 +189,8 @@ export default {
             return a.rank - b.rank
           })
         }
-
         this.announcements = datas.map(data => data.announcement)
-
-        this.marqueeInterval = setInterval(() => {
-          this.currentAnnouncementIndex = (this.currentAnnouncementIndex + 1) % this.announcements.length
-        }, 15000)
+        this.setAnnouncement()
       }
     )
     fetchGames().then(
@@ -186,7 +203,6 @@ export default {
     })
   },
   beforeDestroy () {
-    clearInterval(this.marqueeInterval)
     clearInterval(this.interval)
   },
   mounted () {
@@ -219,19 +235,12 @@ export default {
   background-color: #fafafa;
   color: #9b9b9b;
   cursor: pointer;
-  text-align: center;
+  text-align: left;
   .title {
     display: inline-block;
     .text {
       display: inline-block;
       margin-left: 5px;
-    }
-  }
-  .content {
-    display: inline-block;
-    .text {
-      width: 100%;
-      overflow: hidden;
     }
   }
   .speaker {
@@ -432,5 +441,6 @@ export default {
   border-radius: 50%;
   background-color: black;
 }
+
 
 </style>
