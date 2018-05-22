@@ -314,7 +314,8 @@ import Stickers from './Stickers'
 import Emojis from './Emojis'
 
 const WSHOST = config.chatHost
-const RECEIVER = 100000
+const RECEIVER = 1
+// const RECEIVER = 100000
 
 export default {
   props: {
@@ -387,7 +388,7 @@ export default {
     },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
-        this.getStickers()
+        // this.getStickers()
       }
     }
   },
