@@ -315,6 +315,7 @@ import Emojis from './Emojis'
 
 const WSHOST = config.chatHost
 const RECEIVER = 1
+// const RECEIVER = 100000
 
 export default {
   props: {
