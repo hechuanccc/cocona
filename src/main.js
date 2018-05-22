@@ -64,6 +64,20 @@ if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 
+// axios.defaults.withCredentials = true
+// axios.defaults.headers.common['clienttime'] = nao
+// axios.defaults.headers.common['sign'] = hide(nao)
+// import { hide } from './utils'
+// axios.interceptors.request.use((config) => {
+//   let nao = Vue.moment().format()
+//   axios.defaults.withCredentials = true
+//   config.headers.common['clienttime'] = nao
+//   config.headers.common['sign'] = hide(nao)
+//   return config
+// }, function (error) {
+//   return Promise.reject(error)
+// })
+
 axios.interceptors.response.use(res => {
   let responseData = res.data
 

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import gameTranslator from './gameTranslator'
-
+const CryptoJS = require('crypto-js')
 /**
  * 1. Get chunks from original list using 'size' as chunk's length
  * 2. Regroup the 'keyUnion' inside the list
@@ -177,4 +177,10 @@ export function getCookie (name) {
     }
   }
   return ''
+}
+
+export function hide (date) {
+  let raw = date.split('T').reverse().join()
+  console.log(CryptoJS.MD5(raw).toString(), 'CryptoJS.MD5(raw).toString()')
+  return CryptoJS.MD5(raw).toString()
 }
