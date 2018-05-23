@@ -100,7 +100,7 @@ export default {
     payment_record: '充值纪录',
     discount_record: '优惠与红包',
     withdraw_record: '取款纪录',
-    remit_record: '轉帳充值纪录',
+    remit_record: '转帐充值纪录',
     remit_account: '帐户',
     remit_address: '开户行网点',
     remit_despositor: '入款人',
