@@ -29,7 +29,7 @@
               </li>
             </ul>
             <ul class="info-tips m-l">
-              <li>1. 您在给轉帳充值时请仔细核对入款信息</li>
+              <li>1. 您在给转帐充值时请仔细核对入款信息</li>
               <li>2. 请认真填写存款人信息，以免核对出错</li>
               <li>3. 填写入款表单完成后，可在财务记录当中查看入款状态</li>
             </ul>
@@ -53,7 +53,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item :label="$t('user.amount')" prop="amount">
-                 <el-input clearable
+                <el-input clearable
                   @blur="remitData.amount = Math.floor(remitData.amount * 100)/100"
                   class="input-width"
                   placeHolder="请输入存款金额"
