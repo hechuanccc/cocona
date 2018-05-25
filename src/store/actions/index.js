@@ -10,7 +10,8 @@ import {
   fetchUser,
   updateUser,
   fetchGames,
-  fetchCategories
+  fetchCategories,
+  fetchChatUserInfo
 } from '../../api'
 
 export default {
@@ -58,9 +59,20 @@ export default {
   fetchUser: ({ commit, state }) => {
     return fetchUser().then(res => {
       if (res.length > 0) {
+        let user = res[0]
+        if (user.account_type && !state.user.chatInfo) {
+          fetchChatUserInfo(user.username).then((info) => {
+            let chatInfo = info
+            commit(types.SET_USER, {
+              user: {
+                chatInfo
+              }
+            })
+          })
+        }
         commit(types.SET_USER, {
           user: {
-            ...res[0],
+            ...user,
             logined: true
           }
         })
@@ -132,5 +144,8 @@ export default {
   },
   collectEnvelope: ({ commit, state }, data) => {
     commit(types.COLLECT_ENVELOPE, data)
+  },
+  updateCurrentChatRoom: ({ commit, state }, room) => {
+    commit(types.UPDATE_CURRENTCHATROOM, room)
   }
 }

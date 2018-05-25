@@ -5,7 +5,7 @@ const host = env.HOST.replace(/"/g, '')
 const prefix = host + '/member'
 const apiv1 = host + '/v1/member'
 const apiChat = env.chatApi.replace(/"/g, '')
-const apiRoom = apiChat + '/v1/room'
+const apiRoom = apiChat + '/v1/member/room'
 
 export default {
   domain: host,
@@ -51,5 +51,6 @@ export default {
   apiRoom,
   setCookie: host + '/set_cookie/',
   stickers: apiChat + '/v1/stickers/',
-  envelope: host + '/v1/member/red_envelope/'
+  envelope: host + '/v1/member/red_envelope/',
+  chatUser: apiChat + '/v1/user/'
 }

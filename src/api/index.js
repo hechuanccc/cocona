@@ -35,6 +35,7 @@ export function gethomePage () {
 export function getDescription () {
   return axios.get(`${urls.website}descriptions/`)
 }
+
 export function getPromotions () {
   return axios.get(urls.promotions)
 }
@@ -255,6 +256,10 @@ export function setCookie (cookie) {
 
 export function fetchStickers () {
   return axiosChat.get(`${urls.stickers}`).then(res => res.data)
+}
+
+export function fetchChatUserInfo (username) {
+  return axiosChat.get(`${urls.chatUser}${username}`).then(res => res.data)
 }
 
 export function sendEnvelope (data) {

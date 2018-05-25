@@ -6,29 +6,27 @@
       id="chatBox"
       element-loading-text="正在登录"
       v-if="isLogin && showChatRoom">
-      <el-header class="chat-header clearfix" height="40px">
+      <el-header class="chat-header clearfix" height="56px">
         <div class="left fl clearfix">
-          <icon class="icon home-icon" name="home" scale="1.5"></icon>
-          <span class="title">聊天室</span>
+          <span class="title">{{roomTitle}}</span>
         </div>
         <div class="right fr clearfix">
-          <icon v-if="personal_setting.manager"
-            class="icon clickable"
-            name="cog"
-            scale="1.5"
-            @click.native="handleBlockPopupShow">
-          </icon>
-          <icon v-if="user.account_type !== 0" class="icon m-l clickable"
-            title="修改昵称"
-            name="user"
-            scale="1.5"
-            @click.native="personal_setting.blocked ? '' : showEditProfile = true">
-          </icon>
-          <icon class="icon m-l clickable"
-            name="times"
-            scale="1.5"
-            @click="leaveRoom">
-          </icon>
+          <img :src="require('../assets/icon_setting.png')"
+            v-if="personal_setting.manager"
+            alt="setting"
+            class="clickable icon"
+            @click="handleBlockPopupShow"/>
+
+          <img :src="require('../assets/icon_profile.png')"
+            alt="profile"
+            class="clickable icon"
+            @click="personal_setting.blocked ? '' : showEditProfile = true"/>
+
+          <img :src="require('../assets/icon_close.png')"
+            alt="profile"
+            class="clickable icon"
+            @click="leaveRoom"/>
+
         </div>
 
         <transition
@@ -47,7 +45,7 @@
                 :before-upload="beforeAvatarUpload">
 
                 <img v-if="user.avatar && !swichAvatar" :src="user.avatar" class="avatar">
-                <img v-else-if="!swichAvatar" :src="require('../assets/avatar.png')">
+                <img v-else-if="!swichAvatar" :src="defaultAvatar">
                 <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
                   <span class="el-icon-upload"></span>
                 </label>
@@ -77,7 +75,7 @@
             <div
               class="avatar"
               style="overflow-y: hidden;">
-              <img :src="checkUser.avatar_url || require('../assets/avatar.png')" class="avatar">
+              <img :src="checkUser.avatar_url || defaultAvatar" class="avatar">
               <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
                 <span class="el-icon-upload"></span>
               </label>
@@ -111,125 +109,18 @@
           </div>
         </div>
 
-        <div class="msg-controler">
-          <a class="btn" href="javascript:void(0)">
-            <icon class="icon" name="unsorted"></icon>
-            <span class="text" @click="$refs.msgEnd.scrollIntoView()">滚屏</span>
-          </a>
-          <a class="btn" href="javascript:void(0)">
-            <icon class="icon" name="trash"></icon>
-            <span class="text" @click="messages = []">清屏</span>
-          </a>
-        </div>
-
-        <ChatMessages :messages="messages" :roomManagers="roomManagers" :user="user" :personalSetting="personal_setting"/>
-        <!-- <ul class="chatmsgs-list">
-
-
-          <li v-for="(item, index) in messages"
-            :key="index"
-            :class="
-              ['clearfix',
-                'item',
-                item.sender && (user.username === item.sender.username) ? 'item-right' : 'item-left',
-                item.type < 0 ? 'sys-msg' : ''
-              ]">
-            <div class="lay-block clearfix" v-if="item.type >= 0">
-              <div class="avatar">
-                <icon name="cog" class="font-cog" v-if="item.type === 4" scale="3"></icon>
-                <img @click="handleCheckUser(item)"
-                :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')"
-                v-else>
-              </div>
-              <div class="lay-content">
-                <div class="msg-header">
-                  <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
-                  <span class="common-member" v-if="item.type !== 4">
-                    {{roomManagers.indexOf(item.sender.id) !== -1 ? '管理员' : '普通会员'}}
-                  </span>
-                  <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
-                </div>
-
-                <div v-if="item.type === 5">
-
-                  <div v-if="!user.account_type" class="envelope-message expired">
-                    <img class="img m-r" src="../assets/envelope_message.png" alt="envelope"/>
-                    <div class="send-texts">
-                      <p class="slogan">{{item.content || '恭喜发财 大吉大利'}}</p>
-                      <p class="action">会员才可以抢红包！</p>
-                    </div>
-                  </div>
-
-                  <div :class="['envelope-message','clickable',
-                    {'null': (item.envelope_status.total === item.envelope_status.users.length) && !item.envelope_status.users.map(item => item.receiver_id).includes(user.id)}]"
-                    v-else-if="item.envelope_status && isAlive(item.envelope_status.expired_time)"
-                    @click="takeEnvelope(item)">
-                    <img class="img m-r" src="../assets/envelope_message.png" alt="envelope"/>
-                    <div class="send-texts">
-                      <p class="slogan">{{item.content || '恭喜发财 大吉大利'}}</p>
-                      <p class="action">
-                        {{
-                          item.envelope_status.users.map(item => item.username).includes(user.username) ?
-                          '已领取' : (item.envelope_status.total === item.envelope_status.users.length)  ?
-                          '已领完' : '待领取'
-                        }}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div class="envelope-message expired"
-                    v-else-if="!isAlive(item.envelope_status.expired_time)">
-                    <img class="img m-r"
-                      src="../assets/envelope_message.png"
-                      alt="envelope"/>
-                    <div class="send-texts">
-                      <p class="slogan">{{item.content || '恭喜发财 大吉大利'}}</p>
-                      <p>已过期</p>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div v-else :class="['bubble', 'bubble' + item.type]">
-                  <p>
-                    <span v-if="item.type === 0 || item.type === 4" v-html="item.content"></span>
-                    <img @click="showImageMsg = true; showImageMsgUrl = item.content"
-                      v-else-if="item.type === 1"
-                      :src="item.content">
-                    <img class="sticker-message"
-                      v-else-if="item.type === 7"
-                      :src="item.content"
-                      alt="sticker"/>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="inner" v-else-if="item.type === -1">
-              <p>以上是历史消息</p>
-            </div>
-            <div v-else-if="user.account_type && (item.type === -2 || item.type === -3 || (item.type === 6 && item.sender.username === user.username))" class="inner type-warning">
-              <div class="text-center">
-                <p class="get-envelope">{{`${item.get_envelope_user === user.username ? '你' : item.get_envelope_user.get_envelope_user}抢到了你的红包`}}</p>
-              </div>
-              <p>
-                <span v-if="item.type === -2">您可以设置昵称啦, 点击 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>设置昵称</span>
-                <span v-else>您可以上传自己的头像啦, 点击 <a href="javascript:void(0)" class="btn-here" @click="item.type === -3 ? showEditProfile = true : showNickNameBox = true">这里</a>设置</span>
-              </p>
-            </div>
-          </li>
-
-
-
-          <li v-if="personal_setting.block" class="block-info text-center">您已被管理员拉黑，请联系客服。<li>
-
-
-
-          <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
-
-        </ul> -->
+        <ChatMessages :messages="messages"
+          ref="chatmessages"
+          :defaultAvatar="defaultAvatar"
+          :user="user"
+          :envelope="envelope"
+          :isBanned="isBanned"
+          :isBlocked="isBlocked"
+          :isManager="isManager"
+          :personalSetting="personal_setting"/>
       </el-main>
 
-      <el-footer class="footer" height="100">
+      <el-footer class="footer" height="130">
         <div class="control-bar">
           <el-popover :popper-class="'emoji-popover'"
             ref="sticker-popover"
@@ -248,6 +139,7 @@
                 <div class="stickers-container">
                   <Stickers :stickerGroups="stickerGroups"
                     :stickers="stickers"
+                    :roomId="RECEIVER"
                     :ws="ws"
                     @closeStickerPopover="closeStickerPopover"
                     v-if="stickerTab === 'stickers'"/>
@@ -257,17 +149,20 @@
           </el-popover>
 
           <a v-popover:sticker-popover href="javascript:void(0)" title="发送表情" class="btn-control btn-smile">
-            <icon scale="1.3" name="smile-o"></icon>
+            <img :src="require('../assets/icon_sticker_normal.png')"
+              alt="sticker"/>
           </a>
 
           <a href="javascript:void(0)" class="btn-control btn-smile">
             <label for="imgUploadInput">
               <span title="上传图片">
-                <i class="el-icon-picture"></i>
+                <img :src="require('../assets/icon_picture_normal.png')"
+                  alt="sticker"/>
                 <input :disabled="!personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
+
           <div v-if="systemConfig.envelopeSettings && systemConfig.envelopeSettings.enabled === '1'"
             class="btn-control btn-smile envelope-icon clickable"
             @click="handleEnvelopeIconClick">
@@ -284,6 +179,7 @@
               @blur="$store.dispatch('updateIsChatting', false)"
               :placeholder="personal_setting.chat.status ? '' : chatConditionMessage"
               type="textarea" rows="2"
+              ref="textarea"
               autocomplete="off"
               validateevent="true"
               class="el-textarea-inner"
@@ -292,7 +188,7 @@
             </textarea>
           </div>
 
-          <div class="sendbtn fr">
+          <div class="p-r text-right" @click="$refs.textarea.focus()">
             <a href="javascript:void(0)" class="u-btn" @click="sendMsg">发送</a>
           </div>
         </div>
@@ -402,17 +298,18 @@
 <script>
 import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { msgFormatter, getCookie } from '../utils'
-import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser, fetchStickers, takeEnvelope } from '../api'
+import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser, fetchStickers } from '../api'
 import config from '../../config'
 import Stickers from './Stickers'
 import Envelope from './Envelope'
 import Emojis from './Emojis'
 import ChatMessages from './ChatMessages'
+import _ from 'lodash'
 
 const WSHOST = config.chatHost
-const RECEIVER = 100000
+let RECEIVER = 100000
 
 export default {
   props: {
@@ -423,8 +320,9 @@ export default {
   },
   data () {
     return {
-      ws: null,
       RECEIVER,
+      ws: null,
+      defaultAvatar: require('../assets/avatar.png'),
       showChatRoom: false,
       messages: [],
       showEditProfile: false,
@@ -444,7 +342,12 @@ export default {
       },
       announcement: '',
       personal_setting: {
+        banned: {},
+        blocked: [],
+        plan_maker: [],
+        manager: [],
         chat: {
+          status: '',
           reasons: []
         }
       },
@@ -473,7 +376,8 @@ export default {
         status: '',
         visible: false,
         envelope: {}
-      }
+      },
+      backTodefaultRoom: false
     }
   },
   components: {
@@ -492,14 +396,47 @@ export default {
       if (visible) {
         this.getStickers()
       }
+    },
+    'currentGame': function (val, oldVal) {
+      if (oldVal) {
+        this.leaveRoom()
+        this.RECEIVER = val.id
+        this.$store.dispatch('updateCurrentChatRoom', val.id)
+        this.joinChatRoom()
+      }
+      this.getUser()
     }
   },
   computed: {
     ...mapState([
       'user',
       'envelopes',
-      'systemConfig'
+      'systemConfig',
+      'chatRoom'
     ]),
+    ...mapGetters([
+      'currentGame'
+    ]),
+    isManager () {
+      return this.personal_setting.manager.includes(this.RECEIVER)
+    },
+    isBlocked () {
+      return this.personal_setting.blocked.includes(this.RECEIVER)
+    },
+    isBanned () {
+      return !!this.personal_setting.banned[this.RECEIVER]
+    },
+    roomTitle () {
+      if (this.currentGame) {
+        if (this.chatRoom.currentRoom !== this.chatRoom.defaultRoom) {
+          return this.currentGame.display_name + '聊天室'
+        } else {
+          return '聊天室'
+        }
+      } else {
+        return ''
+      }
+    },
     isLogin () {
       return this.$store.state.user.logined && this.$route.name !== 'Home'
     },
@@ -521,10 +458,9 @@ export default {
     }
   },
   methods: {
-    meSpeaking (msg) {
-      if (msg) {
-        return msg.sender.username === this.user.username
-      }
+    scrollToEnd () {
+      console.log(this.$refs)
+      this.$refs['chatmessages'].scrollToEnd()
     },
     isAlive (time) {
       return this.$moment().isBefore(this.$moment(time))
@@ -532,52 +468,12 @@ export default {
     closeEnvelope () {
       this.envelope.visible = false
     },
-    takeEnvelope (envelope) {
-      if (!this.user.account_type) {
-        return
-      }
-
-      this.envelope.content = envelope.content
-      this.envelope.status = 'taking'
-
-      let payload = {
-        envelope_id: envelope.envelope_status.id,
-        receiver_id: this.user.id
-      }
-
-      this.envelope.visible = true
-
-      takeEnvelope(payload).then(res => {
-        res.envelope_id = payload.envelope_id
-        this.envelope.envelope = res
-
-        if (res.amount) {
-          this.$store.dispatch('fetchUser').then(() => { this.envelope.status = 'success' })
-        } else {
-          switch (res.status) {
-            case 'expired' :
-              this.envelope.status = 'expired'
-
-              let index = this.messages.findIndex((msg) => msg.type === 5 && msg.envelope_status && msg.envelope_status.id === payload.envelope_id)
-              this.messages[index].envelope_status.expired = true
-              return
-            case 'repeat' :
-              this.envelope.status = 'repeat'
-              return
-            case 'fail' :
-              this.envelope.status = 'fail'
-          }
-        }
-      })
-    },
     handleEnvelopeSend (envelope) {
       this.envelope.visible = false
       this.envelope.status = ''
       this.$store.dispatch('fetchUser')
 
-      this.$nextTick(() => {
-        this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
-      })
+      this.scrollToEnd()
     },
     handleEnvelopeIconClick () {
       // if (this.personalSetting.blocked || this.personalSetting.banned) {
@@ -600,7 +496,7 @@ export default {
           if (!res) {
             return
           }
-          this.stickerGroups = res.map(sticker => {
+          this.stickerGroups = res.data.map(sticker => {
             this.stickers[sticker.display_name] = sticker.stickers
             return {
               display_name: sticker.display_name,
@@ -614,36 +510,27 @@ export default {
     handleEmojiClick (emoji) {
       this.msgCnt = this.msgCnt + emoji.emoji + ' '
     },
-    joinChatRoom () {
+    joinChatRoom (room) {
       this.showChatRoom = true
       let token = getCookie('access_token')
       this.loading = true
       this.ws = new WebSocket(`${WSHOST}/chat/stream?username=${this.$store.state.user.username}&token=${token}`)
       this.ws.onopen = () => {
+        this.ws.send(JSON.stringify({
+          'command': 'join',
+          'receivers': [room || this.RECEIVER]
+        }))
+
         this.handleMsg()
       }
       this.ws.onclose = () => {
         this.ws = null
       }
-      setTimeout(() => {
-        if ((!this.ws || (this.ws && this.ws.readyState !== 1)) && this.showChatRoom) {
-          this.joinChatRoom()
-        } else {
-          if (!this.emojis.people.length) {
-            fetchChatEmoji().then((resData) => {
-              this.emojis = resData.data
-            }).catch(err => console.log(err))
-          }
-        }
-      }, 2000)
     },
     handleMsg () {
       this.loading = false
       if (!this.ws) { return false }
-      this.ws.send(JSON.stringify({
-        'command': 'join',
-        'receivers': [RECEIVER]
-      }))
+
       this.ws.onmessage = (resData) => {
         if (!this.showChatRoom || !this.showEntry) { return }
         let data
@@ -653,20 +540,21 @@ export default {
 
             if (!data.error_type) {
               if (data.latest_message) {
-                this.announcement = ['ffasfaf', 'asfsafasfqef'].join('  ')
+                if (!this.emojis.people.length) {
+                  fetchChatEmoji().then((resData) => {
+                    this.emojis = resData.data.data
+                  }).catch(err => console.log(err))
+                }
                 if (data.bulletin.length) {
                   this.announcement = data.bulletin.join(' ')
                 }
 
-                this.messages = this.messages.concat(data.latest_message.reverse())
-                let oSupplyData = [{
-                  type: -1
-                }]
-                if (this.personal_setting.user) {
-                  !this.personal_setting.user.avatar_url && oSupplyData.push({type: -2})
-                  !this.personal_setting.user.nickname && oSupplyData.push({type: -3})
-                  this.messages = this.messages.concat(oSupplyData)
+                _.each(data.latest_message, (msg) => {
+                  msg.isSaidByMe = msg.sender && (msg.sender.username === this.user.username)
                 }
+                )
+
+                this.messages = this.messages.concat(data.latest_message.reverse())
 
                 let envelopes = data.latest_message.filter((msg) => msg.type === 5 && this.isAlive(msg.envelope_status.expired_time))
                 envelopes.forEach((envelope) => {
@@ -674,7 +562,7 @@ export default {
                 })
 
                 this.$nextTick(() => {
-                  this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+                  this.scrollToEnd()
                 })
                 return
               } else if (data.personal_setting) {
@@ -687,11 +575,17 @@ export default {
                         this.errMsg = true
                         this.errMsgCnt = data.content
                       } else if (data.command === 'unblock') {
-                        this.personal_setting.blocked = false
+                        this.personal_setting.chat.status = 1
+                        this.personal_setting.blocked.remove(this.RECEIVER)
                         this.joinChatRoom()
                       } else if (data.command === 'unbanned') {
                         this.personal_setting.chat.status = 1
+                        this.personal_setting.banned[this.RECEIVER] = ''
+                      } else if (data.command === 'join') {
+                        this.RECEIVER = data.receivers
+                        this.$store.dispatch('updateCurrentChatRoom', data.receivers)
                       }
+
                       this.$notify({
                         message: data.content,
                         offset: 100,
@@ -707,13 +601,15 @@ export default {
                     return
 
                   case 5:
+                    data.isSaidByMe = data.sender && (data.sender.username === this.user.username)
                     this.messages.push(data)
                     this.$store.dispatch('collectEnvelope', data)
                     this.$nextTick(() => {
-                      this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+                      this.scrollToEnd()
                     })
                     return
                   case 6:
+                    data.isSaidByMe = data.sender && (data.sender.username === this.user.username)
                     this.messages.push(data)
                     this.$store.dispatch('collectEnvelope', data)
                     let currentEnvelopeIndex = this.messages.findIndex((msg) => msg.envelope_status && msg.envelope_status.id === data.envelope_status.id)
@@ -722,12 +618,13 @@ export default {
 
                     if (data.sender.id === this.user.id) {
                       this.$nextTick(() => {
-                        this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+                        this.scrollToEnd()
                       })
                     }
                     return
 
                   default:
+                    data.isSaidByMe = data.sender && (data.sender.username === this.user.username)
                     this.messages.push(data)
                 }
 
@@ -737,26 +634,31 @@ export default {
                   let sh = chatBox.scrollHeight || chatBox.offsetHeigth
                   let st = chatBox.scrollTop || document.documentElement.scrollTop || document.body.scrollTop
                   if (h + st + 100 >= sh || (data.sender && data.sender.username === this.user.username)) {
-                    this.$nextTick(() => {
-                      this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
-                    })
+                    this.scrollToEnd()
                   }
                 }
               }
             } else {
               if (data.error_type !== 2 && data.error_type !== 3) {
-                this.errMsg = true
                 switch (data.error_type) {
                   case 4:
+                    this.errMsg = true
                     this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
-                    this.personal_setting.banned = true
+                    this.personal_setting.banned[data.roomId] = data.msg
                     this.personal_setting.chat.status = 0
                     break
                   case 5:
+                    this.errMsg = true
                     this.messages = []
-                    this.personal_setting.block = true
+                    this.personal_setting.blocked.push(data.roomId)
                     this.personal_setting.chat.status = 0
                     this.errMsgCnt = data.msg
+                    break
+                  case 6:
+                    this.leaveRoom()
+                    this.joinChatRoom(this.chatRoom.defaultRoom)
+                    this.RECEIVER = this.chatRoom.defaultRoom
+                    this.$store.dispatch('updateCurrentChatRoom', this.chatRoom.defaultRoom)
                     break
                   default:
                     this.errMsgCnt = data.msg
@@ -769,7 +671,7 @@ export default {
         }
       }
       setTimeout(() => {
-        this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+        this.scrollToEnd()
       }, 1000)
     },
     handleAvatarSuccess (res, file) {
@@ -809,7 +711,7 @@ export default {
         return
       }
       let formData = new FormData()
-      formData.append('receivers', RECEIVER)
+      formData.append('receivers', this.RECEIVER)
       formData.append('image', file)
       sendImgToChat(formData).then((data) => {
         fileInp.value = ''
@@ -819,7 +721,7 @@ export default {
       if (!this.msgCnt.trim()) { return false }
       this.ws.send(JSON.stringify({
         'command': 'send',
-        'receivers': [RECEIVER],
+        'receivers': [this.RECEIVER],
         'type': 0,
         'content': this.msgCnt
       }))
@@ -846,8 +748,12 @@ export default {
       this.showEditProfile = false
       this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
-        'receivers': [RECEIVER]
+        'receivers': [this.RECEIVER]
       }))
+
+      this.RECEIVER = null
+      this.$store.dispatch('updateCurrentChatRoom', null)
+
       if (this.ws) {
         this.ws.close()
       }
@@ -860,7 +766,7 @@ export default {
       this.showCheckUser = true
     },
     ban (mins) {
-      banChatUser(RECEIVER, {
+      banChatUser(this.RECEIVER, {
         user: this.checkUser.username,
         banned_time: mins
       }).then((data) => {
@@ -874,7 +780,7 @@ export default {
       })
     },
     unban (user) {
-      unbanChatUser(RECEIVER, {
+      unbanChatUser(this.RECEIVER, {
         user: user
       }).then((data) => {
         this.getUser()
@@ -892,7 +798,7 @@ export default {
       })
     },
     block () {
-      blockChatUser(RECEIVER, {
+      blockChatUser(this.RECEIVER, {
         user: this.checkUser.username
       }).then((data) => {
         this.showCheckUser = false
@@ -906,7 +812,7 @@ export default {
       })
     },
     unblock (user) {
-      unblockChatUser(RECEIVER, {
+      unblockChatUser(this.RECEIVER, {
         user: user
       }).then((data) => {
         this.getUser()
@@ -925,7 +831,7 @@ export default {
     },
     getUser () {
       this.loading = true
-      getChatUser(1).then(response => {
+      getChatUser(this.RECEIVER).then(response => {
         let data = response.data
         this.roomManagers = response.data.managers
         this.bannedUsers = data.banned_users
@@ -940,15 +846,14 @@ export default {
       this.showBlockPopup = true
       this.getUser()
     }
-  },
-  created () {
-    this.getUser()
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '../style/vars.scss';
+
+
 
 $primary-blue: #006bb3;
 
@@ -965,7 +870,7 @@ $primary-blue: #006bb3;
     position: fixed;
     right: 0;
     top: 0;
-    width: 340px;
+    width: 380px;
     height: 100%;
     overflow-x: hidden;
     border-left: 3px solid $primary-blue;
@@ -982,32 +887,24 @@ $primary-blue: #006bb3;
   }
 
   &-body {
-    background: url('../assets/chatbg.jpg') no-repeat right bottom;
-    background-attachment: fixed;
-    background-size: cover;
+    background-color: #f2f2f2;
   }
 
-  &msgs-list {
-    padding-top: 35px;
-  }
 }
 
 
 .chat-header {
-  line-height: 40px;
+  height: 56px;
+  line-height: 56px;
   color: #fff;
-  .home-icon {
-    margin-top: -5px;
-  }
+
   .icon {
+    margin-left: 10px;
     vertical-align: middle;
-    &.clickable:hover {
-      color: #ddd;
-    }
   }
 
   .title {
-    font-size: 16px;
+    font-size: 20px;
   }
 }
 
@@ -1015,20 +912,18 @@ $primary-blue: #006bb3;
   padding: 5px 0;
   .announcements {
     position: absolute;
-    top: 43px;
+    top: 56px;
     left: 5px;
     right: 5px;
-    background: rgba(237,244,254,.91);
-    border: 1px solid #c2cfe2;
-    border-radius: 5px;
-    height: 30px;
-    line-height: 30px;
+    background-image: linear-gradient(to bottom, #f2f2f2 39%, rgba(242, 242, 242, 0.9) 97%);
+    height: 32px;
+    line-height: 32px;
     overflow: hidden;
     z-index: 3;
 
     .bulletin {
-      background: #e1edfd;
-      color: red;
+      background-image: linear-gradient(to bottom, #f2f2f2 39%, rgba(242, 242, 242, 0.9) 97%);
+      color: #b32020;
       padding: 0px 5px;
     }
 
@@ -1038,233 +933,22 @@ $primary-blue: #006bb3;
 
     .marquee {
       margin-left: 75px;
+      color: #999999;
     }
   }
 
-  .msg-controler {
-    position: absolute;
-    width: 100%;
-    top: 80px;
-    left: 0;
-    text-align: center;
-    z-index: 3;
-
-    .btn {
-      display: inline-block;
-      height: 15px;
-      line-height: 15px;
-      padding: 5px 10px;
-      border: 1px solid #e2e2e2;
-      border-radius: 15px;
-      margin: 0 5px;
-      background: #fff;
-      color: #a5a5a5;
-      .icon, .text {
-        vertical-align: bottom;
-      }
-    }
-  }
 }
 
-// .chatmsgs-list {
-//   .block-info {
-//     padding-top: 100px;
-//     font-size: 16px;
-//     color: red;
-//   }
-// }
-
-// .item {
-//   margin-top: 10px;
-//   padding: 5px;
-//   &.sys-msg {
-//     text-align: center;
-//     margin-top: 0px;
-//     .inner {
-//       color: #999;
-//       display: inline-block;
-//       background: #efefef;
-//       border-radius: 8px;
-//       border: 1px solid #dddddc;
-//       padding: 5px 10px;
-//     }
-//     .type-warning {
-//       color: #f60;
-//       .btn-here {
-//         color: rgb(25, 158, 216);
-//       }
-//     }
-//   }
-//   &.item-left {
-//     .lay-block {
-//       .lay-content {
-//         .bubble:after {
-//           left: 0;
-//           border-left: 0;
-//           margin-left: -9px;
-//           border-right-color: inherit;
-//         }
-//       }
-//     }
-//   }
-//   &.item-right {
-//     .lay-block {
-//       .avatar {
-//         float: right;
-//       }
-//       .lay-content {
-//         float: right;
-//         margin-right: 15px;
-//         .msg-header {
-//           h4 {
-//             text-align: right;
-//             float: right;
-//             padding-top: 2px;
-//           }
-
-//           span {
-//             float: right;
-//           }
-//         }
-//         .bubble {
-//           float: right;
-//         }
-//         .bubble:after {
-//           right: 0;
-//           border-right: 0;
-//           margin-right: -9px;
-//           border-left-color: inherit;
-//         }
-//       }
-//     }
-//   }
-// }
-// .lay-block {
-//   .avatar {
-//     width: 42px;
-//     height: 42px;
-//     cursor: pointer;
-//     float: left;
-//     .font-cog {
-//       color: #7285d6;
-//     }
-//     img {
-//       display: block;
-//       width: 100%;
-//       height: 100%;
-//       border-radius: 7px;
-//     }
-//   }
-// }
-
-// .common-member {
-//   display: inline-block;
-//   margin: 0 2px;
-//   background: #cb9b64;
-//   color: #fff;
-//   padding: 0 6px;
-//   border-radius: 10px;
-//   font-weight: 400;
-//   font-size: 10px;
-// }
-
-
-// .lay-content {
-//   margin-left: 18px;
-//   float: left;
-//   max-width: 75%;
-// }
-// .msg-header {
-//   overflow: hidden;
-//   h4 {
-//     display: inline-block;
-//     font-size: 12px;
-//     color: #4f77ab;
-//     display: inline-block;
-//     font-weight: 400;
-//     cursor: pointer;
-//     max-width: 73px;
-//     overflow:hidden;
-//     text-overflow:ellipsis;
-//     line-height: 12px;
-//   }
-
-//   .msg-time {
-//     display: inline-block;
-//     color: #666;
-//     margin: 0 2px;
-//   }
-// }
-// .bubble {
-//   background: linear-gradient(to right, $primary, rgb(25, 158, 216));
-//   border-left-color: rgb(25, 158, 216);
-//   border-right-color: $primary;
-//   color: rgb(255, 255, 255);
-//   margin-top: 3px;
-//   position: relative;
-//   border-radius: 5px;
-//   padding: 5px 8px;
-//   font-size: 13px;
-//   display: inline-block;
-//   p {
-//     width: 100%;
-//   }
-//   &.bubble1 {
-//     width: 55%;
-//   }
-//   &.bubble4 {
-//     background: #ab47bc;
-//     background: linear-gradient(to right,#ab47bc,#5169DE);
-//     border-left-color: #5169de;
-//     border-right-color: #ab47bc;
-//   }
-//   &.bubble7 {
-//     background: transparent;
-//     border: none;
-//     padding: 0;
-//     .sticker-message {
-//       width: 100px;
-//       height: 100px;
-//     }
-//     &:after {
-//       content: none;
-//     }
-//   }
-
-//   p {
-//     display: inline-block;
-//     span {
-//       white-space: pre-wrap;
-//       word-break: break-all;
-//     }
-//     img {
-//       width: 100%;
-//       min-height: 50px;
-//       cursor: pointer;
-//     }
-//   }
-// }
-// .bubble:after {
-//   content: '';
-//   position: absolute;
-//   top: 14px;
-//   width: 0;
-//   height: 0;
-//   border: 9px solid transparent;
-//   border-top: 0;
-//   margin-top: -7px;
-// }
-
 .footer {
-  background: #f5f5f5;
-  padding: 0;
+  height: 130px;
   width: 100%;
+  background: #f5f5f5;
+  border-top: 2px solid #e5e5e5;
+  padding: 0;
+
   .control-bar {
     height: 32px;
     background: #f5f5f5;
-    border: 1px solid #ccc;
-    border-left: 0;
-    border-right: 0;
     position: relative;
     overflow: hidden;
     .btn-smile {
@@ -1282,11 +966,10 @@ $primary-blue: #006bb3;
   }
   .typing {
     position: relative;
-    padding: 5px;
+    padding: 0px 5px;
     .txtinput {
       display: block;
       width: auto;
-      margin-right: 58px;
     }
     .el-textarea {
       vertical-align: bottom;
@@ -1297,23 +980,20 @@ $primary-blue: #006bb3;
         border-color: #d1dbe5;
         color: #bbb;
         cursor: not-allowed;
-        height: 54px;
-        resize: none;
       }
     }
     .el-textarea-inner {
       display: block;
-      resize: vertical;
-      padding: 5px 7px;
+      box-sizing: border-box;
+      resize: none;
+      background-color: #f5f5f5;
+      padding: 0px 5px;
       line-height: 1.5;
       width: 100%;
-      font-size: 14px;
-      color: #1f2d3d;
-      background-color: #fff;
-      border: 1px solid #bfcbd9;
-      border-radius: 4px;
-      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-      box-sizing: border-box;
+      font-size: 16px;
+      color: #333333;
+      border: none;
+      outline: none;
       background-image: none;
     }
   }
@@ -1323,7 +1003,6 @@ $primary-blue: #006bb3;
     padding: 4px 12px;
     line-height: 32px;
     margin-right: 1px;
-    background: #e5e5e5;
     color: #666;
     cursor: pointer;
     .el-icon-picture {
@@ -1333,11 +1012,6 @@ $primary-blue: #006bb3;
   }
   .envelope-icon .img{
     width: 20px;
-  }
-  .sendbtn {
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
   }
 }
 .edit-profile {
@@ -1409,10 +1083,10 @@ $primary-blue: #006bb3;
   text-align: center;
   border-radius: 3px;
   margin-left: 3px;
-  width: 52px;
-  height: 52px;
+  width: 72px;
+  height: 36px;
+  line-height: 36px;
   font-size: 14px;
-  line-height: 52px;
   background: $primary;
   color: #fff;
   cursor: pointer;
@@ -1443,77 +1117,6 @@ $primary-blue: #006bb3;
     }
   }
 }
-
-// .envelope-message {
-//   display: flex;
-//   width: 190px;
-//   padding: 10px;
-//   border-radius: 5px;
-//   justify-content: stretch;
-//   background-color: #fa9d3b;
-//   position: relative;
-//   &.expired {
-//     background: #f5c38e;
-//   }
-//   &.null {
-//     background: #f5c38e;
-//   }
-//   .img {
-//     width: 30px;
-//     height: 35px;
-//   }
-//   .send-texts {
-//     color: #fff;
-//     .slogan {
-//       font-size: 14px;
-//       width: 150px;
-//       white-space: nowrap;
-//       overflow: hidden;
-//       text-overflow: ellipsis;
-//     }
-//   }
-//   &:after {
-//     content: '';
-//     position: absolute;
-//     top: 14px;
-//     width: 0;
-//     height: 0;
-//     border: 9px solid transparent;
-//     border-top: 0;
-//     margin-top: -7px;
-//     border-right-color: #fa9d3b;
-//   }
-// }
-// .item-left .envelope-message{
-//   &:after {
-//     left: 0;
-//     border-left: 0;
-//     margin-left: -8px;
-//   }
-//   &.null:after, &.expired:after {
-//     border-right-color: #f5c38e;
-//   }
-// }
-// .item-right .envelope-message{
-//   float: right;
-//   &:after {
-//     right: 0;
-//     border-right: 0;
-//     margin-right: -9px;
-//     border-left-color: #fa9d3b;
-//   }
-//   &.null:after, &.expired:after {
-//     border-left-color: #f5c38e;
-//   }
-// }
-
-// .get-envelope {
-//   display: inline-block;
-//   color: #dedede;
-//   background: rgba(255, 255, 255, 0.1);
-//   padding: 5px 20px;
-//   border-radius: 4px;
-// }
 
 
 </style>

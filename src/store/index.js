@@ -12,9 +12,14 @@ export function createStore () {
       user: {
         logined: '',
         showChatRoom: true,
-        account_type: undefined
+        account_type: undefined,
+        chatInfo: null
       },
       isChatting: false,
+      chatRoom: {
+        defaultRoom: 100000,
+        currentRoom: null
+      },
       loginDialogVisible: false,
       showTrialVerifyDialog: false,
       betRecordDialogVisible: false,

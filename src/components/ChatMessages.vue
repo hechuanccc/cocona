@@ -1,104 +1,264 @@
 <template>
-  <ul class="chatmsgs-list">
-    <li v-for="(item, index) in messages" :key="index" :class="
-      ['clearfix',
-        'item',
-        item.sender && (user.username === item.sender.username) ? 'item-right' : 'item-left',
-        item.type < 0 ? 'sys-msg' : ''
-      ]">
-      <div class="lay-block clearfix" v-if="item.type >= 0">
-        <div class="avatar">
-          <icon name="cog" class="font-cog" v-if="item.type === 4" scale="3"></icon>
-          <img @click="handleCheckUser(item)" :src="item.sender && item.sender.avatar_url ? item.sender.avatar_url : require('../assets/avatar.png')"
+  <ul>
+    <li v-for="(msg, index) in messages"
+      :key="index"
+      class="msg">
+      <div :class="['msg-wrapper', msg.isSaidByMe ? 'item-right' : 'item-left']"
+        v-if="msg.type >= 0 && msg.type !== 6 && msg.sender">
+
+
+        <div class="avatar m-l-sm m-r-sm">
+          <icon name="cog"
+            class="font-cog"
+            v-if="msg.type === 4"
+            scale="3"></icon>
+          <img class="img"
+            @click="handleCheckUser(msg)"
+            :src="msg.sender.avatar_url || defaultAvatar"
             v-else>
         </div>
-        <div class="lay-content">
-          <div class="msg-header">
-            <h4 v-html="item.type === 4 ? '计划消息' : item.sender && item.sender.username === user.username && user.nickname ? user.nickname : item.sender && (item.sender.nickname || item.sender.username)"></h4>
-            <span class="common-member" v-if="item.type !== 4">
-              {{roomManagers && roomManagers.indexOf(item.sender.id) !== -1 ? '管理员' : '普通会员'}}
+
+        <div class="msg-content">
+          <div class="msg-header m-b">
+            <span class="sender">{{msg.sender.nickname || msg.sender.username}}</span>
+            <span :class="[
+                'character-badge',
+                { 'manager': msg.sender.level_name === '管理员'},
+                { 'planmaker': msg.sender.level_name === '(计划员)一般会员'}
+              ]"
+              v-if="msg.sender.level_name === '管理员' || msg.sender.level_name === '(计划员)一般会员' && !msg.isSaidByMe">
+              {{ msg.sender.level_name }}
             </span>
-            <span class="msg-time">{{item.created_at | moment('HH:mm:ss')}}</span>
           </div>
 
-          <div v-if="item.type === 5">
-
+          <div v-if="msg.type === 5">
             <div v-if="!user.account_type" class="envelope-message expired">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
-                <p class="slogan">{{item.content || '恭喜发财 大吉大利'}}</p>
+                <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
                 <p class="action">会员才可以抢红包！</p>
               </div>
             </div>
-
             <div :class="['envelope-message','clickable',
-                    {'null': (item.envelope_status.total === item.envelope_status.users.length) && !item.envelope_status.users.map(item => item.receiver_id).includes(user.id)}]"
-              v-else-if="item.envelope_status && isAlive(item.envelope_status.expired_time)" @click="takeEnvelope(item)">
+              {'null': (msg.envelope_status.total === msg.envelope_status.users.length) &&
+                !msg.envelope_status.users.map(item => item.receiver_id).includes(user.id)}]"
+              v-else-if="msg.envelope_status && isAlive(msg.envelope_status.expired_time)"
+              @click="takeEnvelope(msg)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
-                <p class="slogan">{{item.content || '恭喜发财 大吉大利'}}</p>
+                <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
                 <p class="action">
-                  {{ item.envelope_status.users.map(item => item.username).includes(user.username) ? '已领取' : (item.envelope_status.total ===
-                  item.envelope_status.users.length) ? '已领完' : '待领取' }}
+                  {{ msg.envelope_status.users.map(item => item.username).includes(user.username) ?
+                  '已领取' : (msg.envelope_status.total === msg.envelope_status.users.length) ? '已领完' : '待领取' }}
                 </p>
               </div>
             </div>
-
-            <div class="envelope-message expired" v-else-if="!isAlive(item.envelope_status.expired_time)">
+            <div class="envelope-message expired" v-else-if="!isAlive(msg.envelope_status.expired_time)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
-                <p class="slogan">{{item.content || '恭喜发财 大吉大利'}}</p>
+                <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
                 <p>已过期</p>
               </div>
             </div>
-
           </div>
 
-          <div v-else :class="['bubble', 'bubble' + item.type]">
-            <p>
-              <span v-if="item.type === 0 || item.type === 4" v-html="item.content"></span>
-              <img @click="showImageMsg = true; showImageMsgUrl = item.content" v-else-if="item.type === 1" :src="item.content">
-              <img class="sticker-message" v-else-if="item.type === 7" :src="item.content" alt="sticker" />
-            </p>
+          <div v-else-if="msg.type === 7">
+            <img class="sticker-message" :src="msg.content" alt="sticker" />
+          </div>
+
+          <div class="followingbet-message" v-else-if="msg.type === 8">
+            <div class="game-info m-b">
+              <div class="name">
+                <p class="display-name">{{msg.bet_info.display_name}}</p>
+                <p class="issue-number">第{{msg.bet_info.issue_number}}期</p>
+              </div>
+
+              <div class="drawed" v-if="drawed(msg)">已開獎</div>
+              <div v-else>
+                <div class="countdown" v-if="closed">已封盤</div>
+                <div class="countdown" v-else>
+                  <span v-if="countdown.resultCountDown.days > 0">{{countdown.resultCountDown.days}}天 </span>
+                  <span v-if="countdown.resultCountDown.hours > 0">{{countdown.resultCountDown.hours | complete}}:</span>
+                  {{countdown.resultCountDown.minutes | complete}}:{{countdown.resultCountDown.seconds | complete}}
+                </div>
+              </div>
+            </div>
+            <div class="bet-info">
+              <table class="play-table">
+                <tr class="thead">
+                  <td class="title">玩法</td>
+                  <td class="title">赔率</td>
+                  <td class="title">金额</td>
+                </tr>
+                <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
+                  <td class="td">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
+                  <td class="td">{{bet.play.odds}}</td>
+                  <td class="td">{{bet.bet_amount}}</td>
+                </tr>
+              </table>
+            </div>
+            <div class="action" @click="followBet(msg)">
+              <el-button :disabled="closed || drawed(msg)" type="primary" class="followbet-btn">跟單</el-button>
+            </div>
+          </div>
+
+          <div v-else :class="['bubble', `bubble${msg.type}`]">
+            <span class="text" v-if="msg.type === 0"> {{msg.content}} </span>
+            <img class="img" @click="handleImgMsgClick(msg)" v-else-if="msg.type === 1" :src="msg.content"/>
           </div>
         </div>
+
+        <span class="msg-time" v-if="msg.type !== 8">{{msg.created_at | moment('HH:mm:ss')}}</span>
       </div>
-      <div class="inner" v-else-if="item.type === -1">
-        <p>以上是历史消息</p>
+
+      <div class="tips" v-else>
+        <p class="envelope-tip" v-if="msg.type === 6 && msg.isSaidByMe">
+          {{`${msg.get_envelope_user.username === user.username ? '你' : msg.get_envelope_user.nickname}抢到了你的红包`}}
+        </p>
+        <p class="lastmsg-tip" v-if="msg.type === -1">以上是历史消息</p>
       </div>
+
     </li>
-    <li v-if="personalSetting.block" class="block-info text-center">您已被管理员拉黑，请联系客服。</li>
+
+    <li v-if="isBlocked" class="block-info text-center">您已被管理员拉黑，请联系客服。</li>
     <li ref="msgEnd" id="msgEnd" class="msgEnd"></li>
+
+    <el-dialog :visible.sync="imgLightBox.visible"
+      width="640px"
+      custom-class="init-dialog img-dialog text-center"
+      append-to-body>
+      <img class="img" :src="imgLightBox.contentUrl">
+    </el-dialog>
+
   </ul>
 </template>
 
 
 <script>
+import { takeEnvelope } from '../api'
+import { mapState } from 'vuex'
+
 export default {
   props: {
     messages: {
       type: Array,
       required: true
     },
-    personalSetting: {
-      type: Object,
-      required: true
+    envelope: {
+      type: Object
     },
-    user: {
-      type: Object,
-      required: true
+    defaultAvatar: {
+      type: String
     },
-    roomManagers: {
-      type: Array
+    isBlocked: {
+      type: Boolean
+    },
+    isManager: {
+      type: Boolean
+    },
+    isBanned: {
+      type: Boolean
+    }
+  },
+  filters: {
+    complete (value) {
+      value = parseInt(value)
+      return value < 10 ? ('0' + value) : value
+    }
+  },
+  data () {
+    return {
+      imgLightBox: {
+        visible: false,
+        contentUrl: ''
+      },
+      countdown: {
+        resultCountDown: 0,
+        closeCountDown: 0,
+        schedule: 0
+      }
     }
   },
   methods: {
+    followBet (msg) {
+      this.$root.bus.$emit('followBet', msg.bet_info.bets)
+    },
+    scrollToEnd () {
+      this.$nextTick(() => {
+        this.$refs.msgEnd && this.$refs.msgEnd.scrollIntoView()
+      })
+    },
     isAlive (time) {
       return this.$moment().isBefore(this.$moment(time))
+    },
+    handleImgMsgClick (msg) {
+      this.imgLightBox.visible = true
+      this.imgLightBox.contentUrl = msg.content
+    },
+    takeEnvelope (envelope) {
+      if (!this.user.account_type) {
+        return
+      }
+
+      this.envelope.content = envelope.content
+      this.envelope.status = 'taking'
+
+      let payload = {
+        envelope_id: envelope.envelope_status.id,
+        receiver_id: this.user.id
+      }
+
+      this.envelope.visible = true
+
+      takeEnvelope(payload).then(res => {
+        res.envelope_id = payload.envelope_id
+        this.envelope.envelope = res
+
+        if (res.amount) {
+          this.$store.dispatch('fetchUser').then(() => { this.envelope.status = 'success' })
+        } else {
+          switch (res.status) {
+            case 'expired' :
+              this.envelope.status = 'expired'
+
+              let index = this.messages.findIndex((msg) => msg.type === 5 && msg.envelope_status && msg.envelope_status.id === payload.envelope_id)
+              this.messages[index].envelope_status.expired = true
+              return
+            case 'repeat' :
+              this.envelope.status = 'repeat'
+              return
+            case 'fail' :
+              this.envelope.status = 'fail'
+          }
+        }
+      })
+    },
+    handleCheckUser (msg) {
+      if (!this.isManager || msg.sender.level_name.indexOf('管理员') !== -1) {
+        return false
+      }
+      this.$emit('checkUser', msg.sender)
+    },
+    drawed (msg) {
+      return this.countdown.resultCountDown.schedule !== msg.bet_info.issue_number
     }
   },
   computed: {
-
+    ...mapState([
+      'user'
+    ]),
+    closed () {
+      const r = this.countdown.resultCountDown
+      return r.hours + r.hours + r.seconds + r.minutes === 0
+    }
+  },
+  created () {
+    this.$root.bus.$on('countdown', (timing) => {
+      this.countdown = timing
+    })
+  },
+  beforeDestroy () {
+    this.$root.bus.$off('countdown')
   }
 }
 </script>
@@ -106,21 +266,64 @@ export default {
 <style lang="scss" scoped>
 @import '../style/vars.scss';
 
-.chatmsgs-list {
-  .block-info {
-    padding-top: 100px;
-    font-size: 16px;
-    color: red;
-  }
+.block-info {
+  padding-top: 100px;
+  font-size: 16px;
+  color: red;
 }
 
-.item {
+.msg {
   margin-top: 10px;
   padding: 5px;
-  &.sys-msg {
+  &-wrapper {
+    display: flex;
+
+    &.item-right {
+      justify-content: flex-end;
+      .msg-header {
+        text-align: right;
+      }
+
+      .bubble, .followingbet-message {
+        border-radius: 10px 0 10px 10px;
+        align-self: flex-end;
+      }
+
+      .bubble {
+        background: #0269b1;
+        color: #ffffff;
+      }
+
+      .msg-time {
+        order: 0
+      }
+      .msg-content {
+        order: 1
+      }
+      .avatar {
+        order: 2
+      }
+
+    }
+    &.item-left {
+      justify-content: flex-start;
+
+      .bubble, .followingbet-message {
+        border-radius: 0 10px 10px 10px;
+      }
+
+      .bubble {
+        background: #e5e5e5;
+        color: #333333;
+      }
+
+    }
+
+  }
+  .tips {
     text-align: center;
     margin-top: 0px;
-    .inner {
+    .lastmsg-tip {
       color: #999;
       display: inline-block;
       background: #efefef;
@@ -128,171 +331,101 @@ export default {
       border: 1px solid #dddddc;
       padding: 5px 10px;
     }
-    .type-warning {
-      color: #f60;
-      .btn-here {
-        color: rgb(25, 158, 216);
-      }
-    }
-  }
-  &.item-left {
-    .lay-block {
-      .lay-content {
-        .bubble:after {
-          left: 0;
-          border-left: 0;
-          margin-left: -9px;
-          border-right-color: inherit;
-        }
-      }
-    }
-  }
-  &.item-right {
-    .lay-block {
-      .avatar {
-        float: right;
-      }
-      .lay-content {
-        float: right;
-        margin-right: 15px;
-        .msg-header {
-          h4 {
-            text-align: right;
-            float: right;
-            padding-top: 2px;
-          }
 
-          span {
-            float: right;
-          }
-        }
-        .bubble {
-          float: right;
-        }
-        .bubble:after {
-          right: 0;
-          border-right: 0;
-          margin-right: -9px;
-          border-left-color: inherit;
-        }
-      }
+    .envelope-tip {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 8px;
+      color: #999;
     }
+
   }
-}
-.lay-block {
+
   .avatar {
     width: 42px;
     height: 42px;
-    cursor: pointer;
-    float: left;
-    .font-cog {
-      color: #7285d6;
-    }
-    img {
+    .img {
       display: block;
       width: 100%;
       height: 100%;
       border-radius: 7px;
     }
   }
-}
 
-.common-member {
-  display: inline-block;
-  margin: 0 2px;
-  background: #cb9b64;
-  color: #fff;
-  padding: 0 6px;
-  border-radius: 10px;
-  font-weight: 400;
-  font-size: 10px;
-}
-
-
-.lay-content {
-  margin-left: 18px;
-  float: left;
-  max-width: 75%;
-}
-.msg-header {
-  overflow: hidden;
-  h4 {
-    display: inline-block;
-    font-size: 12px;
-    color: #4f77ab;
-    display: inline-block;
-    font-weight: 400;
-    cursor: pointer;
-    max-width: 73px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    line-height: 12px;
+  .msg-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
   }
 
   .msg-time {
-    display: inline-block;
+    display: flex;
+    align-items: flex-end;
     color: #666;
-    margin: 0 2px;
+    color: #bfbfbf;
+    font-size: 10px;
+    margin: 0 5px;
   }
 }
+
+.msg-header {
+  overflow: hidden;
+
+  .sender {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    color: #0269b1;
+  }
+
+  .character-badge {
+    display: inline-block;
+    margin: 0 2px;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 10px;
+    &.planmaker {
+      background: #e58364;
+    }
+
+    &.manager {
+      background-color: #62adcd;
+    }
+  }
+
+}
+
+// msg details
 .bubble {
-  background: linear-gradient(to right, $primary, rgb(25, 158, 216));
-  border-left-color: rgb(25, 158, 216);
-  border-right-color: $primary;
-  color: rgb(255, 255, 255);
-  margin-top: 3px;
-  position: relative;
-  border-radius: 5px;
-  padding: 5px 8px;
-  font-size: 13px;
-  display: inline-block;
-  p {
-    width: 100%;
+  max-width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  max-height: 200px;
+  overflow-y: auto;
+  .text {
+    word-wrap: break-word;
   }
+
   &.bubble1 {
-    width: 55%;
+    width: auto;
+    max-width: 150px;
+    height: auto;
+    max-height: 200px;
+    .img {
+      width: 100%;
+      height: 100%;
+    }
   }
-  &.bubble4 {
-    background: #ab47bc;
-    background: linear-gradient(to right,#ab47bc,#5169DE);
-    border-left-color: #5169de;
-    border-right-color: #ab47bc;
-  }
+
   &.bubble7 {
     background: transparent;
     border: none;
     padding: 0;
-    .sticker-message {
-      width: 100px;
-      height: 100px;
-    }
-    &:after {
-      content: none;
-    }
   }
-
-  p {
-    display: inline-block;
-    span {
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-    img {
-      width: 100%;
-      min-height: 50px;
-      cursor: pointer;
-    }
-  }
-}
-.bubble:after {
-  content: '';
-  position: absolute;
-  top: 14px;
-  width: 0;
-  height: 0;
-  border: 9px solid transparent;
-  border-top: 0;
-  margin-top: -7px;
 }
 
 .envelope-message {
@@ -301,18 +434,24 @@ export default {
   padding: 10px;
   border-radius: 5px;
   justify-content: stretch;
-  background-color: #fa9d3b;
+  background-color: #eea549;
   position: relative;
+
   &.expired {
-    background: #f5c38e;
+    opacity: .6;
+    background: #999999;
   }
+
   &.null {
-    background: #f5c38e;
+    opacity: .6;
+    background: #D69F14;
   }
+
   .img {
     width: 30px;
     height: 35px;
   }
+
   .send-texts {
     color: #fff;
     .slogan {
@@ -323,46 +462,83 @@ export default {
       text-overflow: ellipsis;
     }
   }
-  &:after {
-    content: '';
-    position: absolute;
-    top: 14px;
-    width: 0;
-    height: 0;
-    border: 9px solid transparent;
-    border-top: 0;
-    margin-top: -7px;
-    border-right-color: #fa9d3b;
-  }
 }
-.item-left .envelope-message{
-  &:after {
-    left: 0;
-    border-left: 0;
-    margin-left: -8px;
-  }
-  &.null:after, &.expired:after {
-    border-right-color: #f5c38e;
-  }
+
+.sticker-message {
+  width: 120px;
+  height: 120px;
 }
-.item-right .envelope-message{
-  float: right;
-  &:after {
-    right: 0;
-    border-right: 0;
-    margin-right: -9px;
-    border-left-color: #fa9d3b;
+
+.followingbet-message {
+  width: 265px;
+  max-height: 300px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 16px 14px -10px rgba(37, 140, 211, 0.25), 0 4px 10px 0 rgba(62, 174, 252, 0.1);
+  padding: 10px;
+  .game-info {
+    display: flex;
+    justify-content: space-between;
+
+    .name {
+      .display-name {
+        color: #333333;
+        font-weight: 500;
+        font-size: 16px;
+      }
+      .issue-number {
+        color: #999999;
+        font-weight: 300;
+      }
+    }
+
+    .countdown {
+      font-size: 20px;
+      line-height: 1.5;
+      font-weight: 500;
+      color: #b32020;
+    }
+    .drawed {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: #229e50;
+    }
   }
-  &.null:after, &.expired:after {
-    border-left-color: #f5c38e;
+
+  .bet-info {
+    width: 100%;
+    .play-table {
+      width: 100%;
+    }
+    .thead {
+      color: #999999;
+      font-weight: 300;
+      font-size: 12px;
+      border-bottom: 2px solid #e5e5e5;
+    }
+    .trow {
+      font-size: 14px;
+      color: #333333;
+      line-height: 2;
+    }
+  }
+
+  .action {
+    padding: 5px 0 0 0;
+    .followbet-btn {
+      width: 100%;
+      font-weight: 500;
+      font-size: 14px;
+      color: #fff;
+    }
   }
 }
 
-.get-envelope {
-  display: inline-block;
-  color: #dedede;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 5px 20px;
-  border-radius: 4px;
+
+.img-dialog .img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 </style>

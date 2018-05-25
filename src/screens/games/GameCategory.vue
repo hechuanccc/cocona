@@ -162,8 +162,11 @@
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
       </el-alert>
+      <div class="text-center" v-if="followBetCheckboxVisible">
+        <el-checkbox v-model="followBetAllowed">将此笔注单分享至聊天室开放跟单</el-checkbox>
+      </div>
       <div class="text-center m-t-lg" v-if="!submitted">
-        <el-button size="medium" :loading="submitting" type="primary" :disabled="!playsForSubmit.length" @click="placeOrder">确认</el-button>
+        <el-button size="medium" :loading="submitting" type="primary" :disabled="submitBtnDisabled" @click="placeOrder">确认</el-button>
         <el-button size="medium" @click="dialogVisible = false" :disabled="submitting">取消</el-button>
       </div>
       <el-alert v-else title="成功下单" type="success" center :closable="false" show-icon>
@@ -175,6 +178,7 @@
 
 <script>
 import Vue from 'vue'
+import { mapState, mapGetters } from 'vuex'
 import _ from 'lodash'
 import '../../style/playicon.scss'
 import { fetchPlaygroup, placeBet } from '../../api'
@@ -246,12 +250,33 @@ export default {
       errors: '',
       playReset: false,
       showCombinationDetails: false,
-      showCombinationsTips: false
+      showCombinationsTips: false,
+      followBetAllowed: true,
+      followingBets: []
     }
   },
   computed: {
+    ...mapGetters([
+      'currentGame',
+      'planMakerMap'
+    ]),
+    ...mapState([
+      'systemConfig',
+      'chatRoom'
+    ]),
+    submitBtnDisabled () {
+      let bettingArr = this.playsForSubmit.bets || this.playsForSubmit
+      return !bettingArr.length
+    },
+    followBetCheckboxVisible () {
+      if (this.currentGame) {
+        return this.planMakerMap[this.currentGame.id] &&
+        this.planMakerMap[this.currentGame.id].isPlanMaker &&
+        this.systemConfig.chatroomEnabled === 'true'
+      }
+    },
     playsForSubmit () {
-      return _.filter(this.activePlays, play => play.active).map(play => {
+      let bettingArr = _.filter(this.activePlays, play => play.active).map(play => {
         return {
           game_schedule: this.scheduleId,
           bet_amount: parseFloat(play.bet_amount),
@@ -259,6 +284,16 @@ export default {
           bet_options: play.bet_options
         }
       })
+
+      let isPlanMaker = this.currentGame && this.planMakerMap[this.currentGame.id] && this.planMakerMap[this.currentGame.id].isPlanMaker
+      if (this.followBetAllowed && isPlanMaker) {
+        return {
+          bets: bettingArr,
+          send_bet_info: true
+        }
+      } else {
+        return bettingArr
+      }
     },
     formatting () {
       let category = this.$store.getters.categoriesById(this.$route.params.categoryId)
@@ -308,10 +343,14 @@ export default {
       localStorage.setItem('amount', amount)
     },
     // play object array for submit to API to place the order
-    'playsForSubmit': function (plays) {
-      this.totalAmount = _.reduce(plays, (sum, play) => {
-        return sum + parseFloat(play.bet_amount)
-      }, 0)
+    'playsForSubmit': {
+      handler: function () {
+        let plays = this.playsForSubmit.bets || this.playsForSubmit
+        this.totalAmount = _.reduce(plays, (sum, play) => {
+          return sum + parseFloat(play.bet_amount)
+        }, 0)
+      },
+      deep: true
     },
     'rawAndFormatting': function () {
       if (this.raw.length && this.formatting.length) {
@@ -322,6 +361,25 @@ export default {
   created () {
     this.initPlaygroups()
     this.$root.bus.$on('openBetDialog', (gameData) => {
+      this.openDialog()
+    })
+
+    this.$root.bus.$on('followBet', (bets) => {
+      this.followingBets = bets
+      this.$nextTick(() => {
+        this.activePlays = this.followingBets.map((bet) => {
+          return {
+            game_schedule: 10,
+            display_name: `${bet.play.display_name}-${bet.play.playgroup}`,
+            odds: bet.play.odds,
+            bet_amount: bet.bet_amount,
+            id: bet.play.id,
+            bet_options: bet.bet_options,
+            active: true
+          }
+        })
+      })
+
       this.openDialog()
     })
   },
@@ -404,6 +462,7 @@ export default {
       }
       this.errors = ''
       this.submitted = false
+      this.followingBets = []
     },
     placeOrder () {
       this.submitting = true
@@ -419,7 +478,9 @@ export default {
               this.submitted = false
               this.dialogVisible = false
               this.updateBetrecords()
-              this.reset()
+              if (!this.followingBets.length) {
+                this.reset()
+              }
             }, 1000)
           } else {
             let messages = []
@@ -485,6 +546,9 @@ export default {
           }
         }
       )
+
+      console.log(validedPlays, 'validedPlays')
+
       this.activePlays = _.values(validedPlays.map(play => {
         let betOptions
         let isCustom = play.isCustom
@@ -524,6 +588,7 @@ export default {
             forShow = `${play.group} - ${play.display_name}`
           }
         }
+
         return {
           game_schedule: 10,
           display_name: forShow,
@@ -537,6 +602,7 @@ export default {
           optionDisplayNames: optionDisplayNames
         }
       }))
+
       this.dialogVisible = true
     },
     getWidthForGroup (playSection) {
