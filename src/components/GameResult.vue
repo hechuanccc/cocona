@@ -113,15 +113,14 @@ export default {
     },
     fetchResult (gameId) {
       return fetchGameResult(gameId).then(
-      result => {
-        if (!result || !result[0]) {
-          return
-        }
-        this.gameLatestResult = result[0]
-        this.zodiacs = result[0].zodiac.split(',')
-        return result
-      }
-    )
+        result => {
+          if (!result || !result[0]) {
+            return
+          }
+          this.gameLatestResult = result[0]
+          this.zodiacs = result[0].zodiac.split(',')
+          return result
+        })
     },
     pollResult (gameid) {
       if (!this.gameLatestResult) {

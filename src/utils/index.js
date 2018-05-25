@@ -154,7 +154,7 @@ export function setIndicator (onActivate, onInactivate) {
   }
 }
 export function filtAmount (evt, decimalFlag) {
- // prevent key in: + - . e
+  // prevent key in: + - . e
   const codes = decimalFlag ? [43, 45, 101] : [43, 45, 46, 101]
 
   _.each(codes, code => {

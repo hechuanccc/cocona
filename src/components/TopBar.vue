@@ -108,12 +108,12 @@
 
 <script>
 import 'vue-awesome/icons/credit-card'
+import 'vue-awesome/icons/arrow-circle-right'
 import 'vue-awesome/icons/list-ul'
-import 'vue-awesome/icons/credit-card-alt'
-import 'vue-awesome/icons/file-text-o'
+import 'vue-awesome/icons/file'
 import 'vue-awesome/icons/user'
-import 'vue-awesome/icons/envelope-o'
-import 'vue-awesome/icons/sign-out'
+import 'vue-awesome/icons/envelope'
+import 'vue-awesome/icons/sign-out-alt'
 
 import { register } from '../api'
 import { msgFormatter } from '../utils'

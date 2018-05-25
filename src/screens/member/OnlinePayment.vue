@@ -45,12 +45,12 @@
           <el-input class="input-width" name="amount" type="number" v-model.number="selectedPayment.amount" @keypress.native="filtAmount" :min="lower" :max="upper"></el-input>
           <div class="min-amount">
             <span class="text">{{$t('user.min_amount')}}:</span>
-            <icon scale="0.75" name="jpy"></icon>
+            <icon scale="0.75" name="yen-sign"></icon>
             <span class="amount">{{lower}}</span>
             <template v-if="upper">
               &nbsp;
               <span class="text">{{$t('user.max_amount')}}:</span>
-              <icon scale="0.75" name="jpy"></icon>
+              <icon scale="0.75" name="yen-sign"></icon>
               <span class="amount">{{upper}}</span>
             </template>
           </div>
@@ -102,7 +102,7 @@ import { fetchPaymentType } from '../../api'
 import { msgFormatter, filtAmount } from '../../utils'
 import urls from '../../api/urls'
 import Vue from 'vue'
-import 'vue-awesome/icons/jpy'
+import 'vue-awesome/icons/yen-sign'
 export default {
   name: 'OnlinePayment',
   data () {

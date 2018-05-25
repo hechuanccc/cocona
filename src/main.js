@@ -55,8 +55,9 @@ const token = Vue.cookie.get('access_token')
 
 Vue.config.productionTip = false
 
-Object.keys(locales).forEach(lang => {
-  Vue.locale(lang, locales['cn'])
+const i18n = new VueI18n({
+  locale: 'cn',
+  messages: locales
 })
 
 if (token) {
@@ -190,6 +191,7 @@ gethomePage().then(
 
 /* eslint-disable no-new */
 new Vue({
+  i18n,
   el: '#app',
   router,
   store,
