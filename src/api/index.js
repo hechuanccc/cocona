@@ -88,6 +88,10 @@ export function fetchCaptcha () {
   })
 }
 
+export function fetchSmsCode (phone) {
+  return axios.put(`${urls.smsCode}`, {phone_number: phone})
+}
+
 export function fetchPaymentType () {
   return axios.get(urls.paymentType)
 }
