@@ -166,7 +166,8 @@ gethomePage().then(
         gaTrackingId: pref.ga_tracking_id,
         favicon: response.favicon,
         regPresentAmount: response.reg_present_amount,
-        needBankinfo: response.need_bankinfo
+        needBankinfo: response.need_bankinfo,
+        sms_validation_enabled: pref.sms_validation_enabled
       })
 
     if (pref.ga_tracking_id) {
