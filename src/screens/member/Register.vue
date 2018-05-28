@@ -44,6 +44,12 @@
           <el-form-item :label="$t('user.phone')" prop="phone">
             <el-input class="input-width" v-model="user.phone" @blur="clearSpace(user, 'phone')"></el-input>
           </el-form-item>
+          <el-form-item :label="'短信验证码'" prop="sms_code" v-if="systemConfig.sms_validation_enabled !== 'false'">
+            <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @blur="clearSpace(user, 'sms_code')">
+              <el-button slot="suffix" type="info" class="captcha" @click="fetchSmsCode">获取</el-button>
+            </el-input>
+            <div class="sms-tip m-t" v-if="sms_tip">{{sms_tip}}</div>
+          </el-form-item>
           <el-form-item :label="$t('user.qq')" prop="qq">
             <el-input class="input-width" v-model="user.qq" @blur="clearSpace(user, 'qq')"></el-input>
           </el-form-item>
@@ -59,12 +65,6 @@
             <el-col :span="4" :offset="12">
               <img :src="captcha_src" alt="" height="30">
             </el-col>
-          </el-form-item>
-          <el-form-item :label="'短信验证码'" prop="sms_code" v-else>
-            <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @blur="clearSpace(user, 'sms_code')">
-              <el-button slot="suffix" type="info" class="captcha" @click="fetchSmsCode">获取</el-button>
-            </el-input>
-            <div class="sms-tip m-t" v-if="sms_tip">{{sms_tip}}</div>
           </el-form-item>
           <el-form-item :label="''" prop="hasAgree">
             <el-checkbox-group v-model="user.hasAgree">
