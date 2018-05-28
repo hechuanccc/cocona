@@ -50,7 +50,7 @@
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
             <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password" @blur="clearSpace(user, 'withdraw_password')"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('user.captcha')" prop="verification_code_1">
+          <el-form-item :label="$t('user.captcha')" prop="verification_code_1" v-if="systemConfig.sms_validation_enabled === 'false'">
             <el-col :span="7">
               <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off" @blur="clearSpace(user, 'verification_code_1')">
                 <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
@@ -59,6 +59,12 @@
             <el-col :span="4" :offset="12">
               <img :src="captcha_src" alt="" height="30">
             </el-col>
+          </el-form-item>
+          <el-form-item :label="'短信验证码'" prop="sms_code" v-else>
+            <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @blur="clearSpace(user, 'sms_code')">
+              <el-button slot="suffix" type="info" class="captcha" @click="fetchSmsCode">获取</el-button>
+            </el-input>
+            <div class="sms-tip m-t" v-if="sms_tip">{{sms_tip}}</div>
           </el-form-item>
           <el-form-item :label="''" prop="hasAgree">
             <el-checkbox-group v-model="user.hasAgree">
@@ -74,6 +80,7 @@
       </div>
     </div>
     <el-dialog
+      top="5vh"
       :title="$t('user.agreement')"
       width="40%"
       :visible.sync="dialogVisible">
@@ -97,9 +104,11 @@
 </template>
 
 <script>
-import { fetchCaptcha, checkUserName, register } from '../../api'
+import { fetchCaptcha, checkUserName, register, fetchSmsCode } from '../../api'
 import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword, validateQQ, validateRealName } from '../../validate'
 import { msgFormatter } from '../../utils'
+import { mapState } from 'vuex'
+
 export default {
   name: 'register',
   data () {
@@ -146,6 +155,7 @@ export default {
         callback()
       }
     }
+
     const captchaValidator = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('validate.required')))
@@ -185,6 +195,7 @@ export default {
         callback()
       }
     }
+
     return {
       user: {
         username: '',
@@ -196,8 +207,11 @@ export default {
         withdraw_password: '',
         verification_code_0: '',
         verification_code_1: '',
-        hasAgree: ['hasAgree']
+        hasAgree: ['hasAgree'],
+        sms_code: '',
+        loading: false
       },
+      sms_tip: '',
       dialogVisible: false,
       captcha_src: '',
       rules: {
@@ -231,17 +245,23 @@ export default {
         ],
         hasAgree: [
           { type: 'array', required: true, message: this.$t('validate.agreement_validate'), trigger: 'change' }
+        ],
+        sms_code: [
+          { required: true, validator: captchaValidator, trigger: 'blur' }
         ]
       }
     }
   },
   created () {
-    this.fetchCaptcha()
+    if (this.systemConfig.sms_validation_enabled === 'false') {
+      this.fetchCaptcha()
+    }
   },
   methods: {
     submitForm () {
       this.$refs['user'].validate((valid) => {
         if (valid) {
+          this.loading = true
           register(this.user).then(result => {
             if (result.code === 9001) {
               this.$message({
@@ -250,6 +270,7 @@ export default {
                 type: 'warning'
               })
             }
+            this.loading = false
             return this.$store.dispatch('login', {
               user: {
                 username: this.user.username,
@@ -259,36 +280,69 @@ export default {
           }).then(result => {
             this.$router.push({ name: 'Game' })
           }, errorMsg => {
-            this.fetchCaptcha()
+            if (this.systemConfig.sms_validation_enabled === 'false') {
+              this.fetchCaptcha()
+            }
 
             this.$message({
               showClose: true,
               message: msgFormatter(errorMsg),
               type: 'error'
             })
+
+            this.loading = false
           })
         } else {
           return false
         }
       })
     },
-    resetForm () {
-      this.$refs['user'].resetFields()
-      this.fetchCaptcha()
-    },
     fetchCaptcha () {
+      if (this.loading) {
+        return
+      }
+      this.loading = true
       fetchCaptcha().then(res => {
         this.captcha_src = res.captcha_src
         this.user.verification_code_0 = res.captcha_val
+        this.loading = false
+      })
+    },
+    fetchSmsCode () {
+      if (this.loading) {
+        return
+      }
+
+      if (!this.user.phone) {
+        this.sms_tip = '请先填入手机号码'
+        return
+      }
+
+      if (!validatePhone(this.user.phone)) {
+        this.sms_tip = this.$t('validate.phone_validate')
+        return
+      }
+
+      this.loading = true
+      fetchSmsCode(this.user.phone).then(res => {
+        this.sms_tip = res.msg
+        this.loading = false
+      },
+      errRes => {
+        this.sms_tip = msgFormatter(errRes)
+        this.loading = false
       })
     }
   },
   computed: {
+    ...mapState([
+      'systemConfig'
+    ]),
     regPresentAmount () {
-      return this.$store.state.systemConfig.regPresentAmount
+      return this.systemConfig.regPresentAmount
     },
     needBankinfo () {
-      return this.$store.state.systemConfig.needBankinfo
+      return this.systemConfig.needBankinfo
     }
   }
 }
@@ -335,5 +389,10 @@ export default {
 .agreement-link {
   color: $primary;
   text-decoration: underline;
+}
+
+.sms-tip {
+  color: #aaa;
+  line-height: 15px;
 }
 </style>
