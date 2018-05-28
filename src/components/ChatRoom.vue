@@ -12,7 +12,7 @@
         </div>
         <div class="right fr clearfix">
           <img :src="require('../assets/icon_setting.png')"
-            v-if="personal_setting.manager"
+            v-if="isManager"
             alt="setting"
             class="clickable icon"
             @click="handleBlockPopupShow"/>
@@ -20,7 +20,7 @@
           <img :src="require('../assets/icon_profile.png')"
             alt="profile"
             class="clickable icon"
-            @click="personal_setting.blocked ? '' : showEditProfile = true"/>
+            @click="isBlocked ? '' : showEditProfile = true"/>
 
           <img :src="require('../assets/icon_close.png')"
             alt="profile"
@@ -184,7 +184,7 @@
               validateevent="true"
               class="el-textarea-inner"
               v-model="msgCnt"
-              :disabled="personal_setting.chat.status ? false : true">
+              :disabled="!personal_setting.chat.status">
             </textarea>
           </div>
 
@@ -300,7 +300,7 @@ import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
 import { mapState, mapGetters } from 'vuex'
 import { msgFormatter, getCookie } from '../utils'
-import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getChatUser, fetchStickers } from '../api'
+import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getRoomInfo, fetchStickers } from '../api'
 import config from '../../config'
 import Stickers from './Stickers'
 import Envelope from './Envelope'
@@ -309,7 +309,6 @@ import ChatMessages from './ChatMessages'
 import _ from 'lodash'
 
 const WSHOST = config.chatHost
-let RECEIVER = 100000
 
 export default {
   props: {
@@ -319,6 +318,7 @@ export default {
     }
   },
   data () {
+    let RECEIVER = this.$store.state.chatRoom.defaultRoom
     return {
       RECEIVER,
       ws: null,
@@ -460,7 +460,9 @@ export default {
   methods: {
     scrollToEnd () {
       console.log(this.$refs)
-      this.$refs['chatmessages'].scrollToEnd()
+      if (this.$refs['chatmessages']) {
+        this.$refs['chatmessages'].scrollToEnd()
+      }
     },
     isAlive (time) {
       return this.$moment().isBefore(this.$moment(time))
@@ -476,9 +478,9 @@ export default {
       this.scrollToEnd()
     },
     handleEnvelopeIconClick () {
-      // if (this.personalSetting.blocked || this.personalSetting.banned) {
-        // return
-      // }
+      if (this.isBlocked || this.isBanned) {
+        return
+      }
       if (!this.user.account_type) {
         this.$store.commit('OPEN_LOGINDIALOG')
       } else {
@@ -759,7 +761,7 @@ export default {
       }
     },
     handleCheckUser (data) {
-      if (!this.personal_setting.manager || data.sender.level_name.indexOf('管理员') !== -1) {
+      if (!this.isManager || data.sender.level_name.indexOf('管理员') !== -1) {
         return false
       }
       this.checkUser = data.sender
@@ -831,7 +833,7 @@ export default {
     },
     getUser () {
       this.loading = true
-      getChatUser(this.RECEIVER).then(response => {
+      getRoomInfo(this.RECEIVER).then(response => {
         let data = response.data
         this.roomManagers = response.data.managers
         this.bannedUsers = data.banned_users

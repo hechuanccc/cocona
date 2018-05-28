@@ -246,8 +246,12 @@ export function unblockChatUser (id, data) {
     })
 }
 
-export function getChatUser (id) {
+export function getRoomInfo (id) { // for manager
   return axiosChat.get(`${urls.apiRoom}/${id}/`)
+}
+
+export function getRoomsStatus (id) {
+  return axiosChat.get(`${urls.apiRoom}/`)
 }
 
 export function setCookie (cookie) {
