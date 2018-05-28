@@ -2,7 +2,8 @@ const pattern = {
   username: /^[a-zA-Z0-9]{6,15}$/,
   password: /^[a-zA-Z0-9]{6,15}$/,
   qq: /^[0-9]{4,}$/,
-  phone: /^1[0-9]{10}$/,
+  // phone: /^1[0-9]{10}$/,
+  phone: /^[0-9]{10,}$/, // TODO
   bankAccount: /^[0-9]{10,}$/,
   withdrawPassword: /^[0-9]{6}$/,
   real_name: /[\u4E00-\u9FA5]/
