@@ -5,17 +5,11 @@
       class="msg">
       <div :class="['msg-wrapper', msg.isSaidByMe ? 'item-right' : 'item-left']"
         v-if="msg.type >= 0 && msg.type !== 6 && msg.sender">
-
-
         <div class="avatar m-l-sm m-r-sm">
-          <icon name="cog"
-            class="font-cog"
-            v-if="msg.type === 4"
-            scale="3"></icon>
           <img class="img"
             @click="handleCheckUser(msg)"
             :src="msg.sender.avatar_url || defaultAvatar"
-            v-else>
+            >
         </div>
 
         <div class="msg-content">
@@ -259,6 +253,9 @@ export default {
   },
   beforeDestroy () {
     this.$root.bus.$off('countdown')
+  },
+  mounted () {
+    this.scrollToEnd()
   }
 }
 </script>

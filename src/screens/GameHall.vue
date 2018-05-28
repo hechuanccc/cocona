@@ -260,7 +260,10 @@ export default {
     })
   },
   created () {
+    this.$store.dispatch('setRoomsStatus')
+
     this.$root.bus = bus
+
     this.$root.bus.$on('new-betrecords', (gameData) => {
       this.fetchOngoingBet(gameData)
     })

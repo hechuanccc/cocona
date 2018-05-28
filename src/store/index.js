@@ -18,7 +18,8 @@ export function createStore () {
       isChatting: false,
       chatRoom: {
         defaultRoom: 100000,
-        currentRoom: null
+        currentRoom: null,
+        roomsStatus: undefined
       },
       loginDialogVisible: false,
       showTrialVerifyDialog: false,
@@ -234,7 +235,7 @@ export function createStore () {
         global_preferences: {
           chat_condition_message: ''
         },
-        chatroomEnabled: 'false',
+        chatroomEnabled: false,
         floatAd: null
       }
     },

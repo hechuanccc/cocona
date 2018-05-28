@@ -246,11 +246,11 @@ export function unblockChatUser (id, data) {
     })
 }
 
-export function getRoomInfo (id) { // for manager
+export function getRoomUserInfo (id) { // for manager
   return axiosChat.get(`${urls.apiRoom}/${id}/`)
 }
 
-export function getRoomsStatus (id) {
+export function getRoomsStatus (id) { // for all
   return axiosChat.get(`${urls.apiRoom}/`)
 }
 

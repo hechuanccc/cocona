@@ -272,7 +272,7 @@ export default {
       if (this.currentGame) {
         return this.planMakerMap[this.currentGame.id] &&
         this.planMakerMap[this.currentGame.id].isPlanMaker &&
-        this.systemConfig.chatroomEnabled === 'true'
+        this.systemConfig.chatroomEnabled
       }
     },
     playsForSubmit () {

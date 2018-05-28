@@ -160,7 +160,7 @@ gethomePage().then(
         openAccountConsultingQQ: pref.open_account_consulting_qq,
         siteName: response.name,
         floatAd: response.right_float_img,
-        chatroomEnabled: pref.chatroom_enabled,
+        chatroomEnabled: pref.chatroom_enabled === 'true',
         gaTrackingId: pref.ga_tracking_id,
         favicon: response.favicon,
         regPresentAmount: response.reg_present_amount,

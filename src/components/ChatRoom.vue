@@ -25,7 +25,7 @@
           <img :src="require('../assets/icon_close.png')"
             alt="profile"
             class="clickable icon"
-            @click="leaveRoom"/>
+            @click="showChatRoom = false"/>
 
         </div>
 
@@ -111,6 +111,7 @@
 
         <ChatMessages :messages="messages"
           ref="chatmessages"
+          @checkUser="handleCheckUser"
           :defaultAvatar="defaultAvatar"
           :user="user"
           :envelope="envelope"
@@ -222,12 +223,10 @@
     <div
       v-if="isLogin && showEntry"
       class="chat-guide text-center"
-      @click="joinChatRoom">
+      @click="joinChatRoom()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
-      <ul class="text-center">
-        <li>聊</li>
-        <li>天</li>
-        <li>室</li>
+      <ul class="words-list text-center">
+        <li class="p-t-sm text-center" v-for="(word , index) in roomTitle" :key="index">{{word}}</li>
       </ul>
     </div>
 
@@ -298,9 +297,17 @@
 <script>
 import MarqueeTips from 'vue-marquee-tips'
 import urls from '../api/urls'
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { msgFormatter, getCookie } from '../utils'
-import { updateUser, fetchChatEmoji, sendImgToChat, banChatUser, blockChatUser, unblockChatUser, unbanChatUser, getRoomInfo, fetchStickers } from '../api'
+import { updateUser,
+  fetchChatEmoji,
+  sendImgToChat,
+  banChatUser,
+  blockChatUser,
+  unblockChatUser,
+  unbanChatUser,
+  getRoomUserInfo,
+  fetchStickers} from '../api'
 import config from '../../config'
 import Stickers from './Stickers'
 import Envelope from './Envelope'
@@ -323,6 +330,7 @@ export default {
       RECEIVER,
       ws: null,
       defaultAvatar: require('../assets/avatar.png'),
+      defaultRoom: this.$store.state.chatRoom.defaultRoom,
       showChatRoom: false,
       messages: [],
       showEditProfile: false,
@@ -377,7 +385,7 @@ export default {
         visible: false,
         envelope: {}
       },
-      backTodefaultRoom: false
+      roomTitle: ''
     }
   },
   components: {
@@ -389,23 +397,43 @@ export default {
         this.leaveRoom()
       }
     },
-    'user.showChatRoom' (val, oldVal) {
-      this.leaveRoom()
-    },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
         this.getStickers()
       }
     },
-    'currentGame': function (val, oldVal) {
-      if (oldVal) {
-        this.leaveRoom()
-        this.RECEIVER = val.id
-        this.$store.dispatch('updateCurrentChatRoom', val.id)
-        this.joinChatRoom()
+    '$route.params.gameId': function (val, oldVal) {
+      if (val) {
+        let oldRoom = this.RECEIVER
+        this.initRECEIVER()
+
+        if (!this.ws) {
+          this.joinChatRoom()
+        } else {
+          let roomChanged = (oldRoom !== this.RECEIVER)
+          if (roomChanged) {
+            this.ws && this.ws.send(JSON.stringify({
+              'command': 'leave',
+              'receivers': [oldRoom]
+            }))
+
+            this.ws.send(JSON.stringify({
+              'command': 'join',
+              'receivers': [this.RECEIVER]
+            }))
+          }
+        }
+
+        this.getUser()
       }
-      this.getUser()
+    },
+    'RECEIVER': function () {
+      this.messages = []
+      this.scrollToEnd()
     }
+  },
+  created () {
+    this.initRECEIVER()
   },
   computed: {
     ...mapState([
@@ -413,9 +441,6 @@ export default {
       'envelopes',
       'systemConfig',
       'chatRoom'
-    ]),
-    ...mapGetters([
-      'currentGame'
     ]),
     isManager () {
       return this.personal_setting.manager.includes(this.RECEIVER)
@@ -426,22 +451,11 @@ export default {
     isBanned () {
       return !!this.personal_setting.banned[this.RECEIVER]
     },
-    roomTitle () {
-      if (this.currentGame) {
-        if (this.chatRoom.currentRoom !== this.chatRoom.defaultRoom) {
-          return this.currentGame.display_name + '聊天室'
-        } else {
-          return '聊天室'
-        }
-      } else {
-        return ''
-      }
-    },
     isLogin () {
-      return this.$store.state.user.logined && this.$route.name !== 'Home'
+      return this.user.logined && this.$route.name !== 'Home'
     },
     chatConditionMessage () {
-      return this.$store.state.systemConfig.global_preferences.chat_condition_message
+      return this.systemConfig.global_preferences.chat_condition_message
     },
     formattedBannedUsers () {
       let result = []
@@ -458,8 +472,15 @@ export default {
     }
   },
   methods: {
+    initRECEIVER () {
+      let gameId = this.$route.params.gameId
+      let roomsStatus = this.chatRoom.roomsStatus
+      let current = roomsStatus[gameId].status ? roomsStatus[gameId] : roomsStatus[this.defaultRoom]
+      this.RECEIVER = current.id
+      this.roomTitle = current.title
+      this.$store.dispatch('updateCurrentChatRoom', this.RECEIVER)
+    },
     scrollToEnd () {
-      console.log(this.$refs)
       if (this.$refs['chatmessages']) {
         this.$refs['chatmessages'].scrollToEnd()
       }
@@ -514,6 +535,14 @@ export default {
     },
     joinChatRoom (room) {
       this.showChatRoom = true
+      if (this.ws) {
+        this.ws.send(JSON.stringify({
+          'command': 'join',
+          'receivers': [this.RECEIVER]
+        }))
+        return
+      }
+
       let token = getCookie('access_token')
       this.loading = true
       this.ws = new WebSocket(`${WSHOST}/chat/stream?username=${this.$store.state.user.username}&token=${token}`)
@@ -525,16 +554,12 @@ export default {
 
         this.handleMsg()
       }
-      this.ws.onclose = () => {
-        this.ws = null
-      }
     },
     handleMsg () {
       this.loading = false
       if (!this.ws) { return false }
 
       this.ws.onmessage = (resData) => {
-        if (!this.showChatRoom || !this.showEntry) { return }
         let data
         if (typeof resData.data === 'string') {
           try {
@@ -572,7 +597,7 @@ export default {
               } else {
                 switch (data.type) {
                   case 2:
-                    if (this.showChatRoom && this.isLogin) {
+                    if (this.showChatRoom) {
                       if (data.command === 'banned') {
                         this.errMsg = true
                         this.errMsgCnt = data.content
@@ -657,10 +682,11 @@ export default {
                     this.errMsgCnt = data.msg
                     break
                   case 6:
-                    this.leaveRoom()
-                    this.joinChatRoom(this.chatRoom.defaultRoom)
-                    this.RECEIVER = this.chatRoom.defaultRoom
-                    this.$store.dispatch('updateCurrentChatRoom', this.chatRoom.defaultRoom)
+                    this.$store.dispatch('updateRoomStatus', this.RECEIVER, 0)
+                    this.joinChatRoom(this.defaultRoom)
+                    this.RECEIVER = this.defaultRoom
+
+                    this.$store.dispatch('updateCurrentChatRoom', this.defaultRoom)
                     break
                   default:
                     this.errMsgCnt = data.msg
@@ -748,35 +774,39 @@ export default {
       this.showChatRoom = false
       this.messages = []
       this.showEditProfile = false
+
       this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
         'receivers': [this.RECEIVER]
       }))
 
-      this.RECEIVER = null
-      this.$store.dispatch('updateCurrentChatRoom', null)
-
       if (this.ws) {
         this.ws.close()
+        this.ws = null
+        this.RECEIVER = null
+        this.$store.dispatch('updateCurrentChatRoom', null)
       }
     },
-    handleCheckUser (data) {
-      if (!this.isManager || data.sender.level_name.indexOf('管理员') !== -1) {
-        return false
-      }
-      this.checkUser = data.sender
+    handleCheckUser (sender) {
+      this.checkUser = sender
       this.showCheckUser = true
     },
     ban (mins) {
       banChatUser(this.RECEIVER, {
         user: this.checkUser.username,
         banned_time: mins
-      }).then((data) => {
+      }).then((response) => {
+        let data = response.data.data
         this.showCheckUser = false
+        this.$message({
+          showClose: true,
+          message: data.status,
+          type: 'success'
+        })
       }, errorMsg => {
         this.$message({
           showClose: true,
-          message: errorMsg,
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
       })
@@ -784,17 +814,18 @@ export default {
     unban (user) {
       unbanChatUser(this.RECEIVER, {
         user: user
-      }).then((data) => {
+      }).then((response) => {
+        let data = response.data.data
         this.getUser()
         this.$message({
           showClose: true,
-          message: data.data.status,
+          message: data.status,
           type: 'success'
         })
       }, errorMsg => {
         this.$message({
           showClose: true,
-          message: errorMsg,
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
       })
@@ -802,13 +833,19 @@ export default {
     block () {
       blockChatUser(this.RECEIVER, {
         user: this.checkUser.username
-      }).then((data) => {
+      }).then((response) => {
+        let data = response.data.data
         this.showCheckUser = false
+        this.$message({
+          showClose: true,
+          message: data.status,
+          type: 'success'
+        })
       }, errorMsg => {
         this.showCheckUser = false
         this.$message({
           showClose: true,
-          message: errorMsg.response.data.error,
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
       })
@@ -816,25 +853,29 @@ export default {
     unblock (user) {
       unblockChatUser(this.RECEIVER, {
         user: user
-      }).then((data) => {
+      }).then((response) => {
+        let data = response.data.data
         this.getUser()
         this.$message({
           showClose: true,
-          message: data.data.status,
+          message: data.status,
           type: 'success'
         })
       }, errorMsg => {
         this.$message({
           showClose: true,
-          message: errorMsg,
+          message: msgFormatter(errorMsg),
           type: 'error'
         })
       })
     },
     getUser () {
+      if (!this.isManager) {
+        return
+      }
       this.loading = true
-      getRoomInfo(this.RECEIVER).then(response => {
-        let data = response.data
+      getRoomUserInfo(this.RECEIVER).then(response => {
+        let data = response.data.data
         this.roomManagers = response.data.managers
         this.bannedUsers = data.banned_users
         this.blockedUsers = data.block_users
@@ -1099,24 +1140,19 @@ $primary-blue: #006bb3;
   right: 0;
   top: 50%;
   width: 40px;
-  height: 122px;
+  height: auto;
   margin-top: -76px;
   background-size: 100%;
   cursor: pointer;
   z-index: 0;
   background: #1e72df;
   border-radius: 8px 0 0 8px;
-  padding-top: 14px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  .words-list,
   .font-wechat {
-    color: #d1e6fe;
-  }
-  ul {
-    font-size: 18px;
     color: #fff;
-    li {
-      text-align: center;
-      padding: 4px 0;
-    }
+    font-size: 18px;
   }
 }
 

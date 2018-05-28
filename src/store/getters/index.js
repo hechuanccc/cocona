@@ -11,7 +11,6 @@ export default {
     return state.games
   },
   currentGame: (state, getters) => {
-    console.log('getters')
     let routerParams = state.route.params
     return routerParams && routerParams.gameId ? getters.gameById(routerParams.gameId) : null
   },

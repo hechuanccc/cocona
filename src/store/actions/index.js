@@ -11,7 +11,8 @@ import {
   updateUser,
   fetchGames,
   fetchCategories,
-  fetchChatUserInfo
+  fetchChatUserInfo,
+  getRoomsStatus
 } from '../../api'
 
 export default {
@@ -147,5 +148,18 @@ export default {
   },
   updateCurrentChatRoom: ({ commit, state }, room) => {
     commit(types.UPDATE_CURRENTCHATROOM, room)
+  },
+  setRoomsStatus: ({ commit, state }) => {
+    let statusMap = {}
+    getRoomsStatus().then((res) => {
+      let roomsStatus = res.data.data
+      _.each(roomsStatus, (room) => {
+        statusMap[room.id] = room
+      })
+      commit(types.SET_ROOMSSTATUS, statusMap)
+    })
+  },
+  updateRoomStatus: ({commit, state}, roomId, status) => {
+    commit(types.SET_ROOMSSTATUS, roomId, status)
   }
 }
