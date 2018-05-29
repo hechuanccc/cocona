@@ -103,6 +103,9 @@ body {
 .p-b {
   padding-bottom: 10px;
 }
+.p-b-sm {
+  padding-bottom: 5px;
+}
 .p-l-lg {
   padding-left: 20px;
 }
@@ -111,6 +114,9 @@ body {
 }
 .p-t {
   padding-top: 10px;
+}
+.p-t-sm {
+  padding-top: 5px;
 }
 .block-center {
   margin: 0 auto;
@@ -162,4 +168,8 @@ a {
 
 .text-bold {
   font-weight: 700;
+}
+
+.init-dialog /deep/ .el-dialog__header , .init-dialog /deep/ .el-dialog__body {
+  padding: 0;
 }

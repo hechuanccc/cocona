@@ -98,14 +98,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'currentGame'
     ]),
     ...mapState([
       'isChatting'
-    ]),
-    currentGame () {
-      return this.$store.getters.gameById(this.$route.params.gameId)
-    }
+    ])
   },
   watch: {
     '$route': function (to, from) {
@@ -151,6 +149,9 @@ export default {
     },
     formattedWinRecords (results) {
       let formatted = []
+      if (!results || !results.length) {
+        return
+      }
       _.each(results, (result) => {
         let win = {
           playgroup: result.play.playgroup,
@@ -274,7 +275,10 @@ export default {
     })
   },
   created () {
+    this.$store.dispatch('setRoomsStatus')
+
     this.$root.bus = bus
+
     this.$root.bus.$on('new-betrecords', (gameData) => {
       this.fetchOngoingBet(gameData)
     })
@@ -294,6 +298,7 @@ export default {
   beforeDestroy () {
     clearInterval(this.interval)
     this.$root.bus.$off('new-betrecords')
+    this.$root.bus.$off('followBet')
     window.removeEventListener('keypress', keyEnterListener)
   }
 }

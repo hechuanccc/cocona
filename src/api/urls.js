@@ -5,7 +5,7 @@ const host = env.HOST.replace(/"/g, '')
 const prefix = host + '/member'
 const apiv1 = host + '/v1/member'
 const apiChat = env.chatApi.replace(/"/g, '')
-const apiRoom = apiChat + '/v1/room'
+const apiRoom = apiChat + '/v1/member/room'
 
 export default {
   domain: host,
@@ -46,11 +46,12 @@ export default {
   messageCount: apiv1 + '/message/count/',
   gamehistory: apiv1 + '/history/',
   statistic: apiv1 + '/statistic/',
-  chatRoomLogin: apiChat + '/chat/',
   article: apiv1 + '/website/franchising-program-page/',
   chatEmoji: apiChat + '/v1/emoji/',
   sendImgToChat: host + '/v1/manage/attachment/',
   apiRoom,
   setCookie: host + '/set_cookie/',
-  stickers: apiChat + '/v1/stickers/'
+  stickers: apiChat + '/v1/stickers/',
+  envelope: host + '/v1/member/red_envelope/',
+  chatUser: apiChat + '/v1/user/'
 }

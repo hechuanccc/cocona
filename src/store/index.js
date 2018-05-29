@@ -13,9 +13,15 @@ export function createStore () {
         logined: '',
         showChatRoom: true,
         account_type: undefined,
+        chatInfo: null,
         unsettled: 0
       },
       isChatting: false,
+      chatRoom: {
+        defaultRoom: 100000,
+        currentRoom: null,
+        roomsStatus: undefined
+      },
       loginDialogVisible: false,
       showTrialVerifyDialog: false,
       betRecordDialogVisible: false,
@@ -23,6 +29,7 @@ export function createStore () {
       categories: [],
       loading: false,
       messageCount: 0,
+      envelopes: {},
       customPlayGroups: [
         {
           // 重庆幸运农场 连码
@@ -229,7 +236,7 @@ export function createStore () {
         global_preferences: {
           chat_condition_message: ''
         },
-        chatroomEnabled: 'false',
+        chatroomEnabled: false,
         floatAd: null
       }
     },

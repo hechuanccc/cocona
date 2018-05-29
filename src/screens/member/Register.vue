@@ -46,7 +46,7 @@
           </el-form-item>
           <el-form-item :label="'短信验证码'" ref="sms_code" prop="sms_code" v-if="systemConfig.sms_validation_enabled !== 'false'">
             <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @focus="$refs.user.validateField('sms_code')" @blur="clearSpace(user, 'sms_code')">
-              <el-button slot="suffix" type="info" class="captcha" :disabled="!smsClickable" @click="fetchSmsCode">
+              <el-button slot="suffix" type="info" class="captcha" :disabled="!smsClickable || !!countdown" @click="fetchSmsCode">
                 {{!!countdown  ? countdown + 's' : '获取'}}
               </el-button>
             </el-input>
@@ -229,6 +229,7 @@ export default {
       countdown: 0,
       countdownInterval: null,
       sms_tip: '',
+      sms_success_tip: '',
       smsClickable: false,
       dialogVisible: false,
       captcha_src: '',
