@@ -1,5 +1,5 @@
 <template>
-  <ul>
+  <ul class="msg-list">
     <li v-for="(msg, index) in messages"
       :key="index"
       class="msg">
@@ -272,6 +272,9 @@ export default {
 .msg {
   margin-top: 10px;
   padding: 5px;
+  &-list {
+    margin-top: 30px;
+  }
   &-wrapper {
     display: flex;
 

@@ -105,7 +105,7 @@
             <span class="text">公告:</span>
           </div>
           <div class="marquee">
-            <MarqueeTips :content="announcement" :speed="10"></MarqueeTips>
+            <MarqueeTips :content="announcement" :speed="20"></MarqueeTips>
           </div>
         </div>
 
@@ -121,7 +121,7 @@
           :personalSetting="personal_setting"/>
       </el-main>
 
-      <el-footer class="footer" height="130">
+      <el-footer class="footer" height="120">
         <div class="control-bar">
           <el-popover :popper-class="'emoji-popover'"
             ref="sticker-popover"
@@ -194,7 +194,7 @@
             </textarea>
           </div>
 
-          <div class="p-r text-right" @click="$refs.textarea.focus()">
+          <div class="p-r text-right sendbtn">
             <a href="javascript:void(0)" class="u-btn" @click="sendMsg">发送</a>
           </div>
         </div>
@@ -442,7 +442,7 @@ export default {
       this.scrollToEnd()
     }
   },
-  created () {
+  mounted () {
     this.initRECEIVER()
   },
   computed: {
@@ -915,7 +915,7 @@ $primary-blue: #006bb3;
     position: fixed;
     right: 0;
     top: 0;
-    width: 380px;
+    width: 420px;
     z-index: 2;
   }
 
@@ -923,7 +923,7 @@ $primary-blue: #006bb3;
     position: fixed;
     right: 0;
     top: 0;
-    width: 380px;
+    width: 420px;
     height: 100%;
     overflow-x: hidden;
     border-left: 3px solid $primary-blue;
@@ -966,16 +966,16 @@ $primary-blue: #006bb3;
   .announcements {
     position: absolute;
     top: 56px;
-    left: 5px;
-    right: 5px;
-    background-image: linear-gradient(to bottom, #f2f2f2 39%, rgba(242, 242, 242, 0.9) 97%);
+    left: 0px;
+    right: 0px;
+    background: #fff;
     height: 32px;
     line-height: 32px;
     overflow: hidden;
     z-index: 3;
 
     .bulletin {
-      background-image: linear-gradient(to bottom, #f2f2f2 39%, rgba(242, 242, 242, 0.9) 97%);
+      background-image: #fff;
       color: #b32020;
       padding: 0px 5px;
     }
@@ -993,7 +993,7 @@ $primary-blue: #006bb3;
 }
 
 .footer {
-  height: 130px;
+  height: 120px;
   width: 100%;
   background: #f5f5f5;
   border-top: 2px solid #e5e5e5;
@@ -1016,10 +1016,16 @@ $primary-blue: #006bb3;
   }
   .typing {
     position: relative;
-    padding: 0px 5px;
+    display: inline-flex;
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(100% - 32px);
+    padding: 0 0 0px 5px;
     .txtinput {
       display: block;
       width: auto;
+      flex-grow: 1;
+      align-self: center;
     }
     .el-textarea {
       vertical-align: bottom;
@@ -1035,16 +1041,23 @@ $primary-blue: #006bb3;
     .el-textarea-inner {
       display: block;
       box-sizing: border-box;
-      resize: none;
-      background-color: #f5f5f5;
-      padding: 0px 5px;
-      line-height: 1.5;
       width: 100%;
+      height: 72px;
+      resize: none;
+      background-color: #fcfcfc;
+      border: none;
+      border-radius: 5px;
+      line-height: 1.5;
       font-size: 16px;
       color: #333333;
-      border: none;
       outline: none;
       background-image: none;
+    }
+
+    .sendbtn {
+      display: flex;
+      align-items: center;
+      padding-right: 5px;
     }
   }
 
@@ -1132,10 +1145,10 @@ $primary-blue: #006bb3;
   display: inline-block;
   text-align: center;
   border-radius: 3px;
-  margin-left: 3px;
+  margin-left: 5px;
   width: 72px;
-  height: 36px;
-  line-height: 36px;
+  height: 72px;
+  line-height: 72px;
   font-size: 14px;
   background: $primary;
   color: #fff;
