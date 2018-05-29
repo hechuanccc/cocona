@@ -44,12 +44,15 @@
           <el-form-item :label="$t('user.phone')" prop="phone">
             <el-input class="input-width" v-model="user.phone" @blur="clearSpace(user, 'phone')"></el-input>
           </el-form-item>
-          <el-form-item :label="'短信验证码'" prop="sms_code" v-if="systemConfig.sms_validation_enabled !== 'false'">
-            <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @blur="clearSpace(user, 'sms_code')">
-              <el-button slot="suffix" type="info" class="captcha" @click="fetchSmsCode">获取</el-button>
+          <el-form-item :label="'短信验证码'" ref="sms_code" prop="sms_code" v-if="systemConfig.sms_validation_enabled !== 'false'">
+            <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @focus="$refs.user.validateField('sms_code')" @blur="clearSpace(user, 'sms_code')">
+              <el-button slot="suffix" type="info" class="captcha" :disabled="!smsClickable || !!countdown" @click="fetchSmsCode">
+                {{!!countdown  ? countdown + 's' : '获取'}}
+              </el-button>
             </el-input>
-            <div class="sms-tip m-t" v-if="sms_tip">{{sms_tip}}</div>
+            <div v-if="sms_success_tip" class="sms-tip">{{sms_success_tip}}</div>
           </el-form-item>
+
           <el-form-item :label="$t('user.qq')" prop="qq">
             <el-input class="input-width" v-model="user.qq" @blur="clearSpace(user, 'qq')"></el-input>
           </el-form-item>
@@ -166,8 +169,10 @@ export default {
 
     const phoneValidator = (rule, value, callback) => {
       if (!validatePhone(value)) {
+        this.smsClickable = false
         callback(new Error(this.$t('validate.phone_validate')))
       } else {
+        this.smsClickable = true
         callback()
       }
     }
@@ -196,6 +201,16 @@ export default {
       }
     }
 
+    const smsValidator = (rule, value, callback) => {
+      if (this.sms_tip) {
+        callback(new Error(this.sms_tip))
+      } else if (value === '') {
+        callback(new Error(this.$t('validate.required')))
+      } else {
+        callback()
+      }
+    }
+
     return {
       user: {
         username: '',
@@ -211,7 +226,11 @@ export default {
         sms_code: '',
         loading: false
       },
+      countdown: 0,
+      countdownInterval: null,
       sms_tip: '',
+      sms_success_tip: '',
+      smsClickable: false,
       dialogVisible: false,
       captcha_src: '',
       rules: {
@@ -247,7 +266,7 @@ export default {
           { type: 'array', required: true, message: this.$t('validate.agreement_validate'), trigger: 'change' }
         ],
         sms_code: [
-          { required: true, validator: captchaValidator, trigger: 'blur' }
+          { required: true, validator: smsValidator, trigger: 'blur,change' }
         ]
       }
     }
@@ -255,6 +274,16 @@ export default {
   created () {
     if (this.systemConfig.sms_validation_enabled === 'false') {
       this.fetchCaptcha()
+    }
+  },
+  watch: {
+    'sms_tip': function () {
+      this.$refs.user.validateField('sms_code')
+    },
+    'sms_success_tip': function () {
+      setTimeout(() => {
+        this.sms_success_tip = ''
+      }, 3000)
     }
   },
   methods: {
@@ -313,25 +342,30 @@ export default {
         return
       }
 
-      if (!this.user.phone) {
-        this.sms_tip = '请先填入手机号码'
-        return
-      }
-
-      if (!validatePhone(this.user.phone)) {
-        this.sms_tip = this.$t('validate.phone_validate')
-        return
-      }
-
       this.loading = true
       fetchSmsCode(this.user.phone).then(res => {
-        this.sms_tip = res.msg
+        this.$refs.sms_code.clearValidate()
         this.loading = false
+        this.sms_success_tip = res.msg
+        this.sms_tip = ''
+        this.setCountdown()
       },
       errRes => {
         this.sms_tip = msgFormatter(errRes)
         this.loading = false
       })
+    },
+    setCountdown () {
+      this.countdown = 60
+      this.smsClickable = false
+      this.countdownInterval = setInterval(() => {
+        this.countdown--
+        if (this.countdown <= 0) {
+          clearInterval(this.countdownInterval)
+          this.countdown = 0
+          this.smsClickable = true
+        }
+      }, 1000)
     }
   },
   computed: {
@@ -385,6 +419,7 @@ export default {
 .el-button.el-button--info.el-button--small.captcha {
   position: absolute;
   right: 0;
+  width: 55px;
 }
 .agreement-link {
   color: $primary;
@@ -392,7 +427,7 @@ export default {
 }
 
 .sms-tip {
-  color: #aaa;
+  color: $green;
   line-height: 15px;
 }
 </style>
