@@ -607,22 +607,25 @@ export default {
               } else {
                 switch (data.type) {
                   case 2:
-                    if (this.showChatRoom) {
-                      if (data.command === 'banned') {
-                        this.errMsg = true
-                        this.errMsgCnt = data.content
-                      } else if (data.command === 'unblock') {
-                        this.personal_setting.chat.status = 1
-                        this.personal_setting.blocked.remove(this.RECEIVER)
-                        this.joinChatRoom()
-                      } else if (data.command === 'unbanned') {
-                        this.personal_setting.chat.status = 1
-                        this.personal_setting.banned[this.RECEIVER] = ''
-                      } else if (data.command === 'join') {
-                        this.RECEIVER = data.receivers
-                        this.$store.dispatch('updateCurrentChatRoom', data.receivers)
-                      }
 
+                    if (data.command === 'banned') {
+                      this.errMsg = true
+                      this.errMsgCnt = data.content
+                    } else if (data.command === 'unblock') {
+                      this.personal_setting.chat.status = 1
+                      this.personal_setting.blocked.remove(this.RECEIVER)
+                      this.joinChatRoom()
+                    } else if (data.command === 'unbanned') {
+                      this.personal_setting.chat.status = 1
+                      this.personal_setting.banned[this.RECEIVER] = ''
+                    } else if (data.command === 'join') {
+                      this.RECEIVER = data.receivers
+                      this.$store.dispatch('updateCurrentChatRoom', data.receivers)
+                    } else if (data.command === 'chat_condition_passed') {
+                      this.personal_setting.chat.status = 1
+                    }
+
+                    if (this.showChatRoom) {
                       this.$notify({
                         message: data.content,
                         offset: 100,
