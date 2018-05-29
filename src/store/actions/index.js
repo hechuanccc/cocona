@@ -10,7 +10,9 @@ import {
   fetchUser,
   updateUser,
   fetchGames,
-  fetchCategories
+  fetchCategories,
+  fetchChatUserInfo,
+  getRoomsStatus
 } from '../../api'
 
 export default {
@@ -58,9 +60,20 @@ export default {
   fetchUser: ({ commit, state }) => {
     return fetchUser().then(res => {
       if (res.length > 0) {
+        let user = res[0]
+        if (user.account_type && !state.user.chatInfo) {
+          fetchChatUserInfo(user.username).then((info) => {
+            let chatInfo = info
+            commit(types.SET_USER, {
+              user: {
+                chatInfo
+              }
+            })
+          })
+        }
         commit(types.SET_USER, {
           user: {
-            ...res[0],
+            ...user,
             logined: true
           }
         })
@@ -129,6 +142,25 @@ export default {
   },
   updateIsChatting: ({ commit, state }, signal) => {
     commit(types.UPDATE_ISCHATTING, signal)
+  },
+  collectEnvelope: ({ commit, state }, data) => {
+    commit(types.COLLECT_ENVELOPE, data)
+  },
+  updateCurrentChatRoom: ({ commit, state }, room) => {
+    commit(types.UPDATE_CURRENTCHATROOM, room)
+  },
+  setRoomsStatus: ({ commit, state }) => {
+    let statusMap = {}
+    getRoomsStatus().then((res) => {
+      let roomsStatus = res.data.data
+      _.each(roomsStatus, (room) => {
+        statusMap[room.id] = room
+      })
+      commit(types.SET_ROOMSSTATUS, statusMap)
+    })
+  },
+  updateRoomStatus: ({commit, state}, roomId, status) => {
+    commit(types.SET_ROOMSSTATUS, roomId, status)
   },
   updateUnsettled: ({ commit, state }, value) => {
     commit(types.UPDATE_UNSETTLED, value)

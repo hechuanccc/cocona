@@ -84,11 +84,9 @@ export default {
       return this.$store.getters.gameById(this.$route.params.gameId) || {index: 0}
     },
     ...mapGetters([
-      'allGames'
-    ]),
-    user () {
-      return this.$store.state.user
-    }
+      'allGames',
+      'user'
+    ])
   },
   watch: {
     'allGames': function () {
