@@ -17,11 +17,11 @@
             <span class="sender">{{msg.sender.nickname || msg.sender.username}}</span>
             <span :class="[
                 'character-badge',
-                { 'manager': msg.sender.level_name === '管理员'},
-                { 'planmaker': msg.sender.level_name === '(计划员)一般会员'}
+                { 'manager': msg.sender.level === 'manager'},
+                { 'planmaker': msg.sender.level === 'plan_maker'}
               ]"
-              v-if="msg.sender.level_name === '管理员' || msg.sender.level_name === '(计划员)一般会员' && !msg.isSaidByMe">
-              {{ msg.sender.level_name }}
+              v-if="msg.sender.level === 'manager' || msg.sender.level === 'plan_maker' && !msg.isSaidByMe">
+              {{ msg.sender.level === 'manager' ? '管理员' : '计划员' }}
             </span>
           </div>
 
@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <span class="msg-time" v-if="msg.type !== 8">{{msg.created_at | moment('HH:mm:ss')}}</span>
+        <span class="msg-time" v-if="msg.type !== 8">{{msg.created_at | moment('HH:mm')}}</span>
       </div>
 
       <div class="tips" v-else>
@@ -228,7 +228,7 @@ export default {
       })
     },
     handleCheckUser (msg) {
-      if (!this.isManager || msg.sender.level_name.indexOf('管理员') !== -1) {
+      if (!this.isManager || msg.sender.level === 'manager') {
         return false
       }
       this.$emit('checkUser', msg.sender)

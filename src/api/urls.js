@@ -16,6 +16,7 @@ export default {
   withdraw_password: prefix + '/withdraw_password/',
   refresh_token: prefix + '/login/refresh/',
   verification: apiv1 + '/verification_code/',
+  smsCode: apiv1 + '/sms_verification/',
   logout: host + '/logout/',
   games: apiv1 + '/game/',
   category: apiv1 + '/game/category/',

@@ -89,6 +89,10 @@ export function fetchCaptcha () {
   })
 }
 
+export function fetchSmsCode (phone) {
+  return axios.put(`${urls.smsCode}`, {phone_number: phone})
+}
+
 export function fetchPaymentType () {
   return axios.get(urls.paymentType)
 }
@@ -267,7 +271,6 @@ export function fetchChatUserInfo (username) {
 }
 
 export function sendEnvelope (data) {
-  console.log(data)
   return axios.post(urls.envelope, {
     pack_amount: data.pack_amount,
     pack_nums: data.pack_nums,

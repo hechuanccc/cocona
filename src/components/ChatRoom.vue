@@ -149,15 +149,19 @@
             </el-tabs>
           </el-popover>
 
-          <a v-popover:sticker-popover href="javascript:void(0)" title="发送表情" class="btn-control btn-smile">
-            <img :src="require('../assets/icon_sticker_normal.png')"
+          <a v-popover:sticker-popover
+            href="javascript:void(0)"
+            title="发送表情" class="btn-control btn-smile clickable"
+            @mouseenter="controlBar.sticker = true"
+            @mouseleave="controlBar.sticker = false">
+            <img :src="controlBar.sticker ? require('../assets/icon_sticker_hover.png') : require('../assets/icon_sticker_normal.png')"
               alt="sticker"/>
           </a>
 
-          <a href="javascript:void(0)" class="btn-control btn-smile">
-            <label for="imgUploadInput">
+          <a href="javascript:void(0)" class="btn-control btn-smile clickable">
+            <label for="imgUploadInput" class="clickable" @mouseenter="controlBar.image = true" @mouseleave="controlBar.image = false">
               <span title="上传图片">
-                <img :src="require('../assets/icon_picture_normal.png')"
+                <img :src="controlBar.image ? require('../assets/icon_picture_hover.png') : require('../assets/icon_picture_normal.png')"
                   alt="sticker"/>
                 <input :disabled="!personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
@@ -166,8 +170,9 @@
 
           <div v-if="systemConfig.envelopeSettings && systemConfig.envelopeSettings.enabled === '1'"
             class="btn-control btn-smile envelope-icon clickable"
+             @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
             @click="handleEnvelopeIconClick">
-            <img class="img" src="../assets/envelope_icon.png" alt="envelope-icon">
+            <img class="img" :src="controlBar.redEnvelope ? require('../assets/icon_red pocket_hover.png') : require('../assets/icon_red pocket.png')" alt="envelope-icon">
           </div>
 
         </div>
@@ -385,7 +390,12 @@ export default {
         visible: false,
         envelope: {}
       },
-      roomTitle: ''
+      roomTitle: '',
+      controlBar: {
+        sticker: false,
+        image: false,
+        redEnvelope: false
+      }
     }
   },
   components: {
@@ -399,7 +409,7 @@ export default {
     },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
-        this.getStickers()
+        // this.getStickers()
       }
     },
     '$route.params.gameId': function (val, oldVal) {
@@ -1003,9 +1013,6 @@ $primary-blue: #006bb3;
         top: -20px;
       }
     }
-    .btn-smile:hover {
-      background: #ffd4c0;
-    }
   }
   .typing {
     position: relative;
@@ -1043,7 +1050,7 @@ $primary-blue: #006bb3;
 
   .btn-control {
     float: left;
-    padding: 4px 12px;
+    padding: 4px 10px;
     line-height: 32px;
     margin-right: 1px;
     color: #666;
@@ -1054,7 +1061,7 @@ $primary-blue: #006bb3;
     }
   }
   .envelope-icon .img{
-    width: 20px;
+    width: auto;
   }
 }
 .edit-profile {

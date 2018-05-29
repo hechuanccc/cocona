@@ -67,8 +67,11 @@ if (token) {
 
 axios.interceptors.response.use(res => {
   let responseData = res.data
+
   if (responseData.code === 2000) {
     return responseData.data
+  } else if (responseData.code === 9001) {
+    return responseData
   } else {
     if (responseData.code === 9007) {
       toHomeAndLogin(router)
@@ -165,7 +168,8 @@ gethomePage().then(
         favicon: response.favicon,
         regPresentAmount: response.reg_present_amount,
         needBankinfo: response.need_bankinfo,
-        envelopeSettings: pref.red_envelope_settings
+        envelopeSettings: pref.red_envelope_settings,
+        sms_validation_enabled: pref.sms_validation_enabled
       })
 
     if (pref.ga_tracking_id) {

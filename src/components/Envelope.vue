@@ -202,7 +202,6 @@ export default {
           content: this.send.content ? this.send.content : '恭喜发财，大吉大利',
           room: this.roomId
         }
-        console.log(this.send)
         this.loading = true
         sendEnvelope(this.send).then(res => {
           this.initEnvelope()

@@ -161,5 +161,8 @@ export default {
   },
   updateRoomStatus: ({commit, state}, roomId, status) => {
     commit(types.SET_ROOMSSTATUS, roomId, status)
+  },
+  updateUnsettled: ({ commit, state }, value) => {
+    commit(types.UPDATE_UNSETTLED, value)
   }
 }

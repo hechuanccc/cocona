@@ -19,8 +19,9 @@ export default {
     let map = {}
     if (chatInfo && chatInfo.plan_maker_rooms.length) {
       _.each(chatInfo.plan_maker_rooms, (roomId) => {
-        map[roomId] = {}
-        map[roomId].isPlanMaker = true
+        map[roomId] = {
+          isPlanMaker: true
+        }
       })
     }
     return map

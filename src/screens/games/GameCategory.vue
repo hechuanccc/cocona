@@ -465,6 +465,9 @@ export default {
       this.followingBets = []
     },
     placeOrder () {
+      if (this.submitting) {
+        return
+      }
       this.submitting = true
       this.errors = ''
       placeBet(this.playsForSubmit)
@@ -546,8 +549,6 @@ export default {
           }
         }
       )
-
-      console.log(validedPlays, 'validedPlays')
 
       this.activePlays = _.values(validedPlays.map(play => {
         let betOptions

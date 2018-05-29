@@ -13,7 +13,8 @@ export function createStore () {
         logined: '',
         showChatRoom: true,
         account_type: undefined,
-        chatInfo: null
+        chatInfo: null,
+        unsettled: 0
       },
       isChatting: false,
       chatRoom: {
