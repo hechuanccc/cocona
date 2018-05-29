@@ -97,7 +97,7 @@
           </div>
 
           <div v-else :class="['bubble', `bubble${msg.type}`]">
-            <span class="text" v-if="msg.type === 0"> {{msg.content}} </span>
+            <span class="text" v-if="msg.type === 0">{{ msg.content }}</span>
             <img class="img" @click="handleImgMsgClick(msg)" v-else-if="msg.type === 1" :src="msg.content"/>
           </div>
         </div>
@@ -398,13 +398,14 @@ export default {
 .bubble {
   max-width: 90%;
   padding: 10px;
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 1px;
-  max-height: 200px;
+  max-height: 800px;
   overflow-y: auto;
   .text {
     word-wrap: break-word;
+    white-space: pre-wrap;
   }
 
   &.bubble1 {
