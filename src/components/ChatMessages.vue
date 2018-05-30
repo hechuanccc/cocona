@@ -230,7 +230,7 @@ export default {
       })
     },
     handleCheckUser (msg) {
-      if (!this.isManager || msg.sender.level === 'manager') {
+      if (!this.isManager || msg.sender.level === 'manager' || msg.sender.is_robot) {
         return false
       }
       this.$emit('checkUser', msg.sender)
