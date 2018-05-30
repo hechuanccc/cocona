@@ -223,9 +223,9 @@ export default {
         verification_code_0: '',
         verification_code_1: '',
         hasAgree: ['hasAgree'],
-        sms_code: '',
-        loading: false
+        sms_code: ''
       },
+      loading: false,
       countdown: 0,
       countdownInterval: null,
       sms_tip: '',
