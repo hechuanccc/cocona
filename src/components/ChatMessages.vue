@@ -67,9 +67,9 @@
                 <p class="issue-number">第{{msg.bet_info.issue_number}}期</p>
               </div>
 
-              <div class="drawed" v-if="drawed(msg)">已開獎</div>
+              <div class="drawed" v-if="drawed(msg)">已开奖</div>
               <div v-else>
-                <div class="countdown" v-if="closed">已封盤</div>
+                <div class="countdown" v-if="closed">已封盘</div>
                 <div class="countdown" v-else>
                   <span v-if="countdown.resultCountDown.days > 0">{{countdown.resultCountDown.days}}天 </span>
                   <span v-if="countdown.resultCountDown.hours > 0">{{countdown.resultCountDown.hours | complete}}:</span>
@@ -78,17 +78,19 @@
               </div>
             </div>
             <div class="bet-info">
-              <table class="play-table">
+              <table>
                 <tr class="thead">
-                  <td class="title">玩法</td>
+                  <td class="title group-name">玩法</td>
                   <td class="title">赔率</td>
                   <td class="title">金额</td>
                 </tr>
-                <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
-                  <td class="td">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
-                  <td class="td">{{bet.play.odds}}</td>
-                  <td class="td">{{bet.bet_amount}}</td>
-                </tr>
+                <tbody class="tbody">
+                  <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
+                    <td class="td group-name">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
+                    <td class="td">{{bet.play.odds}}</td>
+                    <td class="td">{{bet.bet_amount}}</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <div class="action" @click="followBet(msg)">
@@ -234,7 +236,7 @@ export default {
       this.$emit('checkUser', msg.sender)
     },
     drawed (msg) {
-      return this.countdown.resultCountDown.schedule !== msg.bet_info.issue_number
+      return this.countdown.schedule !== msg.bet_info.issue_number
     }
   },
   computed: {
@@ -242,7 +244,7 @@ export default {
       'user'
     ]),
     closed () {
-      const r = this.countdown.resultCountDown
+      const r = this.countdown.closeCountDown
       return r.hours + r.hours + r.seconds + r.minutes === 0
     }
   },
@@ -472,7 +474,6 @@ export default {
 
 .followingbet-message {
   width: 265px;
-  max-height: 300px;
   overflow: hidden;
   background: #fff;
   box-shadow: 0 16px 14px -10px rgba(37, 140, 211, 0.25), 0 4px 10px 0 rgba(62, 174, 252, 0.1);
@@ -509,19 +510,38 @@ export default {
 
   .bet-info {
     width: 100%;
-    .play-table {
-      width: 100%;
-    }
+
     .thead {
       color: #999999;
       font-weight: 300;
       font-size: 12px;
       border-bottom: 2px solid #e5e5e5;
     }
+
+    .tbody {
+      display:block;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
     .trow {
       font-size: 14px;
       color: #333333;
       line-height: 2;
+    }
+
+    .thead, .trow {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    .td {
+      vertical-align: middle;
+    }
+
+    .group-name {
+      width: 40%;
     }
   }
 

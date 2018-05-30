@@ -57,7 +57,7 @@ export default {
       this.$root.bus.$emit('countdown', {
         resultCountDown: this.resultCountDown,
         closeCountDown: this.closeCountDown,
-        schedule: this.schedule.id
+        schedule: this.schedule.issue_number
       })
     }
   }
