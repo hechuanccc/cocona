@@ -44,13 +44,22 @@
           <el-form-item :label="$t('user.phone')" prop="phone">
             <el-input class="input-width" v-model="user.phone" @blur="clearSpace(user, 'phone')"></el-input>
           </el-form-item>
+          <el-form-item :label="'短信验证码'" ref="sms_code" prop="sms_code" v-if="systemConfig.sms_validation_enabled !== 'false'">
+            <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @focus="$refs.user.validateField('sms_code')" @blur="clearSpace(user, 'sms_code')">
+              <el-button slot="suffix" type="info" class="captcha" :disabled="!smsClickable || !!countdown" @click="fetchSmsCode">
+                {{!!countdown  ? countdown + 's' : '获取'}}
+              </el-button>
+            </el-input>
+            <div v-if="sms_success_tip" class="sms-tip">{{sms_success_tip}}</div>
+          </el-form-item>
+
           <el-form-item :label="$t('user.qq')" prop="qq">
             <el-input class="input-width" v-model="user.qq" @blur="clearSpace(user, 'qq')"></el-input>
           </el-form-item>
           <el-form-item :label="$t('user.withdraw_password')" prop="withdraw_password">
             <el-input class="input-width" type="password" :maxlength="6" v-model="user.withdraw_password" @blur="clearSpace(user, 'withdraw_password')"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('user.captcha')" prop="verification_code_1">
+          <el-form-item :label="$t('user.captcha')" prop="verification_code_1" v-if="systemConfig.sms_validation_enabled === 'false'">
             <el-col :span="7">
               <el-input class="input-width" :maxlength="4" v-model="user.verification_code_1" auto-complete="off" @blur="clearSpace(user, 'verification_code_1')">
                 <el-button slot="suffix" type="info" icon="el-icon-refresh" class="captcha" @click="fetchCaptcha"></el-button>
@@ -74,6 +83,7 @@
       </div>
     </div>
     <el-dialog
+      top="5vh"
       :title="$t('user.agreement')"
       width="40%"
       :visible.sync="dialogVisible">
@@ -97,9 +107,11 @@
 </template>
 
 <script>
-import { fetchCaptcha, checkUserName, register } from '../../api'
+import { fetchCaptcha, checkUserName, register, fetchSmsCode } from '../../api'
 import { validateUserName, validatePassword, validatePhone, validateWithdrawPassword, validateQQ, validateRealName } from '../../validate'
 import { msgFormatter } from '../../utils'
+import { mapState } from 'vuex'
+
 export default {
   name: 'register',
   data () {
@@ -146,6 +158,7 @@ export default {
         callback()
       }
     }
+
     const captchaValidator = (rule, value, callback) => {
       if (value === '') {
         callback(new Error(this.$t('validate.required')))
@@ -156,8 +169,10 @@ export default {
 
     const phoneValidator = (rule, value, callback) => {
       if (!validatePhone(value)) {
+        this.smsClickable = false
         callback(new Error(this.$t('validate.phone_validate')))
       } else {
+        this.smsClickable = true
         callback()
       }
     }
@@ -185,6 +200,17 @@ export default {
         callback()
       }
     }
+
+    const smsValidator = (rule, value, callback) => {
+      if (this.sms_tip) {
+        callback(new Error(this.sms_tip))
+      } else if (value === '') {
+        callback(new Error(this.$t('validate.required')))
+      } else {
+        callback()
+      }
+    }
+
     return {
       user: {
         username: '',
@@ -196,8 +222,15 @@ export default {
         withdraw_password: '',
         verification_code_0: '',
         verification_code_1: '',
-        hasAgree: ['hasAgree']
+        hasAgree: ['hasAgree'],
+        sms_code: ''
       },
+      loading: false,
+      countdown: 0,
+      countdownInterval: null,
+      sms_tip: '',
+      sms_success_tip: '',
+      smsClickable: false,
       dialogVisible: false,
       captcha_src: '',
       rules: {
@@ -231,17 +264,30 @@ export default {
         ],
         hasAgree: [
           { type: 'array', required: true, message: this.$t('validate.agreement_validate'), trigger: 'change' }
+        ],
+        sms_code: [
+          { required: true, validator: smsValidator, trigger: 'blur,change' }
         ]
       }
     }
   },
   created () {
-    this.fetchCaptcha()
+    if (this.systemConfig.sms_validation_enabled === 'false') {
+      this.fetchCaptcha()
+    }
+  },
+  watch: {
+    'sms_success_tip': function () {
+      setTimeout(() => {
+        this.sms_success_tip = ''
+      }, 5000)
+    }
   },
   methods: {
     submitForm () {
       this.$refs['user'].validate((valid) => {
         if (valid) {
+          this.loading = true
           register(this.user).then(result => {
             if (result.code === 9001) {
               this.$message({
@@ -250,6 +296,7 @@ export default {
                 type: 'warning'
               })
             }
+            this.loading = false
             return this.$store.dispatch('login', {
               user: {
                 username: this.user.username,
@@ -259,36 +306,79 @@ export default {
           }).then(result => {
             this.$router.push({ name: 'Game' })
           }, errorMsg => {
-            this.fetchCaptcha()
+            if (this.systemConfig.sms_validation_enabled === 'false') {
+              this.fetchCaptcha()
+            }
 
             this.$message({
               showClose: true,
               message: msgFormatter(errorMsg),
               type: 'error'
             })
+
+            this.loading = false
           })
         } else {
           return false
         }
       })
     },
-    resetForm () {
-      this.$refs['user'].resetFields()
-      this.fetchCaptcha()
-    },
     fetchCaptcha () {
+      if (this.loading) {
+        return
+      }
+      this.loading = true
       fetchCaptcha().then(res => {
         this.captcha_src = res.captcha_src
         this.user.verification_code_0 = res.captcha_val
+        this.loading = false
       })
+    },
+    fetchSmsCode () {
+      if (this.loading) {
+        return
+      }
+
+      this.loading = true
+      fetchSmsCode(this.user.phone).then(res => {
+        this.$refs.sms_code.clearValidate()
+        this.loading = false
+        this.sms_success_tip = res.msg
+        this.sms_tip = ''
+        this.setCountdown()
+      },
+      errRes => {
+        this.sms_tip = msgFormatter(errRes)
+        this.$refs.user.validateField('sms_code')
+        setTimeout(() => {
+          this.$refs.sms_code.clearValidate()
+          this.sms_tip = ''
+        }, 5000)
+        this.loading = false
+      })
+    },
+    setCountdown () {
+      this.countdown = 60
+      this.smsClickable = false
+      this.countdownInterval = setInterval(() => {
+        this.countdown--
+        if (this.countdown <= 0) {
+          clearInterval(this.countdownInterval)
+          this.countdown = 0
+          this.smsClickable = true
+        }
+      }, 1000)
     }
   },
   computed: {
+    ...mapState([
+      'systemConfig'
+    ]),
     regPresentAmount () {
-      return this.$store.state.systemConfig.regPresentAmount
+      return this.systemConfig.regPresentAmount
     },
     needBankinfo () {
-      return this.$store.state.systemConfig.needBankinfo
+      return this.systemConfig.needBankinfo
     }
   }
 }
@@ -331,9 +421,15 @@ export default {
 .el-button.el-button--info.el-button--small.captcha {
   position: absolute;
   right: 0;
+  width: 55px;
 }
 .agreement-link {
   color: $primary;
   text-decoration: underline;
+}
+
+.sms-tip {
+  color: $green;
+  line-height: 15px;
 }
 </style>
