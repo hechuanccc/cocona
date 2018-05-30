@@ -169,8 +169,12 @@
           </a>
 
           <div v-if="systemConfig.envelopeSettings && systemConfig.envelopeSettings.enabled === '1'"
-            class="btn-control btn-smile envelope-icon clickable"
-             @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
+            :class="['btn-control',
+              'btn-smile',
+              'envelope-icon',
+              'clickable',
+              {'not-allowed': isBanned || isBlocked}]"
+            @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
             @click="handleEnvelopeIconClick">
             <img class="img" :src="controlBar.redEnvelope ? require('../assets/icon_red pocket_hover.png') : require('../assets/icon_red pocket.png')" alt="envelope-icon">
           </div>
