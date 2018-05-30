@@ -20,7 +20,7 @@
           <img :src="require('../assets/icon_profile.png')"
             alt="profile"
             class="clickable icon"
-            @click="isBlocked ? '' : showEditProfile = true"/>
+            @click="isBlocked || !user.account_type ? '' : showEditProfile = true"/>
 
           <img :src="require('../assets/icon_close.png')"
             alt="profile"
@@ -124,6 +124,7 @@
       <el-footer class="footer" height="120">
         <div class="control-bar">
           <el-popover :popper-class="'emoji-popover'"
+            :disabled="!user.account_type || isBlocked || isBanned || !personal_setting.chat.status"
             ref="sticker-popover"
             v-model="stickerPopoverVisible"
             placement="top-start"
@@ -159,7 +160,7 @@
           </a>
 
           <a href="javascript:void(0)" class="btn-control btn-smile clickable">
-            <label for="imgUploadInput" class="clickable" @mouseenter="controlBar.image = true" @mouseleave="controlBar.image = false">
+            <label for="imgUploadInput" @click="handleImgIconClick($event)" class="clickable" @mouseenter="controlBar.image = true" @mouseleave="controlBar.image = false">
               <span title="上传图片">
                 <img :src="controlBar.image ? require('../assets/icon_picture_hover.png') : require('../assets/icon_picture_normal.png')"
                   alt="sticker"/>
@@ -360,6 +361,7 @@ export default {
       showImageMsg: false,
       showImageMsgUrl: '',
       loading: false,
+      managerLoading: false,
       emojis: {
         people: []
       },
@@ -376,8 +378,6 @@ export default {
       },
       showCheckUser: false,
       checkUser: {},
-      welcome: '',
-      chatLoading: true,
       showBlockPopup: false,
       nowRestraintTab: '0',
       bannedUsers: [],
@@ -450,6 +450,11 @@ export default {
     'RECEIVER': function () {
       this.messages = []
       this.scrollToEnd()
+    },
+    'isLogin': function (val) {
+      if (!val) {
+        this.leaveRoom()
+      }
     }
   },
   mounted () {
@@ -472,7 +477,7 @@ export default {
       return !!this.personal_setting.banned[this.RECEIVER]
     },
     isLogin () {
-      return this.user.logined && this.$route.name !== 'Home'
+      return this.user.logined
     },
     chatConditionMessage () {
       return this.systemConfig.global_preferences.chat_condition_message
@@ -492,6 +497,11 @@ export default {
     }
   },
   methods: {
+    handleImgIconClick (e) {
+      if (this.isBlocked || this.isBanned || !this.user.account_type) {
+        e.preventDefault()
+      }
+    },
     initRECEIVER () {
       let gameId = this.$route.params.gameId
       let roomsStatus = this.chatRoom.roomsStatus
@@ -893,16 +903,16 @@ export default {
       })
     },
     getUser () {
-      if (!this.isManager) {
+      if (!this.isManager || this.managerLoading) {
         return
       }
-      this.loading = true
+      this.managerLoading = true
       getRoomUserInfo(this.RECEIVER).then(response => {
         let data = response.data.data
         this.roomManagers = data.managers
         this.bannedUsers = data.banned_users
         this.blockedUsers = data.block_users
-        this.loading = false
+        this.managerLoading = false
       })
     },
     switchBlockTab (index) {

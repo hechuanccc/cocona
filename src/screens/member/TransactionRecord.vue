@@ -12,6 +12,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="transaction_type.display_name" :label="$t('user.transaction_way')">
+        <template slot-scope="scope">
+          <span v-if="scope.row.red_envelope_type">{{ scope.row.red_envelope_type | envelopFilter}}</span>
+          <span v-else>{{ scope.row.transaction_type.display_name }}</span>
+        </template>
       </el-table-column>
       <el-table-column :label="$t('user.status')">
         <template slot-scope="scope">
@@ -53,6 +57,18 @@ export default {
         default:
           return ''
       }
+    },
+    envelopFilter (value) {
+      switch (value) {
+        case 1:
+          return '发送红包'
+        case 2:
+          return '接收红包'
+        case 3:
+          return '抢到红包'
+        default:
+          return '红包'
+      }
     }
   },
   data () {
@@ -69,7 +85,7 @@ export default {
       if (this.$route.name === 'PaymentRecord') {
         return 'online_pay,remit'
       } else if (this.$route.name === 'DiscountRecord') {
-        return 'discount'
+        return 'discount,envelope'
       } else {
         return 'withdraw'
       }

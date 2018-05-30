@@ -20,7 +20,7 @@
                 { 'manager': msg.sender.level === 'manager'},
                 { 'planmaker': msg.sender.level === 'plan_maker'}
               ]"
-              v-if="msg.sender.level === 'manager' || msg.sender.level === 'plan_maker' && !msg.isSaidByMe">
+              v-if="(msg.sender.level === 'manager' || msg.sender.level === 'plan_maker') && !msg.isSaidByMe">
               {{ msg.sender.level === 'manager' ? '管理员' : '计划员' }}
             </span>
           </div>
