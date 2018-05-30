@@ -70,10 +70,11 @@
               <div class="drawed" v-if="drawed(msg)">已开奖</div>
               <div v-else>
                 <div class="countdown" v-if="closed">已封盘</div>
-                <div class="countdown" v-else>
-                  <span v-if="countdown.resultCountDown.days > 0">{{countdown.resultCountDown.days}}天 </span>
-                  <span v-if="countdown.resultCountDown.hours > 0">{{countdown.resultCountDown.hours | complete}}:</span>
-                  {{countdown.resultCountDown.minutes | complete}}:{{countdown.resultCountDown.seconds | complete}}
+                <div class="countdown text-center" v-else>
+                  <p class="text">封盘</p>
+                  <span v-if="countdown.closeCountDown.days > 0">{{countdown.closeCountDown.days}}天 </span>
+                  <span v-if="countdown.closeCountDown.hours > 0">{{countdown.closeCountDown.hours | complete}}:</span>
+                  {{countdown.closeCountDown.minutes | complete}}:{{countdown.closeCountDown.seconds | complete}}
                 </div>
               </div>
             </div>
@@ -87,7 +88,7 @@
                 <tbody class="tbody">
                   <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
                     <td class="td group-name">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
-                    <td class="td">{{bet.play.odds}}</td>
+                    <td class="td odds">{{bet.play.odds}}</td>
                     <td class="td">{{bet.bet_amount}}</td>
                   </tr>
                 </tbody>
@@ -230,7 +231,7 @@ export default {
       })
     },
     handleCheckUser (msg) {
-      if (!this.isManager || msg.sender.level === 'manager') {
+      if (!this.isManager || msg.sender.level === 'manager' || msg.sender.is_robot) {
         return false
       }
       this.$emit('checkUser', msg.sender)
@@ -496,9 +497,13 @@ export default {
 
     .countdown {
       font-size: 20px;
-      line-height: 1.5;
+      line-height: 1;
       font-weight: 500;
-      color: #b32020;
+      color: $red;
+      .text {
+        font-size: 12px;
+        color: #999999;
+      }
     }
     .drawed {
       font-size: 20px;
@@ -520,7 +525,7 @@ export default {
 
     .tbody {
       display:block;
-      max-height: 300px;
+      max-height: 250px;
       overflow-y: auto;
     }
 
@@ -542,6 +547,10 @@ export default {
 
     .group-name {
       width: 40%;
+    }
+    .odds {
+      color: $red;
+      font-weight: 700;
     }
   }
 

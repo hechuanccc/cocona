@@ -8,7 +8,7 @@
           <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount" />
         </el-col>
         <el-col class="m-l-lg" :span="4">
-          <el-button class="place-order-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
+          <el-button class="place-order-btn" type="primary" size="small" @click="handleBetClick" :disabled="gameClosed">下单</el-button>
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
       </el-row>
@@ -99,7 +99,7 @@
           <el-button type="primary"
             class="place-order-btn"
             size="small"
-            @click="openDialog"
+            @click="handleBetClick"
             :disabled="gameClosed">下单</el-button>
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
@@ -157,7 +157,7 @@
         <span class="red bet-amount text-bold">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
       </div>
       <div class="summary m-b text-center p-t p-b" v-else>
-        共 {{ playsForSubmit.length}} 组 总金额:
+        共 {{ followBetAllowed && followBetCheckboxVisible ? playsForSubmit.bets.length : playsForSubmit.length }} 组 总金额:
         <span class="red bet-amount text-bold">{{totalAmount}}</span>
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
@@ -276,7 +276,7 @@ export default {
       }
     },
     playsForSubmit () {
-      let bettingArr = _.filter(this.activePlays, play => play.active).map(play => {
+      let bettingArr = _.filter(this.activePlays, play => play.active && parseFloat(play.bet_amount) > 0).map(play => {
         return {
           game_schedule: this.scheduleId,
           bet_amount: parseFloat(play.bet_amount),
@@ -356,6 +356,16 @@ export default {
       if (this.raw.length && this.formatting.length) {
         this.playSections = formatPlayGroup(this.raw, this.formatting)
       }
+    },
+    'activePlays': {
+      handler: function () {
+        _.each(this.activePlays, (play) => {
+          if (!parseFloat(play.bet_amount)) {
+            play.active = false
+          }
+        })
+      },
+      deep: true
     }
   },
   created () {
@@ -379,6 +389,9 @@ export default {
           }
         })
       })
+      if (this.followBetCheckboxVisible) {
+        this.followBetAllowed = false
+      }
 
       this.openDialog()
     })
@@ -532,6 +545,12 @@ export default {
         this.plays = plays
         this.loading = false
       })
+    },
+    handleBetClick () {
+      if (this.followBetCheckboxVisible) {
+        this.followBetAllowed = true
+      }
+      this.openDialog()
     },
     openDialog () {
       const validedPlays = _.flatMap(

@@ -325,7 +325,12 @@ import ChatMessages from './ChatMessages'
 import _ from 'lodash'
 
 const WSHOST = config.chatHost
-
+const removeItem = (arr, item) => {
+  let index = arr.indexOf(item)
+  if (index !== -1) {
+    arr.splice(index, 1)
+  }
+}
 export default {
   props: {
     showEntry: {
@@ -335,6 +340,7 @@ export default {
   },
   data () {
     let RECEIVER = this.$store.state.chatRoom.defaultRoom
+
     return {
       RECEIVER,
       ws: null,
@@ -617,7 +623,7 @@ export default {
                       this.errMsgCnt = data.content
                     } else if (data.command === 'unblock') {
                       this.personal_setting.chat.status = 1
-                      this.personal_setting.blocked.remove(this.RECEIVER)
+                      removeItem(this.personal_setting.blocked, this.RECEIVER)
                       this.joinChatRoom()
                     } else if (data.command === 'unbanned') {
                       this.personal_setting.chat.status = 1
@@ -688,13 +694,13 @@ export default {
                   case 4:
                     this.errMsg = true
                     this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
-                    this.personal_setting.banned[data.roomId] = data.msg
+                    this.personal_setting.banned[data.room_id] = data.msg
                     this.personal_setting.chat.status = 0
                     break
                   case 5:
                     this.errMsg = true
                     this.messages = []
-                    this.personal_setting.blocked.push(data.roomId)
+                    this.personal_setting.blocked.push(data.room_id)
                     this.personal_setting.chat.status = 0
                     this.errMsgCnt = data.msg
                     break
@@ -893,7 +899,7 @@ export default {
       this.loading = true
       getRoomUserInfo(this.RECEIVER).then(response => {
         let data = response.data.data
-        this.roomManagers = response.data.managers
+        this.roomManagers = data.managers
         this.bannedUsers = data.banned_users
         this.blockedUsers = data.block_users
         this.loading = false
