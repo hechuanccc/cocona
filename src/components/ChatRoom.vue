@@ -325,7 +325,12 @@ import ChatMessages from './ChatMessages'
 import _ from 'lodash'
 
 const WSHOST = config.chatHost
-
+const removeItem = (arr, item) => {
+  let index = arr.indexOf(item)
+  if (index !== -1) {
+    arr.splice(index, 1)
+  }
+}
 export default {
   props: {
     showEntry: {
@@ -335,16 +340,10 @@ export default {
   },
   data () {
     let RECEIVER = this.$store.state.chatRoom.defaultRoom
-    const removeItem = (arr, item) => {
-      let index = arr.indexOf(item)
-      if (index !== -1) {
-        arr.splice(index, 1)
-      }
-    }
+
     return {
       RECEIVER,
       ws: null,
-      removeItem,
       defaultAvatar: require('../assets/avatar.png'),
       defaultRoom: this.$store.state.chatRoom.defaultRoom,
       showChatRoom: false,
@@ -624,7 +623,7 @@ export default {
                       this.errMsgCnt = data.content
                     } else if (data.command === 'unblock') {
                       this.personal_setting.chat.status = 1
-                      this.removeItem(this.personal_setting.blocked, this.RECEIVER)
+                      removeItem(this.personal_setting.blocked, this.RECEIVER)
                       this.joinChatRoom()
                     } else if (data.command === 'unbanned') {
                       this.personal_setting.chat.status = 1
