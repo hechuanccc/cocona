@@ -46,7 +46,7 @@
           </el-form-item>
           <el-form-item :label="'短信验证码'" ref="sms_code" prop="sms_code" v-if="systemConfig.sms_validation_enabled !== 'false'">
             <el-input class="input-width" :maxlength="6" v-model="user.sms_code" @focus="$refs.user.validateField('sms_code')" @blur="clearSpace(user, 'sms_code')">
-              <el-button slot="suffix" type="info" class="captcha" :disabled="!smsClickable" @click="fetchSmsCode">
+              <el-button slot="suffix" type="info" class="captcha" :disabled="!smsClickable || !!countdown" @click="fetchSmsCode">
                 {{!!countdown  ? countdown + 's' : '获取'}}
               </el-button>
             </el-input>
@@ -223,12 +223,13 @@ export default {
         verification_code_0: '',
         verification_code_1: '',
         hasAgree: ['hasAgree'],
-        sms_code: '',
-        loading: false
+        sms_code: ''
       },
+      loading: false,
       countdown: 0,
       countdownInterval: null,
       sms_tip: '',
+      sms_success_tip: '',
       smsClickable: false,
       dialogVisible: false,
       captcha_src: '',
@@ -276,13 +277,10 @@ export default {
     }
   },
   watch: {
-    'sms_tip': function () {
-      this.$refs.user.validateField('sms_code')
-    },
     'sms_success_tip': function () {
       setTimeout(() => {
         this.sms_success_tip = ''
-      }, 3000)
+      }, 5000)
     }
   },
   methods: {
@@ -351,6 +349,11 @@ export default {
       },
       errRes => {
         this.sms_tip = msgFormatter(errRes)
+        this.$refs.user.validateField('sms_code')
+        setTimeout(() => {
+          this.$refs.sms_code.clearValidate()
+          this.sms_tip = ''
+        }, 5000)
         this.loading = false
       })
     },
