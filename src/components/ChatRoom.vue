@@ -453,7 +453,17 @@ export default {
     },
     'isLogin': function (val) {
       if (!val) {
-        this.leaveRoom()
+        this.closeEnvelope()
+        this.showChatRoom = false
+        this.messages = []
+        this.showEditProfile = false
+
+        if (this.ws) {
+          this.ws.close()
+          this.ws = null
+          this.RECEIVER = null
+          this.$store.dispatch('updateCurrentChatRoom', null)
+        }
       }
     }
   },
@@ -811,6 +821,7 @@ export default {
       this.showChatRoom = false
       this.messages = []
       this.showEditProfile = false
+      this.closeEnvelope()
 
       this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
