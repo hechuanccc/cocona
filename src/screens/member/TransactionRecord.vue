@@ -65,7 +65,7 @@ export default {
         case 2:
           return '接收红包'
         case 3:
-          return '抢到红包'
+          return '返还红包'
         default:
           return '红包'
       }
