@@ -9,14 +9,15 @@
      'z-index': 2
     }">
     <transition name="slide-fade">
-      <div v-show="floatAdVisible">
+      <a v-show="floatAdVisible" target="_blank" :href="systemConfig.customerServiceUrl ? systemConfig.customerServiceUrl : 'javascript:;' ">
         <img class="ad-img" :src="content" alt="float-ad"/>
-      </div>
+      </a>
     </transition>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     floatAdVisible: {
@@ -44,7 +45,10 @@ export default {
   computed: {
     scrollWidth () {
       return window.innerWidth - document.body.clientWidth
-    }
+    },
+    ...mapState([
+      'systemConfig'
+    ])
   }
 }
 </script>
