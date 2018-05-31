@@ -16,17 +16,14 @@
             alt="setting"
             class="clickable icon"
             @click="handleBlockPopupShow"/>
-
           <img :src="require('../assets/icon_profile.png')"
             alt="profile"
             class="clickable icon"
             @click="isBlocked || !user.account_type ? '' : showEditProfile = true"/>
-
           <img :src="require('../assets/icon_close.png')"
             alt="profile"
             class="clickable icon"
             @click="showChatRoom = false"/>
-
         </div>
 
         <transition
@@ -43,7 +40,6 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-
                 <img v-if="user.avatar && !swichAvatar" :src="user.avatar" class="avatar">
                 <img v-else-if="!swichAvatar" :src="defaultAvatar">
                 <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
@@ -51,7 +47,6 @@
                 </label>
               </el-upload>
             </div>
-
             <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
             <p>
               <span class="txt-nick">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
@@ -93,9 +88,7 @@
             </div>
           </div>
         </transition>
-
       </el-header>
-
 
       <el-main class="chat-body" id="chatBox">
 
@@ -119,6 +112,7 @@
           :isBlocked="isBlocked"
           :isManager="isManager"
           :personalSetting="personal_setting"/>
+
       </el-main>
 
       <el-footer class="footer" height="120">
@@ -164,7 +158,13 @@
               <span title="上传图片">
                 <img :src="controlBar.image ? require('../assets/icon_picture_hover.png') : require('../assets/icon_picture_normal.png')"
                   alt="sticker"/>
-                <input :disabled="!personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
+                <input :disabled="!personal_setting.chat.status"
+                  @change="sendMsgImg"
+                  type="file"
+                  ref="fileImgSend"
+                  class="img-upload-input"
+                  id="imgUploadInput"
+                  accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
@@ -231,9 +231,9 @@
     </el-dialog>
 
     <div
-      v-if="isLogin && showEntry"
+      v-if="isLogin && showEntry && roomTitle"
       class="chat-guide text-center"
-      @click="joinChatRoom()">
+      @click="handleEntryClick()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
       <ul class="words-list text-center">
         <li class="p-t-sm text-center" v-for="(word , index) in roomTitle" :key="index">{{word}}</li>
@@ -497,6 +497,10 @@ export default {
     }
   },
   methods: {
+    handleEntryClick () {
+      this.showChatRoom = true
+      this.joinChatRoom()
+    },
     handleImgIconClick (e) {
       if (this.isBlocked || this.isBanned || !this.user.account_type) {
         e.preventDefault()
@@ -564,7 +568,6 @@ export default {
       this.msgCnt = this.msgCnt + emoji.emoji + ' '
     },
     joinChatRoom (room) {
-      this.showChatRoom = true
       if (this.ws) {
         this.ws.send(JSON.stringify({
           'command': 'join',
