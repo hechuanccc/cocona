@@ -646,6 +646,7 @@ export default {
                       this.$store.dispatch('updateCurrentChatRoom', data.receivers)
                     } else if (data.command === 'chat_condition_passed') {
                       this.personal_setting.chat.status = 1
+                      this.personal_setting.chat.reasons = []
                     }
 
                     if (this.showChatRoom) {
