@@ -465,6 +465,11 @@ export default {
           this.$store.dispatch('updateCurrentChatRoom', null)
         }
       }
+    },
+    'ws': function () {
+      if (!this.ws) {
+        this.showChatRoom = false
+      }
     }
   },
   mounted () {
