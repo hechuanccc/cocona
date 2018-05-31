@@ -267,7 +267,7 @@ export function fetchStickers () {
 }
 
 export function fetchChatUserInfo (username) {
-  return axiosChat.get(`${urls.chatUser}${username}`).then(res => res.data)
+  return axiosChat.get(`${urls.chatUser}${username}/`).then(res => res.data)
 }
 
 export function sendEnvelope (data) {
