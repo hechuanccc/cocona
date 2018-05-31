@@ -26,11 +26,12 @@
           </div>
 
           <div v-if="msg.type === 5">
-            <div v-if="!user.account_type" class="envelope-message expired">
+            <div v-if="!user.account_type || !personalSetting.chat.status" class="envelope-message expired">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
-                <p class="action">会员才可以抢红包！</p>
+                <p class="action" v-if="!user.account_type">会员才可以抢红包！</p>
+                <p class="action"  v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
               </div>
             </div>
             <div :class="['envelope-message','clickable',
@@ -133,6 +134,7 @@
 
 <script>
 import { takeEnvelope } from '../api'
+import { msgFormatter } from '../utils'
 import { mapState } from 'vuex'
 
 export default {
@@ -155,6 +157,9 @@ export default {
     },
     isBanned: {
       type: Boolean
+    },
+    personalSetting: {
+      type: Object
     }
   },
   filters: {
@@ -193,7 +198,7 @@ export default {
       this.imgLightBox.contentUrl = msg.content
     },
     takeEnvelope (envelope) {
-      if (!this.user.account_type) {
+      if (!this.user.account_type || !this.personalSetting.chat.status) {
         return
       }
 
@@ -228,6 +233,12 @@ export default {
               this.envelope.status = 'fail'
           }
         }
+      }, errMsg => {
+        this.loading = false
+        this.$message({
+          message: msgFormatter(errMsg),
+          type: 'warning'
+        })
       })
     },
     handleCheckUser (msg) {
