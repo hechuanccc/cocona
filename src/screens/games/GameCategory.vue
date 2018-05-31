@@ -257,7 +257,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentGame',
       'planMakerMap'
     ]),
     ...mapState([
@@ -269,9 +268,9 @@ export default {
       return !bettingArr.length
     },
     followBetCheckboxVisible () {
-      if (this.currentGame) {
-        return this.planMakerMap[this.currentGame.id] &&
-        this.planMakerMap[this.currentGame.id].isPlanMaker &&
+      if (this.game) {
+        return this.planMakerMap[this.game.id] &&
+        this.planMakerMap[this.game.id].isPlanMaker &&
         this.systemConfig.chatroomEnabled
       }
     },
@@ -285,7 +284,7 @@ export default {
         }
       })
 
-      let isPlanMaker = this.currentGame && this.planMakerMap[this.currentGame.id] && this.planMakerMap[this.currentGame.id].isPlanMaker
+      let isPlanMaker = this.game && this.planMakerMap[this.game.id] && this.planMakerMap[this.game.id].isPlanMaker
       if (this.followBetAllowed && isPlanMaker) {
         return {
           bets: bettingArr,
