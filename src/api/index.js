@@ -35,6 +35,7 @@ export function gethomePage () {
 export function getDescription () {
   return axios.get(`${urls.website}descriptions/`)
 }
+
 export function getPromotions () {
   return axios.get(urls.promotions)
 }
@@ -86,6 +87,10 @@ export function fetchCaptcha () {
     data.captcha_src = urls.domain + data.captcha_src
     return data
   })
+}
+
+export function fetchSmsCode (phone) {
+  return axios.put(`${urls.smsCode}`, {phone_number: phone})
 }
 
 export function fetchPaymentType () {
@@ -245,8 +250,12 @@ export function unblockChatUser (id, data) {
     })
 }
 
-export function getChatUser (id) {
+export function getRoomUserInfo (id) { // for manager
   return axiosChat.get(`${urls.apiRoom}/${id}/`)
+}
+
+export function getRoomsStatus (id) { // for all
+  return axiosChat.get(`${urls.apiRoom}/`)
 }
 
 export function setCookie (cookie) {
@@ -255,4 +264,23 @@ export function setCookie (cookie) {
 
 export function fetchStickers () {
   return axiosChat.get(`${urls.stickers}`).then(res => res.data)
+}
+
+export function fetchChatUserInfo (username) {
+  return axiosChat.get(`${urls.chatUser}${username}/`).then(res => res.data)
+}
+
+export function sendEnvelope (data) {
+  return axios.post(urls.envelope, {
+    pack_amount: data.pack_amount,
+    pack_nums: data.pack_nums,
+    content: data.content,
+    room: data.room
+  })
+}
+
+export function takeEnvelope (data) {
+  return axios.put(`${urls.envelope}${data.envelope_id}/`, {
+    receiver_id: data.receiver_id
+  })
 }

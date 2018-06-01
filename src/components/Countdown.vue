@@ -1,7 +1,6 @@
 <template>
   <div class="countdown-panel">
     <p class="issue">{{schedule.issue_number}}{{$t('navMenu.result_period')}}</p>
-    
     <div class="schedule" v-if="schedule && schedule.issue_number">
       <div class="title">开奖</div>
       <span v-if="!ended" class="green countdown">
@@ -45,11 +44,21 @@ export default {
       const r = this.resultCountDown
       return r.hours + r.hours + r.seconds + r.minutes === 0
     }
+
   },
   filters: {
     complete (value) {
       value = parseInt(value)
       return value < 10 ? ('0' + value) : value
+    }
+  },
+  watch: {
+    'closeCountDown': function () {
+      this.$root.bus.$emit('countdown', {
+        resultCountDown: this.resultCountDown,
+        closeCountDown: this.closeCountDown,
+        schedule: this.schedule.issue_number
+      })
     }
   }
 }

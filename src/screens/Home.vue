@@ -8,7 +8,7 @@
         </el-carousel>
         <el-row class="announcement-wp">
           <div class="announcement container" @click="announcementDialogVisible = true">
-            <span :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
+            <span class="text" :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
           </div>
         </el-row>
         <div class="popular-game container">
@@ -100,6 +100,7 @@ export default {
       descriptions: '',
       announcementWidth: 0,
       leftOffset: 0,
+      announcementTimer: null,
       currentAnnouncementIndex: 0,
       announcementDialogVisible: false,
       floatAdVisible: false
@@ -134,21 +135,21 @@ export default {
     },
     setAnnouncement () {
       this.$nextTick(() => {
-        this.announcementWidth = this.$refs.announcement.getBoundingClientRect().width
-        setTimeout(() => {
+        this.announcementWidth = this.$refs.announcement.offsetWidth
+        this.announcementTimer = setTimeout(() => {
           this.scrollAnnouncement()
         }, 1000)
       })
     },
     scrollAnnouncement () {
-      setTimeout(() => {
+      this.announcementTimer = setTimeout(() => {
         this.leftOffset += 1
         if (this.leftOffset > this.announcementWidth) {
           let idx = this.currentAnnouncementIndex + 1
           if (idx >= this.announcements.length) {
             idx = idx % this.announcements.length
           }
-          setTimeout(() => {
+          this.announcementTimer = setTimeout(() => {
             this.currentAnnouncementIndex = idx
             this.leftOffset = 0
             this.setAnnouncement()
@@ -203,6 +204,7 @@ export default {
     })
   },
   beforeDestroy () {
+    clearTimeout(this.announcementTimer)
     clearInterval(this.interval)
   },
   mounted () {
@@ -236,12 +238,8 @@ export default {
   color: #9b9b9b;
   cursor: pointer;
   text-align: left;
-  .title {
-    display: inline-block;
-    .text {
-      display: inline-block;
-      margin-left: 5px;
-    }
+  .text {
+    white-space: nowrap;
   }
   .speaker {
     vertical-align: text-bottom;

@@ -22,7 +22,7 @@
       </li>
 
       <li v-if="!isLogin">
-        <a @click="login" class="link">{{$t('navMenu.user_login')}}</a>
+        <a id="login-link" @click="login" class="link">{{$t('navMenu.user_login')}}</a>
       </li>
       <li v-if="!isLogin">
         <a class="red link" @click="tryplay">{{$t('navMenu.try_play')}}</a>
