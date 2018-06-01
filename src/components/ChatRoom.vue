@@ -31,49 +31,38 @@
           leave-active-class="animated fadeOutUp"
           enter-active-class="animated fadeInDown">
           <div class="edit-profile" v-if="showEditProfile">
-            <div @mouseover="swichAvatar = true"
-              @mouseout="swichAvatar = false">
+            <div @mouseover="swichAvatar = true" @mouseout="swichAvatar = false">
               <el-upload
-                class="avatar"
+                class="avatar clickable"
                 style="overflow-y: hidden;"
                 :action="uploadUrl"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-                <img v-if="user.avatar && !swichAvatar" :src="user.avatar" class="avatar">
-                <img v-else-if="!swichAvatar" :src="defaultAvatar">
-                <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
+                <img class="img" v-if="user.avatar && !swichAvatar" :src="user.avatar">
+                <img class="img" v-else-if="!swichAvatar" :src="defaultAvatar">
+                <label for="avatarUploadInput" class="upload-avatar clickable" v-if="swichAvatar">
                   <span class="el-icon-upload"></span>
                 </label>
               </el-upload>
             </div>
             <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
-            <p>
-              <span class="txt-nick">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
-              <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
+            <p class="clickable" @click="showNickNameBox = true">
+              <span class="display-name">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
+              <a href="javascript:void(0)" class="icon-edit">
                 <span class="el-icon-edit-outline"></span>
               </a>
             </p>
-            <div>
-              <p>
-                <a href="javascript:void(0)" class="u-btn" @click="showEditProfile = false">关闭</a>
-              </p>
-            </div>
+            <el-button type="primary" @click.native="showEditProfile = false">关闭</el-button>
           </div>
         </transition>
 
-        <transition
-          enter-class="profileFadeInEnter"
+        <transition enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
           enter-active-class="animated fadeInDown">
           <div class="edit-profile" v-if="showCheckUser">
-            <div
-              class="avatar"
-              style="overflow-y: hidden;">
+            <div class="avatar" style="overflow-y: hidden;">
               <img :src="checkUser.avatar_url || defaultAvatar" class="avatar">
-              <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
-                <span class="el-icon-upload"></span>
-              </label>
             </div>
             <p class="avatar-upload-tip">{{checkUser.nickname || checkUser.username}}({{checkUser.level_name}})</p>
             <div class="restraint-actions">
@@ -82,12 +71,11 @@
               <el-button type="danger" size="mini" @click.native="block()">加入黑名单</el-button>
             </div>
             <div>
-              <p>
-                <a href="javascript:void(0)" class="u-btn" @click="showCheckUser = false">关闭</a>
-              </p>
+              <a href="javascript:void(0)" class="u-btn" @click="showCheckUser = false">关闭</a>
             </div>
           </div>
         </transition>
+
       </el-header>
 
       <el-main class="chat-body" id="chatBox">
@@ -235,9 +223,8 @@
       class="chat-guide text-center"
       @click="handleEntryClick()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
-      <ul class="words-list text-center">
-        <li class="p-t-sm text-center" v-for="(word , index) in roomTitle" :key="index">{{word}}</li>
-      </ul>
+      <div class="words vertical-writing" v-html="verticalTranform(roomTitle)">
+      </div>
     </div>
 
     <el-dialog :visible.sync="errMsg"
@@ -512,6 +499,9 @@ export default {
     }
   },
   methods: {
+    verticalTranform (str) {
+      return str.replace(/(\d+\w+|\d+|\w+.*?)/g, '<span style="text-orientation: upright; writing-mode: horizontal-tb; line-height: 1.5">$1</span>')
+    },
     handleEntryClick () {
       this.showChatRoom = true
       this.joinChatRoom()
@@ -1120,16 +1110,17 @@ $primary-blue: #006bb3;
     width: auto;
   }
 }
+
 .edit-profile {
+  position: relative;
   max-width: 310px;
   border-radius: 5px;
   background: rgba(255,255,255,.93);
   margin: 50px auto 0;
-  position: relative;
   min-height: 200px;
   border: 1px solid #c8d4e4;
   text-align: center;
-  padding: 20px 0;
+  padding: 10px 0;
   width: 90%;
   z-index: 9999;
   color: #4f77ab;
@@ -1137,9 +1128,11 @@ $primary-blue: #006bb3;
     font-size: 12px;
     color: rgb(255, 127, 77);
   }
+
   .icon-edit {
     font-size: 20px;
   }
+
   .avatar {
     display: inline-block;
     border-radius: 50%;
@@ -1147,12 +1140,11 @@ $primary-blue: #006bb3;
     height: 90px;
     border: 1px solid #c8d4e4;
     overflow: hidden;
-    cursor: pointer;
-    img {
+    .img {
       display: block;
       width: 100%;
     }
-    label {
+    .upload-avatar {
       display: block;
       position: absolute;
       top: 38px;
@@ -1162,22 +1154,13 @@ $primary-blue: #006bb3;
       color: #fff;
       font-size: 50px;
       color: #909090;
-      cursor: pointer;
     }
   }
-  .txt-nick {
+
+  .display-name {
     font-size: 20px;
   }
-  p {
-    margin-top: 5px;
-    cursor: pointer;
-  }
-  .u-btn {
-    width: 56px;
-    height: 20px;
-    font-size: 12px;
-    line-height: 20px;
-  }
+
   .el-icon-edit-outline {
     color: $primary;
     font-size: 20px;
@@ -1212,11 +1195,21 @@ $primary-blue: #006bb3;
   border-radius: 8px 0 0 8px;
   padding-top: 15px;
   padding-bottom: 15px;
-  .words-list,
-  .font-wechat {
+  .font-wechat,
+  .words {
     color: #fff;
     font-size: 18px;
+    line-height: 40px;
   }
+
+  .vertical-writing {
+    writing-mode: vertical-rl;
+
+    .number {
+      text-orientation: upright;
+    }
+  }
+
 }
 
 
