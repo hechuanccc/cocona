@@ -100,7 +100,7 @@
               </table>
             </div>
             <div class="action" @click="followBet(msg)">
-              <el-button :disabled="closed || drawed(msg)" type="primary" class="followbet-btn">跟單</el-button>
+              <el-button :disabled="closed || drawed(msg)" type="primary" class="followbet-btn">跟单</el-button>
             </div>
           </div>
 

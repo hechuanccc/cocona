@@ -5,7 +5,7 @@
       v-loading="loading"
       id="chatBox"
       element-loading-text="正在登录"
-      v-if="isLogin && showChatRoom">
+      v-if="isLogin && showChatRoom && RECEIVER">
       <el-header class="chat-header clearfix" height="56px">
         <div class="left fl clearfix">
           <span class="title">{{roomTitle}}</span>
@@ -217,7 +217,7 @@
     </el-dialog>
 
     <div
-      v-if="isLogin && showEntry && roomTitle"
+      v-if="isLogin && showEntry && roomTitle && RECEIVER"
       class="chat-guide text-center"
       @click="handleEntryClick()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -512,7 +512,7 @@ export default {
     initRECEIVER () {
       let gameId = this.$route.params.gameId
       let roomsStatus = this.chatRoom.roomsStatus
-      let current = roomsStatus[gameId].status ? roomsStatus[gameId] : roomsStatus[this.defaultRoom]
+      let current = roomsStatus[gameId].status ? roomsStatus[gameId] : !roomsStatus[this.defaultRoom].status ? {id: undefined, title: ''} : roomsStatus[this.defaultRoom]
       this.RECEIVER = current.id
       this.roomTitle = current.title
       this.$store.dispatch('updateCurrentChatRoom', this.RECEIVER)
