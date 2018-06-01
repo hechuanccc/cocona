@@ -26,7 +26,8 @@
           </div>
 
           <div v-if="msg.type === 5">
-            <div v-if="!user.account_type || !personalSetting.chat.status" class="envelope-message expired">
+
+            <div v-if="!user.account_type || (!personalSetting.chat.status && !isBanned)" class="envelope-message expired">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
@@ -34,6 +35,7 @@
                 <p class="action"  v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
               </div>
             </div>
+
             <div :class="['envelope-message','clickable',
               {'null': (msg.envelope_status.total === msg.envelope_status.users.length) &&
                 !msg.envelope_status.users.map(item => item.receiver_id).includes(user.id)}]"
@@ -48,6 +50,7 @@
                 </p>
               </div>
             </div>
+
             <div class="envelope-message expired" v-else-if="!isAlive(msg.envelope_status.expired_time)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
@@ -55,6 +58,7 @@
                 <p>已过期</p>
               </div>
             </div>
+
           </div>
 
           <div v-else-if="msg.type === 7">
@@ -198,7 +202,7 @@ export default {
       this.imgLightBox.contentUrl = msg.content
     },
     takeEnvelope (envelope) {
-      if (!this.user.account_type || !this.personalSetting.chat.status) {
+      if (!this.user.account_type || (!this.personalSetting.chat.status && !this.isBanned)) {
         return
       }
 

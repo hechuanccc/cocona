@@ -70,9 +70,7 @@
               <el-button type="danger" size="mini" @click.native="ban(30)">禁言30分钟</el-button>
               <el-button type="danger" size="mini" @click.native="block()">加入黑名单</el-button>
             </div>
-            <div>
-              <a href="javascript:void(0)" class="u-btn" @click="showCheckUser = false">关闭</a>
-            </div>
+            <el-button type="primary" @click.native="showCheckUser = false">关闭</el-button>
           </div>
         </transition>
 
@@ -176,7 +174,7 @@
             <textarea  @keyup.enter="sendMsg"
               @focus="$store.dispatch('updateIsChatting', true)"
               @blur="$store.dispatch('updateIsChatting', false)"
-              :placeholder="personal_setting.chat.status ? '' : chatConditionMessage"
+              :placeholder="personal_setting.chat.status ? '' : isBanned || isBlocked ? '你现在没有发言权限' :chatConditionMessage"
               type="textarea" rows="2"
               ref="textarea"
               autocomplete="off"
