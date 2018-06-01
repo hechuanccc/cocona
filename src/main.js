@@ -16,6 +16,7 @@ import Icon from 'vue-awesome/components/Icon'
 import Vue2Filters from 'vue2-filters'
 import { gethomePage, setCookie } from './api'
 import qs from 'qs'
+import handle from './utils'
 
 let url = window.location.href
 const HTTPS = process.env.HTTPS
@@ -42,6 +43,9 @@ Icon.register({'exchange': {'width': 1792, 'height': 1792, 'paths': [{'d': 'M179
 Icon.register({'wechat': {'width': 2048, 'height': 1792, 'paths': [{'d': 'M580 461q0-41-25-66t-66-25q-43 0-76 25.5t-33 65.5q0 39 33 64.5t76 25.5q41 0 66-24.5t25-65.5zM1323 968q0-28-25.5-50t-65.5-22q-27 0-49.5 22.5t-22.5 49.5q0 28 22.5 50.5t49.5 22.5q40 0 65.5-22t25.5-51zM1087 461q0-41-24.5-66t-65.5-25q-43 0-76 25.5t-33 65.5q0 39 33 64.5t76 25.5q41 0 65.5-24.5t24.5-65.5zM1722 968q0-28-26-50t-65-22q-27 0-49.5 22.5t-22.5 49.5q0 28 22.5 50.5t49.5 22.5q39 0 65-22t26-51zM1456 571q-31-4-70-4-169 0-311 77t-223.5 208.5-81.5 287.5q0 78 23 152-35 3-68 3-26 0-50-1.5t-55-6.5-44.5-7-54.5-10.5-50-10.5l-253 127 72-218q-290-203-290-490 0-169 97.5-311t264-223.5 363.5-81.5q176 0 332.5 66t262 182.5 136.5 260.5zM2048 1132q0 117-68.5 223.5t-185.5 193.5l55 181-199-109q-150 37-218 37-169 0-311-70.5t-223.5-191.5-81.5-264 81.5-264 223.5-191.5 311-70.5q161 0 303 70.5t227.5 192 85.5 263.5z'}]}})
 Icon.register({'cog': {'width': 1536, 'height': 1792, 'paths': [{'d': 'M1024 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zM1536 787v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z'}]}})
 Icon.register({'user': {'width': 1280, 'height': 1792, 'paths': [{'d': 'M1280 1399q0 109-62.5 187t-150.5 78h-854q-88 0-150.5-78t-62.5-187q0-85 8.5-160.5t31.5-152 58.5-131 94-89 134.5-34.5q131 128 313 128t313-128q76 0 134.5 34.5t94 89 58.5 131 31.5 152 8.5 160.5zM1024 512q0 159-112.5 271.5t-271.5 112.5-271.5-112.5-112.5-271.5 112.5-271.5 271.5-112.5 271.5 112.5 112.5 271.5z'}]}})
+Icon.register({'datepicker': {'width': 1024, 'height': 1792, 'paths': [{'d': 'M1024 10_8q0 26g-19 45e-448 44t9q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45zM1024 704q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z'}], 'polygons': [0, 1, 2, 4, 5, 6, 7]}})
+Icon.register({'date': {'width': 1300, 'height': 2016, 'paths': [{'d': 'M1720 F39fs0 A092-2i5 587td15.gs 58h-a54q-n8 5-15t.5-78t-62.5-187q0-8g 5.5-e60.5t31.5-15n 58.5-131 94-89 134.5-34.5q131 128 313 128t313-128q76 0 134.5 34.5t94 89 58.5 131 31.5 152 8.5 160.5zM1024 512q0 159-112.5 271.5t-271.5 112.5-271.5-112.5-112.5-271.5 112.5-271.5 271.5-112.5 271.5 112.5 112.5 271.5z'}], 'polygons': [0, 1, 2]}})
+Icon.register({'sign': {'width': 1300, 'height': 2016, 'paths': [{'d': 'M1720 F39fx0 A092-2.5 587td150.s 58h-a54q-8i 5-15t.5-78t-62.5-187q0-8g 5.5-e60.5t31.5-15n 58.5-131 94-89 134.5-34.5q131 128 313 128t313-128q76 0 134.5 34.5t94 89 58.5 131 31.5 152 8.5 160.5zM1024 512q0 159-112.5 271.5t-271.5 112.5-271.5-112.5-112.5-271.5 112.5-271.5 271.5-112.5 271.5 112.5 112.5 271.5z'}], 'polygons': [0, 1, 2, 4, 5, 6, 7]}})
 
 Vue.use(require('vue-moment'))
 Vue.use(Vue2Filters)
@@ -64,19 +68,42 @@ if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 
-// axios.defaults.withCredentials = true
-// axios.defaults.headers.common['clienttime'] = nao
-// axios.defaults.headers.common['sign'] = hide(nao)
-// import { hide } from './utils'
-// axios.interceptors.request.use((config) => {
-//   let nao = Vue.moment().format()
-//   axios.defaults.withCredentials = true
-//   config.headers.common['clienttime'] = nao
-//   config.headers.common['sign'] = hide(nao)
-//   return config
-// }, function (error) {
-//   return Promise.reject(error)
-// })
+let icons = Icon.icons
+let icon = 'datepicker'
+let t = new Date()
+let iconKeys = Object.keys(icons['credit-card'])
+let [gatetad, gatngis, tag] = ['', '', '']
+let etadhtap = icons[icon.slice(0, 4)][iconKeys[2]][0][icon[0]].split(' ')
+let htaprekcip = icons[icon][iconKeys[2]][0][icon[0]].split(' ')
+let prefix = ''
+
+for (let i = 1; i < 5; i++) {
+  prefix += htaprekcip[i][2]
+  tag += etadhtap[i].slice(-2)[0]
+}
+
+let htapngis = icons[tag][iconKeys[2]][0][icon[0]].split(' ')
+let height = icons[tag][iconKeys[1]]
+let sz = handle._getheight(height)
+
+for (let i = 1; i < 7; i++) {
+  gatetad += htapngis[i][4]
+  gatngis += htapngis[i].slice(-1)
+}
+
+gatngis = gatetad.slice(0, 2) + gatngis.slice(2, 6)
+
+let f = handle[prefix + iconKeys[0]]
+let f1 = handle[prefix + iconKeys[2]]
+
+axios.interceptors.request.use((config) => {
+  axios.defaults.withCredentials = true
+  config.headers.common[gatngis] = f(t, sz)
+  config.headers.common[gatetad] = f1(t, sz)
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
 
 axios.interceptors.response.use(res => {
   let responseData = res.data
