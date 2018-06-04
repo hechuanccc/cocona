@@ -536,7 +536,7 @@ export default {
       this.scrollToEnd()
     },
     handleEnvelopeIconClick () {
-      if (this.isBlocked || this.isBanned) {
+      if (this.isBlocked || this.isBanned || !this.personal_setting.chat.status) {
         return
       }
       if (!this.user.account_type) {
