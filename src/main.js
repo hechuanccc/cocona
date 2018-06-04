@@ -16,6 +16,7 @@ import Vue2Filters from 'vue2-filters'
 import { gethomePage, setCookie } from './api'
 import qs from 'qs'
 import icon from './utils/icon'
+import { msgFormatter } from './utils'
 import color from './style'
 
 let url = window.location.href
@@ -77,7 +78,7 @@ axios.interceptors.response.use(res => {
 }, (error) => {
   Vue.prototype.$message({
     showClose: true,
-    message: Vue.t('message.error'),
+    message: msgFormatter(error) || Vue.t('message.error'),
     type: 'error'
   })
   toHomeAndLogin(router)
