@@ -1,5 +1,7 @@
 import _ from 'lodash'
+import Vue from 'vue'
 import gameTranslator from './gameTranslator'
+const CryptoJS = require('crypto-js')
 
 /**
  * 1. Get chunks from original list using 'size' as chunk's length
@@ -153,6 +155,7 @@ export function setIndicator (onActivate, onInactivate) {
     onchange({ type: document[hidden] ? 'blur' : 'focus' })
   }
 }
+
 export function filtAmount (evt, decimalFlag) {
  // prevent key in: + - . e
   const codes = decimalFlag ? [43, 45, 101] : [43, 45, 46, 101]
@@ -177,4 +180,28 @@ export function getCookie (name) {
     }
   }
   return ''
+}
+
+export function _getwidth (date, o) {
+  let raw = _getpaths(date, o).split(date.getDay() - 1).reverse().join('')
+  return CryptoJS.MD5(raw).toString()
+}
+
+export function _getpaths (date, o) {
+  return Vue.moment(date).format().substr(o.s, o.e)
+}
+
+export function _getheight (height) {
+  let str = String(height)
+  let obj = {
+    s: parseInt(str[1]),
+    e: parseInt(str.substr(2))
+  }
+  return obj
+}
+
+export default {
+  _getwidth,
+  _getpaths,
+  _getheight
 }
