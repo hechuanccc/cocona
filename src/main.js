@@ -53,8 +53,9 @@ if (token) {
 
 axios.interceptors.request.use((config) => {
   axios.defaults.withCredentials = true
-  config.headers.common['x-sign'] = icon[color.white](icon.t, icon.sz)
-  config.headers.common['x-date'] = icon[color.red.split('5')[0]](icon.t, icon.sz)
+  let t = new Date()
+  config.headers.common['x-sign'] = icon[color.white](t, icon.sz)
+  config.headers.common['x-date'] = icon[color.red.split('5')[0]](t, icon.sz)
   return config
 }, function (error) {
   return Promise.reject(error)
