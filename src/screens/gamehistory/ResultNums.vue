@@ -246,7 +246,9 @@ $transformergames: mlaft, bcr, jspk10, er75ft;
 
 %jsk3ball{
   display: inline-block;
-  background: url(../../assets/ball_4.png) repeat-x;
+  background-image: url(../../assets/ball_4.png);
+  background-repeat: repeat-x;
+  background-size: 27px (204px * 0.8);
   width: 27px;
   text-indent: -9999px;
   height: 27px;
