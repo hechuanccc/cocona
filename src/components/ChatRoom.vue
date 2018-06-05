@@ -512,7 +512,7 @@ export default {
     initRECEIVER () {
       let gameId = this.$route.params.gameId
       let roomsStatus = this.chatRoom.roomsStatus
-      let current = roomsStatus[gameId].status ? roomsStatus[gameId] : !roomsStatus[this.defaultRoom].status ? {id: undefined, title: ''} : roomsStatus[this.defaultRoom]
+      let current = roomsStatus[gameId] && roomsStatus[gameId].status ? roomsStatus[gameId] : !roomsStatus[this.defaultRoom].status ? {id: undefined, title: ''} : roomsStatus[this.defaultRoom]
       this.RECEIVER = current.id
       this.roomTitle = current.title
       this.$store.dispatch('updateCurrentChatRoom', this.RECEIVER)
