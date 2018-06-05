@@ -217,7 +217,7 @@ export default {
   .ball-sum {
     display: inline-block;
   }
-  .wrapper-hkl span{
+  .wrapper-hkl span, .wrapper-luckl span{
     margin-bottom: 10px;
   }
 }
