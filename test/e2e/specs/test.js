@@ -1,8 +1,7 @@
 // For authoring Nightwatch tests, see
 // http://nightwatchjs.org/guide#usage
-
 module.exports = {
-  'default e2e tests': function (browser) {
+  'Login Test': function (browser) {
     // automatically uses dev Server port from /config.index.js
     // default: http://localhost:8080
     // see nightwatch.conf.js
@@ -11,9 +10,14 @@ module.exports = {
     browser
       .url(devServer)
       .waitForElementVisible('#app', 5000)
-      .assert.elementPresent('.hello')
-      .assert.containsText('h1', 'Welcome to Your Vue.js App')
-      .assert.elementCount('img', 1)
+      .assert.elementPresent('#home')
+      .click('#login-link')
+      .waitForElementVisible('#username', 3000)
+      .setValue('#username', 'eeeeee')
+      .setValue('#password', 'Aa111111')
+      .click('.el-button.login-btn.el-button--primary.el-button--small')
+      .waitForElementVisible('.top-bar .username', 3000)
+      .assert.containsText('.top-bar .username', '欢迎, eeeeee')
       .end()
   }
 }

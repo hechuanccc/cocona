@@ -34,7 +34,6 @@
 </template>
 
 <script>
-const roomId = 1
 
 export default {
   props: {
@@ -46,12 +45,14 @@ export default {
     },
     ws: {
       type: WebSocket
+    },
+    roomId: {
+      type: Number
     }
   },
   data () {
     return {
-      nowSticker: '',
-      roomId
+      nowSticker: ''
     }
   },
   methods: {

@@ -11,8 +11,8 @@
           :zodiacMap="zodiacMap"
           ref="gameCategory"/>
         <Countdown
+          v-if="schedule && schedule.id"
           :schedule="schedule"
-          v-if="schedule.id"
           :currentGame="currentGame"
           :gameClosed="gameClosed"
           :closeCountDown="closeCountDown"

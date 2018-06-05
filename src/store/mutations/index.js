@@ -61,5 +61,18 @@ export default {
   },
   [types.UPDATE_ISCHATTING]: (state, signal) => {
     state.isChatting = signal
+  },
+  [types.COLLECT_ENVELOPE]: (state, data) => {
+    Vue.set(state.envelopes, data.envelope_status.id, data)
+  },
+  [types.UPDATE_CURRENTCHATROOM]: (state, room) => {
+    state.chatRoom.currentRoom = room
+  },
+  [types.SET_ROOMSSTATUS]: (state, roomStatus, roomId, status) => {
+    if (roomId) {
+      Vue.set(state.chatRoom.roomsStatus[roomId], 'status', status)
+    } else {
+      Vue.set(state.chatRoom, 'roomsStatus', roomStatus)
+    }
   }
 }
