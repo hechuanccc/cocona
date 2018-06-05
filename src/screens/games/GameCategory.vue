@@ -62,13 +62,13 @@
                     <span :class="play.value||needZodiac?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
                   </span>
                 </el-col>
-                <el-col v-if="play.value||needZodiac" :span="15" class="number">
+                <el-col v-if="play.value||needZodiac" :span="16" class="number">
                   <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value||zodiacMap&&zodiacMap[play.display_name]" :key="index">{{num}}</span>
                 </el-col>
                 <el-col :span="play.value||needZodiac ? 2 : 6" class="odds">
                   <span>{{ !gameClosed ? play.odds : '-'}}</span>
                 </el-col>
-                <el-col :span="play.value||needZodiac ? 5 : 12" class="input">
+                <el-col :span="play.value||needZodiac ? 4 : 12" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />

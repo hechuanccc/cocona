@@ -82,10 +82,12 @@ export default {
 $hklgames: hkl, luckl;
 %hklball{
   background: url("../../assets/ball_hk6.png") no-repeat;
+  background-size: 28px 1372px;
   display: inline-block;
   text-indent: -9999px;
-  width: 26px;
-  line-height: 26px;
+  width: 28px;
+  line-height: 28px;
+  margin-top: 10px;
 }
 
 @mixin hkl-num{
@@ -103,12 +105,12 @@ $hklgames: hkl, luckl;
       @if $i < 10 {
         .#{$game}-0#{$i}{
           @extend %hklball;
-          background-position: 0 (-27px * ($i - 1));
+          background-position: 0 (-28px * ($i - 1));
         }
       }
       .#{$game}-#{$i}{
         @extend %hklball;
-        background-position: 0 (-27px * ($i - 1));
+        background-position: 0 (-28px * ($i - 1));
       }
     }
   }
