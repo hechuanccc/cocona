@@ -5,7 +5,7 @@
         <router-view
           :key="$route.name + ($route.params.categoryId || '')"
           :game="currentGame"
-          :scheduleId="schedule ? schedule.id : null"
+          :scheduleId="schedule && schedule.id ? schedule.id : null"
           :gameClosed="gameClosed"
           @clearShortCut="clearShortCut"
           :zodiacMap="zodiacMap"
@@ -20,7 +20,7 @@
       </el-row>
       <el-row class="m-b-xlg">
         <GameStatistic
-          v-if="currentGame&&currentGame.code!=='hkl'&&currentGame.code!=='fc3d'&&currentGame.code!=='luckl'"
+          v-if="currentGame && currentGame.code!=='hkl' && currentGame.code!=='fc3d' && currentGame.code!=='luckl'"
           :gameCode="currentGame.code"
           :resultStatistic="resultStatistic"/>
       </el-row>

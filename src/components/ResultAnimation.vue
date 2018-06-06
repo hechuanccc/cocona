@@ -27,6 +27,9 @@
         </ul>
       </div>
     </template>
+    <div v-else-if="gameCode === 'jsk3'">
+      <img :src="require('../assets/loading_dice.gif')" alt="dice">
+    </div>
     <div
       v-else
       :class="`result-${gameCode} view`"

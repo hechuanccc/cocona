@@ -22,7 +22,7 @@
                 <img src="../assets/game-ad.png" alt="More Games"/>
                 <p>20 多款游戏，数百种创新玩法</p>
               </router-link>
-              <li v-for="(game, index) in games" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
+              <li v-for="(game, index) in allGames" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
                 <div class="game-icon">
                   <img :src="game.icon" :alt="game.id"/>
                   <p>{{game.display_name}}</p>
@@ -43,8 +43,8 @@
         <el-row class="ads container">
           <el-col
             v-for="(item, index) in descriptions"
+            :key="index"
             class="ad"
-            :key="item.id"
             :offset="descriptions.length===1?6:0"
             :span="dynamicAdWidth"
             >
@@ -83,7 +83,8 @@
 </template>
 
 <script>
-import { getBanner, getAnnouncements, fetchGames, getDescription } from '../api'
+import { mapGetters } from 'vuex'
+import { getBanner, getAnnouncements, getDescription } from '../api'
 import 'vue-awesome/icons/bullhorn'
 import FloatAd from '../components/FloatAd'
 
@@ -96,7 +97,6 @@ export default {
     return {
       banners: [],
       announcements: [],
-      games: '',
       descriptions: '',
       announcementWidth: 0,
       leftOffset: 0,
@@ -107,6 +107,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'allGames'
+    ]),
     isHome () {
       return this.$store.state.route.path === '/'
     },
@@ -194,11 +197,7 @@ export default {
         this.setAnnouncement()
       }
     )
-    fetchGames().then(
-      games => {
-        this.games = games
-      }
-    )
+
     getDescription().then(response => {
       this.descriptions = response
     })
