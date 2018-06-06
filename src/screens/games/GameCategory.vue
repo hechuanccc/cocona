@@ -296,7 +296,7 @@ export default {
     },
     formatting () {
       let category = this.$store.getters.categoriesById(this.$route.params.categoryId)
-      return category ? category.formatting : null
+      return category ? category.formatting : []
     },
     // just to trigger watcher below
     rawAndFormatting () {

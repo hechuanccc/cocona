@@ -10,10 +10,7 @@ export default {
     })
     return state.games
   },
-  currentGame: (state, getters) => {
-    let routerParams = state.route.params
-    return routerParams && routerParams.gameId ? getters.gameById(routerParams.gameId) : null
-  },
+
   planMakerMap: (state, getters) => {
     let chatInfo = state.user.chatInfo
     let map = {}
