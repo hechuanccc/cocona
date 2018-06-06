@@ -181,6 +181,8 @@ export default {
       window.location.reload()
     }
 
+    this.$store.dispatch('fetchGames')
+
     if (this.$cookie.get('access_token')) {
       this.$store.dispatch('fetchUser').then(() => {
         this.getMessageCount()
