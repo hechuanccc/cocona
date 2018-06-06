@@ -98,8 +98,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user',
-      'currentGame'
+      'user'
     ]),
     ...mapState([
       'isChatting'
