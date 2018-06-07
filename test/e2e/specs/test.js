@@ -1,14 +1,10 @@
+require('../page_objects/bet.js')
 // For authoring Nightwatch tests, see
 // http://nightwatchjs.org/guide#usage
 module.exports = {
-  'Login Test': function (browser) {
-    // automatically uses dev Server port from /config.index.js
-    // default: http://localhost:8080
-    // see nightwatch.conf.js
-    const devServer = browser.globals.devServerURL
-
+  before: function (browser) {
     browser
-      .url(devServer)
+      .url(browser.launch_url)
       .waitForElementVisible('#app', 5000)
       .assert.elementPresent('#home')
       .click('#login-link')
@@ -18,6 +14,22 @@ module.exports = {
       .click('.el-button.login-btn.el-button--primary.el-button--small')
       .waitForElementVisible('.top-bar .username', 3000)
       .assert.containsText('.top-bar .username', '欢迎, eeeeee')
-      .end()
+  },
+  after: function (browser) {
+    browser.end()
+  },
+  'bet Test': function (browser) {
+    const bet = browser.page.bet()
+    // bet.navigate()
+    browser.pause(2000)
+    bet.clearValue('@amountInput')
+    bet.setValue('@amountInput', 1)
+    .selectAll()
+    bet.click('@betButton')
+    .waitForElementVisible('@dialog', 1000)
+    .expect.element('@dialog').to.be.visible
+    bet.click('@confirmButton')
+    .waitForElementVisible('@alertSuccess', 2000)
+    .expect.element('@alertSuccess').to.be.visible
   }
 }
