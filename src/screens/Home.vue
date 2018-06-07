@@ -130,7 +130,7 @@ export default {
     },
     navigate (game) {
       if (this.$store.state.user.logined) {
-        this.$router.replace(`/game/${game.id}/`)
+        this.$router.push(`/game/${game.id}/`)
       } else {
         this.$store.commit('SHOW_LOGIN_DIALOG')
       }
