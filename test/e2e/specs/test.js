@@ -22,9 +22,9 @@ module.exports = {
   'bet Test': function (browser) {
     const bet = browser.page.bet()
     bet.navigate()
-    browser.pause(2000)
-    bet.clearValue('@amountInput')
-    bet.setValue('@amountInput', 1)
+    .waitForElementNotPresent('@disabledBetButton', 3000)
+    .clearValue('@amountInput')
+    .setValue('@amountInput', 1)
     .selectAll()
     bet.click('@betButton')
     .waitForElementVisible('@dialog', 1000)

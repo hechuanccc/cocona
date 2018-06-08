@@ -289,6 +289,7 @@ export default {
         if (valid) {
           this.loading = true
           register(this.user).then(result => {
+            window.gtag('event', '註冊', {'event_category': '會員註冊'})
             if (result.code === 9001) {
               this.$message({
                 showClose: true,
