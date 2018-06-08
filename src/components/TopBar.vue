@@ -161,6 +161,7 @@ export default {
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
+        window.gtag('event', '試玩', {'event_category': '遊客'})
       }, errorMsg => {
         if (errorMsg) {
           this.$message({

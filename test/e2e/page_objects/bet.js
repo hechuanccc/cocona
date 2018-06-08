@@ -1,6 +1,6 @@
 module.exports = {
   url: function () {
-    return this.api.launchUrl + '/#/game/178/1571'
+    return this.api.launchUrl + '/#/game/307/2203'
   },
   commands: [{
     selectAll: function () {
@@ -14,6 +14,9 @@ module.exports = {
   elements: {
     amountInput: {
       selector: 'div.bet-area > div.actions input.el-input__inner'
+    },
+    disabledBetButton: {
+      selector: 'div.bet-area > div.actions button.place-order-btn.is-disabled'
     },
     betButton: {
       selector: 'div.bet-area > div.actions button.place-order-btn'
