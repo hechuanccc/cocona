@@ -1,7 +1,7 @@
 module.exports = {
-  // url: function () {
-  //   return this.api.launchUrl + 'game/172/1884'
-  // },
+  url: function () {
+    return this.api.launchUrl + '/#/game/178/1571'
+  },
   commands: [{
     selectAll: function () {
       this.api.elements('css selector', '.clickable', (elems) => {

@@ -36,7 +36,7 @@ module.exports = {
     },
 
     staging: {
-      launch_url: 'http://rico-st8ging.azureedge.net/#/',
+      launch_url: 'http://rico-st8ging.azureedge.net',
       desiredCapabilities: {
         browserName: 'chrome',
         javascriptEnabled: true,

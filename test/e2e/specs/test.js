@@ -14,13 +14,14 @@ module.exports = {
       .click('.el-button.login-btn.el-button--primary.el-button--small')
       .waitForElementVisible('.top-bar .username', 3000)
       .assert.containsText('.top-bar .username', '欢迎, eeeeee')
+      .pause(1000)
   },
   after: function (browser) {
     browser.end()
   },
   'bet Test': function (browser) {
     const bet = browser.page.bet()
-    // bet.navigate()
+    bet.navigate()
     browser.pause(2000)
     bet.clearValue('@amountInput')
     bet.setValue('@amountInput', 1)
