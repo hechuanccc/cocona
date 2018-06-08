@@ -69,7 +69,6 @@ export default {
       style,
       exposedCount: 11,
       dropdownActive: false,
-      categories: [],
       isBusy: false
     }
   },
@@ -83,34 +82,17 @@ export default {
     currentGame () {
       return this.$store.getters.gameById(this.$route.params.gameId) || {index: 0}
     },
+    categories () {
+      const currentGameId = this.$route.params.gameId
+      if (!currentGameId) {
+        return []
+      }
+      return this.$store.getters.categoriesByGameId(currentGameId)
+    },
     ...mapGetters([
       'allGames',
       'user'
     ])
-  },
-  watch: {
-    'allGames': function () {
-      let currentGameId = this.$route.params.gameId
-      if (!currentGameId) {
-        currentGameId = localStorage.getItem('lastGame') || this.allGames[0].id
-      }
-      this.categories = this.$store.getters.categoriesByGameId(currentGameId)
-      if (!this.categories.length) {
-        this.$store.dispatch('fetchCategories', currentGameId)
-          .then((res) => {
-            if (res) {
-              this.categories = res
-              let categoryId = this.$route.params.categoryId || this.categories[0].id
-              this.$router.replace(`/${this.path}/${currentGameId}/${categoryId}`)
-            } else {
-              this.performLogin()
-            }
-          })
-      } else {
-        let categoryId = this.$route.params.categoryId || this.categories[0].id
-        this.$router.replace(`/${this.path}/${currentGameId}/${categoryId}`)
-      }
-    }
   },
   name: 'gamemenu',
   methods: {
@@ -122,27 +104,10 @@ export default {
       if (this.isBusy) {
         return false
       }
-      this.isBusy = true
+      // this.isBusy = true
       localStorage.setItem('lastGame', key)
       localStorage.setItem('lastGameCode', game.code)
-      this.categories = this.$store.getters.categoriesByGameId(key + '')
-      if (!this.categories.length) {
-        this.$store.dispatch('fetchCategories', key)
-          .then((res) => {
-            this.isBusy = false
-            if (res) {
-              this.categories = res
-              this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
-            } else {
-              this.performLogin()
-            }
-          }, errRes => {
-            this.isBusy = false
-          })
-      } else {
-        this.isBusy = false
-        this.$router.push(`/${this.path}/${key}/${this.categories[0].id}`)
-      }
+      this.$router.push(`/${this.path}/${key}`)
     },
     switchCategory (category) {
       if (!category) {

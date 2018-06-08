@@ -57,7 +57,7 @@
         </div>
       </el-aside>
       <el-main class="m-t">
-        <router-view :key="$route.name + ($route.params.gameId || '')"/>
+        <router-view :key="$route.params.gameId"/>
       </el-main>
     </el-container>
   </div>
@@ -80,6 +80,9 @@ function keyEnterListener (event) {
 
 export default {
   name: 'gamehall',
+  components: {
+    GameMenu
+  },
   filters: {
     betOptionFilter (options) {
       if (options) {
@@ -98,7 +101,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user'
+      'user', 'allGames'
     ]),
     ...mapState([
       'isChatting'
@@ -110,11 +113,7 @@ export default {
         this.betrecords = []
       }
       if (to.path === '/game') {
-        this.$store.dispatch('fetchGames').catch(error => {
-          if (error.response.status > 400) {
-            this.performLogin()
-          }
-        })
+        this.chooseGame()
       }
     },
     'user.unsettled': function (value) {
@@ -131,10 +130,42 @@ export default {
       }
     }
   },
-  components: {
-    GameMenu
+  created () {
+    if (!this.$route.params.gameId) {
+      if (this.allGames.length > 0) {
+        this.chooseGame()
+      } else {
+        const unwatch = this.$watch('allGames', function (allGames) {
+          this.chooseGame()
+          unwatch()
+        })
+      }
+    }
+    this.$store.dispatch('setRoomsStatus')
+
+    this.$root.bus = bus
+
+    this.$root.bus.$on('new-betrecords', (gameData) => {
+      this.fetchOngoingBet(gameData)
+    })
+
+    if (this.user.unsettled) {
+      fetchWinBet().then(results => {
+        _.each(this.formattedWinRecords(results.win_bets), (result) => {
+          this.notifyIssueNumber[result.game] = result.issue_number
+          this.generateWinMessage(results.win_bets)
+        })
+      })
+      this.pollWinNotify()
+    }
+
+    window.addEventListener('keypress', keyEnterListener.bind(this))
   },
   methods: {
+    chooseGame () {
+      const gameId = localStorage.getItem('lastGame') || this.allGames[0].id
+      this.$router.replace('/game/' + gameId)
+    },
     fetchOngoingBet (gameData) {
       fetchBet(gameData).then(res => {
         this.betrecords = res
@@ -272,27 +303,6 @@ export default {
           }
         })
     })
-  },
-  created () {
-    this.$store.dispatch('setRoomsStatus')
-
-    this.$root.bus = bus
-
-    this.$root.bus.$on('new-betrecords', (gameData) => {
-      this.fetchOngoingBet(gameData)
-    })
-
-    if (this.user.unsettled) {
-      fetchWinBet().then(results => {
-        _.each(this.formattedWinRecords(results.win_bets), (result) => {
-          this.notifyIssueNumber[result.game] = result.issue_number
-          this.generateWinMessage(results.win_bets)
-        })
-      })
-      this.pollWinNotify()
-    }
-
-    window.addEventListener('keypress', keyEnterListener.bind(this))
   },
   beforeDestroy () {
     clearInterval(this.interval)
