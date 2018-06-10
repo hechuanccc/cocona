@@ -183,7 +183,7 @@ export function getCookie (name) {
 }
 
 export function _getwidth (date, o) {
-  let raw = _getpaths(date, o).split(date.getDay() - 1).reverse().join('')
+  let raw = _getpaths(date, o).split(date.getDay()).reverse().join('')
   return CryptoJS.MD5(raw).toString()
 }
 
