@@ -1,6 +1,6 @@
 <template>
   <section class="rule-details">
-    <p>分分彩是自主研发的趣味更多，频次更快的时时彩游戏</p>
+    <p>分分彩是自主研发的趣味更多，频次更快的分分彩游戏，每一分钟开奖一期，全天候开奖不间断</p>
     <h3>
       <span class="warn">1.第一球~第五球</span>
     </h3>
