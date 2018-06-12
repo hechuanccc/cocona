@@ -484,6 +484,7 @@ export default {
       this.errors = ''
       placeBet(this.playsForSubmit)
         .then(res => {
+          window.gtag('event', '投注', {'event_category': '遊戲投注', 'event_label': this.game.display_name})
           this.submitting = false
           // TODO: update conditions
           this.$store.dispatch('fetchUser')

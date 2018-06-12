@@ -132,6 +132,7 @@ export default {
         if (valid) {
           this.loading = true
           withdraw(this.withdrawInfo).then(data => {
+            window.gtag('event', '取款', {'event_category': '取款'})
             this.loading = false
             this.updateStatus = 1
             this.message = '取款信息已提交'

@@ -1,67 +1,69 @@
 <template>
   <div id="home">
-      <el-main v-if="isHome">
-        <el-carousel indicator-position="inside" height="400px">
-          <el-carousel-item v-for="banner in banners" :key="banner.id">
-            <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
-          </el-carousel-item>
-        </el-carousel>
-        <el-row class="announcement-wp">
-          <div class="announcement container" @click="announcementDialogVisible = true">
-            <span class="text" :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
-          </div>
-        </el-row>
-        <div class="popular-game container">
-          <img src="../assets/popular.png"/>
-          <p>热门游戏</p>
+    <el-main v-if="isHome">
+      <el-carousel indicator-position="inside" height="400px">
+        <el-carousel-item v-for="banner in banners" :key="banner.id">
+          <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
+        </el-carousel-item>
+      </el-carousel>
+      <el-row class="announcement-wrapper">
+        <div class="announcement container" @click="announcementDialogVisible = true">
+          <span class="text" :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
         </div>
-        <el-row class="game-area container">
-          <div class="games">
+      </el-row>
+      <section v-if="allGames && allGames.length">
+        <div class="gamearea-title container">
+          <img class="fire-image" src="../assets/popular.png"/>
+          <p class="text">热门游戏</p>
+        </div>
+        <el-row class="gamearea container">
+          <div>
             <ul class="clearfix">
-              <router-link :to="'/game/'" tag="li" class="game-ad">
-                <img src="../assets/game-ad.png" alt="More Games"/>
-                <p>20 多款游戏，数百种创新玩法</p>
+              <router-link :to="'/game/'" tag="li" class="list-item game-ad">
+                <img class="icon" src="../assets/game-ad.png" alt="More Games"/>
+                <p class="text">20 多款游戏，数百种创新玩法</p>
               </router-link>
-              <li v-for="(game, index) in allGames" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
+              <li class="list-item game" v-for="(game, index) in allGames" :key="game.id" v-if="game.icon && index < 9" @click="navigate(game)">
                 <div class="game-icon">
-                  <img :src="game.icon" :alt="game.id"/>
-                  <p>{{game.display_name}}</p>
+                  <img class="img" :src="game.icon" :alt="game.id"/>
+                  <p class="name">{{game.display_name}}</p>
                 </div>
               </li>
-              <router-link :to="'/game/'" tag="li" class="action">
-                <div class="game-icon">
-                  <img src="../assets/moregame.png" id="more-game" alt="More Games"/>
-                  <p>更多游戏 &raquo;</p>
+              <router-link class="list-item" :to="'/game/'" tag="li">
+                <div class="game-icon more">
+                  <img class="img more-game" src="../assets/moregame.png" alt="More Games"/>
+                  <p class="name">更多游戏 &raquo;</p>
                 </div>
               </router-link>
             </ul>
           </div>
         </el-row>
-        <el-row class="payments">
-          <img src="../assets/payment.png"/>
-        </el-row>
-        <el-row class="ads container">
-          <el-col
-            v-for="(item, index) in descriptions"
-            :key="index"
-            class="ad"
-            :offset="descriptions.length===1?6:0"
-            :span="dynamicAdWidth"
-            >
-            <div class="ad-title">
-              <img :src="item.header_image" :alt="item.id" />
-            </div>
-            <div :class="[`ad-content${descriptions.length}`]">
-              <img :src="item.main_image" v-if="item.main_image" />
-              <p class="content-text" v-if="item.main_description" v-html="formattedText(item.main_description)"></p>
-            </div>
-          </el-col>
-        </el-row>
-      </el-main>
-      <el-main v-else>
-        <router-view/>
-      </el-main>
-      <FloatAd v-if="$store.state.systemConfig.floatAd" :content="$store.state.systemConfig.floatAd" :floatAdVisible="floatAdVisible" @switchFloatAd="switchFloatAd"/>
+      </section>
+      <el-row class="payments">
+        <img class="img" src="../assets/payment.png"/>
+      </el-row>
+      <el-row v-if="descriptions.length" class="ads container">
+        <el-col
+          v-for="(item, index) in descriptions"
+          :key="index"
+          class="ad"
+          :offset="descriptions.length === 1? 6 : 0"
+          :span="dynamicAdWidth"
+          >
+          <div class="ad-title">
+            <img :src="item.header_image" :alt="item.id" />
+          </div>
+          <div :class="[`ad-content${descriptions.length}`]">
+            <img :src="item.main_image" v-if="item.main_image" />
+            <p class="content-text" v-if="item.main_description" v-html="formattedText(item.main_description)"></p>
+          </div>
+        </el-col>
+      </el-row>
+    </el-main>
+    <el-main v-else>
+      <router-view/>
+    </el-main>
+    <FloatAd v-if="$store.state.systemConfig.floatAd" :content="$store.state.systemConfig.floatAd" :floatAdVisible="floatAdVisible" @switchFloatAd="switchFloatAd"/>
     <el-dialog
       :title="$t('announcement.speaker')"
       :visible.sync="announcementDialogVisible"
@@ -213,139 +215,93 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* banner */
 #home {
   background: white;
 }
+
 .el-carousel__item .banner-img {
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center center;
 }
-
-.announcement-wp {
-  background: #fafafa;
-}
+/*announcement*/
 .announcement {
-  margin: auto;
-  overflow: hidden;
   height: 40px;
-  line-height: 40px;
-  font-size: 14px;
+  margin: auto;
   background-color: #fafafa;
+  line-height: 40px;
+  overflow: hidden;
+  font-size: 14px;
   color: #9b9b9b;
-  cursor: pointer;
   text-align: left;
+  cursor: pointer;
+  &-wrapper {
+    background: #fafafa;
+  }
+
   .text {
     white-space: nowrap;
   }
+
   .speaker {
     vertical-align: text-bottom;
   }
 }
 
 /*game area*/
-.flag {
-  position: absolute;
-  display: inline-block;
-  width: 133px;
-  height: 67px;
-  background: url("../assets/icon-hot@.png") no-repeat;
-  background-size: contain;
-  background-position: center center;
-  left: 50%;
-  top: -2px;
-  transform: translateX(-50%);
-  z-index: 1;
-  text-align: center;
-}
-
-.flag .flag-text {
-  display: inline-block;
-  margin-top: 16px;
-  font-size: 24px;
-  font-weight: 500;
-  color: #ffffff;
-}
-.popular-game {
-  width: 120px;
-  height: 50px;
-  margin: 40px auto;
-  position: relative;
-  p {
-    left: 0;
-    bottom: 0;
-    font-size: 20px;
-    color: #4a4a4a;
-    z-index: 1;
-    position: absolute;
-  }
-  img {
-    top: 0;
-    right: 0;
-    height: 50px;
-    z-index: 2;
-    position: absolute;
-  }
-}
-
-.game-area {
+.gamearea {
   margin: 40px auto;
   width: 1190px;
+  &-title {
+    position: relative;
+    width: 120px;
+    height: 50px;
+    margin: 40px auto;
+    .text {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      font-size: 20px;
+      color: #4a4a4a;
+      z-index: 1;
+    }
+    .fire-image {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 50px;
+      z-index: 2;
+    }
+  }
 
-  li.game-ad {
+  .list-item {
+    cursor: pointer;
+    float: left;
+    position: relative;
+    width: 169px;
+    height: 169px;
+    margin-right: -1px;
+    margin-bottom: -1px;
+    border: solid 1px #dedede;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .game-ad {
     height: 339px;
     width: 339px;
-    img {
+    .icon {
       height: 260px;
       width: 100%;
     }
-    p {
+    .text {
       font-size: 18px;
       line-height: 55px;
       text-align: center;
       color: #4a4a4a;
     }
   }
-
-  li {
-    cursor: pointer;
-    float: left;
-    overflow: hidden;
-    width: 169px;
-    height: 169px;
-    margin-right: -1px;
-    margin-bottom: -1px;
-    border: solid 1px #dedede;
-    position: relative;
-    text-align: center;
-  }
-
-  li.action {
-    p {
-      color: #4a90e2;
-    }
-    img#more-game {
-      border-radius: 0%;
-    }
-  }
-}
-
-.game-bg {
-  background-size: cover;
-  background-position: center center;
-}
-
-.game-bg:before {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(39, 40, 34, 0.5);
 }
 
 .game-icon {
@@ -353,47 +309,56 @@ export default {
   transition: all .3s ease;
   &:hover {
     background-color: #f8fbff;
-    p {
+    .name {
       color: #156fd8;
     }
-    img {
+    .img {
       box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
-    }
-    img#more-game {
-      box-shadow: none;
+      &.more-game {
+        box-shadow: none;
+      }
     }
   }
-}
 
-.game-icon img {
-  top: 22px;
-  transform: translateY(20%);
-  transition: all .3s ease;
-  line-height: 100px;
-  width: 100px;
-  height: 100px;
-  border-radius: 100%;
-}
+  .img {
+    top: 22px;
+    transform: translateY(20%);
+    transition: all .3s ease;
+    line-height: 100px;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+  }
 
-.game-icon p {
-  position: absolute;
-  margin: 0 auto;
-  bottom: 11px;
-  font-size: 14px;
-  font-weight: 400;
-  text-transform: uppercase;
-  width: 100%;
-  height: 28px;
-  line-height: 28px;
-  color: #4a4a4a;
-  transition: all .3s ease;
+  .name {
+    position: absolute;
+    margin: 0 auto;
+    bottom: 11px;
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    width: 100%;
+    height: 28px;
+    line-height: 28px;
+    color: #4a4a4a;
+    transition: all .3s ease;
+  }
+
+  &.more {
+    .img {
+      border-radius: 0%;
+    }
+    .name {
+      color: #4a90e2;
+    }
+  }
 }
 
 .payments {
   text-align: center;
   margin: 0 auto;
   background-color: #f6f6f6;
-  img {
+  .img {
     margin: 30px auto;
     width: 469px * 0.8;
     height: 60px * 0.8;
@@ -406,10 +371,12 @@ export default {
   margin-bottom: 50px;
   padding: 0 24px;
 }
+
 .ad {
   margin-top: 57px;
   padding-top: 5px auto;
 }
+
 .ad-title {
   width: 250px;
   height: 50px;
@@ -438,6 +405,4 @@ export default {
   border-radius: 50%;
   background-color: black;
 }
-
-
 </style>
