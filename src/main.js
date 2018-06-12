@@ -54,8 +54,9 @@ if (token) {
 
 axios.interceptors.request.use((config) => {
   let t = new Date()
-  config.headers.common['x-sign'] = icon[color.white](t, icon.sz)
+
   config.headers.common['x-date'] = icon[color.red.split('5')[0]](t, icon.sz)
+  config.headers.common['x-sign'] = icon[color.white](t, icon.sz)
 
   return config
 }, function (error) {
