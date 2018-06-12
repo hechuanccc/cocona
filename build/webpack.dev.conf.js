@@ -6,6 +6,7 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -13,6 +14,7 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
+  mode: 'development',
   module: {
     rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
   },
@@ -32,6 +34,13 @@ module.exports = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true
     }),
+    new AddAssetHtmlPlugin([{
+      filepath: require.resolve('../lib/base.dll.js'),
+      includeSourcemap: false
+    }, {
+      filepath: require.resolve('../lib/ui.dll.js'),
+      includeSourcemap: false
+    }]),
     new FriendlyErrorsPlugin()
   ]
 })
