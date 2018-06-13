@@ -86,7 +86,8 @@
             :playgroup="playgroup"
             :plays="plays"
             :gameClosed="gameClosed"
-            :zodiacMap = "zodiacMap"
+            :zodiacMap="zodiacMap"
+            :gameCode="game.code"
             v-else />
         </div>
       </div>

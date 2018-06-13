@@ -97,6 +97,10 @@ export default {
   name: 'gamemenu',
   methods: {
     switchGame (game) {
+      if (this.activeGame === game.id) {
+        return
+      }
+
       const key = game.id
       if (key === '-1') {
         return false
@@ -140,6 +144,10 @@ export default {
   cursor: pointer;
   &.active {
     background: rgba(0, 0, 0, 0.3);
+    &:hover {
+      background: rgba(0, 0, 0, 0.3);
+      cursor: default;
+    }
   }
   &:hover {
     background: rgba(0, 0, 0, 0.2);
@@ -192,12 +200,15 @@ export default {
   width: 150px;
   background: $darkish-blue;
 }
+
 .dropdown-menu {
   position: relative;
 }
+
 .dropdown-menu-item {
   height: 44px;
   line-height: 44px;
+
   &:hover {
     background: rgba(0, 0, 0, 0.2);
   }
