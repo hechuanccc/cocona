@@ -1,10 +1,10 @@
 
 # Take note that the image itself is already logged-in in the cloud CLI
 FROM unnotechlottery/rico:latest as rico
-
-FROM node:6.11.4
+FROM node:10.4.1-alpine
 
 WORKDIR /usr/src/app
+
 EXPOSE 8080
 
 ARG AZURE_STORAGE_ACCOUNT
@@ -23,8 +23,8 @@ ARG SITE_TITLE
 COPY --from=rico /root /root
 
 COPY --from=rico /usr/src/app/node_modules node_modules
-COPY package.json package.json
-RUN npm install
+COPY package.json .
+RUN yarn install
 
 # To include everything
 COPY . .
@@ -33,4 +33,4 @@ COPY . .
 #RUN chmod u+x cloud_deploy.sh
 #RUN ./cloud_deploy.sh
 
-CMD npm run dev
+CMD yarn run dev

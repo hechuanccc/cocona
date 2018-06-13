@@ -76,12 +76,12 @@
             </li>
             <li>
               <router-link to="/account/remit">
-              <icon name="credit-card-alt"></icon>{{$t('user.remit')}}
+              <icon name="arrow-circle-right"></icon>{{$t('user.remit')}}
               </router-link>
             </li>
             <li>
               <router-link to="/account/withdraw">
-                <icon name="file-text-o"></icon>{{$t('user.withdraw')}}
+                <icon name="file"></icon>{{$t('user.withdraw')}}
               </router-link>
             </li>
             <li>
@@ -91,12 +91,12 @@
             </li>
             <li>
               <router-link to="/account/message">
-                <icon name="envelope-o"></icon>{{$t('user.message')}}<span v-if="messageCount" class="msg-tooltip-right">{{messageCount}}</span>
+                <icon name="envelope"></icon>{{$t('user.message')}}<span v-if="messageCount" class="msg-tooltip-right">{{messageCount}}</span>
               </router-link>
             </li>
             <li @click="logout()">
               <a>
-                <icon name="sign-out"></icon>{{$t('navMenu.logout')}}
+                <icon name="sign-out-alt"></icon>{{$t('navMenu.logout')}}
               </a>
             </li>
           </ul>
@@ -108,12 +108,12 @@
 
 <script>
 import 'vue-awesome/icons/credit-card'
+import 'vue-awesome/icons/arrow-circle-right'
 import 'vue-awesome/icons/list-ul'
-import 'vue-awesome/icons/credit-card-alt'
-import 'vue-awesome/icons/file-text-o'
+import 'vue-awesome/icons/file'
 import 'vue-awesome/icons/user'
-import 'vue-awesome/icons/envelope-o'
-import 'vue-awesome/icons/sign-out'
+import 'vue-awesome/icons/envelope'
+import 'vue-awesome/icons/sign-out-alt'
 
 import { register } from '../api'
 import { msgFormatter } from '../utils'
