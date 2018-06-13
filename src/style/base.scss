@@ -166,10 +166,15 @@ a {
   cursor: pointer;
 }
 
+.not-allowed {
+  cursor: not-allowed;
+}
+
 .text-bold {
   font-weight: 700;
 }
 
-.init-dialog /deep/ .el-dialog__header , .init-dialog /deep/ .el-dialog__body {
+.init-dialog .el-dialog__header ,
+.init-dialog .el-dialog__body {
   padding: 0;
 }

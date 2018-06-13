@@ -169,6 +169,7 @@
           if (valid) {
             this.loading = true
             agentRegister(this.user).then(result => {
+              window.gtag('event', '註冊', {'event_category': '代理商註冊'})
               this.loading = false
               this.successMsg = this.$t('message.submit_success')
             }, errorMsg => {

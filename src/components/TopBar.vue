@@ -22,7 +22,7 @@
       </li>
 
       <li v-if="!isLogin">
-        <a @click="login" class="link">{{$t('navMenu.user_login')}}</a>
+        <a id="login-link" @click="login" class="link">{{$t('navMenu.user_login')}}</a>
       </li>
       <li v-if="!isLogin">
         <a class="red link" @click="tryplay">{{$t('navMenu.try_play')}}</a>
@@ -161,6 +161,7 @@ export default {
         return this.$store.dispatch('login', { user })
       }).then(result => {
         this.$router.push({ name: 'Game' })
+        window.gtag('event', '試玩', {'event_category': '遊客'})
       }, errorMsg => {
         if (errorMsg) {
           this.$message({

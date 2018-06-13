@@ -222,6 +222,26 @@ export default {
         if (valid) {
           this.remiting = true
           remit(this.remitData).then(data => {
+            let remitType = ''
+            try {
+              const currentRemitData = this.remitPayees.find(data => data.id + '' === this.activeName)
+              if (currentRemitData) {
+                switch (currentRemitData.remit_type) {
+                  case 1:
+                    remitType = '銀行'
+                    break
+                  case 2:
+                    remitType = '微信'
+                    break
+                  case 3:
+                    remitType = '支付宝'
+                    break
+                  default:
+                    remitType = ''
+                }
+              }
+            } catch (e) {}
+            window.gtag('event', '充值', {'event_category': '線下匯款', 'event_label': remitType + '轉帳'})
             this.successPayeeId = this.remitData.remit_info.remit_payee
             this.$message({
               showClose: true,

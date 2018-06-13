@@ -147,7 +147,7 @@ export default {
       }
       this.selectedOptions.sort((a, b) => { return a.num - b.num })
       _.forEach(this.plays, (play) => {
-        if (play.display_name.slice(-3, -1) === '' + (this.selectedOptions.length)) {
+        if (play.rules.max_opts === this.selectedOptions.length) {
           this.activePlay.odds = play.odds
           this.activePlay.id = play.id
           this.activePlay.display_name = play.display_name

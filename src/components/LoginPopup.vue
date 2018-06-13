@@ -22,6 +22,7 @@
           <el-form :model="user" status-icon :rules="rules" ref="user">
             <el-form-item prop="username" :label="$t('user.username')" label-width="55px">
               <el-input v-model="user.username"
+                id="username"
                 class="m-t-sm"
                 @keyup.enter.native="login"
                 @blur="clearSpace(user, 'username')"
@@ -30,6 +31,7 @@
             </el-form-item>
             <el-form-item prop="password" :label="$t('user.password')" label-width="55px">
               <el-input v-model="user.password"
+                id="password"
                 type="password"
                 @blur="clearSpace(user, 'password')"
                 @keyup.enter.native="login">
@@ -132,6 +134,7 @@ export default {
       }).then(result => {
         this.$store.commit('CLOSE_LOGINDIALOG')
         this.$router.push({ name: 'Game' })
+        window.gtag('event', '試玩', {'event_category': '遊客'})
       }, errorMsg => {
         this.errorMsg = msgFormatter(errorMsg)
       })

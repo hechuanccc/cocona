@@ -38,7 +38,7 @@
           <span class="title">最新注单</span>
           <ul class="items" >
             <li class="record" v-for="(bet, index) in betrecords" :key="bet.issue_number + index">
-              <div class="issueNumber">
+              <div>
                 <span>{{bet.issue_number}} 期</span>
               </div>
               <div class="play-name">玩法: {{bet.play.playgroup}}-{{bet.play.display_name}} @ <span class="odds">{{bet.odds}}</span></div>
@@ -47,7 +47,7 @@
               </div>
               <div >金额: {{bet.bet_amount| currency('￥')}}</div>
             </li>
-            <li class="empty"  v-if="!betrecords || betrecords.length === 0">暂无注单</li>
+            <li class="empty" v-if="!betrecords || betrecords.length === 0">暂无注单</li>
 
           </ul>
           <div class="buttons" v-if="betrecords && betrecords.length > 0">
@@ -57,7 +57,7 @@
         </div>
       </el-aside>
       <el-main class="m-t">
-        <router-view :key="$route.name + ($route.params.gameId || '')"/>
+        <router-view :key="$route.params.gameId"/>
       </el-main>
     </el-container>
   </div>
@@ -80,6 +80,9 @@ function keyEnterListener (event) {
 
 export default {
   name: 'gamehall',
+  components: {
+    GameMenu
+  },
   filters: {
     betOptionFilter (options) {
       if (options) {
@@ -98,8 +101,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'user',
-      'currentGame'
+      'user', 'allGames'
     ]),
     ...mapState([
       'isChatting'
@@ -111,11 +113,7 @@ export default {
         this.betrecords = []
       }
       if (to.path === '/game') {
-        this.$store.dispatch('fetchGames').catch(error => {
-          if (error.response.status > 400) {
-            this.performLogin()
-          }
-        })
+        this.chooseGame()
       }
     },
     'user.unsettled': function (value) {
@@ -132,10 +130,42 @@ export default {
       }
     }
   },
-  components: {
-    GameMenu
+  created () {
+    if (!this.$route.params.gameId) {
+      if (this.allGames.length > 0) {
+        this.chooseGame()
+      } else {
+        const unwatch = this.$watch('allGames', function (allGames) {
+          this.chooseGame()
+          unwatch()
+        })
+      }
+    }
+    this.$store.dispatch('setRoomsStatus')
+
+    this.$root.bus = bus
+
+    this.$root.bus.$on('new-betrecords', (gameData) => {
+      this.fetchOngoingBet(gameData)
+    })
+
+    if (this.user.unsettled) {
+      fetchWinBet().then(results => {
+        _.each(this.formattedWinRecords(results.win_bets), (result) => {
+          this.notifyIssueNumber[result.game] = result.issue_number
+          this.generateWinMessage(results.win_bets)
+        })
+      })
+      this.pollWinNotify()
+    }
+
+    window.addEventListener('keypress', keyEnterListener.bind(this))
   },
   methods: {
+    chooseGame () {
+      const gameId = localStorage.getItem('lastGame') || this.allGames[0].id
+      this.$router.replace('/game/' + gameId)
+    },
     fetchOngoingBet (gameData) {
       fetchBet(gameData).then(res => {
         this.betrecords = res
@@ -274,27 +304,6 @@ export default {
         })
     })
   },
-  created () {
-    this.$store.dispatch('setRoomsStatus')
-
-    this.$root.bus = bus
-
-    this.$root.bus.$on('new-betrecords', (gameData) => {
-      this.fetchOngoingBet(gameData)
-    })
-
-    if (this.user.unsettled) {
-      fetchWinBet().then(results => {
-        _.each(this.formattedWinRecords(results.win_bets), (result) => {
-          this.notifyIssueNumber[result.game] = result.issue_number
-          this.generateWinMessage(results.win_bets)
-        })
-      })
-      this.pollWinNotify()
-    }
-
-    window.addEventListener('keypress', keyEnterListener.bind(this))
-  },
   beforeDestroy () {
     clearInterval(this.interval)
     this.$root.bus.$off('new-betrecords')
@@ -306,31 +315,34 @@ export default {
 
 <style scoped lang="scss">
 @import "../style/vars.scss";
+
 .el-main {
   padding: 0;
 }
+
 .box {
+  max-height: 100vh;
   margin: 10px 10px 0;
   background: #fff;
-  max-height: 100vh;
   .items {
     max-height: 300px;
     overflow-y: auto;
   }
   .title {
     display: block;
-    color: #9b9b9b;
-    font-size: 13px;
-    text-align: center;
     height: 32px;
     line-height: 32px;
+    font-size: 13px;
+    color: #9b9b9b;
+    text-align: center;
     border-bottom: 1px solid $pinkish-grey;
     margin-bottom: 10px;
   }
+
   .item {
-    padding: 0 10px;
     height: 24px;
     line-height: 24px;
+    padding: 0 10px;
     color: #666;
     .text {
       font-size: 12px;
@@ -345,19 +357,11 @@ export default {
     }
   }
   .record {
-    color: #666;
-    margin: 0 10px;
     padding: 5px 0;
     border-bottom: 1px solid #f5f5f5;
+    margin: 0 10px;
     font-size: 12px;
-    .issueNumber {
-      .amount {
-        float: right;
-        display: block;
-        text-align: right;
-        color: #000;
-      }
-    }
+    color: #666;
     .odds {
       color: $red;
     }
@@ -369,13 +373,14 @@ export default {
     }
   }
   .empty {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 0 10px;
     color: #ccc;
     text-align: center;
-    line-height: 30px;
-    height: 30px;
-    padding: 0 0 10px;
     font-weight: 200;
   }
+
   .buttons {
     margin-top: 10px;
     text-align: center;
@@ -383,6 +388,7 @@ export default {
     .el-button:last-child {
       margin-left: 5px;
     }
+
     .large-btn.el-button {
       margin: 0;
       width: 170px;

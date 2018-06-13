@@ -5,7 +5,7 @@
       v-loading="loading"
       id="chatBox"
       element-loading-text="正在登录"
-      v-if="isLogin && showChatRoom">
+      v-if="isLogin && showChatRoom && RECEIVER">
       <el-header class="chat-header clearfix" height="56px">
         <div class="left fl clearfix">
           <span class="title">{{roomTitle}}</span>
@@ -16,17 +16,14 @@
             alt="setting"
             class="clickable icon"
             @click="handleBlockPopupShow"/>
-
           <img :src="require('../assets/icon_profile.png')"
             alt="profile"
             class="clickable icon"
-            @click="isBlocked ? '' : showEditProfile = true"/>
-
+            @click="isBlocked || !user.account_type ? '' : showEditProfile = true"/>
           <img :src="require('../assets/icon_close.png')"
             alt="profile"
             class="clickable icon"
             @click="showChatRoom = false"/>
-
         </div>
 
         <transition
@@ -34,51 +31,38 @@
           leave-active-class="animated fadeOutUp"
           enter-active-class="animated fadeInDown">
           <div class="edit-profile" v-if="showEditProfile">
-            <div @mouseover="swichAvatar = true"
-              @mouseout="swichAvatar = false">
+            <div @mouseover="swichAvatar = true" @mouseout="swichAvatar = false">
               <el-upload
-                class="avatar"
+                class="avatar clickable"
                 style="overflow-y: hidden;"
                 :action="uploadUrl"
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
-
-                <img v-if="user.avatar && !swichAvatar" :src="user.avatar" class="avatar">
-                <img v-else-if="!swichAvatar" :src="defaultAvatar">
-                <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
+                <img class="img" v-if="user.avatar && !swichAvatar" :src="user.avatar">
+                <img class="img" v-else-if="!swichAvatar" :src="defaultAvatar">
+                <label for="avatarUploadInput" class="upload-avatar clickable" v-if="swichAvatar">
                   <span class="el-icon-upload"></span>
                 </label>
               </el-upload>
             </div>
-
             <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
-            <p>
-              <span class="txt-nick">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
-              <a href="javascript:void(0)" class="icon-edit" @click="showNickNameBox = true">
+            <p class="clickable" @click="showNickNameBox = true">
+              <span class="display-name">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
+              <a href="javascript:void(0)" class="icon-edit">
                 <span class="el-icon-edit-outline"></span>
               </a>
             </p>
-            <div>
-              <p>
-                <a href="javascript:void(0)" class="u-btn" @click="showEditProfile = false">关闭</a>
-              </p>
-            </div>
+            <el-button type="primary" @click.native="showEditProfile = false">关闭</el-button>
           </div>
         </transition>
 
-        <transition
-          enter-class="profileFadeInEnter"
+        <transition enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
           enter-active-class="animated fadeInDown">
           <div class="edit-profile" v-if="showCheckUser">
-            <div
-              class="avatar"
-              style="overflow-y: hidden;">
+            <div class="avatar" style="overflow-y: hidden;">
               <img :src="checkUser.avatar_url || defaultAvatar" class="avatar">
-              <label for="avatarUploadInput" class="upload-avatar" v-if="swichAvatar">
-                <span class="el-icon-upload"></span>
-              </label>
             </div>
             <p class="avatar-upload-tip">{{checkUser.nickname || checkUser.username}}({{checkUser.level_name}})</p>
             <div class="restraint-actions">
@@ -86,16 +70,11 @@
               <el-button type="danger" size="mini" @click.native="ban(30)">禁言30分钟</el-button>
               <el-button type="danger" size="mini" @click.native="block()">加入黑名单</el-button>
             </div>
-            <div>
-              <p>
-                <a href="javascript:void(0)" class="u-btn" @click="showCheckUser = false">关闭</a>
-              </p>
-            </div>
+            <el-button type="primary" @click.native="showCheckUser = false">关闭</el-button>
           </div>
         </transition>
 
       </el-header>
-
 
       <el-main class="chat-body" id="chatBox">
 
@@ -119,11 +98,13 @@
           :isBlocked="isBlocked"
           :isManager="isManager"
           :personalSetting="personal_setting"/>
+
       </el-main>
 
       <el-footer class="footer" height="120">
         <div class="control-bar">
           <el-popover :popper-class="'emoji-popover'"
+            :disabled="!user.account_type || isBlocked || isBanned || !personal_setting.chat.status"
             ref="sticker-popover"
             v-model="stickerPopoverVisible"
             placement="top-start"
@@ -159,18 +140,28 @@
           </a>
 
           <a href="javascript:void(0)" class="btn-control btn-smile clickable">
-            <label for="imgUploadInput" class="clickable" @mouseenter="controlBar.image = true" @mouseleave="controlBar.image = false">
+            <label for="imgUploadInput" @click="handleImgIconClick($event)" class="clickable" @mouseenter="controlBar.image = true" @mouseleave="controlBar.image = false">
               <span title="上传图片">
                 <img :src="controlBar.image ? require('../assets/icon_picture_hover.png') : require('../assets/icon_picture_normal.png')"
                   alt="sticker"/>
-                <input :disabled="!personal_setting.chat.status" @change="sendMsgImg" type="file" ref="fileImgSend" class="img-upload-input" id="imgUploadInput" accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
+                <input :disabled="!personal_setting.chat.status"
+                  @change="sendMsgImg"
+                  type="file"
+                  ref="fileImgSend"
+                  class="img-upload-input"
+                  id="imgUploadInput"
+                  accept=".jpg, .png, .gif, .jpeg, image/jpeg, image/png, image/gif">
               </span>
             </label>
           </a>
 
           <div v-if="systemConfig.envelopeSettings && systemConfig.envelopeSettings.enabled === '1'"
-            class="btn-control btn-smile envelope-icon clickable"
-             @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
+            :class="['btn-control',
+              'btn-smile',
+              'envelope-icon',
+              'clickable',
+              {'not-allowed': isBanned || isBlocked}]"
+            @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
             @click="handleEnvelopeIconClick">
             <img class="img" :src="controlBar.redEnvelope ? require('../assets/icon_red pocket_hover.png') : require('../assets/icon_red pocket.png')" alt="envelope-icon">
           </div>
@@ -183,7 +174,7 @@
             <textarea  @keyup.enter="sendMsg"
               @focus="$store.dispatch('updateIsChatting', true)"
               @blur="$store.dispatch('updateIsChatting', false)"
-              :placeholder="personal_setting.chat.status ? '' : chatConditionMessage"
+              :placeholder="personal_setting.chat.status ? '' : isBanned || isBlocked ? '你现在没有发言权限' :chatConditionMessage"
               type="textarea" rows="2"
               ref="textarea"
               autocomplete="off"
@@ -226,13 +217,12 @@
     </el-dialog>
 
     <div
-      v-if="isLogin && showEntry"
+      v-if="isLogin && showEntry && roomTitle && RECEIVER"
       class="chat-guide text-center"
-      @click="joinChatRoom()">
+      @click="handleEntryClick()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
-      <ul class="words-list text-center">
-        <li class="p-t-sm text-center" v-for="(word , index) in roomTitle" :key="index">{{word}}</li>
-      </ul>
+      <div class="words vertical-writing" v-html="verticalTranform(roomTitle)">
+      </div>
     </div>
 
     <el-dialog :visible.sync="errMsg"
@@ -321,7 +311,12 @@ import ChatMessages from './ChatMessages'
 import _ from 'lodash'
 
 const WSHOST = config.chatHost
-
+const removeItem = (arr, item) => {
+  let index = arr.indexOf(item)
+  if (index !== -1) {
+    arr.splice(index, 1)
+  }
+}
 export default {
   props: {
     showEntry: {
@@ -331,6 +326,7 @@ export default {
   },
   data () {
     let RECEIVER = this.$store.state.chatRoom.defaultRoom
+
     return {
       RECEIVER,
       ws: null,
@@ -350,6 +346,7 @@ export default {
       showImageMsg: false,
       showImageMsgUrl: '',
       loading: false,
+      managerLoading: false,
       emojis: {
         people: []
       },
@@ -366,8 +363,6 @@ export default {
       },
       showCheckUser: false,
       checkUser: {},
-      welcome: '',
-      chatLoading: true,
       showBlockPopup: false,
       nowRestraintTab: '0',
       bannedUsers: [],
@@ -440,6 +435,26 @@ export default {
     'RECEIVER': function () {
       this.messages = []
       this.scrollToEnd()
+    },
+    'isLogin': function (val) {
+      if (!val) {
+        this.closeEnvelope()
+        this.showChatRoom = false
+        this.messages = []
+        this.showEditProfile = false
+
+        if (this.ws) {
+          this.ws.close()
+          this.ws = null
+          this.RECEIVER = null
+          this.$store.dispatch('updateCurrentChatRoom', null)
+        }
+      }
+    },
+    'ws': function () {
+      if (!this.ws) {
+        this.showChatRoom = false
+      }
     }
   },
   mounted () {
@@ -462,7 +477,7 @@ export default {
       return !!this.personal_setting.banned[this.RECEIVER]
     },
     isLogin () {
-      return this.user.logined && this.$route.name !== 'Home'
+      return this.user.logined
     },
     chatConditionMessage () {
       return this.systemConfig.global_preferences.chat_condition_message
@@ -482,10 +497,22 @@ export default {
     }
   },
   methods: {
+    verticalTranform (str) {
+      return str.replace(/(\d+\w+|\d+|\w+.*?)/g, '<span style="text-orientation: upright; writing-mode: horizontal-tb; line-height: 1.5">$1</span>')
+    },
+    handleEntryClick () {
+      this.showChatRoom = true
+      this.joinChatRoom()
+    },
+    handleImgIconClick (e) {
+      if (this.isBlocked || this.isBanned || !this.user.account_type) {
+        e.preventDefault()
+      }
+    },
     initRECEIVER () {
       let gameId = this.$route.params.gameId
       let roomsStatus = this.chatRoom.roomsStatus
-      let current = roomsStatus[gameId].status ? roomsStatus[gameId] : roomsStatus[this.defaultRoom]
+      let current = roomsStatus[gameId] && roomsStatus[gameId].status ? roomsStatus[gameId] : !roomsStatus[this.defaultRoom].status ? {id: undefined, title: ''} : roomsStatus[this.defaultRoom]
       this.RECEIVER = current.id
       this.roomTitle = current.title
       this.$store.dispatch('updateCurrentChatRoom', this.RECEIVER)
@@ -509,7 +536,7 @@ export default {
       this.scrollToEnd()
     },
     handleEnvelopeIconClick () {
-      if (this.isBlocked || this.isBanned) {
+      if (this.isBlocked || this.isBanned || !this.personal_setting.chat.status) {
         return
       }
       if (!this.user.account_type) {
@@ -544,7 +571,6 @@ export default {
       this.msgCnt = this.msgCnt + emoji.emoji + ' '
     },
     joinChatRoom (room) {
-      this.showChatRoom = true
       if (this.ws) {
         this.ws.send(JSON.stringify({
           'command': 'join',
@@ -607,22 +633,26 @@ export default {
               } else {
                 switch (data.type) {
                   case 2:
-                    if (this.showChatRoom) {
-                      if (data.command === 'banned') {
-                        this.errMsg = true
-                        this.errMsgCnt = data.content
-                      } else if (data.command === 'unblock') {
-                        this.personal_setting.chat.status = 1
-                        this.personal_setting.blocked.remove(this.RECEIVER)
-                        this.joinChatRoom()
-                      } else if (data.command === 'unbanned') {
-                        this.personal_setting.chat.status = 1
-                        this.personal_setting.banned[this.RECEIVER] = ''
-                      } else if (data.command === 'join') {
-                        this.RECEIVER = data.receivers
-                        this.$store.dispatch('updateCurrentChatRoom', data.receivers)
-                      }
 
+                    if (data.command === 'banned') {
+                      this.errMsg = true
+                      this.errMsgCnt = data.content
+                    } else if (data.command === 'unblock') {
+                      this.personal_setting.chat.status = 1
+                      removeItem(this.personal_setting.blocked, this.RECEIVER)
+                      this.joinChatRoom()
+                    } else if (data.command === 'unbanned') {
+                      this.personal_setting.chat.status = 1
+                      this.personal_setting.banned[this.RECEIVER] = ''
+                    } else if (data.command === 'join') {
+                      this.RECEIVER = data.receivers
+                      this.$store.dispatch('updateCurrentChatRoom', data.receivers)
+                    } else if (data.command === 'chat_condition_passed') {
+                      this.personal_setting.chat.status = 1
+                      this.personal_setting.chat.reasons = []
+                    }
+
+                    if (this.showChatRoom) {
                       this.$notify({
                         message: data.content,
                         offset: 100,
@@ -681,13 +711,13 @@ export default {
                   case 4:
                     this.errMsg = true
                     this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
-                    this.personal_setting.banned[data.roomId] = data.msg
+                    this.personal_setting.banned[data.room_id] = data.msg
                     this.personal_setting.chat.status = 0
                     break
                   case 5:
                     this.errMsg = true
                     this.messages = []
-                    this.personal_setting.blocked.push(data.roomId)
+                    this.personal_setting.blocked.push(data.room_id)
                     this.personal_setting.chat.status = 0
                     this.errMsgCnt = data.msg
                     break
@@ -784,6 +814,7 @@ export default {
       this.showChatRoom = false
       this.messages = []
       this.showEditProfile = false
+      this.closeEnvelope()
 
       this.ws && this.ws.send(JSON.stringify({
         'command': 'leave',
@@ -880,16 +911,16 @@ export default {
       })
     },
     getUser () {
-      if (!this.isManager) {
+      if (!this.isManager || this.managerLoading) {
         return
       }
-      this.loading = true
+      this.managerLoading = true
       getRoomUserInfo(this.RECEIVER).then(response => {
         let data = response.data.data
-        this.roomManagers = response.data.managers
+        this.roomManagers = data.managers
         this.bannedUsers = data.banned_users
         this.blockedUsers = data.block_users
-        this.loading = false
+        this.managerLoading = false
       })
     },
     switchBlockTab (index) {
@@ -1077,16 +1108,17 @@ $primary-blue: #006bb3;
     width: auto;
   }
 }
+
 .edit-profile {
+  position: relative;
   max-width: 310px;
   border-radius: 5px;
   background: rgba(255,255,255,.93);
   margin: 50px auto 0;
-  position: relative;
   min-height: 200px;
   border: 1px solid #c8d4e4;
   text-align: center;
-  padding: 20px 0;
+  padding: 10px 0;
   width: 90%;
   z-index: 9999;
   color: #4f77ab;
@@ -1094,9 +1126,11 @@ $primary-blue: #006bb3;
     font-size: 12px;
     color: rgb(255, 127, 77);
   }
+
   .icon-edit {
     font-size: 20px;
   }
+
   .avatar {
     display: inline-block;
     border-radius: 50%;
@@ -1104,12 +1138,11 @@ $primary-blue: #006bb3;
     height: 90px;
     border: 1px solid #c8d4e4;
     overflow: hidden;
-    cursor: pointer;
-    img {
+    .img {
       display: block;
       width: 100%;
     }
-    label {
+    .upload-avatar {
       display: block;
       position: absolute;
       top: 38px;
@@ -1119,22 +1152,13 @@ $primary-blue: #006bb3;
       color: #fff;
       font-size: 50px;
       color: #909090;
-      cursor: pointer;
     }
   }
-  .txt-nick {
+
+  .display-name {
     font-size: 20px;
   }
-  p {
-    margin-top: 5px;
-    cursor: pointer;
-  }
-  .u-btn {
-    width: 56px;
-    height: 20px;
-    font-size: 12px;
-    line-height: 20px;
-  }
+
   .el-icon-edit-outline {
     color: $primary;
     font-size: 20px;
@@ -1169,11 +1193,21 @@ $primary-blue: #006bb3;
   border-radius: 8px 0 0 8px;
   padding-top: 15px;
   padding-bottom: 15px;
-  .words-list,
-  .font-wechat {
+  .font-wechat,
+  .words {
     color: #fff;
     font-size: 18px;
+    line-height: 40px;
   }
+
+  .vertical-writing {
+    writing-mode: vertical-rl;
+
+    .number {
+      text-orientation: upright;
+    }
+  }
+
 }
 
 

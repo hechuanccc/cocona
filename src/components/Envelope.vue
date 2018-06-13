@@ -90,7 +90,7 @@
 <script>
 import { sendEnvelope } from '../api'
 import { mapState } from 'vuex'
-import { filtAmount } from '../utils'
+import { filtAmount, msgFormatter } from '../utils'
 const validateItems = ['pack_amount', 'pack_nums']
 
 export default {
@@ -209,13 +209,10 @@ export default {
           this.loading = false
           this.error = ''
           this.$emit('handleSend', res)
-        }, err => {
-          let error = err.response.data
-          this.errorMsg = error.message
-
+        }, errMsg => {
           this.loading = false
           this.$message({
-            message: error.message,
+            message: msgFormatter(errMsg),
             type: 'warning'
           })
         })
@@ -238,8 +235,8 @@ export default {
     },
     validateAll () {
       return validateItems
-      .map(item => this.validators[item].validate(this.send[item]))
-      .filter(msg => msg)
+        .map(item => this.validators[item].validate(this.send[item]))
+        .filter(msg => msg)
     }
   },
   beforeDestroy () {

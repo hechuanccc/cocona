@@ -20,19 +20,22 @@
                 { 'manager': msg.sender.level === 'manager'},
                 { 'planmaker': msg.sender.level === 'plan_maker'}
               ]"
-              v-if="msg.sender.level === 'manager' || msg.sender.level === 'plan_maker' && !msg.isSaidByMe">
+              v-if="(msg.sender.level === 'manager' || msg.sender.level === 'plan_maker') && !msg.isSaidByMe">
               {{ msg.sender.level === 'manager' ? '管理员' : '计划员' }}
             </span>
           </div>
 
           <div v-if="msg.type === 5">
-            <div v-if="!user.account_type" class="envelope-message expired">
+
+            <div v-if="!user.account_type || (!personalSetting.chat.status && !isBanned)" class="envelope-message expired">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
-                <p class="action">会员才可以抢红包！</p>
+                <p class="action" v-if="!user.account_type">会员才可以抢红包！</p>
+                <p class="action"  v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
               </div>
             </div>
+
             <div :class="['envelope-message','clickable',
               {'null': (msg.envelope_status.total === msg.envelope_status.users.length) &&
                 !msg.envelope_status.users.map(item => item.receiver_id).includes(user.id)}]"
@@ -47,6 +50,7 @@
                 </p>
               </div>
             </div>
+
             <div class="envelope-message expired" v-else-if="!isAlive(msg.envelope_status.expired_time)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
@@ -54,6 +58,7 @@
                 <p>已过期</p>
               </div>
             </div>
+
           </div>
 
           <div v-else-if="msg.type === 7">
@@ -67,32 +72,35 @@
                 <p class="issue-number">第{{msg.bet_info.issue_number}}期</p>
               </div>
 
-              <div class="drawed" v-if="drawed(msg)">已開獎</div>
+              <div class="drawed" v-if="drawed(msg)">已开奖</div>
               <div v-else>
-                <div class="countdown" v-if="closed">已封盤</div>
-                <div class="countdown" v-else>
-                  <span v-if="countdown.resultCountDown.days > 0">{{countdown.resultCountDown.days}}天 </span>
-                  <span v-if="countdown.resultCountDown.hours > 0">{{countdown.resultCountDown.hours | complete}}:</span>
-                  {{countdown.resultCountDown.minutes | complete}}:{{countdown.resultCountDown.seconds | complete}}
+                <div class="countdown" v-if="closed">已封盘</div>
+                <div class="countdown text-center" v-else>
+                  <p class="text">封盘</p>
+                  <span v-if="countdown.closeCountDown.days > 0">{{countdown.closeCountDown.days}}天 </span>
+                  <span v-if="countdown.closeCountDown.hours > 0">{{countdown.closeCountDown.hours | complete}}:</span>
+                  {{countdown.closeCountDown.minutes | complete}}:{{countdown.closeCountDown.seconds | complete}}
                 </div>
               </div>
             </div>
             <div class="bet-info">
-              <table class="play-table">
+              <table>
                 <tr class="thead">
-                  <td class="title">玩法</td>
+                  <td class="title group-name">玩法</td>
                   <td class="title">赔率</td>
                   <td class="title">金额</td>
                 </tr>
-                <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
-                  <td class="td">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
-                  <td class="td">{{bet.play.odds}}</td>
-                  <td class="td">{{bet.bet_amount}}</td>
-                </tr>
+                <tbody class="tbody">
+                  <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
+                    <td class="td group-name">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
+                    <td class="td odds">{{bet.play.odds}}</td>
+                    <td class="td">{{bet.bet_amount | currency('￥')}}</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
             <div class="action" @click="followBet(msg)">
-              <el-button :disabled="closed || drawed(msg)" type="primary" class="followbet-btn">跟單</el-button>
+              <el-button :disabled="closed || drawed(msg)" type="primary" class="followbet-btn">跟单</el-button>
             </div>
           </div>
 
@@ -130,6 +138,7 @@
 
 <script>
 import { takeEnvelope } from '../api'
+import { msgFormatter } from '../utils'
 import { mapState } from 'vuex'
 
 export default {
@@ -152,6 +161,9 @@ export default {
     },
     isBanned: {
       type: Boolean
+    },
+    personalSetting: {
+      type: Object
     }
   },
   filters: {
@@ -190,7 +202,7 @@ export default {
       this.imgLightBox.contentUrl = msg.content
     },
     takeEnvelope (envelope) {
-      if (!this.user.account_type) {
+      if (!this.user.account_type || (!this.personalSetting.chat.status && !this.isBanned)) {
         return
       }
 
@@ -225,16 +237,22 @@ export default {
               this.envelope.status = 'fail'
           }
         }
+      }, errMsg => {
+        this.loading = false
+        this.$message({
+          message: msgFormatter(errMsg),
+          type: 'warning'
+        })
       })
     },
     handleCheckUser (msg) {
-      if (!this.isManager || msg.sender.level === 'manager') {
+      if (!this.isManager || msg.sender.level === 'manager' || msg.sender.is_robot || msg.sender.level === 'plan_maker') {
         return false
       }
       this.$emit('checkUser', msg.sender)
     },
     drawed (msg) {
-      return this.countdown.resultCountDown.schedule !== msg.bet_info.issue_number
+      return this.countdown.schedule !== msg.bet_info.issue_number
     }
   },
   computed: {
@@ -242,7 +260,7 @@ export default {
       'user'
     ]),
     closed () {
-      const r = this.countdown.resultCountDown
+      const r = this.countdown.closeCountDown
       return r.hours + r.hours + r.seconds + r.minutes === 0
     }
   },
@@ -472,7 +490,6 @@ export default {
 
 .followingbet-message {
   width: 265px;
-  max-height: 300px;
   overflow: hidden;
   background: #fff;
   box-shadow: 0 16px 14px -10px rgba(37, 140, 211, 0.25), 0 4px 10px 0 rgba(62, 174, 252, 0.1);
@@ -495,9 +512,13 @@ export default {
 
     .countdown {
       font-size: 20px;
-      line-height: 1.5;
+      line-height: 1;
       font-weight: 500;
-      color: #b32020;
+      color: $red;
+      .text {
+        font-size: 12px;
+        color: #999999;
+      }
     }
     .drawed {
       font-size: 20px;
@@ -509,19 +530,42 @@ export default {
 
   .bet-info {
     width: 100%;
-    .play-table {
-      width: 100%;
-    }
+
     .thead {
       color: #999999;
       font-weight: 300;
       font-size: 12px;
       border-bottom: 2px solid #e5e5e5;
     }
+
+    .tbody {
+      display:block;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
     .trow {
       font-size: 14px;
       color: #333333;
       line-height: 2;
+    }
+
+    .thead, .trow {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    .td {
+      vertical-align: middle;
+    }
+
+    .group-name {
+      width: 40%;
+    }
+    .odds {
+      color: $red;
+      font-weight: 700;
     }
   }
 

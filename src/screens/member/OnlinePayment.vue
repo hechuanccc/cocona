@@ -11,7 +11,7 @@
       </el-alert>
       <el-alert
         v-else-if="payeeError"
-        :title="`${payeeErrorMessage}异常，请联系客服`"
+        :title="`${payeeDisplayName}异常，请联系客服`"
         :type="'error'"
         :closable="false"
         center>
@@ -160,7 +160,7 @@ export default {
     payeeError () {
       return this.selectedPayment.gateway_id === undefined
     },
-    payeeErrorMessage () {
+    payeeDisplayName () {
       const currentPayment = this.paymentTypes.find(payment => payment.name === this.activeType)
       if (currentPayment) {
         return currentPayment.display_name
@@ -199,6 +199,7 @@ export default {
     submit (e) {
       this.$refs['payment'].validate((valid) => {
         if (valid) {
+          window.gtag('event', '充值', {'event_category': '在線支付', 'event_label': this.payeeDisplayName})
           this.$refs['payment'].$el.submit()
           this.isSubmit = true
         }

@@ -8,7 +8,7 @@
           <el-input v-model.number="amount" :min="1" type="number" @keypress.native="filtAmount" />
         </el-col>
         <el-col class="m-l-lg" :span="4">
-          <el-button class="place-order-btn" type="primary" size="small" @click="openDialog" :disabled="gameClosed">下单</el-button>
+          <el-button class="place-order-btn" type="primary" size="small" @click="handleBetClick" :disabled="gameClosed">下单</el-button>
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
       </el-row>
@@ -62,13 +62,13 @@
                     <span :class="play.value||needZodiac?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
                   </span>
                 </el-col>
-                <el-col v-if="play.value||needZodiac" :span="15" class="number">
+                <el-col v-if="play.value||needZodiac" :span="16" class="number">
                   <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value||zodiacMap&&zodiacMap[play.display_name]" :key="index">{{num}}</span>
                 </el-col>
                 <el-col :span="play.value||needZodiac ? 2 : 6" class="odds">
                   <span>{{ !gameClosed ? play.odds : '-'}}</span>
                 </el-col>
-                <el-col :span="play.value||needZodiac ? 5 : 12" class="input">
+                <el-col :span="play.value||needZodiac ? 4 : 12" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
@@ -99,7 +99,7 @@
           <el-button type="primary"
             class="place-order-btn"
             size="small"
-            @click="openDialog"
+            @click="handleBetClick"
             :disabled="gameClosed">下单</el-button>
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
@@ -157,7 +157,7 @@
         <span class="red bet-amount text-bold">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
       </div>
       <div class="summary m-b text-center p-t p-b" v-else>
-        共 {{ playsForSubmit.length}} 组 总金额:
+        共 {{ followBetAllowed && followBetCheckboxVisible ? playsForSubmit.bets.length : playsForSubmit.length }} 组 总金额:
         <span class="red bet-amount text-bold">{{totalAmount}}</span>
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
@@ -257,7 +257,6 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'currentGame',
       'planMakerMap'
     ]),
     ...mapState([
@@ -269,14 +268,14 @@ export default {
       return !bettingArr.length
     },
     followBetCheckboxVisible () {
-      if (this.currentGame) {
-        return this.planMakerMap[this.currentGame.id] &&
-        this.planMakerMap[this.currentGame.id].isPlanMaker &&
+      if (this.game) {
+        return this.planMakerMap[this.game.id] &&
+        this.planMakerMap[this.game.id].isPlanMaker &&
         this.systemConfig.chatroomEnabled
       }
     },
     playsForSubmit () {
-      let bettingArr = _.filter(this.activePlays, play => play.active).map(play => {
+      let bettingArr = _.filter(this.activePlays, play => play.active && parseFloat(play.bet_amount) > 0).map(play => {
         return {
           game_schedule: this.scheduleId,
           bet_amount: parseFloat(play.bet_amount),
@@ -285,7 +284,7 @@ export default {
         }
       })
 
-      let isPlanMaker = this.currentGame && this.planMakerMap[this.currentGame.id] && this.planMakerMap[this.currentGame.id].isPlanMaker
+      let isPlanMaker = this.game && this.planMakerMap[this.game.id] && this.planMakerMap[this.game.id].isPlanMaker
       if (this.followBetAllowed && isPlanMaker) {
         return {
           bets: bettingArr,
@@ -297,7 +296,7 @@ export default {
     },
     formatting () {
       let category = this.$store.getters.categoriesById(this.$route.params.categoryId)
-      return category ? category.formatting : null
+      return category ? category.formatting : []
     },
     // just to trigger watcher below
     rawAndFormatting () {
@@ -356,6 +355,16 @@ export default {
       if (this.raw.length && this.formatting.length) {
         this.playSections = formatPlayGroup(this.raw, this.formatting)
       }
+    },
+    'activePlays': {
+      handler: function () {
+        _.each(this.activePlays, (play) => {
+          if (!parseFloat(play.bet_amount)) {
+            play.active = false
+          }
+        })
+      },
+      deep: true
     }
   },
   created () {
@@ -379,6 +388,9 @@ export default {
           }
         })
       })
+      if (this.followBetCheckboxVisible) {
+        this.followBetAllowed = false
+      }
 
       this.openDialog()
     })
@@ -472,6 +484,7 @@ export default {
       this.errors = ''
       placeBet(this.playsForSubmit)
         .then(res => {
+          window.gtag('event', '投注', {'event_category': '遊戲投注', 'event_label': this.game.display_name})
           this.submitting = false
           // TODO: update conditions
           this.$store.dispatch('fetchUser')
@@ -532,6 +545,12 @@ export default {
         this.plays = plays
         this.loading = false
       })
+    },
+    handleBetClick () {
+      if (this.followBetCheckboxVisible) {
+        this.followBetAllowed = true
+      }
+      this.openDialog()
     },
     openDialog () {
       const validedPlays = _.flatMap(

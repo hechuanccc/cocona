@@ -3,16 +3,16 @@
     <div class="main">
       <el-row class="game-container">
         <router-view
-          :key="$route.name + ($route.params.categoryId || '')"
+          :key="$route.params.categoryId"
           :game="currentGame"
-          :scheduleId="schedule ? schedule.id : null"
+          :scheduleId="schedule && schedule.id ? schedule.id : null"
           :gameClosed="gameClosed"
           @clearShortCut="clearShortCut"
           :zodiacMap="zodiacMap"
           ref="gameCategory"/>
         <Countdown
+          v-if="schedule && schedule.id"
           :schedule="schedule"
-          v-if="schedule.id"
           :currentGame="currentGame"
           :gameClosed="gameClosed"
           :closeCountDown="closeCountDown"
@@ -20,7 +20,7 @@
       </el-row>
       <el-row class="m-b-xlg">
         <GameStatistic
-          v-if="currentGame&&currentGame.code!=='hkl'&&currentGame.code!=='fc3d'&&currentGame.code!=='luckl'"
+          v-if="currentGame && currentGame.code!=='hkl' && currentGame.code!=='fc3d' && currentGame.code!=='luckl'"
           :gameCode="currentGame.code"
           :resultStatistic="resultStatistic"/>
       </el-row>
@@ -181,7 +181,6 @@ export default {
       group.actived = false
     })
     return {
-      gameId: this.$route.params.gameId,
       schedule: {
         id: null
       },
@@ -211,8 +210,11 @@ export default {
       const c = this.closeCountDown
       return c.days + c.hours + c.minutes + c.seconds === 0
     },
+    currentGameId () {
+      return this.$route.params.gameId
+    },
     currentGame () {
-      return this.$store.getters.gameById(this.$route.params.gameId)
+      return this.$store.getters.gameById(this.currentGameId)
     },
     sortedStatistic () {
       return this.statistic.sort((a, b) => {
@@ -226,6 +228,13 @@ export default {
       const currentCategory = this.$store.getters.categoriesById(this.currentCategoryId)
       return currentCategory
     },
+    categories () {
+      const currentGameId = this.currentGameId
+      if (!currentGameId) {
+        return []
+      }
+      return this.$store.getters.categoriesByGameId(currentGameId)
+    },
     isShowShortcut () {
       if (this.currentCategory) {
         return categoryNeedShortcut.includes(this.currentCategory.display_name)
@@ -237,7 +246,7 @@ export default {
     'schedule.id': function (newId, oldId) {
       if (newId) {
         this.$root.bus.$emit('new-betrecords', {
-          gameId: this.gameId,
+          gameId: this.currentGameId,
           scheduleId: newId
         })
       }
@@ -259,9 +268,23 @@ export default {
     }
   },
   created () {
+    if (!this.$route.params.categoryId) {
+      if (this.categories.length > 0) {
+        this.chooseCategory()
+      } else {
+        this.$store.dispatch('fetchCategories', this.currentGameId)
+        const unwatch = this.$watch('categories', function (categories) {
+          this.chooseCategory()
+          unwatch()
+        })
+      }
+    } else if (this.categories.length === 0) {
+      this.$store.dispatch('fetchCategories', this.currentGameId)
+    }
+
     this.$root.bus.$on('refreshResult', this.fetchStatistic)
     this.updateSchedule()
-    const currentGame = this.$store.getters.gameById(this.$route.params.gameId)
+    const currentGame = this.$store.getters.gameById(this.currentGameId)
     if (currentGame) {
       localStorage.setItem('lastGameCode', currentGame.code)
       this.fetchStatistic()
@@ -273,9 +296,12 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    chooseCategory () {
+      this.$router.replace(`/game/${this.currentGameId}/${this.categories[0].id}`)
+    },
     updateSchedule () {
       clearInterval(this.timer)
-      fetchSchedule(this.gameId)
+      fetchSchedule(this.currentGameId)
         .then(res => {
           this.schedule = _.find(res, schedule => {
             return schedule.id !== this.schedule.id &&

@@ -10,14 +10,11 @@ export default {
     })
     return state.games
   },
-  currentGame: (state, getters) => {
-    let routerParams = state.route.params
-    return routerParams && routerParams.gameId ? getters.gameById(routerParams.gameId) : null
-  },
+
   planMakerMap: (state, getters) => {
     let chatInfo = state.user.chatInfo
     let map = {}
-    if (chatInfo && chatInfo.plan_maker_rooms.length) {
+    if (chatInfo && chatInfo.plan_maker_rooms && chatInfo.plan_maker_rooms.length) {
       _.each(chatInfo.plan_maker_rooms, (roomId) => {
         map[roomId] = {
           isPlanMaker: true
