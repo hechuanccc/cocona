@@ -12,6 +12,9 @@
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
       </el-row>
+      <section class="cardresults-wrapper m-b" v-if="cardsResult && game.code === 'msnn' && game.code === 'pk10nn'">
+        <CardResult :cardLoading="cardLoading" :cardsResult="cardsResult"/>
+      </section>
       <div
         v-for="(playSection, index) in playSections"
         class="clearfix"
@@ -192,6 +195,7 @@ const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'],
 const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
 const fc3dPg2df = (resolve) => require(['../../components/playGroup/fc3d_pg_2df'], resolve)
 const fc3dPgIc = (resolve) => require(['../../components/playGroup/fc3d_pg_ic'], resolve)
+const CardResult = (resolve) => require(['../../components/CardResult'], resolve)
 
 const setActive = (play, amount) => {
   Vue.set(play, 'active', true)
@@ -233,7 +237,8 @@ export default {
     hklPgExl,
     hklPgNtinfvrNum,
     fc3dPg2df,
-    fc3dPgIc
+    fc3dPgIc,
+    CardResult
   },
   data () {
     return {
@@ -253,7 +258,9 @@ export default {
       showCombinationDetails: false,
       showCombinationsTips: false,
       followBetAllowed: true,
-      followingBets: []
+      followingBets: [],
+      cardsResult: null,
+      cardLoading: false
     }
   },
   computed: {
@@ -395,9 +402,33 @@ export default {
 
       this.openDialog()
     })
+
+    this.$root.bus.$on('emitCardResults', this.getLatestResult)
+  },
+  beforeDestroy () {
+    this.$root.bus.$off('emitCardResults')
   },
   methods: {
     filtAmount,
+    getLatestResult (result) {
+      this.cardLoading = result.cardLoading
+      if (!result || !result[0]) {
+        return
+      }
+      let cardsResult = result[0] || result
+
+      _.each(cardsResult.extra_info, (value, key) => {
+        _.each(value.numbers, (number, index) => {
+          let cardDisplayMap = {
+            number: number,
+            cardType: parseInt(4 * Math.random()) + 1 // for flower color
+          }
+
+          value.numbers[index] = cardDisplayMap
+        })
+      })
+      this.cardsResult = cardsResult
+    },
     selectAlias (playSection, tabIndex) {
       let activePlaygroup = _.find(playSection.playgroups, playgroup => playgroup.active)
       // reset 'active' for plays in inactive playgroups
@@ -739,6 +770,15 @@ export default {
 .extramini  /deep/ .el-input__inner {
   width: 90%;
   height: 26px;
+}
+
+.cardresults-wrapper {
+  width: 100%;
+  min-height: 80px;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #ecf5ff;
 }
 </style>
 

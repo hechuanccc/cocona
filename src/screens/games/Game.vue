@@ -20,7 +20,12 @@
       </el-row>
       <el-row class="m-b-xlg">
         <GameStatistic
-          v-if="currentGame && currentGame.code!=='hkl' && currentGame.code!=='fc3d' && currentGame.code!=='luckl'"
+          v-if="currentGame &&
+            currentGame.code!=='hkl' &&
+            currentGame.code!=='fc3d' &&
+            currentGame.code!=='luckl' &&
+            currentGame.code!=='msnn' &&
+            currentGame.code!=='pk10nn'"
           :gameCode="currentGame.code"
           :resultStatistic="resultStatistic"/>
       </el-row>

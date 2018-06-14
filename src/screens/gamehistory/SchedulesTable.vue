@@ -77,11 +77,19 @@
             </span>
             <div>
               <span v-if="fieldsObject.subHeads && schedule.result_category"
+                :class="{
+                  win : schedule.result_category[subHead.key + '_result'] === 'win',
+                  seperate: currentGame === 'msnn'
+                }"
                 v-for="subHead in fieldsObject.subHeads"
                 :key="'centent-'+currentGame+'-subHead-'+subHead.key"
                 :style="{'display': 'inline-block',
                         'width': 1/fieldsObject.subHeads.length * 100 + '%'}">
-                <b :class="schedule.result_category[subHead.key]">
+                <b v-if="currentGame === 'msnn'">
+                  <p>{{schedule.result_category[subHead.key].slice(0, 2)}}</p>
+                  <p>{{schedule.result_category[subHead.key].slice(3)}}</p>
+                </b>
+                <b v-else :class="schedule.result_category[subHead.key]">
                   {{schedule.result_category[subHead.key] |resultFilter}}
                 </b>
               </span>
@@ -657,7 +665,50 @@ export default {
         key: 'ball_prime_composite_3'
       }
     ]
-
+    const msnnTable =
+      [
+        {
+          displayName: '时间',
+          key: 'schedule_result'
+        },
+        {
+          displayName: '期数',
+          key: 'issue_number'
+        },
+        {
+          displayName: '开奖号码',
+          key: 'result_str'
+        },
+        {
+          displayName: '庄闲 (背景有颜色代表闲家赢)',
+          subHeads: [
+            {
+              displayName: '庄',
+              key: 'banker'
+            },
+            {
+              displayName: '闲一',
+              key: 'player_1'
+            },
+            {
+              displayName: '闲二',
+              key: 'player_2'
+            },
+            {
+              displayName: '闲三',
+              key: 'player_3'
+            },
+            {
+              displayName: '闲四',
+              key: 'player_4'
+            },
+            {
+              displayName: '闲五',
+              key: 'player_5'
+            }
+          ]
+        }
+      ]
     const gameTable = [
       {
         code: 'jspk10',
@@ -742,6 +793,10 @@ export default {
       {
         code: 'fc3d',
         table: fc3dTable
+      },
+      {
+        code: 'msnn',
+        table: msnnTable
       }
     ]
 
@@ -878,6 +933,7 @@ export default {
           _.each(result.results, (schedule) => {
             schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD HH:mm:ss')
           })
+
           this.totalCount = result.count
           this.schedules = result.results
         }
@@ -1025,6 +1081,19 @@ export default {
     content: "";
     display: inline-block;
     width: 100%;
+  }
+}
+
+.win {
+  box-sizing: border-box;
+  background-color: lighten(#409EFF, 30%);
+}
+
+.seperate {
+  border-right: 1px solid #ddd;
+  box-sizing: border-box;
+  &:last-child {
+    border: none;
   }
 }
 </style>

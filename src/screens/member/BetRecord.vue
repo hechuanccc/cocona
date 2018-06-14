@@ -63,6 +63,7 @@
         :label="$t('user.bet_amount')">
         <template slot-scope="scope">
           <span>{{ scope.row.bet_amount | currency('￥')}}</span>
+          <span v-if="scope.row.prepaid_amount">(+{{scope.row.prepaid_amount}})</span>
         </template>
       </el-table-column>
       <el-table-column
