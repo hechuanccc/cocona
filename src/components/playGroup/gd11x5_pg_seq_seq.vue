@@ -93,6 +93,9 @@ export default {
     },
     playReset: {
       type: Boolean
+    },
+    gameCode: {
+      type: String
     }
   },
   name: 'gd11x5Seq',

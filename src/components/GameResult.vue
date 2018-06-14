@@ -18,7 +18,7 @@
       </span>
       <div class="ball-sum" v-if="showSum">
         {{$t('navMenu.total')}}
-        <span>
+        <span :class="getResultClass(resultsSum)">
           <b>{{resultsSum}}</b>
         </span>
       </div>
