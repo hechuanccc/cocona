@@ -56,7 +56,10 @@ export default {
     }
   },
   created () {
-    this.fetchResult(this.gameid).then(res => { this.pollResult(this.gameid) })
+    this.fetchResult(this.gameid).then(res => {
+      this.pollResult(this.gameid)
+      this.$root.bus.$emit('emitCardResults', res)
+    })
   },
   computed: {
     resultNums () {
@@ -89,7 +92,10 @@ export default {
 
       clearInterval(this.interval)
       clearTimeout(this.timer)
-      this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
+      this.fetchResult(gameid).then(res => {
+        this.pollResult(this.gameid)
+        this.$root.bus.$emit('emitCardResults', res)
+      })
     },
     'gameLatestResult.game_code': function (code) {
       if (code === 'hkl' || code === 'luckl') {
@@ -119,6 +125,7 @@ export default {
         }
         this.gameLatestResult = result[0]
         this.zodiacs = result[0].zodiac.split(',')
+
         return result
       }
     )
@@ -146,8 +153,10 @@ export default {
               if (!isGetResult) {
                 isGetResult = true
                 this.ready = false
+                this.$root.bus.$emit('emitCardResults', {cardLoading: true})
                 setTimeout(() => {
                   this.ready = true
+                  this.$root.bus.$emit('emitCardResults', {...result, cardLoading: false})
                 }, 3000)
                 clearInterval(this.interval)
                 clearInterval(this.timer)
@@ -155,7 +164,7 @@ export default {
                   this.$store.dispatch('fetchUser')
                 }, 2000)
                 this.pollResult(gameid)
-                this.$root.bus.$emit('refreshResult')
+                this.$root.bus.$emit('refreshResult', result)
               }
             }
           })
