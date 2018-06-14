@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    
+
     <el-alert
       v-if="updateStatus !== 0"
       :title="message"
@@ -118,7 +118,7 @@ export default {
     }
   },
   created () {
-    fetchBank().then(options => {
+    fetchBank(true).then(options => {
       this.bankOptions = options
     })
     const bankInfo = this.$store.state.user.bank
