@@ -1,0 +1,154 @@
+
+.card-type1 {
+  background-image: url(../assets/niu/cards1.png)
+}
+
+.card-type2 {
+  background-image: url(../assets/niu/cards2.png)
+}
+
+.card-type3 {
+  background-image: url(../assets/niu/cards3.png)
+}
+
+.card-type4 {
+  background-image: url(../assets/niu/cards4.png)
+}
+
+.pokers-info {
+  height: 25px;
+  margin-left: -9px;
+  margin-right: -9px;
+}
+
+.pokers {
+  display: inline-flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.poker {
+  display: inline-block;
+  position: relative;
+}
+
+.card {
+  display: inline-block;
+  width: 32px;
+  height: 43px;
+  margin-left: -9px;
+  margin-right: -9px;
+  background-size: 100%;
+}
+
+.pokers-name {
+  display: inline-block;
+  background-image: url(../assets/niu/niuniu_name.png);
+  background-repeat: no-repeat;
+  width: 40px;
+  height: 20px;
+  background-size: 40px;
+}
+
+.pokers-rank {
+  display: inline-block;
+  background-image: url(../assets/niu/niuniu_sprite.png);
+  width: 50px;
+  height: 25px;
+  background-position: 4px 2px;
+  background-size: 400px;
+}
+
+@for $num from 1 through 13 {
+  .card-#{$num} {
+    background-position: 0 (($num - 1) * 100% / 12);
+  }
+}
+
+.waitopen {
+  display: inline-block;
+  width: 100%;
+  height: 80px;
+  .img {
+    height: 100%;
+  }
+}
+
+.win-badge {
+  position: absolute;
+  right: -20px;
+  top: -10px;
+  display: inline-block;
+  background-image: url(../assets/niu/niuniu_sprite.png);
+  background-size: 300px;
+  background-position: -55px -108px;
+  width: 35px;
+  height: 35px;
+  z-index: 2;
+}
+
+
+.rank-1 {
+  background-position: 4px -32px
+}
+
+.rank-2 {
+  background-position: 4px -66px
+}
+
+.rank-3 {
+  background-position: 4px -99px
+}
+
+.rank-4 {
+  background-position: 4px -133px
+}
+
+.rank-5 {
+  background-position: 4px -167px
+}
+
+.rank-6 {
+  background-position: 4px -200px
+}
+
+.rank-7 {
+  background-position: 4px -233px
+}
+
+.rank-8 {
+  background-position: 4px -267px
+}
+
+.rank-9 {
+  background-position: 4px -301px
+}
+
+.rank-10 {
+  background-position: 4px -334px
+}
+
+
+.banker {
+  background-position: 0 0
+}
+
+.player-n1 {
+  background-position: 0 -33px
+}
+
+.player-n2 {
+  background-position: 0 -66px
+}
+
+.player-n3 {
+  background-position: 0 -100px
+}
+
+.player-n4 {
+  background-position: 0 -133px
+}
+
+.player-n5 {
+  background-position: 0 -166px
+}

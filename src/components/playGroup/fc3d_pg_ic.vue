@@ -66,6 +66,9 @@ export default {
     },
     playReset: {
       type: Boolean
+    },
+    gameCode: {
+      type: String
     }
   },
   name: 'fc3dPgIc',

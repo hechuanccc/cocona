@@ -1,11 +1,11 @@
 %gd11x5ball{
   display: inline-block;
-  background: url("../assets/ball-sprites.png") no-repeat -117px -26px;
-  width: 24px;
+  background: url("../assets/ball_pcdd.png") no-repeat;
+  background-size: cover;
+  width: 27px;
   height: 27px;
-  line-height: 27px;
-  font-weight: bold;
-  font-size: 13px;
+  text-indent: -9999px;
+  vertical-align: middle;
 }
 @mixin gd11x5-num {
   .gd11x5_pg_sn_1f1,
@@ -14,12 +14,24 @@
   .gd11x5_pg_sn_b3,
   .gd11x5_pg_sn_b4,
   .gd11x5_pg_sn_b5 {
+    @for $i from 1 through 11 {
+      &.gd11x5_pl_sn_1f1_#{$i},
+      &.gd11x5_pl_sn_b1_#{$i},
+      &.gd11x5_pl_sn_b2_#{$i},
+      &.gd11x5_pl_sn_b3_#{$i},
+      &.gd11x5_pl_sn_b4_#{$i},
+      &.gd11x5_pl_sn_b5_#{$i} {
+        @extend %gd11x5ball;
+        background-position: 0 (-27px * $i);
+      }
+    }
     @extend %gd11x5ball;
   }
   @for $i from 1 through 11 {
     .gd11x5_pg_wc_wc_#{$i},
     .gd11x5_pg_seq_seq_#{$i} {
       @extend %gd11x5ball;
+      background-position: 0 (-27px * $i);
     }
   }
 }
@@ -83,6 +95,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, csffc;
 
 %sscball{
   background: url("../assets/ball_2.png") no-repeat;
+  background-size: cover;
   display: inline-block;
   text-indent: -9999px;
   width: 26px;
@@ -95,7 +108,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, csffc;
       @for $i from 0 through 9 {
         .#{$game}_pl_inte#{$j}b_#{$j}b_num_#{$i} {
           @extend %sscball;
-          background-position: 0 (-27px * $i);
+          background-position: 0 (-26px * $i);
         }
       }
     }
@@ -103,16 +116,41 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, csffc;
 }
 @include ssc-num;
 
+
 @mixin fc3d-num{
   @for $i from 0 through 9 {
     .fc3d_pg_2df_#{$i}, .fc3d_pg_3df_#{$i} {
       @extend %sscball;
-      background-position: 0 (-27px * $i);
+      background-position: 0 (-26px * $i);
     }
   }
 }
 
 @include fc3d-num;
+
+$ddgames: pcdd, luckdd, jnd28;
+
+%ddball{
+  background: url("../assets/ball_pcdd.png") no-repeat;
+  background-size: cover;
+  display: inline-block;
+  text-indent: -9999px;
+  width: 26px;
+  line-height: 26px;
+}
+
+@mixin dd-num{
+  @each $game in $ddgames{
+    @for $i from 0 through 27 {
+      .#{$game}_pl_sc_#{$i},{
+        @extend %ddball;
+        background-position: 0 (-26px * $i);
+      }
+    }
+  }
+}
+
+@include dd-num;
 
 
 $hk6_playgroups: spc, poscnum, poscspcnump1, poscspcnump2, poscspcnump3, poscspcnump4, poscspcnump5, poscspcnump6, shxiao_spczdc, withcode, ntinfvr_num ,'5elmnts',clrwvs_color, txiao_spczdc, shawzdc, pxxmzdc, pxxmtail, exl;
@@ -304,6 +342,7 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 %gdklsfball{
   display: inline-block;
   background: url(../assets/ball_1.png) repeat-x;
+  background-size: cover;
   width: 27px;
   text-indent: -9999px;
   height: 27px;

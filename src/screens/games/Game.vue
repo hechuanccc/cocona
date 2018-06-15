@@ -20,7 +20,12 @@
       </el-row>
       <el-row class="m-b-xlg">
         <GameStatistic
-          v-if="currentGame && currentGame.code!=='hkl' && currentGame.code!=='fc3d' && currentGame.code!=='luckl'"
+          v-if="currentGame &&
+            currentGame.code!=='hkl' &&
+            currentGame.code!=='fc3d' &&
+            currentGame.code!=='luckl' &&
+            currentGame.code!=='msnn' &&
+            currentGame.code!=='pk10nn'"
           :gameCode="currentGame.code"
           :resultStatistic="resultStatistic"/>
       </el-row>
@@ -243,6 +248,11 @@ export default {
     }
   },
   watch: {
+    gameClosed: function () {
+      if (this.gameClosed) {
+        this.$store.dispatch('setCurrentGameResult', [{}])
+      }
+    },
     'schedule.id': function (newId, oldId) {
       if (newId) {
         this.$root.bus.$emit('new-betrecords', {
@@ -264,6 +274,11 @@ export default {
       for (let i = 27; i < 39; i++) {
         const group = this.shortcutPlayGroups[i]
         group.num = zodiacMap[group.display_name].map(num => num < 10 ? '0' + num : '' + num)
+      }
+    },
+    '$route': function (to, from) {
+      if (to.path === `/game/${this.currentGameId}`) {
+        this.chooseCategory()
       }
     }
   },

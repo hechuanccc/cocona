@@ -50,6 +50,23 @@ export default {
   [types.SET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = count
   },
+  [types.SET_CURRENTGAME_RESULT]: (state, result) => {
+    let obj = result[0] || result
+    if (obj.extra_info) {
+      _.each(obj.extra_info, (value, key) => {
+        _.each(value.numbers, (number, index) => {
+          let cardDisplayMap = {
+            number: number,
+            cardType: parseInt(4 * Math.random()) + 1 // for flower color
+          }
+
+          value.numbers[index] = cardDisplayMap
+        })
+      })
+    }
+
+    state.currentGameResult = obj
+  },
   [types.RESET_MESSAGE_COUNT]: (state, count) => {
     state.messageCount = 0
   },

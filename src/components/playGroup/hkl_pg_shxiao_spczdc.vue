@@ -76,6 +76,9 @@ export default {
     },
     zodiacMap: {
       type: Object
+    },
+    gameCode: {
+      type: String
     }
   },
   name: 'hklPgShxiaoSpczdc',
