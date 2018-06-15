@@ -80,7 +80,7 @@ axios.interceptors.response.use(res => {
 }, (error) => {
   Vue.prototype.$message({
     showClose: true,
-    message: msgFormatter(error) || Vue.t('message.error'),
+    message: msgFormatter(error) || i18n.t('message.error'),
     type: 'error'
   })
   toHomeAndLogin(router)
