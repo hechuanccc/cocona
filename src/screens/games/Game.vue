@@ -243,6 +243,11 @@ export default {
     }
   },
   watch: {
+    '$route': function (to, from) {
+      if (to.path === `/game/${this.currentGameId}`) {
+        this.chooseCategory()
+      }
+    },
     'schedule.id': function (newId, oldId) {
       if (newId) {
         this.$root.bus.$emit('new-betrecords', {
