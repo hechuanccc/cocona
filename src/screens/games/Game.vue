@@ -275,6 +275,11 @@ export default {
         const group = this.shortcutPlayGroups[i]
         group.num = zodiacMap[group.display_name].map(num => num < 10 ? '0' + num : '' + num)
       }
+    },
+    '$route': function (to, from) {
+      if (to.path === `/game/${this.currentGameId}`) {
+        this.chooseCategory()
+      }
     }
   },
   created () {

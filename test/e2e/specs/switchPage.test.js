@@ -14,7 +14,7 @@ module.exports = {
       .pause(1000)
   },
   after: function (browser) {
-    // browser.end()
+    browser.end()
   },
   'init page Test': function (browser) {
     browser
