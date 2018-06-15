@@ -69,6 +69,8 @@
   import jnd28 from './rules/jnd28'
   import luckdd from './rules/luckdd'
   import fc3d from './rules/fc3d'
+  import msnn from './rules/msnn'
+  import pk10nn from './rules/pk10nn'
   import AsideMenu from '../../components/AsideMenu'
   import _ from 'lodash'
 
@@ -96,7 +98,9 @@
       auluck8,
       jnd28,
       luckdd,
-      fc3d
+      fc3d,
+      pk10nn,
+      msnn
     },
     data () {
       return {

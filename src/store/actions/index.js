@@ -134,6 +134,9 @@ export default {
   setSystemConfig: ({ commit }, data) => {
     commit(types.SET_SYSTEM_CONFIG, data)
   },
+  setCurrentGameResult: ({ commit }, result) => {
+    commit(types.SET_CURRENTGAME_RESULT, result)
+  },
   openTrialVerifyDialog: ({ commit, state }) => {
     commit(types.OPEN_VERIFICATION_DIALOG)
   },

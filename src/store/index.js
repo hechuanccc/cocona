@@ -30,6 +30,7 @@ export function createStore () {
       loading: false,
       messageCount: 0,
       envelopes: {},
+      currentGameResult: null,
       customPlayGroups: [
         {
           // 重庆幸运农场 连码

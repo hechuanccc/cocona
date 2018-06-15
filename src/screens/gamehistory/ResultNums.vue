@@ -147,7 +147,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, csffc, pcdd, jnd28, fc3d, luckdd;
 }
 @include ssc-num;
 
-$transformergames: mlaft, bcr, jspk10, er75ft;
+$transformergames: mlaft, bcr, jspk10, er75ft, msnn, pk10nn;
 
 %transformerball{
   display: inline-block;

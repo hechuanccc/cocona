@@ -56,7 +56,10 @@ export default {
     }
   },
   created () {
-    this.fetchResult(this.gameid).then(res => { this.pollResult(this.gameid) })
+    this.fetchResult(this.gameid).then(res => {
+      this.pollResult(this.gameid)
+      this.$store.dispatch('setCurrentGameResult', res)
+    })
   },
   computed: {
     resultNums () {
@@ -89,7 +92,10 @@ export default {
 
       clearInterval(this.interval)
       clearTimeout(this.timer)
-      this.fetchResult(gameid).then(res => { this.pollResult(this.gameid) })
+      this.fetchResult(gameid).then(res => {
+        this.pollResult(this.gameid)
+        this.$store.dispatch('setCurrentGameResult', res)
+      })
     },
     'gameLatestResult.game_code': function (code) {
       if (code === 'hkl' || code === 'luckl') {
@@ -119,6 +125,7 @@ export default {
         }
         this.gameLatestResult = result[0]
         this.zodiacs = result[0].zodiac.split(',')
+
         return result
       }
     )
@@ -148,6 +155,7 @@ export default {
                 this.ready = false
                 setTimeout(() => {
                   this.ready = true
+                  this.$store.dispatch('setCurrentGameResult', result)
                 }, 3000)
                 clearInterval(this.interval)
                 clearInterval(this.timer)
@@ -155,7 +163,7 @@ export default {
                   this.$store.dispatch('fetchUser')
                 }, 2000)
                 this.pollResult(gameid)
-                this.$root.bus.$emit('refreshResult')
+                this.$root.bus.$emit('refreshResult', result)
               }
             }
           })
