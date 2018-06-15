@@ -44,7 +44,6 @@ export default {
       const r = this.resultCountDown
       return r.hours + r.hours + r.seconds + r.minutes === 0
     }
-
   },
   filters: {
     complete (value) {
