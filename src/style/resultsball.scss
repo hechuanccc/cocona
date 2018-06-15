@@ -25,7 +25,7 @@ $ssc_length: length($results_ssc);
 }
 
 /*specific: racing games, common: ball-pk.png*/
-$results_racing: jspk10, bcr, mlaft, er75ft, msnn;
+$results_racing: jspk10, bcr, mlaft, er75ft;
 $racing_length: length($results_racing);
 
 @for $index from 1 through $racing_length {
