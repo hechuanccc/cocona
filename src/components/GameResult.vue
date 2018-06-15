@@ -58,7 +58,7 @@ export default {
   created () {
     this.fetchResult(this.gameid).then(res => {
       this.pollResult(this.gameid)
-      this.$root.bus.$emit('emitCardResults', res)
+      this.$store.dispatch('setCurrentGameResult', res)
     })
   },
   computed: {
@@ -94,7 +94,7 @@ export default {
       clearTimeout(this.timer)
       this.fetchResult(gameid).then(res => {
         this.pollResult(this.gameid)
-        this.$root.bus.$emit('emitCardResults', res)
+        this.$store.dispatch('setCurrentGameResult', res)
       })
     },
     'gameLatestResult.game_code': function (code) {
@@ -153,10 +153,9 @@ export default {
               if (!isGetResult) {
                 isGetResult = true
                 this.ready = false
-                this.$root.bus.$emit('emitCardResults', {cardLoading: true})
                 setTimeout(() => {
                   this.ready = true
-                  this.$root.bus.$emit('emitCardResults', {...result, cardLoading: false})
+                  this.$store.dispatch('setCurrentGameResult', result)
                 }, 3000)
                 clearInterval(this.interval)
                 clearInterval(this.timer)

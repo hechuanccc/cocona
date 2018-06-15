@@ -1,10 +1,10 @@
 <template>
   <ul class="pokers">
-    <li v-if="cardLoading" class="waitopen text-center">
+    <li v-if="!currentGameResult.issue_number" class="waitopen text-center">
       <img class="img" src="../assets/niu/waitopen.png" alt="">
     </li>
     <li v-else class="poker"
-      v-for="(value, key, index) in cardsResult.extra_info"
+      v-for="(value, key, index) in currentGameResult.extra_info"
       :key="index">
       <span class="win-badge" v-if="value.status === 'win'"></span>
       <div class="pokers-wrap">
@@ -24,11 +24,8 @@
 <script>
 export default {
   props: {
-    cardsResult: {
+    currentGameResult: {
       type: Object
-    },
-    cardLoading: {
-      type: Boolean
     }
   },
   methods: {

@@ -79,19 +79,20 @@
               <span v-if="fieldsObject.subHeads && schedule.result_category"
                 :class="{
                   win : schedule.result_category[subHead.key + '_result'] === 'win',
-                  seperate: currentGame === 'msnn'
+                  seperate: currentGame === 'msnn' || currentGame === 'pk10nn'
                 }"
                 v-for="subHead in fieldsObject.subHeads"
                 :key="'centent-'+currentGame+'-subHead-'+subHead.key"
                 :style="{'display': 'inline-block',
                         'width': 1/fieldsObject.subHeads.length * 100 + '%'}">
-                <b v-if="currentGame === 'msnn'">
+                <b v-if="currentGame === 'msnn'|| currentGame === 'pk10nn'">
                   <p>{{schedule.result_category[subHead.key].slice(0, 2)}}</p>
                   <p>{{schedule.result_category[subHead.key].slice(3)}}</p>
                 </b>
                 <b v-else :class="schedule.result_category[subHead.key]">
                   {{schedule.result_category[subHead.key] |resultFilter}}
                 </b>
+
               </span>
               <span v-else>-</span>
             </div>
@@ -102,8 +103,8 @@
                 'width': currentGame === 'bjkl8' || currentGame === 'auluck8' ? '340px' : 'auto',
                 'margin': '0 auto'
               }">
-              <ResultNums v-for="result in classifiyResults (schedule)"
-                :key="currentGame + 'result-number' + result.num"
+              <ResultNums v-for="(result, index) in classifiyResults (schedule)"
+                :key="index"
                 :result="result"
                 :displayType="nowDisplay"
                 :game="currentGame">
@@ -797,6 +798,10 @@ export default {
       {
         code: 'msnn',
         table: msnnTable
+      },
+      {
+        code: 'pk10nn',
+        table: msnnTable
       }
     ]
 
@@ -933,7 +938,6 @@ export default {
           _.each(result.results, (schedule) => {
             schedule.schedule_result = this.$moment(schedule.schedule_result).format('YYYY-MM-DD HH:mm:ss')
           })
-
           this.totalCount = result.count
           this.schedules = result.results
         }

@@ -12,8 +12,8 @@
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
       </el-row>
-      <section class="cardresults-wrapper m-b" v-if="cardsResult && game.code === 'msnn' && game.code === 'pk10nn'">
-        <CardResult :cardLoading="cardLoading" :cardsResult="cardsResult"/>
+      <section class="cardresults-wrapper m-b" v-if="currentGameResult && (game.code === 'msnn' || game.code === 'pk10nn')">
+        <CardResult :currentGameResult="currentGameResult"/>
       </section>
       <div
         v-for="(playSection, index) in playSections"
@@ -42,6 +42,18 @@
             <tr v-if="!playgroup.alias">
               <th class="group-name" :colspan="playSection.playCol">
                 {{playgroup.length}}{{playgroup.display_name}}
+                <span class="odd-tip" v-if="(game.code === 'msnn' || game.code === 'pk10nn')"
+                  @mouseover="oddInstructionsBox.visible = true"
+                  @mouseout="oddInstructionsBox.visible = false">
+                  【赔率说明】
+                  <div class="odd-instruction" v-show="oddInstructionsBox.visible">
+                    <p>赔率说明</p>
+                ①、下注会暂时冻结下注金额的5倍，例：下注1元，冻结4元，总金额5元。开奖后连本带利一并返还。<br>
+                ②、赔率：无牛（1:2）、牛一至牛六（1:2）、牛七牛八（1:3）、牛九（1:4）、牛牛（1:6）以上赔率包含本金。<br>
+                注：当庄与闲点数相等时，牛六以上的点数第一个球比大小，例：（庄：15462牛八，闲：46297牛八，4比1大，闲赢）。牛六以下（含牛六）庄赢。<br>
+                ③、闲赢右上角会有个赢标志，输不会显示。<br>
+                  </div>
+                </span>
               </th>
             </tr>
             <tr
@@ -68,10 +80,10 @@
                 <el-col v-if="play.value||needZodiac" :span="16" class="number">
                   <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value||zodiacMap&&zodiacMap[play.display_name]" :key="index">{{num}}</span>
                 </el-col>
-                <el-col :span="play.value||needZodiac ? 2 : 6" class="odds">
+                <el-col v-if="(game.code !== 'msnn' && game.code !== 'pk10nn')" :span="play.value||needZodiac ? 2 : 6" class="odds">
                   <span>{{ !gameClosed ? play.odds : '-'}}</span>
                 </el-col>
-                <el-col :span="play.value||needZodiac ? 4 : 12" class="input">
+                <el-col :span="play.value||needZodiac ? 4 : (game.code !== 'msnn' && game.code !== 'pk10nn') ? 12 : 18" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
@@ -259,8 +271,9 @@ export default {
       showCombinationsTips: false,
       followBetAllowed: true,
       followingBets: [],
-      cardsResult: null,
-      cardLoading: false
+      oddInstructionsBox: {
+        visible: false
+      }
     }
   },
   computed: {
@@ -269,7 +282,8 @@ export default {
     ]),
     ...mapState([
       'systemConfig',
-      'chatRoom'
+      'chatRoom',
+      'currentGameResult'
     ]),
     submitBtnDisabled () {
       let bettingArr = this.playsForSubmit.bets || this.playsForSubmit
@@ -402,33 +416,9 @@ export default {
 
       this.openDialog()
     })
-
-    this.$root.bus.$on('emitCardResults', this.getLatestResult)
-  },
-  beforeDestroy () {
-    this.$root.bus.$off('emitCardResults')
   },
   methods: {
     filtAmount,
-    getLatestResult (result) {
-      this.cardLoading = result.cardLoading
-      if (!result || !result[0]) {
-        return
-      }
-      let cardsResult = result[0] || result
-
-      _.each(cardsResult.extra_info, (value, key) => {
-        _.each(value.numbers, (number, index) => {
-          let cardDisplayMap = {
-            number: number,
-            cardType: parseInt(4 * Math.random()) + 1 // for flower color
-          }
-
-          value.numbers[index] = cardDisplayMap
-        })
-      })
-      this.cardsResult = cardsResult
-    },
     selectAlias (playSection, tabIndex) {
       let activePlaygroup = _.find(playSection.playgroups, playgroup => playgroup.active)
       // reset 'active' for plays in inactive playgroups
@@ -779,6 +769,22 @@ export default {
   padding: 10px;
   border: 1px solid #ddd;
   background-color: #ecf5ff;
+}
+
+.odd-tip {
+  position: relative;
+}
+
+.odd-instruction {
+  position: absolute;
+  left: 0;
+  width: 600px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  background: azure;
+  text-align: left;
+  z-index: 2;
+  line-height: 20px;
 }
 </style>
 

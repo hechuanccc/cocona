@@ -248,6 +248,11 @@ export default {
     }
   },
   watch: {
+    gameClosed: function () {
+      if (this.gameClosed) {
+        this.$store.dispatch('setCurrentGameResult', [{}])
+      }
+    },
     'schedule.id': function (newId, oldId) {
       if (newId) {
         this.$root.bus.$emit('new-betrecords', {
