@@ -269,6 +269,7 @@ $transformergames: mlaft, bcr, jspk10, er75ft;
 %gdklsfball{
   display: inline-block;
   background: url(../../assets/ball_1.png) repeat-x;
+  background-size: cover;
   width: 27px;
   text-indent: -9999px;
   height: 27px;
@@ -293,6 +294,7 @@ $transformergames: mlaft, bcr, jspk10, er75ft;
 %gd11x5ball{
   display: inline-block;
   background: url(../../assets/ball_1.png) repeat-x;
+  background-size: cover;
   width: 27px;
   text-indent: -9999px;
   height: 27px;

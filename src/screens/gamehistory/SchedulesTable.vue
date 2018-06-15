@@ -94,8 +94,8 @@
                 'width': currentGame === 'bjkl8' || currentGame === 'auluck8' ? '340px' : 'auto',
                 'margin': '0 auto'
               }">
-              <ResultNums v-for="result in classifiyResults (schedule)"
-                :key="currentGame + 'result-number' + result.num"
+              <ResultNums v-for="(result, index) in classifiyResults (schedule)"
+                :key="index"
                 :result="result"
                 :displayType="nowDisplay"
                 :game="currentGame">
