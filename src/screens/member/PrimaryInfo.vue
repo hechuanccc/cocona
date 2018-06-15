@@ -49,14 +49,8 @@
 <script>
 import { msgFormatter } from '../../utils'
 import { validateQQ } from '../../validate'
-import Vue from 'vue'
 export default {
   name: 'PrimaryInfo',
-  filters: {
-    genderFilter (value) {
-      return value === 'M' ? Vue.t('user.male') : Vue.t('user.female')
-    }
-  },
   data () {
     const qqValidator = (rule, value, callback) => {
       if (this.originUser.qq === '' && !value) {
