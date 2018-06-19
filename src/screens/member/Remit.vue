@@ -160,7 +160,7 @@ export default {
         ],
         amount: [
           { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
-          { validator: limitPass, trigger: 'blur,change' }
+          { validator: limitPass, trigger: ['blur', 'change'] }
         ]
       },
       bankMap: {},

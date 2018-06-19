@@ -239,7 +239,7 @@ export default {
         ],
         password: [
           { required: true, validator: passwordValidator, trigger: 'blur' },
-          { validator: passwordFormatValidator, trigger: 'blur,change' }
+          { validator: passwordFormatValidator, trigger: ['blur', 'change'] }
         ],
         confirmation_password: [
           { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
@@ -249,15 +249,15 @@ export default {
         ],
         phone: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { validator: phoneValidator, trigger: 'blur,change' }
+          { validator: phoneValidator, trigger: ['blur', 'change'] }
         ],
         qq: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { validator: qqValidator, trigger: 'blur,change' }
+          { validator: qqValidator, trigger: ['blur', 'change'] }
         ],
         withdraw_password: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { validator: withdrawPasswordValidator, trigger: 'blur,change' }
+          { validator: withdrawPasswordValidator, trigger: ['blur', 'change'] }
         ],
         verification_code_1: [
           { required: true, validator: captchaValidator, trigger: 'blur' }
@@ -266,7 +266,7 @@ export default {
           { type: 'array', required: true, message: this.$t('validate.agreement_validate'), trigger: 'change' }
         ],
         sms_code: [
-          { required: true, validator: smsValidator, trigger: 'blur,change' }
+          { required: true, validator: smsValidator, trigger: ['blur', 'change'] }
         ]
       }
     }
