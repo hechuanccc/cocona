@@ -142,7 +142,10 @@ export function getToken (oldToken) {
       return res
     })
 }
-export function fetchBank () {
+export function fetchBank (onlyEnabled) {
+  if (onlyEnabled) {
+    return axios.get(urls.bank + '?status=1')
+  }
   return axios.get(urls.bank)
 }
 export function fetchGameResult (gameId) {

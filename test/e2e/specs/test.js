@@ -2,6 +2,7 @@ require('../page_objects/bet.js')
 // For authoring Nightwatch tests, see
 // http://nightwatchjs.org/guide#usage
 module.exports = {
+  '@disabled': true,
   before: function (browser) {
     browser
       .url(browser.launch_url)
