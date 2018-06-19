@@ -137,7 +137,7 @@
           ],
           password: [
             { required: true, validator: passwordValidator, trigger: 'blur' },
-            { validator: passwordFormatValidator, trigger: 'blur,change' }
+            { validator: passwordFormatValidator, trigger: ['blur', 'change'] }
           ],
           confirm_password: [
             { required: true, validator: confirmPasswordValidator, trigger: 'blur' }
@@ -147,11 +147,11 @@
           ],
           phone: [
             { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-            { validator: phoneValidator, trigger: 'blur,change' }
+            { validator: phoneValidator, trigger: ['blur', 'change'] }
           ],
           email: [
             { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-            { type: 'email', message: this.$t('validate.email_validate'), trigger: 'blur,change' }
+            { type: 'email', message: this.$t('validate.email_validate'), trigger: ['blur', 'change'] }
           ],
           withdraw_password: [
             { required: true, message: this.$t('validate.required'), trigger: 'blur' }

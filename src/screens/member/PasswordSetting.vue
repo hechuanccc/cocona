@@ -84,7 +84,7 @@ export default {
         ],
         new_password: [
           { required: true, validator: passwordValidator('password'), trigger: 'blur' },
-          { validator: passwordFormatValidator, trigger: 'blur,change' }
+          { validator: passwordFormatValidator, trigger: ['blur', 'change'] }
         ],
         repeat_password: [
           { required: true, validator: repeatPasswordValidator('password'), trigger: 'blur' }
