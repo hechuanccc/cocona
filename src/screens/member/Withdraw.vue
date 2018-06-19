@@ -106,10 +106,10 @@ export default {
       withdrawRules: {
         amount: [
           { required: true, type: 'number', message: this.$t('validate.required_num'), trigger: 'blur' },
-          { validator: limitPass, trigger: 'blur,change' }
+          { validator: limitPass, trigger: ['blur', 'change'] }
         ],
         withdraw_password: [
-          { required: true, message: this.$t('validate.required'), trigger: 'blur,change' }
+          { required: true, message: this.$t('validate.required'), trigger: ['blur', 'change'] }
         ]
       },
       displayMode: true,

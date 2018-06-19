@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    
+
     <el-alert
       v-if="updateStatus !== 0"
       :title="message"
@@ -95,7 +95,7 @@ export default {
         ],
         account: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { validator: bankAccountValidator, trigger: 'blur,change' }
+          { validator: bankAccountValidator, trigger: ['blur', 'change'] }
         ]
       },
       bankOptions: []
