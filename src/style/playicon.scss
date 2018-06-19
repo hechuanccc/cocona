@@ -1,7 +1,7 @@
 %gd11x5ball{
   display: inline-block;
   background: url("../assets/ball_pcdd.png") no-repeat;
-  background-size: cover;
+  background-size: 27px;
   width: 27px;
   height: 27px;
   text-indent: -9999px;
@@ -95,7 +95,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, csffc;
 
 %sscball{
   background: url("../assets/ball_2.png") no-repeat;
-  background-size: cover;
+  background-size: 26px;
   display: inline-block;
   text-indent: -9999px;
   width: 26px;
@@ -132,7 +132,7 @@ $ddgames: pcdd, luckdd, jnd28;
 
 %ddball{
   background: url("../assets/ball_pcdd.png") no-repeat;
-  background-size: cover;
+  background-size: 26px;
   display: inline-block;
   text-indent: -9999px;
   width: 26px;
@@ -342,7 +342,7 @@ $hk6_plays: spcb, spca, posc, poscspcnump1;
 %gdklsfball{
   display: inline-block;
   background: url(../assets/ball_1.png) repeat-x;
-  background-size: cover;
+  background-size: 27px;
   width: 27px;
   text-indent: -9999px;
   height: 27px;
