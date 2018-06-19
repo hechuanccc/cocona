@@ -1,19 +1,17 @@
 <template>
   <ul class="pokers">
-    <li class="poker"
+    <li class="poker text-center"
       v-for="(value, key, index) in currentGameResult.extra_info"
       :key="index">
-      <span class="win-badge" v-if="value.status === 'win'"></span>
+      <div :class="['pokers-name', key === 'n0' ? 'banker' : `player-${key}`]" ></div>
       <div class="pokers-wrap">
+        <span class="win-badge" v-if="value.status === 'win'"></span>
         <span :class="['card', 'card-animation', `card-${displayCardNumber(card.number)}`, `card-type${card.cardType}`]"
           v-for="(card, index) in value.numbers"
           :key="index">
         </span>
       </div>
-      <div class="pokers-info">
-        <div :class="['pokers-name', key === 'n0' ? 'banker' : `player-${key}`]" ></div>
-        <div :class="['pokers-rank', `rank-${value.niu_number}`]"></div>
-      </div>
+      <div :class="['pokers-rank', `rank-${value.niu_number}`]"></div>
     </li>
   </ul>
 </template>
