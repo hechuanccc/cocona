@@ -38,7 +38,7 @@
 
             <div :class="['envelope-message','clickable',
               {'null': (msg.envelope_status.total === msg.envelope_status.users.length) &&
-                !msg.envelope_status.users.map(item => item.receiver_id).includes(user.id)}]"
+                !msg.envelope_status.users.map(item => item.username).includes(user.username)}]"
               v-else-if="msg.envelope_status && isAlive(msg.envelope_status.expired_time)"
               @click="takeEnvelope(msg)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
@@ -453,12 +453,12 @@ export default {
   padding: 10px;
   border-radius: 5px;
   justify-content: stretch;
-  background-color: #eea549;
+  background-color: #fa9d3b;
   position: relative;
 
   &.expired {
     opacity: .6;
-    background: #999999;
+    background: #D69F14;
   }
 
   &.null {

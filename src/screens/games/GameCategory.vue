@@ -12,11 +12,13 @@
           <el-button size="small" @click="reset">重置</el-button>
         </el-col>
       </el-row>
-      <section class="cardresults-wrapper m-b" v-if="currentGameResult && (game.code === 'msnn' || game.code === 'pk10nn')">
+      <section class="cardresults-wrapper m-b"
+        v-loading="!currentGameResult.issue_number"
+        element-loading-text="等待开奖中"
+        v-if="currentGameResult && (game.code === 'msnn' || game.code === 'pk10nn')">
         <CardResult :currentGameResult="currentGameResult"/>
       </section>
-      <div
-        v-for="(playSection, index) in playSections"
+      <div v-for="(playSection, index) in playSections"
         class="clearfix"
         :key="playSection.id + 'playSection' + index"
         v-if="playSections.length">
