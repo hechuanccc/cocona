@@ -118,7 +118,7 @@ export default {
     }
   },
   created () {
-    fetchBank().then(options => {
+    fetchBank(true).then(options => {
       this.bankOptions = options
     })
     const bankInfo = this.$store.state.user.bank

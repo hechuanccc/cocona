@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
 import router from './router'
-import { createStore } from './store'
+import store from './store'
 import { sync } from 'vuex-router-sync'
 import VueCookie from 'vue-cookie'
 import axios from 'axios'
@@ -38,7 +38,6 @@ Vue.use(ElementUI, { size: 'small' })
 Vue.use(VueCookie)
 Vue.use(Vuex)
 
-const store = createStore()
 const token = Vue.cookie.get('access_token')
 
 Vue.config.productionTip = false

@@ -12,7 +12,8 @@ import {
   fetchGames,
   fetchCategories,
   fetchChatUserInfo,
-  getRoomsStatus
+  getRoomsStatus,
+  fetchPaymentType
 } from '../../api'
 
 export default {
@@ -61,15 +62,32 @@ export default {
     return fetchUser().then(res => {
       if (res.length > 0) {
         let user = res[0]
-        if (user.account_type && !state.user.chatInfo) {
-          fetchChatUserInfo(user.username).then((info) => {
-            let chatInfo = info
-            commit(types.SET_USER, {
-              user: {
-                chatInfo
-              }
+        if (user.account_type) {
+          if (!state.user.chatInfo) {
+            fetchChatUserInfo(user.username).then((info) => {
+              let chatInfo = info
+              commit(types.SET_USER, {
+                user: {
+                  chatInfo
+                }
+              })
             })
-          })
+          }
+          if (!state.user.onlinePaymentTypes) {
+            fetchPaymentType().then(datas => {
+              commit(types.SET_USER, {
+                user: {
+                  onlinePaymentTypes: datas
+                }
+              })
+            }).catch(() => {
+              commit(types.SET_USER, {
+                user: {
+                  onlinePaymentTypes: []
+                }
+              })
+            })
+          }
         }
         commit(types.SET_USER, {
           user: {
@@ -133,6 +151,9 @@ export default {
   },
   setSystemConfig: ({ commit }, data) => {
     commit(types.SET_SYSTEM_CONFIG, data)
+  },
+  setCurrentGameResult: ({ commit }, result) => {
+    commit(types.SET_CURRENTGAME_RESULT, result)
   },
   openTrialVerifyDialog: ({ commit, state }) => {
     commit(types.OPEN_VERIFICATION_DIALOG)
