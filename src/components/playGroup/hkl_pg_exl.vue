@@ -25,7 +25,7 @@
           <span>{{option.display_name}}</span>
         </el-col>
         <el-col :span="15" class="number p-l">
-          <span :class="['hkl_pg_exl', `hkl_pg_exl_${num}`]" v-for="(num,index) in  zodiacMap&&zodiacMap[option.display_name]||tailMap[option.display_name]" :key="index">{{num}}</span>
+          <span :class="['hkl_pg_exl', `hkl_pg_exl_${num}`, 'm-l-sm']" v-for="(num,index) in  zodiacMap&&zodiacMap[option.display_name]||tailMap[option.display_name]" :key="index">{{num}}</span>
         </el-col>
         <el-col :span="4" class="odds">
           {{ !gameClosed ? option.odds : '-'}}

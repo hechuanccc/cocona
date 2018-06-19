@@ -121,7 +121,7 @@ $sscgames: tjssc, xjssc, cqssc, jsssc, csffc, pcdd, jnd28, fc3d, luckdd;
 
 %sscball{
   background: url("../../assets/ball_2.png") no-repeat;
-  background-size: cover;
+  background-size: 27px;
   display: inline-block;
   text-indent: -9999px;
   width: 27px;
@@ -269,7 +269,7 @@ $transformergames: mlaft, bcr, jspk10, er75ft, msnn, pk10nn;
 %gdklsfball{
   display: inline-block;
   background: url(../../assets/ball_1.png) repeat-x;
-  background-size: cover;
+  background-size: 27px;
   width: 27px;
   text-indent: -9999px;
   height: 27px;
@@ -294,7 +294,7 @@ $transformergames: mlaft, bcr, jspk10, er75ft, msnn, pk10nn;
 %gd11x5ball{
   display: inline-block;
   background: url(../../assets/ball_1.png) repeat-x;
-  background-size: cover;
+  background-size: 27px;
   width: 27px;
   text-indent: -9999px;
   height: 27px;
