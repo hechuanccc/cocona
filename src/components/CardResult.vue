@@ -1,9 +1,6 @@
 <template>
   <ul class="pokers">
-    <li v-if="!currentGameResult.issue_number" class="waitopen text-center">
-      <img class="img" src="../assets/niu/waitopen.png" alt="">
-    </li>
-    <li v-else class="poker"
+    <li class="poker"
       v-for="(value, key, index) in currentGameResult.extra_info"
       :key="index">
       <span class="win-badge" v-if="value.status === 'win'"></span>

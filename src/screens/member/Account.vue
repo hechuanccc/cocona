@@ -12,7 +12,7 @@
     </header>
     <el-container class="container no-border">
       <div class="aside m-r-sm">
-        <AsideMenu @clicked="onClickChild" :items="menus ? menus : []" :defaultActive="currentPath" />
+        <AsideMenu @clicked="onClickChild" :items="showNenus" :defaultActive="currentPath" />
       </div>
       <div class="main m-b-xlg">
         <router-view/>
@@ -100,6 +100,12 @@ export default {
       } else {
         return path
       }
+    },
+    showNenus () {
+      if (this.user.onlinePaymentTypes && this.user.onlinePaymentTypes.length) {
+        return this.menus
+      }
+      return this.menus.filter(item => item.route !== '/account/online_payment')
     }
   },
   beforeRouteEnter (to, from, next) {

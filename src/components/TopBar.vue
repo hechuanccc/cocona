@@ -69,7 +69,7 @@
                 <icon name="user"></icon>{{$t('user.my_account')}}
               </router-link>
             </li>
-            <li>
+            <li v-if="user.onlinePaymentTypes&&user.onlinePaymentTypes.length">
               <router-link to="/account/online_payment">
                 <icon name="credit-card"></icon>{{$t('user.online_payment')}}
               </router-link>
