@@ -3,7 +3,7 @@
     <div class="quick-info">
       <div :class="['sub-menu', 'm-b-xlg', {'container': notHomePage}]">
         <router-link class="link"
-          v-for="(item, index) in subMenu"
+          v-for="(item, index) in showSubMenu"
           :key="index"
           :to="item.route">{{item.option}}</router-link>
           <a href="#" class="link" @click="navigateToMobile()">手机版</a>
@@ -28,38 +28,34 @@
 </template>
 
 <script>
+const subMenu = [
+  {
+    option: '存款取款',
+    route: '/account/online_payment'
+  },
+  {
+    option: '常见问题',
+    route: '/faq/faqs'
+  },
+  {
+    option: '规则说明',
+    route: '/gameintro'
+  },
+  {
+    option: '加盟合作',
+    route: '/agent/agent_register'
+  },
+  {
+    option: '关于我们',
+    route: '/faq/about'
+  },
+  {
+    option: '最新优惠',
+    route: '/promotions'
+  }
+]
 export default {
   name: 'bottom',
-  data () {
-    return {
-      subMenu: [
-        {
-          option: '存款取款',
-          route: '/account/online_payment'
-        },
-        {
-          option: '常见问题',
-          route: '/faq/faqs'
-        },
-        {
-          option: '规则说明',
-          route: '/gameintro'
-        },
-        {
-          option: '加盟合作',
-          route: '/agent/agent_register'
-        },
-        {
-          option: '关于我们',
-          route: '/faq/about'
-        },
-        {
-          option: '最新优惠',
-          route: '/promotions'
-        }
-      ]
-    }
-  },
   methods: {
     navigateToMobile () {
       this.$cookie.set('desktop', 0)
@@ -69,6 +65,15 @@ export default {
   computed: {
     notHomePage () {
       return this.$route.name !== 'Home'
+    },
+    showSubMenu () {
+      const onlinePaymentTypes = this.$store.state.user.onlinePaymentTypes
+      if (onlinePaymentTypes && onlinePaymentTypes.length) {
+        subMenu[0].route = '/account/online_payment'
+      } else {
+        subMenu[0].route = '/account/remit'
+      }
+      return subMenu
     }
   }
 }
