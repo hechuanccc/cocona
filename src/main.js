@@ -19,6 +19,9 @@ import icon from './utils/icon'
 import { msgFormatter } from './utils'
 import color from './style'
 
+import directive from 'element-ui/packages/popover/src/directive'
+Vue.directive('popover', directive)
+
 let url = window.location.href
 const HTTPS = process.env.HTTPS
 if (HTTPS && HTTPS.replace(/"/g, '') === '1') {
