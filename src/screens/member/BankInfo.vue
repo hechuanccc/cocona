@@ -95,7 +95,7 @@ export default {
         ],
         account: [
           { required: true, message: this.$t('validate.required'), trigger: 'blur' },
-          { validator: bankAccountValidator, trigger: 'blur,change' }
+          { validator: bankAccountValidator, trigger: ['blur', 'change'] }
         ]
       },
       bankOptions: []

@@ -31,7 +31,7 @@
           </div>
           <div v-else class="buttons">
             <el-button class="small-btn" type="primary" @click="linkTo('/account/my/primary_info')">我的账号</el-button>
-            <el-button class="small-btn" type="primary" @click="linkTo('/account/online_payment')">立即充值</el-button>
+            <el-button class="small-btn" type="primary" @click="linkTo(paymentPage)">立即充值</el-button>
           </div>
         </div>
         <div class="box">
@@ -105,7 +105,15 @@ export default {
     ]),
     ...mapState([
       'isChatting'
-    ])
+    ]),
+    paymentPage () {
+      const onlinePaymentTypes = this.user.onlinePaymentTypes
+      if (onlinePaymentTypes && onlinePaymentTypes.length) {
+        return '/account/online_payment'
+      } else {
+        return '/account/remit'
+      }
+    }
   },
   watch: {
     '$route': function (to, from) {

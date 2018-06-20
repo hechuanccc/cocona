@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/screens/Home'
+import store from '../store'
 const GameHall = (resolve) => require(['@/screens/GameHall'], resolve)
 const Game = (resolve) => require(['@/screens/games/Game'], resolve)
 const GameCategory = (resolve) => require(['@/screens/games/GameCategory'], resolve)
@@ -84,7 +85,15 @@ export default new Router({
         {
           path: 'online_payment',
           name: 'OnlinePayment',
-          component: OnlinePayment
+          component: OnlinePayment,
+          beforeEnter: (to, from, next) => {
+            const onlinePaymentTypes = store.state.user.onlinePaymentTypes
+            if (onlinePaymentTypes && onlinePaymentTypes.length) {
+              next()
+            } else {
+              next(false)
+            }
+          }
         },
         {
           path: 'online_payment_success',
