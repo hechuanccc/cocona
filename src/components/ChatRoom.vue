@@ -174,7 +174,7 @@
             <textarea  @keyup.enter="sendMsg"
               @focus="$store.dispatch('updateIsChatting', true)"
               @blur="$store.dispatch('updateIsChatting', false)"
-              :placeholder="personal_setting.chat.status ? '' : isBanned || isBlocked ? '你现在没有发言权限' :chatConditionMessage"
+              :placeholder="personal_setting.chat.status ? (isBanned || isBlocked) ? '你现在没有发言权限' : '' : chatConditionMessage"
               type="textarea" rows="2"
               ref="textarea"
               autocomplete="off"
