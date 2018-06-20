@@ -217,7 +217,7 @@
     </el-dialog>
 
     <div
-      v-if="isLogin && showEntry && roomTitle && RECEIVER"
+      v-if="isLogin && roomTitle && RECEIVER"
       class="chat-guide text-center"
       @click="handleEntryClick()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -318,12 +318,6 @@ const removeItem = (arr, item) => {
   }
 }
 export default {
-  props: {
-    showEntry: {
-      type: Boolean,
-      default: false
-    }
-  },
   data () {
     let RECEIVER = this.$store.state.chatRoom.defaultRoom
 
@@ -397,11 +391,6 @@ export default {
     MarqueeTips, Stickers, Emojis, Envelope, ChatMessages
   },
   watch: {
-    'showEntry': function (val, oldVal) {
-      if (!val && this.showChatRoom && this.isLogin) {
-        this.leaveRoom()
-      }
-    },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
         this.getStickers()
@@ -417,7 +406,7 @@ export default {
         } else {
           let roomChanged = (oldRoom !== this.RECEIVER)
           if (roomChanged) {
-            this.ws && this.ws.send(JSON.stringify({
+            this.ws.send(JSON.stringify({
               'command': 'leave',
               'receivers': [oldRoom]
             }))
