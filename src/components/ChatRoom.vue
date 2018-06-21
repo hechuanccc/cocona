@@ -181,7 +181,7 @@
               validateevent="true"
               class="el-textarea-inner"
               v-model="msgCnt"
-              :disabled="!personal_setting.chat.status">
+              :disabled="!personal_setting.chat.status || (isBanned || isBlocked)">
             </textarea>
           </div>
 
