@@ -77,7 +77,7 @@
         :width="135"
         :label="$t('user.profit')">
         <template slot-scope="scope">
-          <span v-if="scope.row.profit === null">{{ scope.row.remarks | statusFilter}}</span>
+          <span v-if="scope.row.profit === null">{{ statusFilter(scope.row.remarks) }}</span>
           <span v-else :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
         </template>
       </el-table-column>
@@ -135,23 +135,11 @@
 <script>
 import { fetchBetHistory, fetchBetTotal } from '../../api'
 import { msgFormatter } from '../../utils'
-import Vue from 'vue'
 export default {
   name: 'BetRecord',
   props: {
     lazyFetch: {
       type: Boolean
-    }
-  },
-  filters: {
-    statusFilter (value) {
-      if (value === 'no_draw') {
-        return Vue.t('user.no_draw')
-      } else if (value === 'cancelled') {
-        return Vue.t('user.cancelled')
-      } else {
-        return Vue.t('user.unsettled')
-      }
     }
   },
   data () {
@@ -203,6 +191,15 @@ export default {
     }
   },
   methods: {
+    statusFilter (value) {
+      if (value === 'no_draw') {
+        return this.$t('user.no_draw')
+      } else if (value === 'cancelled') {
+        return this.$t('user.cancelled')
+      } else {
+        return this.$t('user.unsettled')
+      }
+    },
     profitColor (amount) {
       if (amount > 0) {
         return 'gain'

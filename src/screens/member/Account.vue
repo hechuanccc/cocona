@@ -23,11 +23,11 @@
 
 <script>
 import 'vue-awesome/icons/credit-card'
-import 'vue-awesome/icons/credit-card-alt'
-import 'vue-awesome/icons/file-text-o'
+import 'vue-awesome/icons/arrow-circle-right'
+import 'vue-awesome/icons/file'
 import 'vue-awesome/icons/list-ul'
 import 'vue-awesome/icons/user'
-import 'vue-awesome/icons/envelope-o'
+import 'vue-awesome/icons/envelope'
 import 'vue-awesome/icons/bullhorn'
 
 import urls from '../../api/urls'
@@ -53,12 +53,12 @@ export default {
         {
           display_name: this.$t('user.remit'),
           route: '/account/remit',
-          leftIcon: 'credit-card-alt'
+          leftIcon: 'arrow-circle-right'
         },
         {
           display_name: this.$t('user.withdraw'),
           route: '/account/withdraw',
-          leftIcon: 'file-text-o'
+          leftIcon: 'file'
         },
         {
           display_name: this.$t('user.finance'),
@@ -73,7 +73,7 @@ export default {
         {
           display_name: this.$t('user.message'),
           route: '/account/message',
-          leftIcon: 'envelope-o'
+          leftIcon: 'envelope'
         },
         {
           display_name: this.$t('user.announcement'),

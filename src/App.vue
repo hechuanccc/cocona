@@ -46,8 +46,7 @@
         </el-form>
       </div>
     </el-dialog>
-    <chat-room v-if="chatRoomReady"
-      :showEntry="showEntry"></chat-room>
+    <chat-room v-if="chatRoomReady"></chat-room>
   </div>
 </template>
 
@@ -166,12 +165,9 @@ export default {
     showTrialVerifyDialog () {
       return this.$store.state.showTrialVerifyDialog
     },
-    showEntry () {
-      let name = this.$route.name
-      return name === 'Gameintro' || name === 'GameDetail' || name === 'GameHistory' || name === 'Game' || name === 'Schedules'
-    },
     chatRoomReady () {
-      return this.$store.state.systemConfig.chatroomEnabled && this.$store.state.chatRoom.roomsStatus
+      let name = this.$route.name
+      return (name === 'GameDetail' || name === 'Game') && this.$store.state.systemConfig.chatroomEnabled && this.$store.state.chatRoom.roomsStatus
     }
   },
   created () {

@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column :label="$t('user.status')">
         <template slot-scope="scope">
-          <span :class="color(scope.row.status)">{{ scope.row.status | statusFilter}}</span>
+          <span :class="color(scope.row.status)">{{ statusFilter(scope.row.status) }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -36,28 +36,9 @@
 <script>
 import { fetchTransactionRecord } from '../../api'
 import { msgFormatter } from '../../utils'
-import Vue from 'vue'
 export default {
   name: 'PaymentRecord',
   filters: {
-    statusFilter (value) {
-      switch (value) {
-        case 1:
-          return Vue.t('user.success')
-        case 2:
-          return Vue.t('user.failed')
-        case 3:
-          return Vue.t('user.ongoing')
-        case 4:
-          return Vue.t('user.cancelled')
-        case 5:
-          return Vue.t('user.declined')
-        case 6:
-          return Vue.t('user.ongoing')
-        default:
-          return ''
-      }
-    },
     envelopFilter (value) {
       switch (value) {
         case 1:
@@ -100,6 +81,24 @@ export default {
     this.initFetchTransactionRecord()
   },
   methods: {
+    statusFilter (value) {
+      switch (value) {
+        case 1:
+          return this.$t('user.success')
+        case 2:
+          return this.$t('user.failed')
+        case 3:
+          return this.$t('user.ongoing')
+        case 4:
+          return this.$t('user.cancelled')
+        case 5:
+          return this.$t('user.declined')
+        case 6:
+          return this.$t('user.ongoing')
+        default:
+          return ''
+      }
+    },
     color (value) {
       if (value === 1) {
         return 'green'
