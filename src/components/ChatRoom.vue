@@ -636,6 +636,7 @@ export default {
                     } else if (data.command === 'join') {
                       this.RECEIVER = data.receivers
                       this.$store.dispatch('updateCurrentChatRoom', data.receivers)
+                      return
                     } else if (data.command === 'chat_condition_passed') {
                       this.personal_setting.chat.status = 1
                       this.personal_setting.chat.reasons = []
