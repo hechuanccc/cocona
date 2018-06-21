@@ -174,13 +174,13 @@
             <textarea  @keyup.enter="sendMsg"
               @focus="$store.dispatch('updateIsChatting', true)"
               @blur="$store.dispatch('updateIsChatting', false)"
+              :placeholder="personal_setting.chat.status ? (isBanned || isBlocked) ? '你现在没有发言权限' : '' : chatConditionMessage"
               type="textarea" rows="2"
               ref="textarea"
               autocomplete="off"
               validateevent="true"
               class="el-textarea-inner"
               v-model="msgCnt"
-              :placeholder="personal_setting.chat.status ? (isBanned || isBlocked) ? '你现在没有发言权限' : '' : chatConditionMessage"
               :disabled="!personal_setting.chat.status">
             </textarea>
           </div>
