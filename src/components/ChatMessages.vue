@@ -27,7 +27,7 @@
 
           <div v-if="msg.type === 5">
 
-            <div v-if="!user.account_type || (!personalSetting.chat.status && !isBanned)" class="envelope-message expired">
+            <div v-if="!user.account_type || (!personalSetting.chat.status && !isBanned)" class="envelope-message mask">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
@@ -37,8 +37,8 @@
             </div>
 
             <div :class="['envelope-message','clickable',
-              {'null': (msg.envelope_status.total === msg.envelope_status.users.length) &&
-                !msg.envelope_status.users.map(item => item.username).includes(user.username)}]"
+              {'mask': (msg.envelope_status.total === msg.envelope_status.users.length) ||
+                msg.envelope_status.users.map(item => item.username).includes(user.username)}]"
               v-else-if="msg.envelope_status && isAlive(msg.envelope_status.expired_time)"
               @click="takeEnvelope(msg)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
@@ -51,7 +51,7 @@
               </div>
             </div>
 
-            <div class="envelope-message expired" v-else-if="!isAlive(msg.envelope_status.expired_time)">
+            <div class="envelope-message mask" v-else-if="!isAlive(msg.envelope_status.expired_time)">
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
@@ -456,14 +456,8 @@ export default {
   background-color: #fa9d3b;
   position: relative;
 
-  &.expired {
+  &.mask {
     opacity: .6;
-    background: #D69F14;
-  }
-
-  &.null {
-    opacity: .6;
-    background: #D69F14;
   }
 
   .img {
