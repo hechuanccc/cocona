@@ -181,7 +181,7 @@
               validateevent="true"
               class="el-textarea-inner"
               v-model="msgCnt"
-              :disabled="!personal_setting.chat.status || (isBanned || isBlocked)">
+              :disabled="!personal_setting.chat.status">
             </textarea>
           </div>
 
@@ -701,13 +701,11 @@ export default {
                     this.errMsg = true
                     this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
                     this.personal_setting.banned[data.room_id] = data.msg
-                    this.personal_setting.chat.status = 0
                     break
                   case 5:
                     this.errMsg = true
                     this.messages = []
                     this.personal_setting.blocked.push(data.room_id)
-                    this.personal_setting.chat.status = 0
                     this.errMsgCnt = data.msg
                     break
                   case 6:
