@@ -331,7 +331,8 @@ export default {
       }
 
       .bubble {
-        background: #e5e5e5;
+        background: #fff;
+        border: 1px solid #eee;
         color: #333333;
       }
 
