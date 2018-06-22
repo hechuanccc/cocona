@@ -312,7 +312,8 @@ export default {
   },
   methods: {
     chooseCategory () {
-      this.$router.replace(`/game/${this.currentGameId}/${this.categories[0].id}`)
+      const categoryId = localStorage.getItem(this.currentGameId + '-lastCategory') || this.categories[0].id
+      this.$router.replace(`/game/${this.currentGameId}/${categoryId}`)
     },
     updateSchedule () {
       clearInterval(this.timer)

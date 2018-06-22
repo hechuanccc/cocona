@@ -90,8 +90,7 @@ export default {
       return this.$store.getters.categoriesByGameId(currentGameId)
     },
     ...mapGetters([
-      'allGames',
-      'user'
+      'allGames'
     ])
   },
   name: 'gamemenu',
@@ -117,9 +116,10 @@ export default {
       if (!category) {
         return
       }
+      const gameId = this.$route.params.gameId
+      localStorage.setItem(gameId + '-lastCategory', category.id)
       this.$router.push({
-        path: `/game/${this.$route.params.gameId}/${category.id}`,
-        params: { formatting: category.formatting }
+        path: `/game/${gameId}/${category.id}`
       })
     }
   }
