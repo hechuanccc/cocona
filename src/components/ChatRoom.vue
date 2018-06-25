@@ -330,14 +330,13 @@ export default {
       defaultRoom: this.$store.state.chatRoom.defaultRoom,
       showChatRoom: false,
       messages: [],
-      showEditProfile: false,
-      swichAvatar: false,
       msgCnt: '',
       errMsg: false,
       roomManagers: [],
       errMsgCnt: '',
       uploadUrl: urls.user,
       nickname: this.$store.state.user.nickname,
+      nicknameChanging: false,
       showImageMsg: false,
       showImageMsgUrl: '',
       loading: false,
@@ -385,8 +384,7 @@ export default {
         sticker: false,
         image: false,
         redEnvelope: false
-      },
-      nicknameChanging: false
+      }
     }
   },
   components: {
@@ -439,7 +437,7 @@ export default {
         this.closeEnvelope()
         this.showChatRoom = false
         this.messages = []
-        this.showEditProfile = false
+        this.nicknameChanging = false
 
         if (this.ws) {
           this.ws.close()
@@ -646,6 +644,8 @@ export default {
                       this.RECEIVER = data.receivers
                       this.$store.dispatch('updateCurrentChatRoom', data.receivers)
                       return
+                    } else if (data.command === 'leave') {
+                      return
                     } else if (data.command === 'chat_condition_passed') {
                       this.personal_setting.chat.status = 1
                       this.personal_setting.chat.reasons = []
@@ -814,7 +814,7 @@ export default {
     leaveRoom (n) {
       this.showChatRoom = false
       this.messages = []
-      this.showEditProfile = false
+      this.nicknameChanging = false
       this.closeEnvelope()
 
       this.ws && this.ws.send(JSON.stringify({
