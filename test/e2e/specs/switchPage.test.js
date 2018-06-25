@@ -18,43 +18,67 @@ module.exports = {
   },
   'init page Test': function (browser) {
     browser
-    .waitForElementVisible('.clickable', 2000)
-    .expect.element('.clickable').to.be.visible
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
   },
   'change page Test': function (browser) {
     browser
     .click('li.game-menu-item:nth-child(2)')
-    .waitForElementVisible('.clickable', 2000)
-    .expect.element('.clickable').to.be.visible
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
   },
-  'click the same page Test': function (browser) {
+  'click the same page again Test': function (browser) {
     browser
     .click('li.game-menu-item:nth-child(2)')
-    .waitForElementVisible('.clickable', 2000)
-    .expect.element('.clickable').to.be.visible
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
   },
-  'change twice page Test': function (browser) {
+  'switch between two page Test': function (browser) {
     browser
     .click('li.game-menu-item:nth-child(2)')
     .click('li.game-menu-item:nth-child(3)')
     .click('li.game-menu-item:nth-child(2)')
-    .waitForElementVisible('.clickable', 2000)
-    .expect.element('.clickable').to.be.visible
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
   },
-  'change multi page Test': function (browser) {
+  'switch between multiple page Test': function (browser) {
     browser
     .click('li.game-menu-item:nth-child(2)')
     .click('li.game-menu-item:nth-child(4)')
     .click('li.game-menu-item:nth-child(3)')
     .click('li.game-menu-item:nth-child(1)')
     .click('li.game-menu-item:nth-child(3)')
-    .waitForElementVisible('.clickable', 2000)
-    .expect.element('.clickable').to.be.visible
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
   },
   'eneter by url Test': function (browser) {
     browser
     .url(browser.launch_url + '/#/game')
-    .waitForElementVisible('.clickable', 2000)
-    .expect.element('.clickable').to.be.visible
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
+  },
+  'browser history back Test': function (browser) {
+    browser
+    .click('li.game-menu-item:nth-child(2)')
+    .click('li.game-menu-item:nth-child(3)')
+    .click('li.game-menu-item:nth-child(4)')
+    .back()
+    .back()
+    .waitForElementVisible('.clickable', 5000)
+    browser.expect.element('.clickable').to.be.visible
+    browser.expect.element('li.game-menu-item.active').to.be.visible
+    browser.expect.element('li.category-menu-item.active').to.be.visible
   }
 }
