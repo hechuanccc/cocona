@@ -94,7 +94,6 @@
           :defaultAvatar="defaultAvatar"
           :user="user"
           :envelope="envelope"
-          :isBanned="isBanned"
           :isBlocked="isBlocked"
           :isManager="isManager"
           :personalSetting="personal_setting"/>
@@ -104,7 +103,7 @@
       <el-footer class="footer" height="120">
         <div class="control-bar">
           <el-popover :popper-class="'emoji-popover'"
-            :disabled="!user.account_type || isBlocked || isBanned || !personal_setting.chat.status"
+            :disabled="!user.account_type || isBlocked || !personal_setting.chat.status"
             ref="sticker-popover"
             v-model="stickerPopoverVisible"
             placement="top-start"
@@ -160,7 +159,7 @@
               'btn-smile',
               'envelope-icon',
               'clickable',
-              {'not-allowed': isBanned || isBlocked}]"
+              {'not-allowed': isBlocked}]"
             @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
             @click="handleEnvelopeIconClick">
             <img class="img" :src="controlBar.redEnvelope ? require('../assets/icon_red pocket_hover.png') : require('../assets/icon_red pocket.png')" alt="envelope-icon">
@@ -494,7 +493,7 @@ export default {
       this.joinChatRoom()
     },
     handleImgIconClick (e) {
-      if (this.isBlocked || this.isBanned || !this.user.account_type) {
+      if (this.isBlocked || !this.user.account_type) {
         e.preventDefault()
       }
     },
@@ -525,7 +524,7 @@ export default {
       this.scrollToEnd()
     },
     handleEnvelopeIconClick () {
-      if (this.isBlocked || this.isBanned || !this.personal_setting.chat.status) {
+      if (this.isBlocked || !this.personal_setting.chat.status) {
         return
       }
       if (!this.user.account_type) {
