@@ -174,7 +174,7 @@
             <textarea  @keyup.enter="sendMsg"
               @focus="$store.dispatch('updateIsChatting', true)"
               @blur="$store.dispatch('updateIsChatting', false)"
-              :placeholder="personal_setting.chat.status ? '' : isBanned || isBlocked ? '你现在没有发言权限' :chatConditionMessage"
+              :placeholder="personal_setting.chat.status ? '' : chatConditionMessage"
               type="textarea" rows="2"
               ref="textarea"
               autocomplete="off"
@@ -217,7 +217,7 @@
     </el-dialog>
 
     <div
-      v-if="isLogin && showEntry && roomTitle && RECEIVER"
+      v-if="isLogin && roomTitle && RECEIVER"
       class="chat-guide text-center"
       @click="handleEntryClick()">
       <icon class="font-wechat" name="wechat" scale="1.7"></icon>
@@ -318,12 +318,6 @@ const removeItem = (arr, item) => {
   }
 }
 export default {
-  props: {
-    showEntry: {
-      type: Boolean,
-      default: false
-    }
-  },
   data () {
     let RECEIVER = this.$store.state.chatRoom.defaultRoom
 
@@ -397,11 +391,6 @@ export default {
     MarqueeTips, Stickers, Emojis, Envelope, ChatMessages
   },
   watch: {
-    'showEntry': function (val, oldVal) {
-      if (!val && this.showChatRoom && this.isLogin) {
-        this.leaveRoom()
-      }
-    },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
         this.getStickers()
@@ -417,7 +406,7 @@ export default {
         } else {
           let roomChanged = (oldRoom !== this.RECEIVER)
           if (roomChanged) {
-            this.ws && this.ws.send(JSON.stringify({
+            this.ws.send(JSON.stringify({
               'command': 'leave',
               'receivers': [oldRoom]
             }))
@@ -647,6 +636,7 @@ export default {
                     } else if (data.command === 'join') {
                       this.RECEIVER = data.receivers
                       this.$store.dispatch('updateCurrentChatRoom', data.receivers)
+                      return
                     } else if (data.command === 'chat_condition_passed') {
                       this.personal_setting.chat.status = 1
                       this.personal_setting.chat.reasons = []
@@ -712,13 +702,11 @@ export default {
                     this.errMsg = true
                     this.errMsgCnt = '您已被聊天室管理员禁言，在' + this.$moment(data.msg).format('YYYY-MM-DD HH:mm:ss') + '后才可以发言。'
                     this.personal_setting.banned[data.room_id] = data.msg
-                    this.personal_setting.chat.status = 0
                     break
                   case 5:
                     this.errMsg = true
                     this.messages = []
                     this.personal_setting.blocked.push(data.room_id)
-                    this.personal_setting.chat.status = 0
                     this.errMsgCnt = data.msg
                     break
                   case 6:

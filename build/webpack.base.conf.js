@@ -5,6 +5,7 @@ const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const webpack = require('webpack')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -47,7 +48,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        include: [resolve('src'), resolve('test'), resolve('node_modules/vue-awesome')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -76,6 +77,15 @@ module.exports = {
     ]
   },
   plugins: [
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require('../lib/base-manifest.json')
+    }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require('../lib/ui-manifest.json')
+    }),
+    new VueLoaderPlugin(),
     // replace useless locale
     new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en|cn/),
     new FaviconsWebpackPlugin({

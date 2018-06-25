@@ -19,6 +19,9 @@ import icon from './utils/icon'
 import { msgFormatter } from './utils'
 import color from './style'
 
+import directive from 'element-ui/packages/popover/src/directive'
+Vue.directive('popover', directive)
+
 let url = window.location.href
 const HTTPS = process.env.HTTPS
 if (HTTPS && HTTPS.replace(/"/g, '') === '1') {
@@ -42,8 +45,9 @@ const token = Vue.cookie.get('access_token')
 
 Vue.config.productionTip = false
 
-Object.keys(locales).forEach(lang => {
-  Vue.locale(lang, locales['cn'])
+const i18n = new VueI18n({
+  locale: 'cn',
+  messages: locales
 })
 
 if (token) {
@@ -78,7 +82,7 @@ axios.interceptors.response.use(res => {
 }, (error) => {
   Vue.prototype.$message({
     showClose: true,
-    message: msgFormatter(error) || Vue.t('message.error'),
+    message: msgFormatter(error) || i18n.t('message.error'),
     type: 'error'
   })
   toHomeAndLogin(router)
@@ -190,6 +194,7 @@ gethomePage().then(
 
 /* eslint-disable no-new */
 new Vue({
+  i18n,
   el: '#app',
   router,
   store,
