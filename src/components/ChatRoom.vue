@@ -19,43 +19,61 @@
           <img :src="require('../assets/icon_profile.png')"
             alt="profile"
             class="clickable icon"
-            @click="isBlocked || !user.account_type ? '' : showEditProfile = true"/>
+            v-popover:editavatar-popover/>
           <img :src="require('../assets/icon_close.png')"
             alt="profile"
             class="clickable icon"
             @click="showChatRoom = false"/>
         </div>
 
-        <transition
-          enter-class="profileFadeInEnter"
-          leave-active-class="animated fadeOutUp"
-          enter-active-class="animated fadeInDown">
-          <div class="edit-profile" v-if="showEditProfile">
-            <div @mouseover="swichAvatar = true" @mouseout="swichAvatar = false">
-              <el-upload
-                class="avatar clickable"
-                style="overflow-y: hidden;"
-                :action="uploadUrl"
-                :show-file-list="false"
-                :on-success="handleAvatarSuccess"
-                :before-upload="beforeAvatarUpload">
-                <img class="img" v-if="user.avatar && !swichAvatar" :src="user.avatar">
-                <img class="img" v-else-if="!swichAvatar" :src="defaultAvatar">
-                <label for="avatarUploadInput" class="upload-avatar clickable" v-if="swichAvatar">
-                  <span class="el-icon-upload"></span>
-                </label>
-              </el-upload>
-            </div>
-            <p class="avatar-upload-tip">{{user.avatar ? '(如需更换头像请点击上方头像上传)' : '(您还未设置头像, 请点击头像上传)'}}</p>
-            <p class="clickable" @click="showNickNameBox = true">
-              <span class="display-name">{{user.account_type === 0 ? '试玩会员' : (user.nickname || user.username)}}</span>
-              <a href="javascript:void(0)" class="icon-edit">
-                <span class="el-icon-edit-outline"></span>
-              </a>
+        <el-popover :popper-class="'avatar-popover'"
+          :disabled="isBlocked || !user.account_type"
+          ref="editavatar-popover"
+          placement="bottom-start"
+          :offset="100"
+          :width="240"
+          trigger="click">
+          <div class="text-center avatar-editor">
+            <p class="tip">
+              {{ !user.avatar ? '您尚未設置頭像，請點擊上傳': ''}}
             </p>
-            <el-button type="primary" @click.native="showEditProfile = false">关闭</el-button>
+            <div class="text-center">
+              <div class="avatar" :style="{ backgroundImage: `url(${user.avatar || defaultAvatar}`} ">
+                <el-upload
+                  :action="uploadUrl"
+                  :show-file-list="false"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="beforeAvatarUpload">
+                  <div class="action">
+                  <span class="icon" v-if="user.avatar">
+                    <img class="changing" src="../assets/icon_changeavatar.png" alt="icon">
+                  </span>
+                  <span class="icon" v-else>
+                    <b class="new">+</b>
+                  </span>
+                </div>
+                </el-upload>
+              </div>
+            </div>
+            <div class="display-name clickable">
+              <div v-if="nicknameChanging">
+                <input class="nickname-input"
+                ref="nicknameinput"
+                v-model="nickname"
+                :placeholder="user.nickname || user.username"
+                @blur="submitNickName"
+                type="text"/>
+                <span class="edit-icon el-icon-circle-check-outline" @click="submitNickName"></span>
+              </div>
+              <div  @click="nicknameChanging = true" v-else>
+                <span class="nickname">
+                  {{!user.account_type ? '试玩会员' : (user.nickname || user.username)}}
+                </span>
+                <span class="edit-icon el-icon-edit-outline"></span>
+              </div>
+            </div>
           </div>
-        </transition>
+        </el-popover>
 
         <transition enter-class="profileFadeInEnter"
           leave-active-class="animated fadeOutUp"
@@ -94,7 +112,6 @@
           :defaultAvatar="defaultAvatar"
           :user="user"
           :envelope="envelope"
-          :isBanned="isBanned"
           :isBlocked="isBlocked"
           :isManager="isManager"
           :personalSetting="personal_setting"/>
@@ -104,7 +121,7 @@
       <el-footer class="footer" height="120">
         <div class="control-bar">
           <el-popover :popper-class="'emoji-popover'"
-            :disabled="!user.account_type || isBlocked || isBanned || !personal_setting.chat.status"
+            :disabled="!user.account_type || isBlocked || !personal_setting.chat.status"
             ref="sticker-popover"
             v-model="stickerPopoverVisible"
             placement="top-start"
@@ -160,7 +177,7 @@
               'btn-smile',
               'envelope-icon',
               'clickable',
-              {'not-allowed': isBanned || isBlocked}]"
+              {'not-allowed': isBlocked}]"
             @mouseenter="controlBar.redEnvelope = true" @mouseleave="controlBar.redEnvelope = false"
             @click="handleEnvelopeIconClick">
             <img class="img" :src="controlBar.redEnvelope ? require('../assets/icon_red pocket_hover.png') : require('../assets/icon_red pocket.png')" alt="envelope-icon">
@@ -193,21 +210,6 @@
       </el-footer>
     </el-container>
 
-    <el-dialog title="修改昵称"
-      :visible.sync="showNickNameBox"
-      width="400px"
-      custom-class="changeNickNameBox"
-      append-to-body>
-      <el-form>
-        <el-form-item label="请输入昵称">
-          <el-input auto-complete="off" v-model="nickname"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="showNickNameBox = false">取 消</el-button>
-        <el-button type="primary" @click="submitNickName">确 定</el-button>
-      </div>
-    </el-dialog>
 
     <el-dialog :visible.sync="showImageMsg"
       width="640px"
@@ -328,15 +330,13 @@ export default {
       defaultRoom: this.$store.state.chatRoom.defaultRoom,
       showChatRoom: false,
       messages: [],
-      showEditProfile: false,
-      swichAvatar: false,
       msgCnt: '',
-      showNickNameBox: false,
       errMsg: false,
       roomManagers: [],
       errMsgCnt: '',
       uploadUrl: urls.user,
       nickname: this.$store.state.user.nickname,
+      nicknameChanging: false,
       showImageMsg: false,
       showImageMsgUrl: '',
       loading: false,
@@ -391,6 +391,13 @@ export default {
     MarqueeTips, Stickers, Emojis, Envelope, ChatMessages
   },
   watch: {
+    'nicknameChanging': function (val) {
+      if (val) {
+        this.$nextTick(() => {
+          this.$refs['nicknameinput'].focus()
+        })
+      }
+    },
     'stickerPopoverVisible': function (visible) {
       if (visible) {
         this.getStickers()
@@ -430,7 +437,7 @@ export default {
         this.closeEnvelope()
         this.showChatRoom = false
         this.messages = []
-        this.showEditProfile = false
+        this.nicknameChanging = false
 
         if (this.ws) {
           this.ws.close()
@@ -494,7 +501,7 @@ export default {
       this.joinChatRoom()
     },
     handleImgIconClick (e) {
-      if (this.isBlocked || this.isBanned || !this.user.account_type) {
+      if (this.isBlocked || !this.user.account_type) {
         e.preventDefault()
       }
     },
@@ -525,7 +532,7 @@ export default {
       this.scrollToEnd()
     },
     handleEnvelopeIconClick () {
-      if (this.isBlocked || this.isBanned || !this.personal_setting.chat.status) {
+      if (this.isBlocked || !this.personal_setting.chat.status) {
         return
       }
       if (!this.user.account_type) {
@@ -636,6 +643,8 @@ export default {
                     } else if (data.command === 'join') {
                       this.RECEIVER = data.receivers
                       this.$store.dispatch('updateCurrentChatRoom', data.receivers)
+                      return
+                    } else if (data.command === 'leave') {
                       return
                     } else if (data.command === 'chat_condition_passed') {
                       this.personal_setting.chat.status = 1
@@ -784,13 +793,17 @@ export default {
       this.msgCnt = ''
     },
     submitNickName () {
+      if (!this.nickname) {
+        this.nicknameChanging = false
+        return
+      }
       updateUser({nickname: this.nickname, id: this.user.id}).then((data) => {
         this.$store.commit('SET_USER', {
           user: data
         })
-        this.showNickNameBox = false
-        this.messages = this.messages.filter((item) => item.type !== -2)
+        this.nicknameChanging = false
       }, errorMsg => {
+        this.nicknameChanging = false
         this.$message({
           showClose: true,
           message: msgFormatter(errorMsg),
@@ -801,7 +814,7 @@ export default {
     leaveRoom (n) {
       this.showChatRoom = false
       this.messages = []
-      this.showEditProfile = false
+      this.nicknameChanging = false
       this.closeEnvelope()
 
       this.ws && this.ws.send(JSON.stringify({
@@ -924,8 +937,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '../style/vars.scss';
-
-
 
 $primary-blue: #006bb3;
 
@@ -1115,10 +1126,6 @@ $primary-blue: #006bb3;
     color: rgb(255, 127, 77);
   }
 
-  .icon-edit {
-    font-size: 20px;
-  }
-
   .avatar {
     display: inline-block;
     border-radius: 50%;
@@ -1130,26 +1137,6 @@ $primary-blue: #006bb3;
       display: block;
       width: 100%;
     }
-    .upload-avatar {
-      display: block;
-      position: absolute;
-      top: 38px;
-      left: 0;
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      font-size: 50px;
-      color: #909090;
-    }
-  }
-
-  .display-name {
-    font-size: 20px;
-  }
-
-  .el-icon-edit-outline {
-    color: $primary;
-    font-size: 20px;
   }
 }
 
@@ -1198,6 +1185,95 @@ $primary-blue: #006bb3;
 
 }
 
+.avatar-editor {
+  padding-top: 15px;
+  .tip {
+    font-size: 12px;
+    color: #999;
+    min-height: 15px;
+  }
+  .avatar {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin-top: 15px;
+    border-radius: 15px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    border: 2px solid #ddd;
+    .action {
+      position: absolute;
+      right: -10px;
+      bottom: -10px;
+      .icon {
+        display: inline-block;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        background-color: $primary-blue;
+        box-shadow: 0 0 12px 0 rgba(2, 107, 179, 0.5);
+        text-align: center;
+        color: #fff;
+        line-height: 40px;
+        .changing {
+          vertical-align: middle;
+        }
+        .new {
+          display: inline-block;
+          margin-top: -5px;
+          font-size: 30px;
+          vertical-align: middle;
+        }
+      }
+      &:hover {
+        border: 1px solid $primary-blue;
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .display-name {
+    position: relative;
+    display: inline-block;
+    margin-top: 35px;
+    margin-bottom: 30px;
+    .nickname-input {
+      width: 120px;
+      font-size: 16px;
+      color: $primary-blue;
+      border: none;
+      border-bottom: 1px solid $primary-blue;
+      outline: none;
+      background-color: transparent;
+      &::placeholder {
+        color: $primary-blue;
+      }
+    }
+    .nickname, .edit-icon  {
+      color: $primary-blue;
+    }
+    .nickname {
+      display: inline-block;
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      font-size: 16px;
+    }
+    .edit-icon {
+      font-size: 20px;
+      vertical-align: middle;
+    }
+    &:hover {
+      .nickname, .edit-icon {
+        color: darken($primary-blue, 15%);
+      }
+    }
+  }
+}
 
 </style>
 
@@ -1214,7 +1290,11 @@ $primary-blue: #006bb3;
     padding-left: 0;
   }
 }
-
+.avatar-popover {
+  &.el-popover {
+    padding: 0;
+  }
+}
 .stickers-tab .el-tabs__content {
   padding: 0;
 }
