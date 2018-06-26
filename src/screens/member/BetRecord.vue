@@ -34,21 +34,21 @@
   <el-row>
     <el-table v-loading="loading" :data="betRecords" stripe>
       <el-table-column
-        :width="130"
+        :width="125"
         :label="$t('user.game_name')"
         prop="game.display_name">
       </el-table-column>
       <el-table-column
-        :width="135"
+        :width="130"
         :label="$t('user.issue_number')"
         prop="issue_number">
       </el-table-column>
       <el-table-column
-        :width="130"
-        :label="$t('user.betdate')"
+        :width="140"
+        :label="$t('user.bettime')"
         prop="created_at">
         <template slot-scope="scope">
-          <span>{{ scope.row.created_at | moment("YYYY-MM-DD")}}</span>
+          <span>{{ scope.row.created_at | moment("YYYY-MM-DD HH:mm:ss")}}</span>
         </template>
       </el-table-column>
       <el-table-column
