@@ -919,7 +919,7 @@ export default {
       getRoomUserInfo(this.RECEIVER).then(response => {
         let data = response.data.data
         this.roomManagers = data.managers
-        this.bannedUsers = data.banned_users
+        this.bannedUsers = data.banned_users.filter(obj => this.$moment(obj.banned_time).isAfter(this.$moment()))
         this.blockedUsers = data.block_users
         this.managerLoading = false
       })
