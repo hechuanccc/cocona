@@ -82,6 +82,7 @@ export default {
     withdraw: 'Withdraw',
     betrecord: 'Bet Record',
     betdate: 'Bet Date',
+    bettime: 'Bet Time',
     my_account: 'My Account',
     primary_info: 'Primary Info',
     password_setting: 'Password Setting',

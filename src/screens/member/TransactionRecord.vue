@@ -93,10 +93,8 @@ export default {
           return this.$t('user.cancelled')
         case 5:
           return this.$t('user.declined')
-        case 6:
-          return this.$t('user.ongoing')
         default:
-          return ''
+          return this.$t('user.ongoing')
       }
     },
     color (value) {
