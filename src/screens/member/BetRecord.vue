@@ -101,7 +101,7 @@
           prop="odds">
         </el-table-column>
       </el-table>
-      <el-table v-if="betRecordTotal.length>0" :data="betRecordTotal" :show-header="false">
+      <el-table v-if="betRecordTotal.length > 0 && !isUnsettled" :data="betRecordTotal" :show-header="false">
         <el-table-column
           :width="130">
         </el-table-column>
@@ -270,7 +270,7 @@ export default {
       })
     },
     getSummary () {
-      fetchBetTotal({startdate: this.startDate, enddate: this.endDate}).then(res => {
+      fetchBetTotal({startdate: this.startDate, enddate: this.endDate, game: this.selectedGame}).then(res => {
         const total = res.results[0]
         if (total) {
           this.betRecordTotal = [{
