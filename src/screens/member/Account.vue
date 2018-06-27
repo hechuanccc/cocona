@@ -12,7 +12,8 @@
     </header>
     <el-container class="container no-border">
       <div class="aside m-r-sm">
-        <AsideMenu @clicked="onClickChild" :items="showNenus" :defaultActive="currentPath" />
+        <AsideMenu v-show="user.onlinePaymentTypes && user.onlinePaymentTypes.length" @clicked="onClickChild" :items="menus" :defaultActive="currentPath" />
+        <AsideMenu v-show="!(user.onlinePaymentTypes && user.onlinePaymentTypes.length)" @clicked="onClickChild" :items="noOnlinePayMenus" :defaultActive="currentPath" />
       </div>
       <div class="main m-b-xlg">
         <router-view/>
@@ -34,53 +35,59 @@ import urls from '../../api/urls'
 import style from '../../style'
 import Vue from 'vue'
 import AsideMenu from '../../components/AsideMenu.vue'
+
 export default {
   name: 'Account',
   components: {
     AsideMenu
   },
   data () {
+    const menus = [
+      {
+        display_name: this.$t('user.online_payment'),
+        route: '/account/online_payment',
+        leftIcon: 'credit-card'
+      },
+      {
+        display_name: this.$t('user.remit'),
+        route: '/account/remit',
+        leftIcon: 'arrow-circle-right'
+      },
+      {
+        display_name: this.$t('user.withdraw'),
+        route: '/account/withdraw',
+        leftIcon: 'file'
+      },
+      {
+        display_name: this.$t('user.finance'),
+        route: '/account/finance',
+        leftIcon: 'list-ul'
+      },
+      {
+        display_name: this.$t('user.my_account'),
+        route: '/account/my',
+        leftIcon: 'user'
+      },
+      {
+        display_name: this.$t('user.message'),
+        route: '/account/message',
+        leftIcon: 'envelope'
+      },
+      {
+        display_name: this.$t('user.announcement'),
+        route: '/account/announcement',
+        leftIcon: 'bullhorn'
+      }
+    ]
+
+    const noOnlinePayMenus = menus.filter(item => item.route !== '/account/online_payment')
+
     return {
       style,
       formSrc: urls.payment,
       token: Vue.cookie.get('access_token'),
-      menus: [
-        {
-          display_name: this.$t('user.online_payment'),
-          route: '/account/online_payment',
-          leftIcon: 'credit-card'
-        },
-        {
-          display_name: this.$t('user.remit'),
-          route: '/account/remit',
-          leftIcon: 'arrow-circle-right'
-        },
-        {
-          display_name: this.$t('user.withdraw'),
-          route: '/account/withdraw',
-          leftIcon: 'file'
-        },
-        {
-          display_name: this.$t('user.finance'),
-          route: '/account/finance',
-          leftIcon: 'list-ul'
-        },
-        {
-          display_name: this.$t('user.my_account'),
-          route: '/account/my',
-          leftIcon: 'user'
-        },
-        {
-          display_name: this.$t('user.message'),
-          route: '/account/message',
-          leftIcon: 'envelope'
-        },
-        {
-          display_name: this.$t('user.announcement'),
-          route: '/account/announcement',
-          leftIcon: 'bullhorn'
-        }
-      ]
+      menus,
+      noOnlinePayMenus
     }
   },
   methods: {
@@ -100,12 +107,6 @@ export default {
       } else {
         return path
       }
-    },
-    showNenus () {
-      if (this.user.onlinePaymentTypes && this.user.onlinePaymentTypes.length) {
-        return this.menus
-      }
-      return this.menus.filter(item => item.route !== '/account/online_payment')
     }
   },
   beforeRouteEnter (to, from, next) {

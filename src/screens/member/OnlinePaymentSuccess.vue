@@ -17,7 +17,7 @@
       <p>充值成功!</p>
       <div class="btn-box">
         <el-button class="success-btn" type="success" @click.native="$router.push({name: 'OnlinePayment'})">继续充值</el-button>
-        <el-button type="warning" @click.native="$router.push('/account/finance/payment_record')">充值记录</el-button>
+        <el-button type="warning" @click.native="$router.push('/account/finance/payment_record')">充值纪录</el-button>
       </div>
     </div>
   </div>
