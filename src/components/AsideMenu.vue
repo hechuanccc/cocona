@@ -5,7 +5,7 @@
       active-text-color="#fff"
       :background-color="'#fff'">
       <el-menu-item v-for="(item,index) in items"
-        :index="item.route ? item.route : ''+index"
+        :index="(item.route) || ('' + index)"
         :key="index"
         class="aside-item"
         @click="onClick(item)"
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     onClick (e) {
-      let data = e.code ? e.code : e
+      let data = e.code || e
       this.$emit('clicked', data)
     }
   }

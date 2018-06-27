@@ -1,137 +1,151 @@
 <template>
-<div>
-  <el-row class="m-b">
-    <el-form :inline="true">
-      <el-form-item :label="$t('user.betdate')">
-        <el-date-picker
-          v-model="selectedDate"
-          type="date"
-          :placeholder="$t('user.choose_date')"
-          format="yyyy-MM-dd"
-          value-format="yyyy-MM-dd">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item :label="$t('user.game_name')">
-        <el-select v-model="selectedGame">
-          <el-option
-            key="all"
-            :label="$t('common.all')"
-            value="">
-          </el-option>
-          <el-option
-            v-for="game in allGames"
-            :key="game.id"
-            :label="game.display_name"
-            :value="game.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="">
-        <el-checkbox v-model="isUnsettled">{{$t('user.unsettled_period')}}</el-checkbox>
-      </el-form-item>
-    </el-form>
-  </el-row>
-  <el-row>
-    <el-table v-loading="loading" :data="betRecords" stripe>
-      <el-table-column
-        :width="130"
-        :label="$t('user.game_name')"
-        prop="game.display_name">
-      </el-table-column>
-      <el-table-column
-        :width="135"
-        :label="$t('user.issue_number')"
-        prop="issue_number">
-      </el-table-column>
-      <el-table-column
-        :width="130"
-        :label="$t('user.betdate')"
-        prop="created_at">
-        <template slot-scope="scope">
-          <span>{{ scope.row.created_at | moment("YYYY-MM-DD")}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :min-width="150"
-        :label="$t('user.play')">
-        <template slot-scope="scope">
-          <span>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :width="135"
-        :label="$t('user.bet_amount')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.bet_amount | currency('￥')}}</span>
-          <span v-if="scope.row.prepaid_amount">(+{{scope.row.prepaid_amount}})</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :width="100"
-        :label="$t('gameIntro.return_rate')">
-        <template slot-scope="scope">
-          <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${Math.floor(scope.row.play.return_rate*10000)/100}%)`: '0' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :width="135"
-        :label="$t('user.profit')">
-        <template slot-scope="scope">
-          <span v-if="scope.row.profit === null">{{ statusFilter(scope.row.remarks) }}</span>
-          <span v-else :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :width="65"
-        :label="$t('user.odd')"
-        prop="odds">
-      </el-table-column>
-    </el-table>
-    <el-table v-if="betRecordTotal.length>0" :data="betRecordTotal" :show-header="false">
-      <el-table-column
-        :width="130">
-      </el-table-column>
-      <el-table-column
-        :width="135">
-      </el-table-column>
-      <el-table-column
-        :width="130">
-      </el-table-column>
-      <el-table-column
-        :min-width="150"
-        prop="text">
-      </el-table-column>
-      <el-table-column
-        :width="135">
-        <template slot-scope="scope">
-          <span>{{ scope.row.amount | currency('￥')}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :width="100">
-      </el-table-column>
-      <el-table-column
-        :width="135">
-        <template slot-scope="scope">
-          <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :width="65">
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      v-if="totalCount > pageSize"
-      :current-page.sync="currentPage"
-      :page-size="pageSize"
-      layout="total, prev, pager, next"
-      :total="totalCount"
-      @current-change="handlePageChange">
-    </el-pagination>
-  </el-row>
-</div>
-
+  <div>
+    <el-row class="m-b">
+      <el-form :inline="true" :model="conditions">
+        <el-form-item :label="$t('user.betdate')" prop="startDate" :error="startDateValidate">
+          <el-date-picker
+            v-model="startDate"
+            type="date"
+            :id="'date1'"
+            :name="'date1'"
+            :placeholder="$t('user.choose_date')"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item>~</el-form-item>
+        <el-form-item prop="endDate" :error="endDateValidate">
+          <el-date-picker
+            v-model="endDate"
+            :id="'date2'"
+            :name="'date2'"
+            type="date"
+            :placeholder="$t('user.choose_date')"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item :label="$t('user.game_name')">
+          <el-select v-model="selectedGame">
+            <el-option
+              key="all"
+              :label="$t('common.all')"
+              value="">
+            </el-option>
+            <el-option
+              v-for="game in allGames"
+              :key="game.id"
+              :label="game.display_name"
+              :value="game.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="">
+          <el-checkbox v-model="isUnsettled">{{$t('user.unsettled_period')}}</el-checkbox>
+        </el-form-item>
+      </el-form>
+    </el-row>
+    <el-row>
+      <el-table v-loading="loading" :data="betRecords" stripe>
+        <el-table-column
+          :width="130"
+          :label="$t('user.game_name')"
+          prop="game.display_name">
+        </el-table-column>
+        <el-table-column
+          :width="135"
+          :label="$t('user.issue_number')"
+          prop="issue_number">
+        </el-table-column>
+        <el-table-column
+          :width="130"
+          :label="$t('user.betdate')"
+          prop="created_at">
+          <template slot-scope="scope">
+            <span>{{ scope.row.created_at | moment("YYYY-MM-DD")}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :min-width="150"
+          :label="$t('user.play')">
+          <template slot-scope="scope">
+            <span>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :width="135"
+          :label="$t('user.bet_amount')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.bet_amount | currency('￥')}}</span>
+            <span v-if="scope.row.prepaid_amount">(+{{scope.row.prepaid_amount}})</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :width="100"
+          :label="$t('gameIntro.return_rate')">
+          <template slot-scope="scope">
+            <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${Math.floor(scope.row.play.return_rate*10000)/100}%)`: '0' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :width="135"
+          :label="$t('user.profit')">
+          <template slot-scope="scope">
+            <span v-if="scope.row.profit === null">{{ statusFilter(scope.row.remarks) }}</span>
+            <span v-else :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :width="65"
+          :label="$t('user.odd')"
+          prop="odds">
+        </el-table-column>
+      </el-table>
+      <el-table v-if="betRecordTotal.length>0" :data="betRecordTotal" :show-header="false">
+        <el-table-column
+          :width="130">
+        </el-table-column>
+        <el-table-column
+          :width="135">
+        </el-table-column>
+        <el-table-column
+          :width="130">
+        </el-table-column>
+        <el-table-column
+          :min-width="150"
+          prop="text">
+        </el-table-column>
+        <el-table-column
+          :width="135">
+          <template slot-scope="scope">
+            <span>{{ scope.row.amount | currency('￥')}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :width="100">
+        </el-table-column>
+        <el-table-column
+          :width="135">
+          <template slot-scope="scope">
+            <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :width="65">
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        v-if="totalCount > pageSize"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        layout="total, prev, pager, next"
+        :total="totalCount"
+        @current-change="handlePageChange">
+      </el-pagination>
+    </el-row>
+  </div>
 </template>
+
 <script>
 import { fetchBetHistory, fetchBetTotal } from '../../api'
 import { msgFormatter } from '../../utils'
@@ -147,7 +161,6 @@ export default {
     return {
       betRecords: [],
       betRecordTotal: [],
-      selectedDate: today,
       selectedGame: '',
       currentPage: 1,
       pageSize: 20,
@@ -155,14 +168,16 @@ export default {
       allGames: [],
       isUnsettled: false,
       totalCount: 0,
-      nextUrl: '',
-      previousUrl: '',
-      offset: 0
+      offset: 0,
+      startDateValidate: '',
+      endDateValidate: '',
+      startDate: today,
+      endDate: today
     }
   },
   created () {
     if (!this.lazyFetch) {
-      this.initFetchBetHistory({status: 'win,lose,tie,ongoing,cancelled,no_draw'})
+      this.initFetchBetHistory({...this.conditions, status: 'win,lose,tie,ongoing,cancelled,no_draw'})
       this.allGames = this.$store.state.state
       if (!this.allGames || this.allGames.length === 0) {
         this.$store.dispatch('fetchGames').then(games => {
@@ -175,19 +190,29 @@ export default {
     conditions () {
       return {
         game: this.selectedGame,
-        bet_date: this.selectedDate,
-        status: this.isUnsettled ? 'ongoing,cancelled,no_draw' : 'win,lose,tie,ongoing,cancelled,no_draw'
+        status: this.isUnsettled ? 'ongoing,cancelled,no_draw' : 'win,lose,tie,ongoing,cancelled,no_draw',
+        created_at_0: this.startDate,
+        created_at_1: this.endDate
       }
     }
   },
   watch: {
     'lazyFetch': function (lazyFetch) {
       if (!lazyFetch) {
-        this.initFetchBetHistory()
+        this.initFetchBetHistory({...this.conditions, status: 'win,lose,tie,ongoing,cancelled,no_draw'})
       }
     },
     'conditions': function (conditions) {
-      this.initFetchBetHistory(conditions)
+      let startDate = this.$moment(conditions.created_at_0)
+      let endDate = this.$moment(conditions.created_at_1)
+      if (startDate && endDate && startDate.diff(endDate) > 0) {
+        this.startDateValidate = this.$t('validate.date_range_validate')
+        this.endDateValidate = ' '
+      } else {
+        this.startDateValidate = ''
+        this.endDateValidate = ''
+        this.initFetchBetHistory(conditions)
+      }
     }
   },
   methods: {
@@ -212,7 +237,7 @@ export default {
     initFetchBetHistory (option) {
       this.loading = true
       this.getSummary()
-      fetchBetHistory({ bet_date: this.selectedDate, ...option, offset: 0 })
+      fetchBetHistory({ ...option, offset: 0 })
         .then(data => {
           if (data.results) {
             this.totalCount = data.count
@@ -245,7 +270,7 @@ export default {
       })
     },
     getSummary () {
-      fetchBetTotal(this.selectedDate).then(res => {
+      fetchBetTotal({startdate: this.startDate, enddate: this.endDate}).then(res => {
         const total = res.results[0]
         if (total) {
           this.betRecordTotal = [{
@@ -267,6 +292,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 @import "../../style/vars.scss";
 .gain {

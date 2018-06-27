@@ -118,7 +118,7 @@ export default {
     cancelled: '已取消',
     no_draw: '官方未开',
     declined: '拒绝',
-    finance: '财务记录',
+    finance: '财务纪录',
     message: '站内消息',
     change_password: '修改密码',
     announcement: '系统公告',

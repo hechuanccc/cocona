@@ -31,7 +31,7 @@
             <ul class="info-tips m-l">
               <li>1. 您在给转帐充值时请仔细核对入款信息</li>
               <li>2. 请认真填写存款人信息，以免核对出错</li>
-              <li>3. 填写入款表单完成后，可在财务记录当中查看入款状态</li>
+              <li>3. 填写入款表单完成后，可在财务纪录当中查看入款状态</li>
             </ul>
           </el-col>
           <el-col :push="2" class="m-l-xlg" :span="14">
@@ -68,7 +68,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button class="m-r-lg input-width" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
-                <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
+                <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款纪录</router-link>
               </el-form-item>
             </el-form>
           </el-col>
@@ -112,7 +112,7 @@
               </el-form-item>
               <el-form-item>
                 <el-button class="m-r-lg input-width" type="primary" :disabled="remiting" @click="submitRemitForm(item.id)">提交入款资料</el-button>
-                <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款记录</router-link>
+                <router-link v-show="successPayeeId" to="/account/finance/payment_record">查看入款纪录</router-link>
               </el-form-item>
             </el-form>
           </el-col>
