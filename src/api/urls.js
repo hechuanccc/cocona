@@ -12,7 +12,7 @@ export default {
   domain: host,
   login: prefix + '/login/',
   register: apiv2 + '/register/',
-  user: apiv2 + '/profile/',
+  user: apiv2 + 's/', // profile -> v2/members
   password: prefix + '/password/',
   withdraw_password: prefix + '/withdraw_password/',
   refresh_token: prefix + '/login/refresh/',
