@@ -1,7 +1,7 @@
 
 # Take note that the image itself is already logged-in in the cloud CLI
 FROM unnotechlottery/rico:latest as rico
-FROM node:10.4.1-alpine
+FROM node:10.4.1
 
 WORKDIR /usr/src/app
 

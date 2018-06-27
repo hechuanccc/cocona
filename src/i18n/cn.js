@@ -81,6 +81,7 @@ export default {
     withdraw: '申请取款',
     betrecord: '下注纪录',
     betdate: '下注日期',
+    bettime: '下注时间',
     my_account: '我的账号',
     primary_info: '基本信息',
     password_setting: '密码修改',
