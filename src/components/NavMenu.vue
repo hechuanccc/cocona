@@ -1,15 +1,14 @@
 <template>
   <ul class="main-navs">
-    <router-link
-      v-if="menu.path"
-      tag="li"
+    <li v-if="menu.path"
       :to="menu.path"
+      @click="onClick(menu)"
       :class="getMenuClass(menu)"
       v-for="menu in menus"
       :key="menu.icon">
       <span :class="menu.eng ? 'big' : ''">{{menu.name}}</span>
       <span v-if="menu.eng" class="eng">{{menu.eng}}</span>
-    </router-link>
+    </li>
     <li class="nav-link">
       <a v-if="$store.state.systemConfig.customerServiceUrl"
         class="online-service m-r"
@@ -41,6 +40,13 @@ export default {
         'active': this.$route.path.split('/')[1] === menu.path.slice(1),
         [menu.class]: menu.class,
         'nav-link': true
+      }
+    },
+    onClick (menu) {
+      let routePath = this.$route.path.split('/')[1]
+      let menuPath = menu.path.split('/')[1]
+      if (routePath !== menuPath) {
+        this.$router.push(menuPath)
       }
     }
   }
