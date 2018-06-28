@@ -111,6 +111,10 @@ export function fetchBet (gameData) {
   return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
 }
 
+export function fetchWinBet () {
+  return axios.get(`${urls.betrecord}?status=win&latest=1`)
+}
+
 export function fetchBetHistory (option) {
   let url = `${urls.betrecord}?limit=20`
   Object.keys(option).forEach(key => {

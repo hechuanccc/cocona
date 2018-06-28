@@ -23,12 +23,6 @@ export default {
   [types.SET_SYSTEM_CONFIG]: (state, data) => {
     state.systemConfig = data
   },
-  [types.SET_WS]: (state, wsInstance) => {
-    state.ws = wsInstance
-  },
-  [types.UPDATE_WINNOTIFICATION]: (state, notification) => {
-    state.winNotification = notification
-  },
   [types.SHOW_LOGIN_DIALOG]: (state) => {
     state.loginDialogVisible = true
   },
