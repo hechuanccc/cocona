@@ -7,8 +7,10 @@ const apiv2 = host + '/v2/member'
 const apiv1 = host + '/v1/member'
 const apiChat = env.chatApi.replace(/"/g, '')
 const apiRoom = apiChat + '/v1/member/room'
+const wsGhostHost = env.ghostHost.replace(/"/g, '')
 
 export default {
+  wsGhostHost,
   domain: host,
   login: prefix + '/login/',
   register: apiv2 + '/register/',
