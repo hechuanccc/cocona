@@ -30,6 +30,8 @@ export default new Vuex.Store({
     messageCount: 0,
     envelopes: {},
     currentGameResult: null,
+    winNotification: null,
+    ws: null,
     customPlayGroups: [
       {
         // 重庆幸运农场 连码

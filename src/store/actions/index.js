@@ -185,5 +185,11 @@ export default {
   },
   updateUnsettled: ({ commit, state }, value) => {
     commit(types.UPDATE_UNSETTLED, value)
+  },
+  setWs: ({ commit }, ws) => {
+    commit(types.SET_WS, ws)
+  },
+  updateWinNotification: ({ commit }, notification) => {
+    commit(types.UPDATE_WINNOTIFICATION, notification)
   }
 }
