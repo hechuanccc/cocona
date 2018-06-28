@@ -71,7 +71,7 @@ export default {
                   chatInfo
                 }
               })
-            })
+            }).catch(() => {})
           }
           if (!state.user.onlinePaymentTypes) {
             fetchPaymentType().then(datas => {
@@ -178,7 +178,7 @@ export default {
         statusMap[room.id] = room
       })
       commit(types.SET_ROOMSSTATUS, statusMap)
-    })
+    }).catch(() => {})
   },
   updateRoomStatus: ({commit, state}, roomId, status) => {
     commit(types.SET_ROOMSSTATUS, roomId, status)
