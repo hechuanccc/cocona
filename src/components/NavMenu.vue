@@ -46,7 +46,7 @@ export default {
       let routePath = this.$route.path.split('/')[1]
       let menuPath = menu.path.split('/')[1]
       if (routePath !== menuPath) {
-        this.$router.push(menuPath)
+        this.$router.push({path: '/' + menuPath})
       }
     }
   }
