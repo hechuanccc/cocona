@@ -780,6 +780,11 @@ export default {
       formData.append('image', file)
       sendImgToChat(formData).then((data) => {
         fileInp.value = ''
+      }, err => {
+        this.$message({
+          message: msgFormatter(err),
+          type: 'warning'
+        })
       })
     },
     sendMsg () {
