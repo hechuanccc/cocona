@@ -42,7 +42,7 @@
         <div class="container">
           <ul>
             <li
-              :class="['category-menu-item',activeCategory===category.id?'active':'']"
+              :class="['category-menu-item',activeCategory===category.id+''?'active':'']"
               v-for="(category, index) in categories"
               :key="'category' + category.id"
               @click="switchCategory(category)">{{category.display_name}}</li>
@@ -77,7 +77,7 @@ export default {
       return parseInt(this.$route.params.gameId)
     },
     activeCategory () {
-      return parseInt(this.$route.params.categoryId)
+      return this.$route.params.categoryId
     },
     currentGame () {
       return this.$store.getters.gameById(this.$route.params.gameId) || {index: 0}
@@ -117,7 +117,9 @@ export default {
         return
       }
       const gameId = this.$route.params.gameId
-      localStorage.setItem(gameId + '-lastCategory', category.id)
+      if (this.currentGame.game_type !== 1) {
+        localStorage.setItem(gameId + '-lastCategory', category.id)
+      }
       this.$router.push({
         path: `/game/${gameId}/${category.id}`
       })

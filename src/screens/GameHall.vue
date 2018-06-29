@@ -56,8 +56,9 @@
           </div>
         </div>
       </el-aside>
-      <el-main class="m-t">
-        <router-view :key="$route.params.gameId"/>
+      <el-main class="m-t" v-if="currentGame">
+        <game-sport v-if="currentGame.game_type===1" :key="$route.params.gameId"/>
+        <router-view v-else :key="$route.params.gameId"/>
       </el-main>
     </el-container>
   </div>
@@ -70,6 +71,8 @@ import { fetchBet, fetchWinBet } from '../api'
 import GameMenu from '../components/GameMenu'
 import _ from 'lodash'
 
+const GameSport = (resolve) => require(['@/screens/games/GameSport'], resolve)
+
 let bus = new Vue()
 
 function keyEnterListener (event) {
@@ -81,7 +84,8 @@ function keyEnterListener (event) {
 export default {
   name: 'gamehall',
   components: {
-    GameMenu
+    GameMenu,
+    GameSport
   },
   filters: {
     betOptionFilter (options) {
@@ -113,6 +117,9 @@ export default {
       } else {
         return '/account/remit'
       }
+    },
+    currentGame () {
+      return this.$store.getters.gameById(this.$route.params.gameId)
     }
   },
   watch: {

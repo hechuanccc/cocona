@@ -78,6 +78,10 @@ export function fetchPlaygroup (categoryId) {
   return axios.get(`${urls.playgroup}?&category=${categoryId}`)
 }
 
+export function fetchMatchPlaygroup (categoryId, matchId) {
+  return axios.get(`${urls.playgroup}?category=${categoryId}&match=${matchId}`)
+}
+
 export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`)
 }

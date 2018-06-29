@@ -117,6 +117,45 @@ export default {
   },
   fetchGames: ({ commit, state }) => {
     return fetchGames().then(res => {
+      let i = -1
+      let len = res.length
+      while (++i < len) {
+        let currentGame = res[i]
+        if (currentGame.game_type === 1) {
+          fetchCategories(currentGame.id).then(results => {
+            const categories = []
+            let formatting = results[0].formatting
+            const categoryMap = {}
+            currentGame.matches.forEach(match => {
+              let date = Vue.moment(match.start_time)
+              let id = date.format('YYYY-MM-DD')
+              let displayName = date.format('MM月DD日')
+              let category
+              if (categoryMap[date]) {
+                category = categoryMap[date]
+              } else {
+                category = {
+                  originId: results[0].id,
+                  id: id,
+                  display_name: displayName,
+                  matches: [],
+                  game_id: currentGame.id + '',
+                  formatting: formatting
+                }
+                categoryMap[date] = category
+                categories.push(category)
+              }
+              category.matches.push(match)
+            })
+            if (categories.length > 0) {
+              commit(types.SET_CATEGORIES, {
+                categories
+              })
+            }
+          })
+          break
+        }
+      }
       commit(types.SET_GAMES, {
         games: res
       })
