@@ -39,7 +39,7 @@ export default {
     state.games = games
   },
   [types.SET_CATEGORIES]: (state, { categories }) => {
-    state.categories = _.xorBy(state.categories, categories, 'id').filter(item => !!item)
+    state.categories = _.unionBy(state.categories, categories, 'id').filter(item => !!item)
   },
   [types.START_LOADING]: (state, loading) => {
     state.loading = true
