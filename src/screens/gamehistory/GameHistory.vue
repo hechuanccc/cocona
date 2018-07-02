@@ -15,7 +15,6 @@
   </el-row>
 </template>
 
-
 <script>
 import { fetchGames } from '../../api'
 import AsideMenu from '../../components/AsideMenu.vue'
@@ -63,7 +62,7 @@ export default {
         this.games = games
         if (!this.$route.params.gameCode) {
           const gameCode = localStorage.getItem('lastGameCode') || games[0].code
-          this.$router.push('/gamehistory/' + gameCode)
+          this.$router.replace('/gamehistory/' + gameCode)
         }
       }
     )
