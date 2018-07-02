@@ -270,7 +270,7 @@ export default {
       })
     },
     getSummary () {
-      fetchBetTotal({startdate: this.startDate, enddate: this.endDate, game: this.selectedGame}).then(res => {
+      fetchBetTotal({startdate: this.startDate || '', enddate: this.endDate || '', game: this.selectedGame}).then(res => {
         const total = res.results[0]
         if (total) {
           this.betRecordTotal = [{
