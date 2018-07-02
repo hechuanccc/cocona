@@ -766,11 +766,13 @@ export default {
 
 .cardresults-wrapper {
   width: 100%;
-  min-height: 80px;
+  height: 145px;
   box-sizing: border-box;
   padding: 10px;
   border: 1px solid #ddd;
   background-color: #ecf5ff;
+  z-index: 2;
+
 }
 
 .odd-tip {
