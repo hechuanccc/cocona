@@ -56,8 +56,9 @@
           </div>
         </div>
       </el-aside>
-      <el-main class="m-t">
-        <router-view :key="$route.params.gameId"/>
+      <el-main class="m-t" v-if="currentGame">
+        <game-sport v-if="currentGame.game_type===1" :key="$route.params.gameId"/>
+        <router-view v-else :key="$route.params.gameId"/>
       </el-main>
     </el-container>
   </div>
@@ -66,8 +67,12 @@
 <script>
 import Vue from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import { fetchBet } from '../api'
+import { fetchBet, fetchWinBet } from '../api'
 import GameMenu from '../components/GameMenu'
+import _ from 'lodash'
+
+const GameSport = (resolve) => require(['@/screens/games/GameSport'], resolve)
+
 let bus = new Vue()
 
 function keyEnterListener (event) {
@@ -79,7 +84,8 @@ function keyEnterListener (event) {
 export default {
   name: 'gamehall',
   components: {
-    GameMenu
+    GameMenu,
+    GameSport
   },
   filters: {
     betOptionFilter (options) {
@@ -92,7 +98,9 @@ export default {
   },
   data () {
     return {
-      betrecords: []
+      betrecords: [],
+      notifyIssueNumber: {},
+      gameMainAreaHeight: 0
     }
   },
   computed: {
@@ -100,7 +108,7 @@ export default {
       'user', 'allGames'
     ]),
     ...mapState([
-      'isChatting', 'winNotification'
+      'isChatting'
     ]),
     paymentPage () {
       const onlinePaymentTypes = this.user.onlinePaymentTypes
@@ -109,6 +117,9 @@ export default {
       } else {
         return '/account/remit'
       }
+    },
+    currentGame () {
+      return this.$store.getters.gameById(this.$route.params.gameId)
     }
   },
   watch: {
@@ -120,8 +131,18 @@ export default {
         this.chooseGame()
       }
     },
-    'winNotification': function (n) {
-      this.broadcastWinMsg(n)
+    'user.unsettled': function (value) {
+      clearInterval(this.interval)
+
+      if (value) {
+        fetchWinBet().then(results => {
+          _.each(this.formattedWinRecords(results.win_bets), (result) => {
+            this.notifyIssueNumber[result.game] = result.issue_number
+            this.generateWinMessage(results.win_bets)
+          })
+        })
+        this.pollWinNotify()
+      }
     }
   },
   created () {
@@ -138,9 +159,20 @@ export default {
     this.$store.dispatch('setRoomsStatus')
 
     this.$root.bus = bus
+
     this.$root.bus.$on('new-betrecords', (gameData) => {
       this.fetchOngoingBet(gameData)
     })
+
+    if (this.user.unsettled) {
+      fetchWinBet().then(results => {
+        _.each(this.formattedWinRecords(results.win_bets), (result) => {
+          this.notifyIssueNumber[result.game] = result.issue_number
+          this.generateWinMessage(results.win_bets)
+        })
+      })
+      this.pollWinNotify()
+    }
 
     window.addEventListener('keypress', keyEnterListener.bind(this))
   },
@@ -160,32 +192,121 @@ export default {
     openBetRecordDialog () {
       this.$store.dispatch('openBetRecordDialog')
     },
-    winMsg (notification) {
-      if (notification) {
-        return this.$createElement('div', { style: { maxHeight: '500px', overflow: 'scroll', paddingRight: '25px' } },
-          [
-            this.$createElement('p', { 'class': { 'text-center': true, 'red': true, 'p-b-sm': true } }, `中奖通知`),
-            this.$createElement('p', { 'class': { 'text-center': true, 'm-t-sm': true, 'm-b-sm': true } }, `${notification.game_name} 第${notification.issue_number}期`),
-            this.$createElement('ul', notification.win_bets.map((bet, index) => {
-              let settlement = parseFloat(bet.settlement_amount)
-              return this.$createElement('li', [
-                this.$createElement('span', `${index + 1}. ${bet.playgroup_name || bet.playgruop_name} ${bet.play_name}`),
-                this.$createElement('span', { style: { color: 'red', fontSize: '14px', lineHeight: '28px' } }, `中奖金额：${settlement.toFixed(3)}`)
-              ])
-            }))
-          ]
-        )
+    formattedWinRecords (results) {
+      let formatted = []
+      if (!results || !results.length) {
+        return
       }
+      _.each(results, (result) => {
+        let win = {
+          playgroup: result.play.playgroup,
+          play: result.play.display_name,
+          settlement_amount: result.profit + result.bet_amount
+        }
+        let game = {
+          game: result.game.display_name,
+          issue_number: result.issue_number,
+          win: win
+        }
+        formatted.push(game)
+      })
+
+      let last = []
+      let hash = {}
+      _.each(formatted, (result) => {
+        let tempObj
+        if (hash[result.game]) {
+          tempObj = hash[result.game]
+        } else {
+          tempObj = {}
+          tempObj.game = result.game
+          tempObj.issue_number = result.issue_number
+          tempObj.wins = []
+          hash[result.game] = tempObj
+          last.push(tempObj)
+        }
+        tempObj.wins.push(result.win)
+      })
+      return last
     },
-    broadcastWinMsg (notification) {
-      setTimeout(() => {
-        this.$notify({
-          showClose: true,
-          position: 'left',
-          duration: 8000,
-          message: this.winMsg(notification)
-        })
-      }, 1000)
+    pollWinNotify () {
+      this.interval = setInterval(() => {
+        if (!this.user.unsettled) {
+          clearInterval(this.interval)
+          return
+        }
+        this.getWinNotify()
+      }, 5000)
+    },
+    getWinNotify () {
+      fetchWinBet().then(results => {
+        this.$store.dispatch('updateUnsettled', results.unsettled)
+        this.generateWinMessage(results.win_bets)
+      }).catch(() => {})
+    },
+    generateWinMessage (results) {
+      let winMsg = (createElement, result) => {
+        if (result) {
+          return createElement('div',
+            {
+              style: {
+                maxHeight: '500px',
+                overflow: 'scroll',
+                paddingRight: '25px'
+              }
+            },
+            [
+              createElement('p',
+                {
+                  'class': {
+                    'text-center': true,
+                    'red': true
+                  },
+                  style: {
+                    paddingBottom: '5px'
+                  }
+                },
+                `中奖通知`
+              ),
+              createElement('p', { 'class': { 'text-center': true, 'm-t-sm': true, 'm-b-sm': true } }, `${result.game} 第${result.issue_number}期`),
+              createElement('ul',
+                result.wins.map(function (win, index) {
+                  let settlement = parseFloat(win.settlement_amount)
+
+                  return createElement('li',
+                    [
+                      createElement('span', `${index + 1}. ${win.playgroup} `),
+                      createElement('span', `${win.play} `),
+                      createElement('span',
+                        {
+                          style: {
+                            color: 'red',
+                            fontSize: '14px',
+                            lineHeight: '28px'
+                          }
+                        },
+                        `中奖金额：${settlement.toFixed(3)}`
+                      )
+                    ]
+                  )
+                })
+              )
+            ])
+        }
+      }
+      _.each(this.formattedWinRecords(results), (result) => {
+        if (this.notifyIssueNumber[result.game] !== result.issue_number) {
+          setTimeout(() => {
+            this.$notify({
+              showClose: true,
+              position: 'left',
+              duration: 8000,
+              message: winMsg(this.$createElement, result)
+            })
+          }, 1000)
+        }
+        this.notifyIssueNumber[result.game] = result.issue_number
+      })
     }
   },
   beforeRouteEnter (to, from, next) {

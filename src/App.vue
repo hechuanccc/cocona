@@ -60,11 +60,11 @@ import Top from './components/Header'
 import Bottom from './components/Footer'
 import LoginPopup from './components/LoginPopup'
 import ChatRoom from './components/ChatRoom'
+
 import BetRecord from './screens/member/BetRecord'
 import { getToken, fetchMessageCount, fetchCaptcha, register } from './api'
 import axios from 'axios'
 import { setIndicator, msgFormatter } from './utils'
-import GhostSocketObj from './utils/ws'
 
 export default {
   name: 'app',
@@ -178,8 +178,8 @@ export default {
     }
 
     this.$store.dispatch('fetchGames')
-    let token = this.$cookie.get('access_token')
-    if (token) {
+
+    if (this.$cookie.get('access_token')) {
       this.$store.dispatch('fetchUser').then(() => {
         this.getMessageCount()
       }).catch(() => {})
@@ -208,14 +208,6 @@ export default {
     '$store.state.showTrialVerifyDialog': function () {
       this.user.verification_code_1 = ''
       this.fetchCaptcha()
-    },
-    '$store.state.user.logined': function (logined) {
-      if (logined) {
-        let token = this.$cookie.get('access_token')
-        this.$store.dispatch('setWs', new GhostSocketObj(token))
-      } else {
-        this.$store.dispatch('setWs', null)
-      }
     }
   }
 }

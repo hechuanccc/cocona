@@ -6,6 +6,10 @@ import getters from './getters'
 
 Vue.use(Vuex)
 
+const isDebugMode = process.env.NODE_ENV !== 'production'
+Vue.config.debug = isDebugMode
+Vue.config.devtools = isDebugMode
+
 export default new Vuex.Store({
   state: {
     user: {
@@ -30,8 +34,6 @@ export default new Vuex.Store({
     messageCount: 0,
     envelopes: {},
     currentGameResult: null,
-    winNotification: null,
-    ws: null,
     customPlayGroups: [
       {
         // 重庆幸运农场 连码

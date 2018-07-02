@@ -78,6 +78,10 @@ export function fetchPlaygroup (categoryId) {
   return axios.get(`${urls.playgroup}?&category=${categoryId}`)
 }
 
+export function fetchMatchPlaygroup (categoryId, matchId) {
+  return axios.get(`${urls.playgroup}?category=${categoryId}&match=${matchId}`)
+}
+
 export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`)
 }
@@ -109,6 +113,10 @@ export function fetchTransactionRecord (option) {
 
 export function fetchBet (gameData) {
   return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
+}
+
+export function fetchWinBet () {
+  return axios.get(`${urls.betrecord}?status=win&latest=1`)
 }
 
 export function fetchBetHistory (option) {
