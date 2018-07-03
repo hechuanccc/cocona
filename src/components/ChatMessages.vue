@@ -92,7 +92,7 @@
                 </tr>
                 <tbody class="tbody">
                   <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
-                    <td class="td group-name">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
+                    <td class="td group-name">{{bet.play.display_name ? bet.play.display_name + '-' : ''}}{{bet.play.playgroup}}</td>
                     <td class="td odds">{{bet.play.odds}}</td>
                     <td class="td">{{bet.bet_amount | currency('￥')}}</td>
                   </tr>
