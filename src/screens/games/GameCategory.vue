@@ -39,7 +39,9 @@
           :class="['group-table', {'last': (playgroupIndex + 1) % playSection.groupCol === 0}]"
           :key="'playgroup' + playgroup.id"
           v-if="playgroup.alias ? playgroup.active : true">
-          <table class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex"
+          <table class="play-table"
+            align="center"
+            key="playgroup.code + index + '' + playgroupIndex"
             v-if="!getCustomFormatting(playgroup.code)">
             <tr v-if="!playgroup.alias">
               <th class="group-name" :colspan="playSection.playCol">
@@ -150,7 +152,7 @@
                     </span>
                   </div>
               </el-popover>
-              <el-button type="text" class="text-bold" v-popover:popover4>[查看明細]</el-button>
+              <el-button v-if="formattedCombinations && Object.keys(formattedCombinations).length" type="text" class="text-bold" v-popover:popover4>[查看明細]</el-button>
             </div>
           </template>
         </el-table-column>
@@ -275,7 +277,8 @@ export default {
       followingBets: [],
       oddInstructionsBox: {
         visible: false
-      }
+      },
+      isCustomPlayGroup: false
     }
   },
   computed: {
@@ -401,14 +404,20 @@ export default {
       this.followingBets = bets
       this.$nextTick(() => {
         this.activePlays = this.followingBets.map((bet) => {
+          let isCustom = this.isCustomPlayGroup
+          let combos = bet.bet_options.opts_combos_count || 0
+          isCustom = combos > 1
           return {
             game_schedule: 10,
-            display_name: `${bet.play.display_name}-${bet.play.playgroup}`,
+            display_name: `${bet.play.display_name ? bet.play.display_name + '-' : ''}${bet.play.playgroup}`,
             odds: bet.play.odds,
-            bet_amount: bet.bet_amount,
+            bet_amount: isCustom ? (bet.bet_amount / combos) : bet.bet_amount,
             id: bet.play.id,
             bet_options: bet.bet_options,
-            active: true
+            active: true,
+            isCustom,
+            combinations: new Array(combos),
+            optionDisplayNames: bet.bet_options.options ? bet.bet_options.options.join(',') : ''
           }
         })
       })
@@ -482,9 +491,11 @@ export default {
       })
     },
     getCustomFormatting (groupCode) {
-      return _.find(this.$store.state.customPlayGroups, item => {
+      let getCustom = _.find(this.$store.state.customPlayGroups, item => {
         return item.code === groupCode
       })
+      this.isCustomPlayGroup = !!getCustom
+      return getCustom
     },
     updateBetrecords () {
       this.$root.bus.$emit('new-betrecords', {
@@ -641,7 +652,7 @@ export default {
           id: play.id,
           bet_options: betOptions,
           active: true,
-          isCustom: isCustom,
+          isCustom,
           combinations: play.combinations,
           optionDisplayNames: optionDisplayNames
         }
