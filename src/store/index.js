@@ -241,7 +241,11 @@ export default new Vuex.Store({
         chat_condition_message: ''
       },
       chatroomEnabled: false,
-      floatAd: null
+      floatAd: null,
+      contactPhoneNumber: '',
+      openAccountConsultingQQ: '',
+      agentBusinessConsultingQQ: '',
+      contactEmail: ''
     }
   },
   actions,
