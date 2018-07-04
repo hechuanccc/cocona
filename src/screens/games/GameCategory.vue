@@ -411,7 +411,7 @@ export default {
             game_schedule: 10,
             display_name: `${bet.play.display_name ? bet.play.display_name + '-' : ''}${bet.play.playgroup}`,
             odds: bet.play.odds,
-            bet_amount: bet.bet_amount,
+            bet_amount: isCustom ? (bet.bet_amount / combos) : bet.bet_amount,
             id: bet.play.id,
             bet_options: bet.bet_options,
             active: true,
