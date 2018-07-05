@@ -190,18 +190,8 @@ export default {
         id: null
       },
       timer: '',
-      closeCountDown: {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      },
-      resultCountDown: {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-      },
+      closeCountDown: null,
+      resultCountDown: null,
       statistic: [],
       resultStatistic: {},
       activeTab: 'statistic',
@@ -212,6 +202,9 @@ export default {
   },
   computed: {
     gameClosed () {
+      if (!this.closeCountDown) {
+        return false
+      }
       const c = this.closeCountDown
       return c.days + c.hours + c.minutes + c.seconds === 0
     },

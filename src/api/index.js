@@ -112,7 +112,7 @@ export function fetchTransactionRecord (option) {
 }
 
 export function fetchBet (gameData) {
-  return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
+  return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`).then(res => res.betrecords)
 }
 
 export function fetchWinBet () {

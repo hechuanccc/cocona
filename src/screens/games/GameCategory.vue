@@ -318,7 +318,10 @@ export default {
           send_bet_info: true
         }
       } else {
-        return bettingArr
+        return {
+          bets: bettingArr,
+          send_bet_info: false
+        }
       }
     },
     formatting () {
