@@ -177,7 +177,7 @@
         <span class="red bet-amount text-bold">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
       </div>
       <div class="summary m-b text-center p-t p-b" v-else>
-        共 {{ followBetAllowed && followBetCheckboxVisible ? playsForSubmit.bets.length : playsForSubmit.length }} 组 总金额:
+        共 {{ playsForSubmit.bets.length }} 组 总金额:
         <span class="red bet-amount text-bold">{{totalAmount}}</span>
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
