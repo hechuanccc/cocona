@@ -494,7 +494,7 @@ export default {
   },
   methods: {
     verticalTranform (str) {
-      return str.replace(/(\d+\w+|\d+|\w+.*?)/g, '<span style="text-orientation: upright; writing-mode: horizontal-tb; line-height: 1.5">$1</span>')
+      return str.replace(/(\d+\w+|\d+|\w+.*?)/g, '<span style="display: inline-block;height: 25px;text-orientation: upright; writing-mode: horizontal-tb; line-height: 1.5">$1</span>')
     },
     handleEntryClick () {
       this.showChatRoom = true
@@ -1178,6 +1178,7 @@ $primary-blue: #006bb3;
     color: #fff;
     font-size: 18px;
     line-height: 40px;
+    white-space: nowrap;
   }
 
   .vertical-writing {
