@@ -72,7 +72,8 @@
           :min-width="150"
           :label="$t('user.play')">
           <template slot-scope="scope">
-            <span>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</span>
+            <div>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</div>
+            <div v-if="scope.row.bet_options.options">{{`共${scope.row.bet_options.opts_combos_count}组 # ${scope.row.bet_options.options.join(',')}`}}</div>
           </template>
         </el-table-column>
         <el-table-column
