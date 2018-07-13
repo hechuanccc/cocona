@@ -31,8 +31,7 @@
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
-                <p class="action" v-if="!user.account_type">会员才可以抢红包！</p>
-                <p class="action"  v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
+                <p class="action" v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
               </div>
             </div>
 
@@ -464,7 +463,7 @@ export default {
   }
 
   .img {
-    width: 30px;
+    width: auto;
     height: 35px;
   }
 
