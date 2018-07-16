@@ -6,7 +6,7 @@
           <div class="banner-img" :style="{backgroundImage: `url(${banner.image})`}"></div>
         </el-carousel-item>
       </el-carousel>
-      <el-row class="announcement-wrapper">
+      <el-row class="announcement-wrapper" v-if="announcements.length">
         <div class="announcement container" @click="announcementDialogVisible = true">
           <span class="text" :style="{ position:'relative', left: `-${leftOffset}px`}" ref="announcement">{{announcements[currentAnnouncementIndex]}}</span>
         </div>
