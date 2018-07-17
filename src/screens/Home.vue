@@ -194,9 +194,9 @@ export default {
           datas.sort((a, b) => {
             return a.rank - b.rank
           })
+          this.announcements = datas.map(data => data.announcement)
+          this.setAnnouncement()
         }
-        this.announcements = datas.map(data => data.announcement)
-        this.setAnnouncement()
       }
     )
 
