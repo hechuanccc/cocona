@@ -50,9 +50,9 @@
 .pokers-rank {
   display: inline-block;
   background-image: url(../assets/niu/niuniu_rank.png);
-  background-size: cover;
+  background-size: 45px  300px;
   width: 45px;
-  height: 25px;
+  height: 27px;
 }
 
 @for $num from 1 through 13 {
@@ -61,44 +61,10 @@
   }
 }
 
-.rank-1 {
-  background-position: 0px -25px
-}
-
-.rank-2 {
-  background-position: 0px -50px
-}
-
-.rank-3 {
-  background-position: 0px -75px
-}
-
-.rank-4 {
-  background-position: 0px -100px
-}
-
-.rank-5 {
-  background-position: 0px -126px
-}
-
-.rank-6 {
-  background-position: 0px -152px
-}
-
-.rank-7 {
-  background-position: 0px -180px
-}
-
-.rank-8 {
-  background-position: 0px -205px
-}
-
-.rank-9 {
-  background-position: 0px -230px
-}
-
-.rank-10 {
-  background-position: 0px -256px
+@for $num from 1 through 10 {
+  .rank-#{$num} {
+    background-position: 0 (($num) * -27px);
+  }
 }
 
 .pokers-name {

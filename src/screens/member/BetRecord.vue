@@ -48,17 +48,20 @@
     <el-row>
       <el-table v-loading="loading" :data="betRecords" stripe>
         <el-table-column
-          :width="130"
+          :width="100"
           :label="$t('user.game_name')"
           prop="game.display_name">
         </el-table-column>
         <el-table-column
-          :width="135"
+          :width="190"
           :label="$t('user.issue_number')"
           prop="issue_number">
+          <template slot-scope="scope">
+            <span>{{ scope.row.match || scope.row.issue_number }}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          :width="130"
+          :width="125"
           :label="$t('user.betdate')"
           prop="created_at">
           <template slot-scope="scope">
@@ -69,7 +72,8 @@
           :min-width="150"
           :label="$t('user.play')">
           <template slot-scope="scope">
-            <span>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</span>
+            <div>{{ `${scope.row.play.playgroup} @ ${scope.row.play.display_name}`}}</div>
+            <div v-if="scope.row.bet_options.options">{{`共${scope.row.bet_options.opts_combos_count}组 # ${scope.row.bet_options.options.join(',')}`}}</div>
           </template>
         </el-table-column>
         <el-table-column
@@ -81,14 +85,14 @@
           </template>
         </el-table-column>
         <el-table-column
-          :width="100"
+          :width="90"
           :label="$t('gameIntro.return_rate')">
           <template slot-scope="scope">
             <span>{{ scope.row.play.return_rate && scope.row.return_amount ? `${scope.row.return_amount}(${Math.floor(scope.row.play.return_rate*10000)/100}%)`: '0' }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          :width="135"
+          :width="125"
           :label="$t('user.profit')">
           <template slot-scope="scope">
             <span v-if="scope.row.profit === null">{{ statusFilter(scope.row.remarks) }}</span>
@@ -101,15 +105,15 @@
           prop="odds">
         </el-table-column>
       </el-table>
-      <el-table v-if="betRecordTotal.length>0" :data="betRecordTotal" :show-header="false">
+      <el-table v-if="betRecordTotal.length > 0 && !isUnsettled" :data="betRecordTotal" :show-header="false">
         <el-table-column
-          :width="130">
+          :width="100">
         </el-table-column>
         <el-table-column
-          :width="135">
+          :width="190">
         </el-table-column>
         <el-table-column
-          :width="130">
+          :width="125">
         </el-table-column>
         <el-table-column
           :min-width="150"
@@ -122,10 +126,10 @@
           </template>
         </el-table-column>
         <el-table-column
-          :width="100">
+          :width="90">
         </el-table-column>
         <el-table-column
-          :width="135">
+          :width="125">
           <template slot-scope="scope">
             <span :class="profitColor(scope.row.profit)">{{ scope.row.profit | currency('￥')}}</span>
           </template>
@@ -270,7 +274,7 @@ export default {
       })
     },
     getSummary () {
-      fetchBetTotal({startdate: this.startDate, enddate: this.endDate}).then(res => {
+      fetchBetTotal({startdate: this.startDate || '', enddate: this.endDate || '', game: this.selectedGame}).then(res => {
         const total = res.results[0]
         if (total) {
           this.betRecordTotal = [{

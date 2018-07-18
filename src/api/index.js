@@ -25,7 +25,7 @@ export function getBanner () {
 }
 
 export function getAnnouncements () {
-  return axios.get(urls.announcements)
+  return axios.get(`${urls.announcements}?platform=1`)
 }
 
 export function gethomePage () {
@@ -78,6 +78,10 @@ export function fetchPlaygroup (categoryId) {
   return axios.get(`${urls.playgroup}?&category=${categoryId}`)
 }
 
+export function fetchMatchPlaygroup (categoryId, matchId) {
+  return axios.get(`${urls.playgroup}?category=${categoryId}&match=${matchId}`)
+}
+
 export function fetchSchedule (gameId) {
   return axios.get(`${urls.schedule}?&game=${gameId}`)
 }
@@ -108,7 +112,7 @@ export function fetchTransactionRecord (option) {
 }
 
 export function fetchBet (gameData) {
-  return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`)
+  return axios.get(`${urls.betrecord}?game=${gameData.gameId}&schedule=${gameData.scheduleId}&status=ongoing`).then(res => res.betrecords)
 }
 
 export function fetchWinBet () {
@@ -125,8 +129,8 @@ export function fetchBetHistory (option) {
   return axios.get(url)
 }
 
-export function fetchBetTotal ({startdate, enddate}) {
-  return axios.get(`${urls.betrecordByDay}?start_date=${startdate}&end_date=${enddate}&status=win,lose,tie,ongoing`)
+export function fetchBetTotal ({startdate, enddate, game}) {
+  return axios.get(`${urls.betrecordByDay}?start_date=${startdate}&end_date=${enddate}&game=${game}&status=win,lose,tie,ongoing`)
 }
 
 export function getToken (oldToken) {

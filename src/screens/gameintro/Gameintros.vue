@@ -11,8 +11,8 @@
         </div>
         <div class="main rules-content m-b-xlg">
           <h1 class="rules-main-title m-b-lg">{{currentGame.display_name}}</h1>
-          <h2 class="rules-sub-title">{{$t('gameIntro.gameinfo')}}</h2>
-          <el-table class="m-b-lg" v-loading="loading" :data="currentPlaySettings" stripe>
+          <h2 class="rules-sub-title" v-if="currentPlaySettings && currentPlaySettings.length">{{$t('gameIntro.gameinfo')}}</h2>
+          <el-table v-if="currentPlaySettings && currentPlaySettings.length" class="m-b-lg" v-loading="loading" :data="currentPlaySettings" stripe>
             <el-table-column :label="''" prop="display_name">
             </el-table-column>
             <el-table-column :label="$t('gameIntro.odds')" prop="odds">
@@ -71,6 +71,7 @@
   import fc3d from './rules/fc3d'
   import msnn from './rules/msnn'
   import pk10nn from './rules/pk10nn'
+  import fifaworldcup from './rules/fifaworldcup'
   import AsideMenu from '../../components/AsideMenu'
   import _ from 'lodash'
 
@@ -100,7 +101,8 @@
       luckdd,
       fc3d,
       pk10nn,
-      msnn
+      msnn,
+      fifaworldcup
     },
     data () {
       return {
@@ -136,7 +138,12 @@
     },
     methods: {
       fetchPlaySetting () {
+        this.currentPlaySettings = []
+        if (this.currentGame.game_type) {
+          return
+        }
         this.loading = true
+
         fetchPlaySetting(this.currentGame.id).then(playSettings => {
           _.each(playSettings, (item) => {
             item.return_rate = item.return_rate + '%'

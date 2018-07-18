@@ -31,8 +31,7 @@
               <img class="img m-r" src="../assets/envelope_message.png" alt="envelope" />
               <div class="send-texts">
                 <p class="slogan">{{msg.content || '恭喜发财 大吉大利'}}</p>
-                <p class="action" v-if="!user.account_type">会员才可以抢红包！</p>
-                <p class="action"  v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
+                <p class="action" v-if="!personalSetting.chat.status">达成输入框内指示的发言条件才可以抢红包</p>
               </div>
             </div>
 
@@ -92,7 +91,12 @@
                 </tr>
                 <tbody class="tbody">
                   <tr class="trow" v-for="(bet, index) in msg.bet_info.bets" :key="index">
-                    <td class="td group-name">{{bet.play.display_name}}-{{bet.play.playgroup}}</td>
+                    <td class="td group-name">
+                      <span>
+                        {{(bet.play.display_name && bet.play.playgroup) ? `${bet.play.display_name}-${bet.play.playgroup}` : (bet.play.display_name || bet.play.playgroup)}}
+                      </span>
+                      <p v-if="bet.bet_options.options">{{bet.bet_options.options.join(',')}}</p>
+                    </td>
                     <td class="td odds">{{bet.play.odds}}</td>
                     <td class="td">{{bet.bet_amount | currency('￥')}}</td>
                   </tr>
@@ -459,7 +463,7 @@ export default {
   }
 
   .img {
-    width: 30px;
+    width: auto;
     height: 35px;
   }
 

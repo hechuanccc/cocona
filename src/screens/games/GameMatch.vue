@@ -18,31 +18,27 @@
         v-if="currentGameResult && (game.code === 'msnn' || game.code === 'pk10nn')">
         <CardResult :currentGameResult="currentGameResult"/>
       </section>
+      <ul class="m-b-sm">
+        <li
+          :class="[{
+            'active': currentMatchId === match.id
+          }, 'alias-tabitem', 'clickable']"
+          v-for="(match, tabIndex) in currentMatches"
+          :key="tabIndex"
+          @click="selectMatch(match.id)">
+          {{`(主队)${match.home_team.display_name} vs ${match.away_team.display_name}(客队)`}}
+        </li>
+      </ul>
       <div v-for="(playSection, index) in playSections"
         class="clearfix"
         :key="playSection.id + 'playSection' + index"
         v-if="playSections.length">
-        <ul v-if="getAliases(playSection).length" class="m-b-sm">
-          <li
-            :class="[{
-              'active': playSection.playgroups[tabIndex].active
-            }, 'alias-tabitem', 'clickable']"
-            v-for="(alias, tabIndex) in getAliases(playSection)"
-            :key="tabIndex"
-            @click="selectAlias(playSection, tabIndex)">
-            {{alias}}
-          </li>
-        </ul>
         <div
           :style="{ width: getWidthForGroup(playSection) }"
           v-for="(playgroup, playgroupIndex) in playSection.playgroups"
           :class="['group-table', {'last': (playgroupIndex + 1) % playSection.groupCol === 0}]"
-          :key="'playgroup' + playgroup.id"
-          v-if="playgroup.alias ? playgroup.active : true">
-          <table class="play-table"
-            align="center"
-            key="playgroup.code + index + '' + playgroupIndex"
-            v-if="!getCustomFormatting(playgroup.code)">
+          :key="'playgroup' + playgroup.id">
+          <table v-if="playgroup.plays.length" class="play-table" align="center" key="playgroup.code + index + '' + playgroupIndex">
             <tr v-if="!playgroup.alias">
               <th class="group-name" :colspan="playSection.playCol">
                 {{playgroup.length}}{{playgroup.display_name}}
@@ -76,18 +72,15 @@
                 @mouseleave="toggleHover(play, false)"
                 @click="toggleActive(plays[play.id], $event)"
                 v-if="play.code">
-                <el-col :span="play.value||needZodiac ? 2 : 6" class="name">
+                <el-col :span="6" class="name">
                   <span>
-                    <span :class="play.value||needZodiac?'':[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
+                    <span :class="[playgroup.code, play.code.replace(',', '')]">{{play.display_name}}</span>
                   </span>
                 </el-col>
-                <el-col v-if="play.value||needZodiac" :span="16" class="number">
-                  <span :class="[playgroup.code, `${playgroup.code}_${num}`,'m-l-sm']" v-for="(num,index) in play.value||zodiacMap&&zodiacMap[play.display_name]" :key="index">{{num}}</span>
-                </el-col>
-                <el-col v-if="(game.code !== 'msnn' && game.code !== 'pk10nn')" :span="play.value||needZodiac ? 2 : 6" class="odds">
+                <el-col v-if="(game.code !== 'msnn' && game.code !== 'pk10nn')" :span="6" class="odds">
                   <span>{{ !gameClosed ? play.odds : '-'}}</span>
                 </el-col>
-                <el-col :span="play.value||needZodiac ? 4 : (game.code !== 'msnn' && game.code !== 'pk10nn') ? 12 : 18" class="input">
+                <el-col :span="(game.code !== 'msnn' && game.code !== 'pk10nn') ? 12 : 18" class="input">
                   <el-input v-if="!gameClosed" size="mini" class="extramini" v-model="plays[play.id].amount" @keypress.native="filtAmount" type="number" min="1" step="10"
                   />
                   <el-input v-else size="mini" class="extramini" placeholder="封盘" disabled />
@@ -96,18 +89,6 @@
               <td :colspan="playSection.playCol - playChunk.length" v-if="playChunk.length < playSection.playCol"></td>
             </tr>
           </table>
-          <component
-            :is="$store.getters.customPlayGroupsById(playgroup.code)"
-            :playReset="playReset"
-            @updatePlayForSubmit="updateCustomPlays"
-            @updateMultiPlayForSubmit="updateMultiCustomPlays"
-            :formatting="getCustomFormatting(playgroup.code)"
-            :playgroup="playgroup"
-            :plays="plays"
-            :gameClosed="gameClosed"
-            :zodiacMap="zodiacMap"
-            :gameCode="game.code"
-            v-else />
         </div>
       </div>
        <el-row type="flex" class="actions" justify="center" v-if="!loading">
@@ -152,7 +133,7 @@
                     </span>
                   </div>
               </el-popover>
-              <el-button v-if="formattedCombinations && Object.keys(formattedCombinations).length" type="text" class="text-bold" v-popover:popover4>[查看明細]</el-button>
+              <el-button type="text" class="text-bold" v-popover:popover4>[查看明細]</el-button>
             </div>
           </template>
         </el-table-column>
@@ -177,7 +158,7 @@
         <span class="red bet-amount text-bold">{{activePlays[0].bet_amount * activePlays[0].combinations.length}}</span>
       </div>
       <div class="summary m-b text-center p-t p-b" v-else>
-        共 {{ playsForSubmit.bets.length }} 组 总金额:
+        共 {{ followBetAllowed && followBetCheckboxVisible ? playsForSubmit.bets.length : playsForSubmit.length }} 组 总金额:
         <span class="red bet-amount text-bold">{{totalAmount}}</span>
       </div>
       <el-alert v-if="errors" :title="errors" type="error" center :closable="false" show-icon>
@@ -201,33 +182,9 @@ import Vue from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import _ from 'lodash'
 import '../../style/playicon.scss'
-import { fetchPlaygroup, placeBet } from '../../api'
+import { fetchMatchPlaygroup, placeBet } from '../../api'
 import { msgFormatter, formatPlayGroup, filtAmount } from '../../utils'
-import { colorWave, tailMap } from '../../utils/hk6'
-const common = (resolve) => require(['../../components/playGroup/common'], resolve)
-const gd11x5Seq = (resolve) => require(['../../components/playGroup/gd11x5_pg_seq_seq'], resolve)
-const hklPgShxiaoSpczdc = (resolve) => require(['../../components/playGroup/hkl_pg_shxiao_spczdc'], resolve)
-const hklPgExl = (resolve) => require(['../../components/playGroup/hkl_pg_exl'], resolve)
-const hklPgNtinfvrNum = (resolve) => require(['../../components/playGroup/hkl_pg_ntinfvr_num'], resolve)
-const fc3dPg2df = (resolve) => require(['../../components/playGroup/fc3d_pg_2df'], resolve)
-const fc3dPgIc = (resolve) => require(['../../components/playGroup/fc3d_pg_ic'], resolve)
 const CardResult = (resolve) => require(['../../components/CardResult'], resolve)
-
-const setActive = (play, amount) => {
-  Vue.set(play, 'active', true)
-  play.amount = amount
-}
-const reverseActive = (play, amount) => {
-  if (play.active) {
-    cancelActive(play)
-  } else {
-    setActive(play, amount)
-  }
-}
-const cancelActive = (play) => {
-  Vue.set(play, 'amount', '')
-  Vue.set(play, 'active', false)
-}
 
 export default {
   props: {
@@ -240,20 +197,10 @@ export default {
     },
     game: {
       type: Object
-    },
-    zodiacMap: {
-      type: Object
     }
   },
-  name: 'gameplay',
+  name: 'GameMatch',
   components: {
-    common,
-    hklPgShxiaoSpczdc,
-    gd11x5Seq,
-    hklPgExl,
-    hklPgNtinfvrNum,
-    fc3dPg2df,
-    fc3dPgIc,
     CardResult
   },
   data () {
@@ -278,7 +225,7 @@ export default {
       oddInstructionsBox: {
         visible: false
       },
-      isCustomPlayGroup: false
+      currentMatchId: ''
     }
   },
   computed: {
@@ -328,10 +275,6 @@ export default {
       let category = this.$store.getters.categoriesById(this.$route.params.categoryId)
       return category ? category.formatting : []
     },
-    // just to trigger watcher below
-    rawAndFormatting () {
-      return this.raw && this.formatting && (this.raw.length + this.formatting.length)
-    },
     formattedCombinations () {
       let formattedDetails = {}
       _.each(this.activePlays, (activePlay) => {
@@ -341,23 +284,14 @@ export default {
       })
       return formattedDetails
     },
-    currentAlias () {
-      for (const section of this.playSections) {
-        for (const group of section.playgroups) {
-          if (group.active) {
-            return group.alias
-          }
-        }
-      }
-      return ''
-    },
     currentCategory () {
       return this.$store.getters.categoriesById(this.$route.params.categoryId)
     },
-    needZodiac () {
-      const code = this.currentCategory.code
-      // 正肖 合肖 特肖 连肖连尾
-      return code.endsWith('txiao') || code.endsWith('shxia') || code.endsWith('ishaw') || code.endsWith('exl') || code.endsWith('pxxm')
+    currentMatches () {
+      if (!this.currentCategory) {
+        return undefined
+      }
+      return this.currentCategory.matches
     }
   },
   watch: {
@@ -381,11 +315,11 @@ export default {
       },
       deep: true
     },
-    'rawAndFormatting': function () {
-      if (this.raw.length && this.formatting.length) {
-        this.playSections = formatPlayGroup(this.raw, this.formatting)
-      }
-    },
+    // 'rawAndFormatting': function () {
+    //   if (this.raw.length && this.formatting.length) {
+    //     this.playSections = formatPlayGroup(this.raw, this.formatting)
+    //   }
+    // },
     'activePlays': {
       handler: function () {
         _.each(this.activePlays, (play) => {
@@ -398,57 +332,28 @@ export default {
     }
   },
   created () {
-    this.initPlaygroups()
-    this.$root.bus.$on('openBetDialog', (gameData) => {
-      this.openDialog()
-    })
-
-    this.$root.bus.$on('followBet', (bets) => {
-      this.followingBets = bets
-      this.$nextTick(() => {
-        this.activePlays = this.followingBets.map((bet) => {
-          let isCustom = this.isCustomPlayGroup
-          let combos = bet.bet_options.opts_combos_count || 0
-          isCustom = combos > 1
-          return {
-            game_schedule: 10,
-            display_name: `${bet.play.display_name ? bet.play.display_name + '-' : ''}${bet.play.playgroup}`,
-            odds: bet.play.odds,
-            bet_amount: isCustom ? (bet.bet_amount / combos) : bet.bet_amount,
-            id: bet.play.id,
-            bet_options: bet.bet_options,
-            active: true,
-            isCustom,
-            combinations: new Array(combos),
-            optionDisplayNames: bet.bet_options.options ? bet.bet_options.options.join(',') : ''
-          }
-        })
+    if (this.currentMatches) {
+      this.selectMatch(this.currentMatches[0].id)
+    } else {
+      const unwatch = this.$watch('currentMatches', function () {
+        this.selectMatch(this.currentMatches[0].id)
+        unwatch()
       })
-      if (this.followBetCheckboxVisible) {
-        this.followBetAllowed = false
-      }
+    }
 
+    this.$root.bus.$on('openBetDialog', (gameData) => {
       this.openDialog()
     })
   },
   methods: {
     filtAmount,
-    selectAlias (playSection, tabIndex) {
-      let activePlaygroup = _.find(playSection.playgroups, playgroup => playgroup.active)
-      // reset 'active' for plays in inactive playgroups
-      _.each(_.filter(this.plays, play => play.active && play.alias === activePlaygroup.alias), play => {
-        this.$set(play, 'active', false)
-        this.$set(play, 'amount', '')
-      })
-      // switch 'active' between play groups
-      _.map(playSection.playgroups, (playgroup, index) => {
-        this.$set(playgroup, 'active', index === tabIndex)
-      })
-      this.$emit('clearShortCut')
-    },
-    getAliases (section) {
-      let aliases = _.map(section.playgroups, playgroup => playgroup.alias)
-      return aliases[0] ? aliases : []
+    selectMatch (id) {
+      if (this.currentMatchId === id) {
+        return
+      }
+      this.currentMatchId = id
+      this.initPlaygroups(id)
+      this.$emit('selectMatch', this.currentMatches.find(match => match.id === id).schedule)
     },
     // will be triggered by custom play components to recevie plays for submitting
     updateCustomPlays (playOptions) {
@@ -471,34 +376,6 @@ export default {
           this.$set(play, 'selectedOptions', [])
         }
       })
-    },
-    updateMultiCustomPlays (playOptions) {
-      _.each(this.plays, play => {
-        // if all of the options are valid, change the target play's status
-        if (playOptions.activePlayIds.includes('' + play.id) && playOptions.valid) {
-          this.$set(play, 'active', true)
-          this.$set(play, 'amount', this.amount)
-          this.$set(play, 'isCustom', true)
-          this.$set(play, 'options', playOptions.options)
-          this.$set(play, 'combinations', playOptions.combinations['' + play.id])
-          this.$set(play, 'selectedOptions', playOptions.selectedOptions)
-          this.$set(play, 'hideName', true)
-        } else {
-          // if not, reset other plays
-          this.$set(play, 'active', false)
-          this.$set(play, 'isCustom', false)
-          this.$set(play, 'options', '')
-          this.$set(play, 'combinations', [])
-          this.$set(play, 'selectedOptions', [])
-        }
-      })
-    },
-    getCustomFormatting (groupCode) {
-      let getCustom = _.find(this.$store.state.customPlayGroups, item => {
-        return item.code === groupCode
-      })
-      this.isCustomPlayGroup = !!getCustom
-      return getCustom
     },
     updateBetrecords () {
       this.$root.bus.$emit('new-betrecords', {
@@ -552,34 +429,17 @@ export default {
           }, this.errors && this.errors.length > 20 ? 5000 : 3000)
         })
     },
-    initPlaygroups () {
-      const categoryId = this.$route.params.categoryId
-      fetchPlaygroup(categoryId).then(res => {
+    initPlaygroups (matchId) {
+      fetchMatchPlaygroup(this.currentCategory.originId, matchId).then(res => {
         let plays = {}
-        if (res.length === 0) {
-          let gameId = this.$route.params.gameId
-          const categories = this.$store.getters.categoriesByGameId(gameId)
-          if (!categories.length) {
-            this.$store.dispatch('fetchCategories', gameId).then((res) => {
-              this.$router.replace(`/game/${gameId}/${res[0].id}`)
-            })
-          } else {
-            this.$router.replace(`/game/${gameId}/${categories[0].id}`)
-          }
-          return
-        }
         res.forEach(item => {
           item.plays.forEach(play => {
             plays[play.id] = play
             plays[play.id]['group'] = item['display_name']
-            if (item.code === 'hkl_pg_clrwvs_color' || item.code === 'luckl_pg_clrwvs_color') {
-              plays[play.id]['value'] = colorWave[play.code]
-            } else if (item.code === 'hkl_pg_pxxmtail' || item.code === 'luckl_pg_pxxmtail') {
-              plays[play.id]['value'] = tailMap[play.display_name]
-            }
           })
         })
         this.raw = res
+        this.playSections = formatPlayGroup(this.raw, this.formatting)
         this.plays = plays
         this.loading = false
       })
@@ -655,7 +515,7 @@ export default {
           id: play.id,
           bet_options: betOptions,
           active: true,
-          isCustom,
+          isCustom: isCustom,
           combinations: play.combinations,
           optionDisplayNames: optionDisplayNames
         }
@@ -694,38 +554,6 @@ export default {
 
       Vue.set(this, 'playReset', !this.playReset)
       this.$emit('clearShortCut')
-    },
-    triggerShortcut (option) {
-      const command = option.command
-      const amount = parseFloat(this.amount)
-      let handleplay
-      switch (command) {
-        case 'all':
-          handleplay = setActive
-          break
-        case 'reverse':
-          handleplay = reverseActive
-          break
-        case 'cancel':
-          handleplay = cancelActive
-          this.$emit('clearShortCut')
-          break
-        default:
-          handleplay = (play) => {
-            if (option.num.includes(play.display_name)) {
-              Vue.set(play, 'active', true)
-              play.amount = amount
-            } else {
-              Vue.set(play, 'amount', '')
-              Vue.set(play, 'active', false)
-            }
-          }
-      }
-      _.each(this.plays, play => {
-        if ((!this.currentAlias && play.group === '号码') || play.alias === this.currentAlias) {
-          handleplay(play, amount)
-        }
-      })
     }
   }
 }
@@ -780,13 +608,11 @@ export default {
 
 .cardresults-wrapper {
   width: 100%;
-  height: 145px;
+  min-height: 80px;
   box-sizing: border-box;
   padding: 10px;
   border: 1px solid #ddd;
   background-color: #ecf5ff;
-  z-index: 2;
-
 }
 
 .odd-tip {

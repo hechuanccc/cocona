@@ -135,27 +135,28 @@ export default {
       })
     },
     activePlayOdds () {
-      if (this.selectedOptions.length < 5) {
-        return '--'
-      }
-      return this.activePlay.odds
+      return this.activePlay.odds || '--'
     }
   },
   watch: {
     'selectedOptions': function () {
       if (this.selectedOptions.length < 5) {
-        this.updateForSubmit()
-        return
-      }
-      _.forEach(this.plays, (play) => {
-        if (play.display_name.slice(-4, -2) === '' + (this.selectedOptions.length)) {
-          this.activePlay.odds = play.odds
-          this.activePlay.id = play.id
-          this.activePlay.display_name = play.display_name
-
-          this.updateForSubmit()
+        this.activePlay = {}
+      } else {
+        let activePlay = Object.values(this.plays).find(play => {
+          return play.display_name.slice(-4, -2) === '' + (this.selectedOptions.length)
+        })
+        if (activePlay) {
+          this.activePlay = {
+            odds: activePlay.odds,
+            id: activePlay.id,
+            display_name: activePlay.display_name
+          }
+        } else {
+          this.activePlay = {}
         }
-      })
+      }
+      this.updateForSubmit()
     },
     'playReset': function () {
       _.flatten(this.optionGroup).forEach(option => {
